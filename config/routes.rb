@@ -3,4 +3,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+  resources :reports, only: [] do
+    get :item_sales_percentage, on: :collection
+  end
+  
 end
