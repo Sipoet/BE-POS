@@ -3,7 +3,7 @@ class Report::ItemSalesPercentageService < BaseService
   PER_PAGE = 1000.freeze
 
   def execute_service
-    filter = get_filter  
+    filter = get_filter
     query = generate_sql_query(filter)
     page = 1
     @controller.response.headers['Content-Type'] = 'text/event-stream'
@@ -63,9 +63,9 @@ class Report::ItemSalesPercentageService < BaseService
   ]
 
   def generate_sql_query(filter)
-    query = """select tbl_item.kodeitem as item_code, tbl_item.namaitem as item_name, tbl_item.jenis as item_type, 
-    tbl_item.supplier1 as supplier, 
-    tbl_item.merek as brand, 
+    query = """select tbl_item.kodeitem as item_code, tbl_item.namaitem as item_name, tbl_item.jenis as item_type,
+    tbl_item.supplier1 as supplier,
+    tbl_item.merek as brand,
     coalesce(sales.number_of_sales,0) as number_of_sales,
     coalesce(sales.sales_total,0) as sales_total,
     coalesce(purchase.number_of_purchase,0) + coalesce(beginning_stock.number_of_purchase,0) as number_of_purchase,
@@ -79,14 +79,14 @@ class Report::ItemSalesPercentageService < BaseService
       group by kodeitem
     )sales on sales.kodeitem = tbl_item.kodeitem
 	left outer join (
-		select kodeitem, 
+		select kodeitem,
       	sum(tbl_imdt.jumlah) as number_of_purchase,
       	sum(tbl_imdt.total) as purchase_total
       	from tbl_imdt
 		group by kodeitem
 	)purchase on purchase.kodeitem = tbl_item.kodeitem and purchase.number_of_purchase > 0
 	left outer join (
-		select kodeitem, 
+		select kodeitem,
       	sum(tbl_item_sa.jumlah) as number_of_purchase,
       	sum(tbl_item_sa.total) as purchase_total
       	from tbl_item_sa
