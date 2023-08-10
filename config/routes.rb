@@ -6,5 +6,13 @@ Rails.application.routes.draw do
   resources :reports, only: [] do
     get :item_sales_percentage, on: :collection
   end
+
+  resources :items, only: [:index, :show]
+
+  resources :suppliers, only: [:index, :show]
+
+  resources :item_types, only: [:index, :show]
+  
+  resources :brands, only: [:index, :show]
   
 end
