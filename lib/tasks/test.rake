@@ -38,7 +38,7 @@ namespace :test do
     begin
       con = PG.connect  dbname: 'i5_TEST',
                         user: 'sysi5adm',
-                        host: '192.168.1.11',
+                        host: 'db',
                         port: '5444',
                         password: pass
       puts "Password db psql: #{pass}"
