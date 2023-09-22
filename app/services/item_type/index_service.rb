@@ -1,8 +1,12 @@
 class ItemType::IndexService < BaseService
   def execute_service
     text_search = @params[:query].to_s
+    page = @params.fetch(:page,1)
+    per =@params.fetch(:per,10)
     item_types = search_data(text_search)
-    item_types = item_types.pluck(:jenis,:ketjenis)
+    item_types = item_types.page(page)
+                          .per(per)
+                          .pluck(:jenis,:ketjenis)
                           .map do|(type,description)|
       {id: type, name: description}
     end

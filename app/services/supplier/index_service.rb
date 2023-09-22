@@ -1,8 +1,12 @@
 class Supplier::IndexService < BaseService
   def execute_service
     text_search = @params[:query].to_s
+    page = @params.fetch(:page,1)
+    per =@params.fetch(:per,10)
     suppliers = search_data(text_search)
-    suppliers = suppliers.pluck(:kode,:nama)
+    suppliers = suppliers.page(page)
+                          .per(per)
+                        .pluck(:kode,:nama)
                           .map do|(code,name)|
       {id: code, name: name}
     end
