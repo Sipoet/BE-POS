@@ -7,7 +7,5 @@ services:
     ports:
       - "3000:3000"
       - "5444:5444"
-    extra_hosts:
-      - "db:allegra-pos.net"
     stdin_open: true
     tty: true
