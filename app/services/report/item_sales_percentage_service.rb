@@ -38,7 +38,7 @@ class Report::ItemSalesPercentageService < BaseService
   end
 
   def filename
-    @filename ||= "Laporan-penjualan-#{Time.zone.now.iso8601}.csv"
+    @filename ||= "Laporan-penjualan-persentase-#{Time.zone.now.strftime('%y%m%d%H%M%S')}.csv"
   end
 
   def get_filter
@@ -92,26 +92,26 @@ class Report::ItemSalesPercentageService < BaseService
       	from tbl_item_sa
 		group by kodeitem
 	)beginning_stock on beginning_stock.kodeitem = tbl_item.kodeitem and beginning_stock.number_of_purchase > 0
-    order by tbl_item.kodeitem asc
     """
+    query_filter = []
     return query if filter.keys.empty?
     if filter[:brands].present?
-      value_string = filter[:brands].join('","')
+      value_string = filter[:brands].map{|x|"'#{x}'"}.join(',')
       query_filter << "merek in (#{value_string})"
     end
-    if filter[:supplier].present?
-      value_string = filter[:suppliers].join('","')
+    if filter[:suppliers].present?
+      value_string = filter[:suppliers].map{|x|"'#{x}'"}.join(',')
       query_filter << "supplier1 in (#{value_string})"
     end
     if filter[:item_types].present?
-      value_string = filter[:item_types].join('","')
+      value_string = filter[:item_types].map{|x|"'#{x}'"}.join(',')
       query_filter << "tipe in (#{value_string})"
     end
     if filter[:item_codes].present?
-      value_string = filter[:item_codes].join('","')
+      value_string = filter[:item_codes].map{|x|"'#{x}'"}.join(',')
       query_filter << "kodeitem in (#{value_string})"
     end
     query += " where #{query_filter.join(' AND ')}"
-    query
+    query +=" ORDER BY tbl_item.kodeitem asc"
   end
 end

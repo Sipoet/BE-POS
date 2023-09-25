@@ -8,7 +8,7 @@ class Item::IndexService < BaseService
                           .per(per)
                           .pluck(:kodeitem,:namaitem)
                           .map do|(code,name)|
-      {id: code, name: name}
+      {id: code, name: "#{code}-#{name}"}
     end
     @controller.render json: {data: items}, status: 200
   end
