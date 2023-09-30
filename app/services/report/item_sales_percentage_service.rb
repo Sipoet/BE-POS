@@ -1,44 +1,110 @@
 class Report::ItemSalesPercentageService < BaseService
   require 'csv'
+  require 'write_xlsx'
   PER_PAGE = 1000.freeze
 
   def execute_service
     filter = get_filter
     query = generate_sql_query(filter)
     page = 1
-    @controller.response.headers['Content-Type'] = 'text/event-stream'
-    stream_csv do |stream|
-      loop do
-        paginated_query = paginate_query(query: query ,page: page, per: PER_PAGE)
-        query_results = execute_sql(paginated_query)
-        break if query_results.to_a.blank?
-        query_results.each do |row|
-          row_data = generate_row_data(row)
-          stream.write CSV.generate_line(row_data)
-        end
-        page += 1
-      end
+    data = []
+    loop do
+      paginated_query = paginate_query(query: query ,page: page, per: PER_PAGE)
+      query_results = execute_sql(paginated_query)
+      query_results = query_results.to_a
+      break if query_results.empty?
+      data += query_results
+      page += 1
     end
+    file_excel = generate_excel(data,filter)
+    @controller.send_file file_excel
   end
 
   private
 
-  def generate_row_data(row)
-    row_data = TABLE_HEADER.map {|column_name| row[column_name.to_s]}
-    percentage_sales = row['number_of_purchase'] == 0 ? 0 : row['number_of_sales'].to_f / row['number_of_purchase'].to_f * 100
-    row_data << "#{percentage_sales}%"
-    row_data
+  def generate_excel(rows, filter)
+    file = Tempfile.new([filename,'.xlsx'])
+    workbook = WriteXLSX.new(file.path)
+    insert_to_sheet_data(workbook,rows)
+    insert_metadata(workbook, filter)
+    workbook.close
+    file
   end
 
-  def stream_csv(&block)
-    @controller.send_stream(filename: filename, type: 'text/event-stream', disposition: 'attachment') do |stream|
-      stream.write CSV.generate_line(TABLE_HEADER + EXT_HEADER)
-      block.call stream
+  def insert_to_sheet_data(workbook,rows)
+    worksheet = workbook.add_worksheet('data')
+    add_header(workbook,worksheet)
+    add_data(workbook,worksheet,rows)
+  end
+
+  def insert_metadata(workbook, filter)
+    worksheet = workbook.add_worksheet('metadata')
+    label_format = workbook.add_format(bold: true, align: 'right')
+    datetime_format = workbook.add_format(num_format: 'dd mmmm yyyy hh:mm')
+    filter_format = workbook.add_format(bold: true, align: 'right', size: 14)
+    worksheet.set_column(0,0,20, label_format)
+    worksheet.set_column(1,1,25)
+    worksheet.set_column(3,3,20, label_format)
+    worksheet.write_string(0,0, 'Report generated at :')
+    worksheet.write_date_time('B1', DateTime.now.iso8601[0..18], datetime_format)
+    worksheet.write_string(1,0, 'FILTER', filter_format)
+    index = 2
+    filter.each do |key, value|
+      worksheet.write_string(index,0, "#{key} :")
+      worksheet.write_string(index,1, value.is_a?(Array) ? value.join(', ') : value.to_s)
+      index += 1
     end
   end
 
+  ALPHABETS = ('A'..'Z').to_a.freeze
+
+  def get_column_number(index)
+    col_number = ''
+    unit = index % ALPHABETS.length
+    dozens = index / ALPHABETS.length
+    col_number = ALPHABETS[(dozens - 1)] if dozens >= 1
+    col_number += ALPHABETS[(unit - 1)]
+    col_number
+  end
+
+  def add_header(workbook,worksheet)
+    header_format = workbook.add_format(bold: true, size: 14)
+    worksheet.set_row(0,22,header_format)
+
+    (TABLE_HEADER + EXT_HEADER).each.with_index(1) do |header_name,index|
+      col_number = get_column_number(index)
+      worksheet.write("#{col_number}1", header_name,header_format)
+    end
+  end
+
+  def add_data(workbook,worksheet,rows)
+    num_format = workbook.add_format(size: 12, num_format: '#,##0')
+    general_format = workbook.add_format(size: 12)
+    worksheet.set_column(5,8,24,num_format)
+    worksheet.set_column(0,4,17,general_format)
+    worksheet.set_column(1,1,45)
+    worksheet.set_column(9,9,20,general_format)
+    rows.each.with_index(1) do |row, index_vertical|
+      TABLE_HEADER.each.with_index(0) do |key,index|
+        value = row[key.to_s]
+        if value.is_a?(String)
+          worksheet.write_string(index_vertical,index, value)
+        else
+          worksheet.write_number(index_vertical,index, value)
+        end
+      end
+      percentage = percentage_sales(row)
+      worksheet.write_string(index_vertical, TABLE_HEADER.length, percentage)
+    end
+  end
+
+  def percentage_sales(row)
+    value = row['number_of_purchase'] == 0 ? 0 : (row['number_of_sales'].to_f / row['number_of_purchase'].to_f * 100).round(2)
+    "#{value}%"
+  end
+
   def filename
-    @filename ||= "Laporan-penjualan-persentase-#{Time.zone.now.strftime('%y%m%d%H%M%S')}.csv"
+    'Laporan-penjualan-persentase'
   end
 
   def get_filter
@@ -105,7 +171,7 @@ class Report::ItemSalesPercentageService < BaseService
     end
     if filter[:item_types].present?
       value_string = filter[:item_types].map{|x|"'#{x}'"}.join(',')
-      query_filter << "tipe in (#{value_string})"
+      query_filter << "jenis in (#{value_string})"
     end
     if filter[:item_codes].present?
       value_string = filter[:item_codes].map{|x|"'#{x}'"}.join(',')
