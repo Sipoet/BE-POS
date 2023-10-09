@@ -6,7 +6,8 @@ class ApplicationController < ActionController::API
   protected
 
   def set_cors_headers
-    response.set_header("Access-Control-Allow-Origin",  Rails.application.config.hosts[3])
+    allowed_host = Rails.application.config.hosts[3]
+    response.set_header("Access-Control-Allow-Origin", "http://#{allowed_host}")
   end
 
   def configure_permitted_parameters
