@@ -1,6 +1,18 @@
 class ApplicationController < ActionController::API
 
+  before_action :set_cors_headers
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
   protected
+
+  def set_cors_headers
+    response.set_header("Access-Control-Allow-Origin",  Rails.application.config.hosts[3])
+  end
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_in, keys: %i[username])
+    # devise_parameter_sanitizer.permit(:account_update, keys: %i[name avatar])
+  end
 
   def run_service_default(controller)
     action_name = controller.action_name
@@ -10,7 +22,7 @@ class ApplicationController < ActionController::API
       klass = class_name.constantize
       klass.run(controller)
     # rescue => NameError
-    #   render_error('service klass not found')  
+      # render_error('service klass not found')
     end
   end
 
