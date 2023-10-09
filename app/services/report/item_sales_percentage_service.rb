@@ -1,5 +1,4 @@
 class Report::ItemSalesPercentageService < BaseService
-  require 'csv'
   require 'write_xlsx'
   PER_PAGE = 1000.freeze
 
@@ -119,6 +118,8 @@ class Report::ItemSalesPercentageService < BaseService
     'item_type',
     'supplier',
     'brand',
+    'sell_price',
+    'avg_buy_price',
     'number_of_sales',
     'sales_total',
     'number_of_purchase',
@@ -132,6 +133,8 @@ class Report::ItemSalesPercentageService < BaseService
     query = """select tbl_item.kodeitem as item_code, tbl_item.namaitem as item_name, tbl_item.jenis as item_type,
     tbl_item.supplier1 as supplier,
     tbl_item.merek as brand,
+    tbl_item.hargajual1 as sell_price,
+    coalesce(purchase.avg_buy_price,beginning_stock.avg_buy_price) as avg_buy_price,
     coalesce(sales.number_of_sales,0) as number_of_sales,
     coalesce(sales.sales_total,0) as sales_total,
     coalesce(purchase.number_of_purchase,0) + coalesce(beginning_stock.number_of_purchase,0) as number_of_purchase,
@@ -147,6 +150,7 @@ class Report::ItemSalesPercentageService < BaseService
 	left outer join (
 		select kodeitem,
       	sum(tbl_imdt.jumlah) as number_of_purchase,
+        avg(tbl_imdt.harga) as avg_buy_price,
       	sum(tbl_imdt.total) as purchase_total
       	from tbl_imdt
 		group by kodeitem
@@ -154,6 +158,7 @@ class Report::ItemSalesPercentageService < BaseService
 	left outer join (
 		select kodeitem,
       	sum(tbl_item_sa.jumlah) as number_of_purchase,
+        avg(tbl_item_sa.harga) as avg_buy_price,
       	sum(tbl_item_sa.total) as purchase_total
       	from tbl_item_sa
 		group by kodeitem
