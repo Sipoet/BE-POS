@@ -16,7 +16,6 @@ class Item::IndexService < BaseService
   private
 
   def search_data(text_search)
-    puts text_search
     if text_search.present?
       Item.where('kodeitem ilike ? or namaitem ilike ?', "%#{text_search}%", "%#{text_search}%")
     else

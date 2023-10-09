@@ -16,7 +16,6 @@ class Brand::IndexService < BaseService
   private
 
   def search_data(text_search)
-    puts text_search
     if text_search.present?
       Brand.where('merek ilike ?', "%#{text_search}%")
     else

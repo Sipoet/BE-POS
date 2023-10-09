@@ -16,7 +16,6 @@ class Supplier::IndexService < BaseService
   private
 
   def search_data(text_search)
-    puts text_search
     if text_search.present?
       Supplier.where('nama ilike ? or kode ilike ?', "%#{text_search}%", "%#{text_search}%")
     else

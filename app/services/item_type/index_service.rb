@@ -16,7 +16,6 @@ class ItemType::IndexService < BaseService
   private
 
   def search_data(text_search)
-    puts text_search
     if text_search.present?
       ItemType.where('jenis ilike ? or ketjenis ilike ?', "%#{text_search}%", "%#{text_search}%")
     else
