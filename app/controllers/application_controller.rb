@@ -6,12 +6,16 @@ class ApplicationController < ActionController::API
   protected
 
   def set_cors_headers
-    response.set_header("Access-Control-Allow-Origin", "http://#{$HOST}")
+    if Rails.env == 'development'
+      response.set_header("Access-Control-Allow-Origin", '*')
+    else
+      response.set_header("Access-Control-Allow-Origin", "http://#{$HOST}")
+    end
   end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_in, keys: %i[username])
-    # devise_parameter_sanitizer.permit(:account_update, keys: %i[name avatar])
+    devise_parameter_sanitizer.permit(:account_update, keys: %i[name avatar])
   end
 
   def run_service_default(controller)
