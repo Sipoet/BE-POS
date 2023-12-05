@@ -168,16 +168,16 @@ class Report::ItemSalesPercentageService < BaseService
     query_filter = []
     return query if filter.keys.empty?
     if filter[:brands].present?
-      query_filter << ApplicationRecord.sanitize_sql(["merek in (?)",filter[:brands])
+      query_filter << ApplicationRecord.sanitize_sql(["merek in (?)",filter[:brands]])
     end
     if filter[:suppliers].present?
-      query_filter << ApplicationRecord.sanitize_sql(["supplier1 in (?)",filter[:supplier1])
+      query_filter << ApplicationRecord.sanitize_sql(["supplier1 in (?)",filter[:supplier1]])
     end
     if filter[:item_types].present?
-      query_filter << ApplicationRecord.sanitize_sql(["jenis in (?)",filter[:item_types])
+      query_filter << ApplicationRecord.sanitize_sql(["jenis in (?)",filter[:item_types]])
     end
     if filter[:item_codes].present?
-      query_filter << ApplicationRecord.sanitize_sql(["kodeitem in (?)",filter[:item_codes])
+      query_filter << ApplicationRecord.sanitize_sql(["kodeitem in (?)",filter[:item_codes]])
     end
     query += " where #{query_filter.join(' AND ')}"
     query +=" ORDER BY tbl_item.kodeitem asc"

@@ -10,10 +10,8 @@ class Users::SessionsController < Devise::SessionsController
   def respond_with(current_user, _opts = {})
   if current_user
     render json: {
-      status: {
         code: 200, message: 'Logged in successfully.',
         data: { user: UserSerializer.new(current_user).serializable_hash[:data][:attributes] }
-      }
     }, status: :ok
     else
       render json: {code: 401, message:"Login failed."}, status: 401
@@ -27,14 +25,20 @@ class Users::SessionsController < Devise::SessionsController
 
     if current_user
       render json: {
-        status: 200,
+        code: 200,
         message: 'Logged out successfully.'
       }, status: :ok
     else
       render json: {
-        status: 401,
+        code: 401,
         message: "Couldn't find an active session."
       }, status: :unauthorized
     end
+
+  rescue JWT::ExpiredSignature => e
+    render json: {
+        code: 200,
+        message: e.message,
+      }, status: :ok
   end
 end
