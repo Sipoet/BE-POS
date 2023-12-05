@@ -107,8 +107,9 @@ class Report::ItemSalesPercentageService < BaseService
   end
 
   def get_filter
+    permitted_params = @params.permit(brands: [],item_codes: [],item_types: [],suppliers: [])
     [:brands,:item_codes, :item_types, :suppliers].each_with_object({}) do |key,filter|
-      filter[key] = @params[key] if @params[key].present?
+      filter[key] = permitted_params[key] if permitted_params[key].present?
     end
   end
 
@@ -167,22 +168,19 @@ class Report::ItemSalesPercentageService < BaseService
     query_filter = []
     return query if filter.keys.empty?
     if filter[:brands].present?
-      value_string = filter[:brands].map{|x|"'#{x}'"}.join(',')
-      query_filter << "merek in (#{value_string})"
+      query_filter << ApplicationRecord.sanitize_sql(["merek in (?)",filter[:brands])
     end
     if filter[:suppliers].present?
-      value_string = filter[:suppliers].map{|x|"'#{x}'"}.join(',')
-      query_filter << "supplier1 in (#{value_string})"
+      query_filter << ApplicationRecord.sanitize_sql(["supplier1 in (?)",filter[:supplier1])
     end
     if filter[:item_types].present?
-      value_string = filter[:item_types].map{|x|"'#{x}'"}.join(',')
-      query_filter << "jenis in (#{value_string})"
+      query_filter << ApplicationRecord.sanitize_sql(["jenis in (?)",filter[:item_types])
     end
     if filter[:item_codes].present?
-      value_string = filter[:item_codes].map{|x|"'#{x}'"}.join(',')
-      query_filter << "kodeitem in (#{value_string})"
+      query_filter << ApplicationRecord.sanitize_sql(["kodeitem in (?)",filter[:item_codes])
     end
     query += " where #{query_filter.join(' AND ')}"
     query +=" ORDER BY tbl_item.kodeitem asc"
+
   end
 end
