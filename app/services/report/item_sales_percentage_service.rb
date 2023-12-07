@@ -1,25 +1,78 @@
 class Report::ItemSalesPercentageService < BaseService
   require 'write_xlsx'
   PER_PAGE = 1000.freeze
+  TABLE_HEADER = [
+    'item_code',
+    'item_name',
+    'item_type',
+    'supplier',
+    'brand',
+    'sell_price',
+    'avg_buy_price',
+    'number_of_sales',
+    'sales_total',
+    'number_of_purchase',
+    'purchase_total',
+  ].freeze
+  EXT_HEADER = [
+    'percentage_sales',
+  ].freeze
+  LOCALE_SCOPE = 'item_sales_percentage_report.model'.freeze
+
 
   def execute_service
+    I18n.locale = :id
     filter = get_filter
-    query = generate_sql_query(filter)
-    page = 1
+    query_generator = ItemSalesPercentageReportQuery.new(brands:filter[:brands],
+                                                        suppliers:filter[:suppliers],
+                                                        item_types:filter[:item_types],
+                                                        item_codes:filter[:item_codes])
+
+    page = @params[:page]
     data = []
-    loop do
-      paginated_query = paginate_query(query: query ,page: page, per: PER_PAGE)
+    if page.present?
+      paginated_query = query_generator.generate_sql_query(page: page.to_i, per: (@params[:per] || PER_PAGE).to_i)
       query_results = execute_sql(paginated_query)
-      query_results = query_results.to_a
-      break if query_results.empty?
-      data += query_results
-      page += 1
+      data = query_results.to_a
+    else
+      page = 1
+      loop do
+        paginated_query = query_generator.generate_sql_query(page: page, per: PER_PAGE)
+        query_results = execute_sql(paginated_query)
+        query_results = query_results.to_a
+        break if query_results.empty?
+        data += query_results
+        page += 1
+      end
     end
-    file_excel = generate_excel(data,filter)
-    @controller.send_file file_excel
+
+
+    case @params[:report_type]
+    when 'xlsx'
+      file_excel = generate_excel(data,filter)
+      @controller.send_file file_excel
+    when 'json'
+      render_json({
+        code: 200,
+        data: convert_to_datatable(data),
+        metadata: {
+          columns: (TABLE_HEADER + EXT_HEADER).map{|column_name| I18n.t(column_name, scope: LOCALE_SCOPE)}
+        }
+      })
+    end
   end
 
   private
+
+  def convert_to_datatable(data)
+    data.each_with_object([]) do |row,obj|
+      decorated_row = TABLE_HEADER.map do|header_name|
+        row[header_name.to_s]
+      end
+      decorated_row << percentage_sales(row)
+      obj << decorated_row
+    end
+  end
 
   def generate_excel(rows, filter)
     file = Tempfile.new([filename,'.xlsx'])
@@ -72,7 +125,7 @@ class Report::ItemSalesPercentageService < BaseService
 
     (TABLE_HEADER + EXT_HEADER).each.with_index(1) do |header_name,index|
       col_number = get_column_number(index)
-      worksheet.write("#{col_number}1", header_name,header_format)
+      worksheet.write("#{col_number}1", I18n.t(header_name, scope: LOCALE_SCOPE),header_format)
     end
   end
 
@@ -113,74 +166,4 @@ class Report::ItemSalesPercentageService < BaseService
     end
   end
 
-  TABLE_HEADER = [
-    'item_code',
-    'item_name',
-    'item_type',
-    'supplier',
-    'brand',
-    'sell_price',
-    'avg_buy_price',
-    'number_of_sales',
-    'sales_total',
-    'number_of_purchase',
-    'purchase_total',
-  ].freeze
-  EXT_HEADER = [
-    'percentage_sales',
-  ]
-
-  def generate_sql_query(filter)
-    query = """select tbl_item.kodeitem as item_code, tbl_item.namaitem as item_name, tbl_item.jenis as item_type,
-    tbl_item.supplier1 as supplier,
-    tbl_item.merek as brand,
-    tbl_item.hargajual1 as sell_price,
-    coalesce(purchase.avg_buy_price,beginning_stock.avg_buy_price) as avg_buy_price,
-    coalesce(sales.number_of_sales,0) as number_of_sales,
-    coalesce(sales.sales_total,0) as sales_total,
-    coalesce(purchase.number_of_purchase,0) + coalesce(beginning_stock.number_of_purchase,0) as number_of_purchase,
-    coalesce(purchase.purchase_total,0) + coalesce(beginning_stock.purchase_total,0) as purchase_total
-    from tbl_item
-    left outer join(
-      select kodeitem,
-      sum(tbl_ikdt.jumlah) as number_of_sales,
-      sum(tbl_ikdt.total) as sales_total
-      from tbl_ikdt
-      group by kodeitem
-    )sales on sales.kodeitem = tbl_item.kodeitem
-	left outer join (
-		select kodeitem,
-      	sum(tbl_imdt.jumlah) as number_of_purchase,
-        avg(tbl_imdt.harga) as avg_buy_price,
-      	sum(tbl_imdt.total) as purchase_total
-      	from tbl_imdt
-		group by kodeitem
-	)purchase on purchase.kodeitem = tbl_item.kodeitem and purchase.number_of_purchase > 0
-	left outer join (
-		select kodeitem,
-      	sum(tbl_item_sa.jumlah) as number_of_purchase,
-        avg(tbl_item_sa.harga) as avg_buy_price,
-      	sum(tbl_item_sa.total) as purchase_total
-      	from tbl_item_sa
-		group by kodeitem
-	)beginning_stock on beginning_stock.kodeitem = tbl_item.kodeitem and beginning_stock.number_of_purchase > 0
-    """
-    query_filter = []
-    return query if filter.keys.empty?
-    if filter[:brands].present?
-      query_filter << ApplicationRecord.sanitize_sql(["merek in (?)",filter[:brands]])
-    end
-    if filter[:suppliers].present?
-      query_filter << ApplicationRecord.sanitize_sql(["supplier1 in (?)",filter[:supplier1]])
-    end
-    if filter[:item_types].present?
-      query_filter << ApplicationRecord.sanitize_sql(["jenis in (?)",filter[:item_types]])
-    end
-    if filter[:item_codes].present?
-      query_filter << ApplicationRecord.sanitize_sql(["kodeitem in (?)",filter[:item_codes]])
-    end
-    query += " where #{query_filter.join(' AND ')}"
-    query +=" ORDER BY tbl_item.kodeitem asc"
-
-  end
 end

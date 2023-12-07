@@ -1,0 +1,15 @@
+id:
+  item_sales_percentage_report:
+    model:
+      item_code: 'Kode Item'
+      item_name: 'Nama Item'
+      item_type: 'Jenis/Departemen'
+      supplier: 'Supplier'
+      brand: 'Merek'
+      sell_price: 'Harga Jual'
+      avg_buy_price: 'Harga Beli Rata-rata'
+      number_of_sales: 'Jumlah Penjualan'
+      sales_total: 'Total Penjualan'
+      number_of_purchase: 'Jumlah Pembelian'
+      purchase_total: 'Total Penjualan'
+      percentage_sales: 'Persentase Laku Terjual'

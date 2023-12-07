@@ -13,14 +13,19 @@ class BaseService
     raise 'should init on child class'
   end
 
+  def render_json(data, options = {status: 200})
+    if data.is_a?(String)
+      options[:json] = data
+    else
+      options[:json] = data.to_json
+    end
+    @controller.render options
+  end
+
   protected
 
   def execute_sql(query)
     ActiveRecord::Base.connection.execute(query)
   end
 
-  def paginate_query(query:, page:, per:)
-    offset = (page - 1) * per
-    query + "\n offset #{offset} limit #{per}"
-  end
 end
