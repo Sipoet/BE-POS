@@ -1,6 +1,6 @@
 class ItemSalesPercentageSerializer
   include JSONAPI::Serializer
-  attributes :item_code, :item_name, :item_type, :supplier, :brand
+  attributes :item_code, :item_name, :item_type, :supplier, :brand, :percentage_sales
   attribute :sell_price do |object|
     object.sell_price.to_f
   end
@@ -18,8 +18,5 @@ class ItemSalesPercentageSerializer
   end
   attribute :purchase_total do |object|
     object.purchase_total.to_f
-  end
-  attribute :percentage_sales do |object|
-    object.percentage_sales.to_f
   end
 end

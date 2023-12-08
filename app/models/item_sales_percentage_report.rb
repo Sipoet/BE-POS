@@ -5,12 +5,12 @@ class ItemSalesPercentageReport
     :item_type,
     :supplier,
     :brand,
-    :sell_price,
     :avg_buy_price,
-    :number_of_sales,
-    :sales_total,
     :number_of_purchase,
     :purchase_total,
+    :sell_price,
+    :number_of_sales,
+    :sales_total,
     :percentage_sales
   ].freeze
 
