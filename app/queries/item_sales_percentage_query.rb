@@ -1,4 +1,4 @@
-class ItemSalesPercentageReportQuery
+class ItemSalesPercentageQuery
 
   def initialize(brands:[], suppliers:[], item_types:[], item_codes:[])
     @brands = *brands

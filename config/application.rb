@@ -20,6 +20,12 @@ module Myapp
     # config.active_record.default_timezone = :local
     config.time_zone = "Singapore"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.autoload_paths << "#{Rails.root}/lib"
+    config.eager_load_paths << "#{Rails.root}/lib"
+
+    %w(tasks).each do |subdir|
+      Rails.autoloaders.main.ignore("#{Rails.root}/lib/#{subdir}")
+    end
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.

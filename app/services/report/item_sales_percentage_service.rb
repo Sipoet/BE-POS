@@ -1,77 +1,53 @@
 class Report::ItemSalesPercentageService < BaseService
   require 'write_xlsx'
-  PER_PAGE = 1000.freeze
-  TABLE_HEADER = [
-    'item_code',
-    'item_name',
-    'item_type',
-    'supplier',
-    'brand',
-    'sell_price',
-    'avg_buy_price',
-    'number_of_sales',
-    'sales_total',
-    'number_of_purchase',
-    'purchase_total',
-  ].freeze
-  EXT_HEADER = [
-    'percentage_sales',
-  ].freeze
+  PER_LIMIT = 1000.freeze
   LOCALE_SCOPE = 'item_sales_percentage_report.model'.freeze
 
 
   def execute_service
     I18n.locale = :id
     filter = get_filter
-    query_generator = ItemSalesPercentageReportQuery.new(brands:filter[:brands],
-                                                        suppliers:filter[:suppliers],
-                                                        item_types:filter[:item_types],
-                                                        item_codes:filter[:item_codes])
+    query_generator = ItemSalesPercentageQuery.new(brands:filter[:brands],
+                                                    suppliers:filter[:suppliers],
+                                                    item_types:filter[:item_types],
+                                                    item_codes:filter[:item_codes])
 
     page = @params[:page]
     data = []
     if page.present?
-      paginated_query = query_generator.generate_sql_query(page: page.to_i, per: (@params[:per] || PER_PAGE).to_i)
-      query_results = execute_sql(paginated_query)
-      data = query_results.to_a
+      paginated_query = query_generator.generate_sql_query(page: page.to_i, per: (@params[:per] || PER_LIMIT).to_i)
+      data = execute_and_decorate_sql(paginated_query)
     else
       page = 1
       loop do
-        paginated_query = query_generator.generate_sql_query(page: page, per: PER_PAGE)
-        query_results = execute_sql(paginated_query)
-        query_results = query_results.to_a
+        paginated_query = query_generator.generate_sql_query(page: page, per: PER_LIMIT)
+        query_results = execute_and_decorate_sql(paginated_query)
         break if query_results.empty?
         data += query_results
         page += 1
       end
     end
 
-
     case @params[:report_type]
     when 'xlsx'
       file_excel = generate_excel(data,filter)
       @controller.send_file file_excel
     when 'json'
-      render_json({
-        code: 200,
-        data: convert_to_datatable(data),
-        metadata: {
-          columns: (TABLE_HEADER + EXT_HEADER).map{|column_name| I18n.t(column_name, scope: LOCALE_SCOPE)}
+      options = {
+        meta:{
+          column_names: localized_column_names,
+          column_order: ItemSalesPercentageReport::TABLE_HEADER,
+          filter: filter
         }
-      })
+      }
+      render_json(ItemSalesPercentageSerializer.new(data,options).serializable_hash)
     end
   end
 
   private
 
-  def convert_to_datatable(data)
-    data.each_with_object([]) do |row,obj|
-      decorated_row = TABLE_HEADER.map do|header_name|
-        row[header_name.to_s]
-      end
-      decorated_row << percentage_sales(row)
-      obj << decorated_row
-    end
+  def localized_column_names
+    @localized_column_names ||= ItemSalesPercentageReport::TABLE_HEADER.map{|column_name| I18n.t(column_name, scope: LOCALE_SCOPE)}
   end
 
   def generate_excel(rows, filter)
@@ -122,10 +98,9 @@ class Report::ItemSalesPercentageService < BaseService
   def add_header(workbook,worksheet)
     header_format = workbook.add_format(bold: true, size: 14)
     worksheet.set_row(0,22,header_format)
-
-    (TABLE_HEADER + EXT_HEADER).each.with_index(1) do |header_name,index|
+    localized_column_names.each.with_index(1) do |header_name,index|
       col_number = get_column_number(index)
-      worksheet.write("#{col_number}1", I18n.t(header_name, scope: LOCALE_SCOPE),header_format)
+      worksheet.write("#{col_number}1", header_name,header_format)
     end
   end
 
@@ -137,23 +112,18 @@ class Report::ItemSalesPercentageService < BaseService
     worksheet.set_column(1,1,45)
     worksheet.set_column(9,9,20,general_format)
     rows.each.with_index(1) do |row, index_vertical|
-      TABLE_HEADER.each.with_index(0) do |key,index|
-        value = row[key.to_s]
+      ItemSalesPercentageReport::TABLE_HEADER.each.with_index(0) do |key,index|
+        value = row.send(key)
         if value.is_a?(String)
           worksheet.write_string(index_vertical,index, value)
         else
           worksheet.write_number(index_vertical,index, value)
         end
       end
-      percentage = percentage_sales(row)
-      worksheet.write_string(index_vertical, TABLE_HEADER.length, percentage)
     end
   end
 
-  def percentage_sales(row)
-    value = row['number_of_purchase'] == 0 ? 0 : (row['number_of_sales'].to_f / row['number_of_purchase'].to_f * 100).round(2)
-    "#{value}%"
-  end
+
 
   def filename
     'Laporan-penjualan-persentase'
@@ -166,4 +136,8 @@ class Report::ItemSalesPercentageService < BaseService
     end
   end
 
+  def execute_and_decorate_sql(sql)
+    results = execute_sql(sql)
+    results.to_a.map{|row| ItemSalesPercentageReport.new(row)}
+  end
 end
