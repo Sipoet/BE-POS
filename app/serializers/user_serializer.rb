@@ -1,4 +1,6 @@
 class UserSerializer
   include JSONAPI::Serializer
-  attributes :id, :email, :username
+  attributes :email, :username
+
+  cache_options store: Rails.cache, namespace: 'jsonapi-serializer', expires_in: 1.hour
 end

@@ -3,6 +3,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   include Devise::JWT::RevocationStrategies::JTIMatcher
 
+  enum :role, [:admin, :sales, :cashier, :marketing, :stock, :superadmin,:warehouse]
+
   devise :database_authenticatable, :registerable, :trackable,
          :recoverable, :rememberable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
 
