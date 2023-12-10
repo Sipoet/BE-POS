@@ -1,0 +1,41 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the "{}" from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+# one: {}
+# column: value
+#
+# two: {}
+# column: value
+discount_all:
+  code: 'discount_all'
+  discount1: 10
+  discount2: 20
+  discount3: 30
+  discount4: 40
+  brand_name: 'Chok'
+  supplier_code: 'A55U'
+  item_type: 'underwear'
+  item_code: '991254321'
+  start_time: '2023-02-23 00:00:00'
+  end_time: '2999-12-31 23:59:59'
+discount_brand:
+  code: 'discount_brand_10'
+  discount1: 10
+  brand_name: 'zara'
+  start_time: '2023-02-23 00:00:00'
+  end_time: '2999-12-31 23:59:59'
+discount_item_type:
+  code: 'discount_item_type_10'
+  discount1: 10
+  item_type: 'clothes'
+  start_time: '2023-02-23 00:00:00'
+  end_time: '2999-12-31 23:59:59'
+discount_supplier:
+  code: 'discount_supplier_10'
+  discount1: 10
+  supplier_code: 'A01'
+  start_time: '2023-02-23 00:00:00'
+  end_time: '2999-12-31 23:59:59'

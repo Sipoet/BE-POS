@@ -10,9 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_03_134958) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_10_142526) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "discounts", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "item_code"
+    t.string "supplier_code"
+    t.string "brand_name"
+    t.string "item_type"
+    t.decimal "discount1", null: false
+    t.decimal "discount2"
+    t.decimal "discount3"
+    t.decimal "discount4"
+    t.datetime "start_time", null: false
+    t.datetime "end_time", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_discounts_on_code", unique: true
+    t.index ["start_time", "end_time"], name: "index_discounts_on_start_time_and_end_time"
+  end
 
   create_table "tbl_acc_sa", id: false, force: :cascade do |t|
     t.string "kodeacc", limit: 30, null: false
@@ -104,8 +122,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_03_134958) do
     t.decimal "jumlah", precision: 20, scale: 3, default: "0.0"
     t.datetime "dateupd", precision: nil
     t.text "keterangan"
-    t.index ["iddetail"], name: "iddetail", unique: true
     t.index ["notransaksi"], name: "notransaksi"
+    t.unique_constraint ["iddetail"], name: "iddetail"
   end
 
   create_table "tbl_acckashd", primary_key: "notransaksi", id: { type: :string, limit: 50 }, force: :cascade do |t|
@@ -785,9 +803,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_03_134958) do
     t.boolean "nonpajakex", default: false
     t.boolean "opsidefhargapokok", default: false
     t.index ["jenis"], name: "jenis"
-    t.index ["kodeitem"], name: "kodeitem", unique: true
     t.index ["matauang"], name: "matauang8"
     t.index ["satuan"], name: "satuan"
+    t.unique_constraint ["kodeitem"], name: "kodeitem"
   end
 
   create_table "tbl_item_ik", primary_key: "iddetail", id: { type: :string, limit: 150 }, force: :cascade do |t|
@@ -1015,11 +1033,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_03_134958) do
     t.decimal "hppdasar", precision: 35, scale: 20, default: "0.0"
     t.boolean "bc_trf_sts", default: false
     t.text "keterangan"
-    t.index ["iddetail"], name: "tbl_itemopname_iddetail_key", unique: true
     t.index ["kodeacc"], name: "kodeacc1"
     t.index ["kodeitem"], name: "kodeitem8"
     t.index ["kodekantor"], name: "kodekantor7"
     t.index ["satuan"], name: "satuan2"
+    t.unique_constraint ["iddetail"], name: "tbl_itemopname_iddetail_key"
   end
 
   create_table "tbl_itempotongan", primary_key: "iddetail", id: { type: :string, limit: 150 }, force: :cascade do |t|
@@ -1100,9 +1118,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_03_134958) do
     t.datetime "dateupd", precision: nil
     t.decimal "poin", precision: 10
     t.decimal "komisisales", precision: 20
-    t.index ["kodebarcode"], name: "kodebarcode", unique: true
     t.index ["kodeitem"], name: "kodeitem10"
     t.index ["satuan"], name: "satuan3"
+    t.unique_constraint ["kodebarcode"], name: "kodebarcode"
   end
 
   create_table "tbl_itemserial", primary_key: "noserial", id: { type: :string, limit: 255 }, force: :cascade do |t|
@@ -2009,3 +2027,325 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_03_134958) do
     t.string "customval", limit: 50
   end
 
+  create_table "tbl_userg", primary_key: "kelompok", id: { type: :string, limit: 30 }, force: :cascade do |t|
+    t.integer "urut"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "username", null: false
+    t.string "encrypted_password", null: false
+    t.integer "role", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "jti", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
+  end
+
+  add_foreign_key "tbl_acc_sa", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_acc_sa_matauang", on_update: :cascade
+  add_foreign_key "tbl_acc_sa", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_acc_sa_kodeacc", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_accdepositdt", "tbl_accdeposithd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_accdepodt_hd", on_update: :cascade
+  add_foreign_key "tbl_accdepositdt", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_accdepodt_matauang", on_update: :cascade
+  add_foreign_key "tbl_accdepositdt", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_accdepodt_kodeacc", on_update: :cascade
+  add_foreign_key "tbl_accdeposithd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_accdepohd_kantor", on_update: :cascade
+  add_foreign_key "tbl_accdeposithd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_accdepohd_mu", on_update: :cascade
+  add_foreign_key "tbl_accdeposithd", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_accdepohd_acc1", on_update: :cascade
+  add_foreign_key "tbl_accdeposithd", "tbl_perkiraan", column: "kodeaccto", primary_key: "kodeacc", name: "tbl_accdepohd_acc2", on_update: :cascade
+  add_foreign_key "tbl_accdeposithd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_accdepohd_supel", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_accjurnal", "tbl_kantor", column: "kantor", primary_key: "kodekantor", name: "tbl_accjurnal_kantor", on_update: :cascade
+  add_foreign_key "tbl_accjurnal", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_accjurnal_matauang", on_update: :cascade
+  add_foreign_key "tbl_accjurnal", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_accjurnal_kodeacc", on_update: :cascade
+  add_foreign_key "tbl_acckasdt", "tbl_acckashd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_acckasdt_hd", on_update: :cascade
+  add_foreign_key "tbl_acckasdt", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_acckasdt_matauang", on_update: :cascade
+  add_foreign_key "tbl_acckasdt", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_acckasdt_kodeacc", on_update: :cascade
+  add_foreign_key "tbl_acckashd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_acckashd_kantor", on_update: :cascade
+  add_foreign_key "tbl_acckashd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_acckashd_mu", on_update: :cascade
+  add_foreign_key "tbl_acckashd", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_acckashd_acc1", on_update: :cascade
+  add_foreign_key "tbl_acckashd", "tbl_perkiraan", column: "kodeaccto", primary_key: "kodeacc", name: "tbl_acckashd_acc2", on_update: :cascade
+  add_foreign_key "tbl_alamatkirim", "tbl_supel", column: "kode_supel", primary_key: "kode", name: "tbl_alamatkirim_supel", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_bank", "tbl_perkiraan", column: "acc_kd", primary_key: "kodeacc", name: "tbl_bank_acc_kd", on_update: :cascade
+  add_foreign_key "tbl_bank", "tbl_perkiraan", column: "acc_kk", primary_key: "kodeacc", name: "tbl_bank_acc_kk", on_update: :cascade
+  add_foreign_key "tbl_byrhutangdt", "tbl_byrhutanghd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_byrhutangdt_fk", on_update: :cascade
+  add_foreign_key "tbl_byrhutangdt", "tbl_imhd", column: "notrsmasuk", primary_key: "notransaksi", name: "tbl_byrhutangdt_im", on_update: :cascade
+  add_foreign_key "tbl_byrhutangdt", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_byrhutangdt_fk_mu", on_update: :cascade
+  add_foreign_key "tbl_byrhutanghd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_byrhutanghd_kantor", on_update: :cascade
+  add_foreign_key "tbl_byrhutanghd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_byrhutanghd_mu", on_update: :cascade
+  add_foreign_key "tbl_byrhutanghd", "tbl_perkiraan", column: "acc_bayar", primary_key: "kodeacc", name: "tbl_byrhutanghd_kodeacc", on_update: :cascade
+  add_foreign_key "tbl_byrhutanghd", "tbl_perkiraan", column: "acc_pot", primary_key: "kodeacc", name: "tbl_byrhutanghd_kodeacc_pot", on_update: :cascade
+  add_foreign_key "tbl_byrhutanghd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_byrhutanghd_supel", on_update: :cascade
+  add_foreign_key "tbl_byrhutangitem", "tbl_byrhutangdt", column: "iddetail", primary_key: "iddetail", name: "tbl_byrhutangitem_hutangdt", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_byrhutangitem", "tbl_byrhutanghd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_byrhutangitem_header", on_update: :cascade
+  add_foreign_key "tbl_byrhutangitem", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_byrhutangitem_kodeitem", on_update: :cascade
+  add_foreign_key "tbl_byrhutangkonsidt", "tbl_byrhutangkonsihd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_byrkonsiindt_notransaksi_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrhutangkonsidt", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_byrkonsiindt_matauang_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrhutangkonsidt", "tbl_tagihimhd", column: "notrsmasuk", primary_key: "notransaksi", name: "tbl_byrkonsiindt_notrsmasuk_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrhutangkonsihd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_byrkonsiinhd_kodekantor_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrhutangkonsihd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_byrkonsiinhd_matauang_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrhutangkonsihd", "tbl_perkiraan", column: "acc_bayar", primary_key: "kodeacc", name: "tbl_byrkonsiinhd_acc_bayar_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrhutangkonsihd", "tbl_perkiraan", column: "acc_pot", primary_key: "kodeacc", name: "tbl_byrhutangkonsihd_kodeacc_pot", on_update: :cascade
+  add_foreign_key "tbl_byrhutangkonsihd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_byrkonsiinhd_kodesupel_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrkomisislsdt", "tbl_byrkomisislshd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_byrkomisislsdt_fk", on_update: :cascade
+  add_foreign_key "tbl_byrkomisislsdt", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_byrkomisislsdt_fk_mu", on_update: :cascade
+  add_foreign_key "tbl_byrkomisislshd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_byrkomisislshd_kantor", on_update: :cascade
+  add_foreign_key "tbl_byrkomisislshd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_byrkomisislshd_mu", on_update: :cascade
+  add_foreign_key "tbl_byrkomisislshd", "tbl_perkiraan", column: "acc_bayar", primary_key: "kodeacc", name: "tbl_byrkomisislshd_kodeacc", on_update: :cascade
+  add_foreign_key "tbl_byrkomisislshd", "tbl_perkiraan", column: "acc_komisi_sales", primary_key: "kodeacc", name: "tbl_byrkomisislshd_acc_komisi_sales", on_update: :cascade
+  add_foreign_key "tbl_byrkomisislshd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_byrkomisislshd_supel", on_update: :cascade
+  add_foreign_key "tbl_byrpiutangdt", "tbl_byrpiutanghd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_byrpiutangdt_notrs", on_update: :cascade
+  add_foreign_key "tbl_byrpiutangdt", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_byrpiutangdt_mu", on_update: :cascade
+  add_foreign_key "tbl_byrpiutanghd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_byrpiutanghd_kantor", on_update: :cascade
+  add_foreign_key "tbl_byrpiutanghd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_byrpiutanghd_mu", on_update: :cascade
+  add_foreign_key "tbl_byrpiutanghd", "tbl_perkiraan", column: "acc_bayar", primary_key: "kodeacc", name: "tbl_byrpiutanghd_kodeacc", on_update: :cascade
+  add_foreign_key "tbl_byrpiutanghd", "tbl_perkiraan", column: "acc_pot", primary_key: "kodeacc", name: "tbl_byrpiutanghd_kodeacc_pot", on_update: :cascade
+  add_foreign_key "tbl_byrpiutanghd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_byrpiutanghd_supel", on_update: :cascade
+  add_foreign_key "tbl_byrpiutangkonsidt", "tbl_byrpiutangkonsihd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_byrpiutangkonsidt_notransaksi_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrpiutangkonsidt", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_byrpiutangkonsidt_matauang_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrpiutangkonsidt", "tbl_tagihikhd", column: "notrsmasuk", primary_key: "notransaksi", name: "tbl_byrpiutangkonsidt_notrsmasuk_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrpiutangkonsihd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_byrpiutangkonsihd_kodekantor_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrpiutangkonsihd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_byrpiutangkonsihd_matauang_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrpiutangkonsihd", "tbl_perkiraan", column: "acc_bayar", primary_key: "kodeacc", name: "tbl_byrpiutangkonsihd_acc_bayar_fkey", on_update: :cascade
+  add_foreign_key "tbl_byrpiutangkonsihd", "tbl_perkiraan", column: "acc_pot", primary_key: "kodeacc", name: "tbl_byrpiutangkonsihd_kodeacc_pot", on_update: :cascade
+  add_foreign_key "tbl_byrpiutangkonsihd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_byrpiutangkonsihd_kodesupel_fkey", on_update: :cascade
+  add_foreign_key "tbl_emoney", "tbl_perkiraan", column: "acc_prod", primary_key: "kodeacc", name: "tbl_emoney_acc_prod", on_update: :cascade
+  add_foreign_key "tbl_formatnotr", "tbl_kantor", column: "kantor", primary_key: "kodekantor", name: "tbl_formatnotr_kantor", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_hupi_sa", "tbl_matauang", column: "kodemu", primary_key: "matauang", name: "tbl_hupi_sa_mu", on_update: :cascade
+  add_foreign_key "tbl_hupi_sa", "tbl_perkiraan", column: "kode_acc", primary_key: "kodeacc", name: "tbl_hupi_sa_acc", on_update: :cascade
+  add_foreign_key "tbl_hupi_sa", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_hupi_sa_supel", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_ikdt", "tbl_ikhd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_ikdt_notransaksi", on_update: :cascade
+  add_foreign_key "tbl_ikdt", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_ikdt_item", on_update: :cascade
+  add_foreign_key "tbl_ikdt", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_ikdt_satuan", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_bank", column: "byr_debit_bank", primary_key: "kodebank", name: "tbl_ikhd_bank_kd", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_bank", column: "byr_kk_bank", primary_key: "kodebank", name: "tbl_ikhd_bank_kk", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_emoney", column: "byr_emoney_prod", primary_key: "kodeprod", name: "tbl_ikhd_emoney_prod", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_ikhd", column: "notrsretur", primary_key: "notransaksi", name: "tbl_ikhd_retur", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_kantor", column: "kantordari", primary_key: "kodekantor", name: "tbl_ikhd_kantordari", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_ikhd_kantor", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_ikhd_mu", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_biaya_pot", primary_key: "kodeacc", name: "tbl_ikhd_biaya_pot", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_biayalain", primary_key: "kodeacc", name: "tbl_ikhd_biaya", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_debit", primary_key: "kodeacc", name: "tbl_ikhd_accdebit", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_dppesanan", primary_key: "kodeacc", name: "tbl_ikhd_accdppsn", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_emoney", primary_key: "kodeacc", name: "tbl_ikhd_accemoney", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_hpp", primary_key: "kodeacc", name: "tbl_ikhd_hpp", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_kk", primary_key: "kodeacc", name: "tbl_ikhd_acckk", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_kredit", primary_key: "kodeacc", name: "tbl_ikhd_kredit", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_pajak", primary_key: "kodeacc", name: "tbl_ikhd_pajak", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_pend_pembulatan", primary_key: "kodeacc", name: "tbl_ikhd_accpendpembulatan", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_potongan", primary_key: "kodeacc", name: "tbl_ikhd_accpot", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_sales", primary_key: "kodeacc", name: "tbl_ikhd_accsales", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_perkiraan", column: "acc_tunai", primary_key: "kodeacc", name: "tbl_ikhd_tunai", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_supel", column: "kodesales", primary_key: "kode", name: "tbl_ikhd_sales", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_supel", column: "kodesales2", primary_key: "kode", name: "tbl_ikhd_sales2", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_supel", column: "kodesales3", primary_key: "kode", name: "tbl_ikhd_sales3", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_supel", column: "kodesales4", primary_key: "kode", name: "tbl_ikhd_sales4", on_update: :cascade
+  add_foreign_key "tbl_ikhd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_ikhd_supel", on_update: :cascade
+  add_foreign_key "tbl_ikrakitan", "tbl_ikdt", column: "iddetailtrs", primary_key: "iddetail", name: "tbl_ikrakitan_detailtrs", on_update: :cascade
+  add_foreign_key "tbl_ikrakitan", "tbl_ikhd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_ikrakitan_notrs", on_update: :cascade
+  add_foreign_key "tbl_ikrakitan", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_ikrakitan_item", on_update: :cascade
+  add_foreign_key "tbl_ikrakitan", "tbl_item", column: "kodeitemrakitan", primary_key: "kodeitem", name: "tbl_ikrakitan_rakitan", on_update: :cascade
+  add_foreign_key "tbl_ikrakitan", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_ikrakitan_satuan", on_update: :cascade
+  add_foreign_key "tbl_imdt", "tbl_imhd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_belidt_belihd", on_update: :cascade
+  add_foreign_key "tbl_imdt", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_belidt_item", on_update: :cascade
+  add_foreign_key "tbl_imdt", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_imdt_satuan", on_update: :cascade
+  add_foreign_key "tbl_imdt", "tbl_kantor", column: "sakantor", primary_key: "kodekantor", name: "tbl_imdt_fk_kantor", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_imhd", column: "notrsretur", primary_key: "notransaksi", name: "tbl_imhd_retur", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_kantor", column: "kantortujuan", primary_key: "kodekantor", name: "tbl_imhd_kantortjn", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_imhd_kantor", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_imhd_mu", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_perkiraan", column: "acc_biaya_pot", primary_key: "kodeacc", name: "tbl_imhd_biaya_pot", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_perkiraan", column: "acc_biayalain", primary_key: "kodeacc", name: "tbl_imhd_accbiaya", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_perkiraan", column: "acc_dppesanan", primary_key: "kodeacc", name: "tbl_imhd_accdppsn", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_perkiraan", column: "acc_hpp", primary_key: "kodeacc", name: "tbl_imhd_acchpp", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_perkiraan", column: "acc_kredit", primary_key: "kodeacc", name: "tbl_imhd_acckredit", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_perkiraan", column: "acc_pajak", primary_key: "kodeacc", name: "tbl_imhd_accpajak", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_perkiraan", column: "acc_potongan", primary_key: "kodeacc", name: "tbl_imhd_accpot", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_perkiraan", column: "acc_tunai", primary_key: "kodeacc", name: "tbl_imhd_acctunai", on_update: :cascade
+  add_foreign_key "tbl_imhd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_imhd_supel", on_update: :cascade
+  add_foreign_key "tbl_imrakitan", "tbl_imhd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_imrakitan_notrs", on_update: :cascade
+  add_foreign_key "tbl_imrakitan", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_imrakitan_item", on_update: :cascade
+  add_foreign_key "tbl_imrakitan", "tbl_item", column: "kodeitemrakitan", primary_key: "kodeitem", name: "tbl_imrakitan_rakitan", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_itemjenis", column: "jenis", primary_key: "jenis", name: "tbl_item_jenis", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_itemmerek", column: "merek", primary_key: "merek", name: "tbl_item_merek", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_item_satuan", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_kantor", column: "dept", primary_key: "kodekantor", name: "tbl_item_dept_gudang", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_item_matauang", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_perkiraan", column: "acc_byoverhead", primary_key: "kodeacc", name: "tbl_item_overhead"
+  add_foreign_key "tbl_item", "tbl_perkiraan", column: "acc_bytenagakerja", primary_key: "kodeacc", name: "tbl_item_tenagakerja", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_perkiraan", column: "acc_hpp", primary_key: "kodeacc", name: "tbl_item_acchpp", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_perkiraan", column: "acc_jasa", primary_key: "kodeacc", name: "tbl_item_accjasa", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_perkiraan", column: "acc_noninventory", primary_key: "kodeacc", name: "tbl_item_accnoninv", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_perkiraan", column: "acc_pendapatan", primary_key: "kodeacc", name: "tbl_item_accpendpt", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_perkiraan", column: "acc_perbahanbaku", primary_key: "kodeacc", name: "tbl_item_bahanbaku", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_perkiraan", column: "acc_persediaan", primary_key: "kodeacc", name: "tbl_item_accpersdn", on_update: :cascade
+  add_foreign_key "tbl_item", "tbl_supel", column: "supplier1", primary_key: "kode", name: "tbl_item_supplier", on_update: :cascade
+  add_foreign_key "tbl_item_ik", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_item_ik_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_ik", "tbl_itemsatuan", column: "satuandasar", primary_key: "satuan", name: "tbl_item_ik_satuan", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_ik", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_item_ik_kantor", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_ikko", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_item_ikko_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_ikret", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_item_ikret_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_im", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_item_im_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_im", "tbl_itemsatuan", column: "satuandasar", primary_key: "satuan", name: "tbl_item_im_fk", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_im", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_item_im_kantor", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_im", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_item_im_mu", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_imret", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_item_imret_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_rekap", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_item_rekap_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_rekap", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_item_rekap_satuan", on_update: :cascade
+  add_foreign_key "tbl_item_rekap", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_item_rekap_kantor", on_update: :cascade
+  add_foreign_key "tbl_item_sa", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_item_sa_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_item_sa", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_item_sa_satuan", on_update: :cascade
+  add_foreign_key "tbl_item_sa", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_item_sa_kantor", on_update: :cascade
+  add_foreign_key "tbl_itemdisp", "tbl_itemjenis", column: "jenis", primary_key: "jenis", name: "tbl_itemdisp_jenis_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemdisp", "tbl_itemmerek", column: "merek", primary_key: "merek", name: "tbl_itemdisp_merek_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemdispdt", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itemdispdt_kodeitem_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemdispdt", "tbl_itemdisp", column: "iddiskon", primary_key: "iddiskon", name: "tbl_itemdispdt_iddiskon_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemdispdt", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_itemdispdt_satuan_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemhj", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itemhj_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemhj", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_itemhj_satuan", on_update: :cascade
+  add_foreign_key "tbl_itemopname", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itemopname_item", on_update: :cascade
+  add_foreign_key "tbl_itemopname", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_itemopname_satuan", on_update: :cascade
+  add_foreign_key "tbl_itemopname", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_itemopname_kantor", on_update: :cascade
+  add_foreign_key "tbl_itemopname", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_itemopname_acc", on_update: :cascade
+  add_foreign_key "tbl_itempotongan", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itempotongan_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itempotongan", "tbl_supelgrup", column: "kodegrup", primary_key: "kgrup", name: "tbl_itempotongan_grup", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itempromo", "tbl_itemjenis", column: "jenis", primary_key: "jenis", name: "tbl_itempromo_jenis_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itempromo", "tbl_itemmerek", column: "merek", primary_key: "merek", name: "tbl_itempromo_merek_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itempromodt", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itempromodt_kodeitem_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itempromodt", "tbl_itempromo", column: "idpromo", primary_key: "idpromo", name: "tbl_itempromodt_idpromo_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itempromodt", "tbl_itemsatuan", column: "satuangratis", primary_key: "satuan", name: "tbl_itempromodt_satuangratis_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itempromodt", "tbl_itemsatuan", column: "satuanjual", primary_key: "satuan", name: "tbl_itempromodt_satuanjual_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemrakitan", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itemrakitan_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemrakitan", "tbl_item", column: "kodeitemrakitan", primary_key: "kodeitem", name: "tbl_itemrakitan_itemsub", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemrakitan", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_itemrakitan_fk", on_update: :cascade
+  add_foreign_key "tbl_itemsatuanjml", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itemsatuanjml_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemsatuanjml", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_itemsatuanjml_satuan", on_update: :cascade
+  add_foreign_key "tbl_itemserial", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itemserial_kodeitem", on_update: :cascade
+  add_foreign_key "tbl_itemserial", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_itemserial_kantor", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemserial_kotag", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itemserialkotag_kodeitem", on_update: :cascade
+  add_foreign_key "tbl_itemserialdt", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itemserialdt_kodeitem", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemserialdt", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_itemserialdt_kantor", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemserialmanage", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itemsermanage_item", on_update: :cascade
+  add_foreign_key "tbl_itemserialmanage", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_itemsermanage_iddetail_key", on_update: :cascade
+  add_foreign_key "tbl_itemserialmanage", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_itemsermanage_kantor", on_update: :cascade
+  add_foreign_key "tbl_itemstok", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itemstok_item", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itemstok", "tbl_kantor", column: "kantor", primary_key: "kodekantor", name: "tbl_itemstok_kantor", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_itktdt", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itktdt_item", on_update: :cascade
+  add_foreign_key "tbl_itktdt", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_itktdt_satuan", on_update: :cascade
+  add_foreign_key "tbl_itktdt", "tbl_itkthd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_itktdt_notransaksi", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_bank", column: "byr_debit_bank", primary_key: "kodebank", name: "tbl_itkthd_bank_kd", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_bank", column: "byr_kk_bank", primary_key: "kodebank", name: "tbl_itkthd_bank_kk", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_emoney", column: "byr_emoney_prod", primary_key: "kodeprod", name: "tbl_itkthd_emoney_prod", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_ikhd", column: "notrsretur", primary_key: "notransaksi", name: "tbl_itkthd_retur", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_kantor", column: "kantordari", primary_key: "kodekantor", name: "tbl_itkthd_kantordari", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_itkthd_kantor", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_itkthd_mu", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_biaya_pot", primary_key: "kodeacc", name: "tbl_itkthd_biaya_pot", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_biayalain", primary_key: "kodeacc", name: "tbl_itkthd_biaya", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_debit", primary_key: "kodeacc", name: "tbl_itkthd_accdebit", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_dppesanan", primary_key: "kodeacc", name: "tbl_itkthd_accdppsn", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_emoney", primary_key: "kodeacc", name: "tbl_itkthd_accemoney", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_hpp", primary_key: "kodeacc", name: "tbl_itkthd_hpp", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_kk", primary_key: "kodeacc", name: "tbl_itkthd_acckk", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_kredit", primary_key: "kodeacc", name: "tbl_itkthd_kredit", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_pajak", primary_key: "kodeacc", name: "tbl_itkthd_pajak_keluar", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_pajak_in", primary_key: "kodeacc", name: "tbl_itkthd_pajak_masuk"
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_potongan", primary_key: "kodeacc", name: "tbl_itkthd_accpot", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_sales", primary_key: "kodeacc", name: "tbl_itkthd_accsales", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_perkiraan", column: "acc_tunai", primary_key: "kodeacc", name: "tbl_itkthd_tunai", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_supel", column: "kodesales", primary_key: "kode", name: "tbl_itkthd_sales", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_supel", column: "kodesales2", primary_key: "kode", name: "tbl_itkthd_sales2", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_supel", column: "kodesales3", primary_key: "kode", name: "tbl_itkthd_sales3", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_supel", column: "kodesales4", primary_key: "kode", name: "tbl_itkthd_sales4", on_update: :cascade
+  add_foreign_key "tbl_itkthd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_itkthd_supel", on_update: :cascade
+  add_foreign_key "tbl_itrdt", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itrdt_item", on_update: :cascade
+  add_foreign_key "tbl_itrdt", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_itrdt_satuan", on_update: :cascade
+  add_foreign_key "tbl_itrdt", "tbl_itrhd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_itrdt_trhd", on_update: :cascade
+  add_foreign_key "tbl_itrhd", "tbl_kantor", column: "kantordari", primary_key: "kodekantor", name: "tbl_itrhd_kantordari", on_update: :cascade
+  add_foreign_key "tbl_itrhd", "tbl_kantor", column: "kantortujuan", primary_key: "kodekantor", name: "tbl_itrhd_kantortujuan", on_update: :cascade
+  add_foreign_key "tbl_itrhd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_itrhd_kantor", on_update: :cascade
+  add_foreign_key "tbl_itrhd", "tbl_perkiraan", column: "acc_persediaan", primary_key: "kodeacc", name: "tbl_ithd_acchpp", on_update: :cascade
+  add_foreign_key "tbl_kantor", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "kodeacc_key", on_update: :cascade
+  add_foreign_key "tbl_kaslacidt", "tbl_kaslaci", column: "notransaksi", primary_key: "notransaksi", name: "no_transaksi", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_mu_ratesa", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_mu_ratesa_fk", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_perkiraan", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_perkiraan_mu", on_update: :cascade
+  add_foreign_key "tbl_perkiraan", "tbl_perkiraan", column: "parentacc", primary_key: "kodeacc", name: "tbl_perkiraan_parent", on_update: :cascade
+  add_foreign_key "tbl_perksetting", "tbl_kantor", column: "acckantor", primary_key: "kodekantor", name: "tbl_perksetting_kantor", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_perksetting", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_perksetting_perkiraan", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "tbl_pesandt", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_orderbelidt_fk_tblitem", on_update: :cascade
+  add_foreign_key "tbl_pesandt", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_pesandt_satuan", on_update: :cascade
+  add_foreign_key "tbl_pesandt", "tbl_pesanhd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_pesandt_hd", on_update: :cascade
+  add_foreign_key "tbl_pesanhd", "tbl_kantor", column: "kantortujuan", primary_key: "kodekantor", name: "tbl_pesanhd_ktrtujuan", on_update: :cascade
+  add_foreign_key "tbl_pesanhd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_pesanhd_kantor", on_update: :cascade
+  add_foreign_key "tbl_pesanhd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_pesanbelihd_mu", on_update: :cascade
+  add_foreign_key "tbl_pesanhd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_pesanhd_mu", on_update: :cascade
+  add_foreign_key "tbl_pesanhd", "tbl_perkiraan", column: "acc_biaya_pot", primary_key: "kodeacc", name: "tbl_pesanhd_biaya_pot", on_update: :cascade
+  add_foreign_key "tbl_pesanhd", "tbl_perkiraan", column: "acc_dpkas", primary_key: "kodeacc", name: "tbl_pesanhd_accdpkas", on_update: :cascade
+  add_foreign_key "tbl_pesanhd", "tbl_perkiraan", column: "acc_dppesanan", primary_key: "kodeacc", name: "tbl_pesanhd_accdppsn", on_update: :cascade
+  add_foreign_key "tbl_pesanhd", "tbl_supel", column: "kodesales", primary_key: "kode", name: "tbl_pesanhd_sales", on_update: :cascade
+  add_foreign_key "tbl_pesanhd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_pesanhd_supel", on_update: :cascade
+  add_foreign_key "tbl_pesanrakitan", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_pesanrakitan_item", on_update: :cascade
+  add_foreign_key "tbl_pesanrakitan", "tbl_item", column: "kodeitemrakitan", primary_key: "kodeitem", name: "tbl_pesanrakitan_rakitan", on_update: :cascade
+  add_foreign_key "tbl_pesanrakitan", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_pesanrakitan_satuan", on_update: :cascade
+  add_foreign_key "tbl_pesanrakitan", "tbl_pesandt", column: "iddetailtrs", primary_key: "iddetail", name: "tbl_pesanrakitan_dt", on_update: :cascade
+  add_foreign_key "tbl_pesanrakitan", "tbl_pesanhd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_pesanrakitan_hd", on_update: :cascade
+  add_foreign_key "tbl_point_sa", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_ikhd_supel", on_update: :cascade
+  add_foreign_key "tbl_pointambil", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_pointambil_kantor", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_rb_hutang", "tbl_imhd", column: "noretur", primary_key: "notransaksi", name: "tbl_rb_hutang_retur", on_update: :cascade
+  add_foreign_key "tbl_rb_hutang", "tbl_imhd", column: "notrspot", primary_key: "notransaksi", name: "tbl_rb_hutang_trs", on_update: :cascade
+  add_foreign_key "tbl_rj_piutang", "tbl_ikhd", column: "noretur", primary_key: "notransaksi", name: "tbl_rj_piutang_retur", on_update: :cascade
+  add_foreign_key "tbl_rj_piutang", "tbl_ikhd", column: "notrspot", primary_key: "notransaksi", name: "tbl_rj_piutang_trs", on_update: :cascade
+  add_foreign_key "tbl_supel", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_supplier_fk_mu"
+  add_foreign_key "tbl_supel", "tbl_supel_subwil", column: "kdsubwil", primary_key: "kode", name: "tbl_supel_fk", on_update: :cascade
+  add_foreign_key "tbl_supel", "tbl_supel_wil", column: "kdwilayah", primary_key: "kode", name: "tbl_supel_wilayah", on_update: :cascade
+  add_foreign_key "tbl_tagihikdt", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_tagihikdt_item", on_update: :cascade
+  add_foreign_key "tbl_tagihikdt", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_tagihikdt_satuan", on_update: :cascade
+  add_foreign_key "tbl_tagihikdt", "tbl_tagihikhd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_tagihikdt_notransaksi", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_bank", column: "byr_debit_bank", primary_key: "kodebank", name: "tbl_tagihikhd_bank_kd", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_bank", column: "byr_kk_bank", primary_key: "kodebank", name: "tbl_tagihikhd_bank_kk", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_ikhd", column: "notransaksi_ko", primary_key: "notransaksi", name: "tbl_tagihkhd_notransaksi_ko", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_kantor", column: "kantordari", primary_key: "kodekantor", name: "tbl_tagihikhd_kantordari", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_tagihikhd_kantor", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_tagihikhd_mu", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_perkiraan", column: "acc_biaya_pot", primary_key: "kodeacc", name: "tbl_tagihikhd_biaya_pot", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_perkiraan", column: "acc_biayalain", primary_key: "kodeacc", name: "tbl_tagihikhd_biaya", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_perkiraan", column: "acc_debit", primary_key: "kodeacc", name: "tbl_tagihikhd_accdebit", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_perkiraan", column: "acc_dppesanan", primary_key: "kodeacc", name: "tbl_tagihikhd_accdppsn", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_perkiraan", column: "acc_hpp", primary_key: "kodeacc", name: "tbl_tagihikhd_hpp", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_perkiraan", column: "acc_kk", primary_key: "kodeacc", name: "tbl_tagihikhd_acckk", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_perkiraan", column: "acc_kredit", primary_key: "kodeacc", name: "tbl_tagihikhd_kredit", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_perkiraan", column: "acc_pajak", primary_key: "kodeacc", name: "tbl_tagihikhd_pajak", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_perkiraan", column: "acc_potongan", primary_key: "kodeacc", name: "tbl_tagihikhd_accpot", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_perkiraan", column: "acc_tunai", primary_key: "kodeacc", name: "tbl_tagihikhd_tunai", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_tagihikhd_supel", on_update: :cascade
+  add_foreign_key "tbl_tagihikhd", "tbl_tagihikhd", column: "notrsretur", primary_key: "notransaksi", name: "tbl_tagihikhd_retur", on_update: :cascade
+  add_foreign_key "tbl_tagihimdt", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_tagihimdt_item", on_update: :cascade
+  add_foreign_key "tbl_tagihimdt", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_tagihimdt_satuan", on_update: :cascade
+  add_foreign_key "tbl_tagihimdt", "tbl_kantor", column: "sakantor", primary_key: "kodekantor", name: "tbl_tagihimdt_fk_kantor", on_update: :cascade
+  add_foreign_key "tbl_tagihimdt", "tbl_tagihimhd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_tagihimdt_tagihimhd", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_kantor", column: "kantortujuan", primary_key: "kodekantor", name: "tbl_tagihimhd_kantortjn", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_tagihimhd_kantor", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_tagihimhd_mu", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_perkiraan", column: "acc_biaya_pot", primary_key: "kodeacc", name: "tbl_tagihimhd_biaya_pot", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_perkiraan", column: "acc_biayalain", primary_key: "kodeacc", name: "tbl_tagihimhd_accbiaya", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_perkiraan", column: "acc_dppesanan", primary_key: "kodeacc", name: "tbl_tagihimhd_accdppsn", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_perkiraan", column: "acc_hpp", primary_key: "kodeacc", name: "tbl_tagihimhd_acchpp", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_perkiraan", column: "acc_kredit", primary_key: "kodeacc", name: "tbl_tagihimhd_acckredit", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_perkiraan", column: "acc_pajak", primary_key: "kodeacc", name: "tbl_tagihimhd_accpajak", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_perkiraan", column: "acc_potongan", primary_key: "kodeacc", name: "tbl_tagihimhd_accpot", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_perkiraan", column: "acc_tagihan", primary_key: "kodeacc", name: "tbl_tagihimhd_acctagihan", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_perkiraan", column: "acc_tunai", primary_key: "kodeacc", name: "tbl_tagihimhd_acctunai", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_supel", column: "kodesupel", primary_key: "kode", name: "tbl_tagihimhd_supel", on_update: :cascade
+  add_foreign_key "tbl_tagihimhd", "tbl_tagihimhd", column: "notrsretur", primary_key: "notransaksi", name: "tbl_tagihimhd_retur", on_update: :cascade
+  add_foreign_key "tbl_user", "tbl_kantor", column: "loginkantor", primary_key: "kodekantor", name: "tbl_user_loginkantor", on_update: :cascade
+  add_foreign_key "tbl_user", "tbl_userg", column: "kelompok", primary_key: "kelompok", name: "tbl_user_kelompokacc", on_update: :cascade
+  add_foreign_key "tbl_userakses", "tbl_userg", column: "klpakses", primary_key: "kelompok", name: "tbl_userakses_klp", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "tbl_usercus_acc", "tbl_userg", column: "klpakses", primary_key: "kelompok", name: "tbl_usercus_acc_userg", on_update: :cascade, on_delete: :cascade
+end

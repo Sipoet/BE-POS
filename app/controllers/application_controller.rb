@@ -16,12 +16,14 @@ class ApplicationController < ActionController::API
       class_name = "#{controller_name.classify}::#{action_name.classify}Service"
       klass = class_name.constantize
       klass.run(controller)
-    # rescue => NameError
-      # render_error('service klass not found')
+    rescue NameError => e
+      render_error('service klass not found')
     end
   end
 
+  private
+
   def render_error(message)
-    render json: {error_message: message}, status: 422
+    render json: {error_message: message}, status: :conflict
   end
 end

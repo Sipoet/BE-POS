@@ -14,12 +14,16 @@ Rails.application.routes.draw do
     get :item_sales_percentage, on: :collection
   end
 
-  resources :items, only: [:index, :show]
+  resources :items, param: :code, only: [:index, :show]
 
-  resources :suppliers, only: [:index, :show]
+  resources :suppliers,param: :code, only: [:index, :show]
 
-  resources :item_types, only: [:index, :show]
+  resources :item_types,param: :code, only: [:index, :show]
 
-  resources :brands, only: [:index, :show]
+  resources :brands,param: :code, only: [:index, :show]
+
+  resources :discounts, param: :code, only: [:index, :show, :create, :show, :update, :destroy] do
+    post :refresh_item_promotion, on: :collection
+  end
 
 end

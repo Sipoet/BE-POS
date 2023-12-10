@@ -4,8 +4,16 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
+# one: {}
+# # column: value
+# #
+# two: {}
 # column: value
-#
-two: {}
-# column: value
+superadmin:
+  username: 'superadmin'
+  email: 'superadmin@allegra-dept-store.com'
+  role: 5
+  encrypted_password: 'password'
+  jti: 'aiueo'
+  # password: 'password'
+  # password_confirmation: 'password'

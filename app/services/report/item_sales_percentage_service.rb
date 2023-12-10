@@ -7,10 +7,7 @@ class Report::ItemSalesPercentageService < BaseService
   def execute_service
     I18n.locale = :id
     filter = get_filter
-    query_generator = ItemSalesPercentageQuery.new(brands:filter[:brands],
-                                                    suppliers:filter[:suppliers],
-                                                    item_types:filter[:item_types],
-                                                    item_codes:filter[:item_codes])
+    query_generator = ItemSalesPercentageReport.all
 
     page = @params[:page]
     data = []
@@ -89,7 +86,7 @@ class Report::ItemSalesPercentageService < BaseService
   def get_column_number(index)
     col_number = ''
     unit = index % ALPHABETS.length
-    dozens = index / ALPHABETS.length
+    dozens = (index / ALPHABETS.length)
     col_number = ALPHABETS[(dozens - 1)] if dozens >= 1
     col_number += ALPHABETS[(unit - 1)]
     col_number
@@ -122,8 +119,6 @@ class Report::ItemSalesPercentageService < BaseService
       end
     end
   end
-
-
 
   def filename
     'Laporan-penjualan-persentase'
