@@ -7,27 +7,16 @@ class Report::ItemSalesPercentageService < BaseService
   def execute_service
     I18n.locale = :id
     filter = get_filter
-    query_generator = ItemSalesPercentageReport.all
-
+    reports = find_reports(filter)
     page = @params[:page]
-    data = []
     if page.present?
-      paginated_query = query_generator.generate_sql_query(page: page.to_i, per: (@params[:per] || PER_LIMIT).to_i)
-      data = execute_and_decorate_sql(paginated_query)
-    else
-      page = 1
-      loop do
-        paginated_query = query_generator.generate_sql_query(page: page, per: PER_LIMIT)
-        query_results = execute_and_decorate_sql(paginated_query)
-        break if query_results.empty?
-        data += query_results
-        page += 1
-      end
+      reports = reports.page(page.to_i)
+                       .per((@params[:per] || PER_LIMIT).to_i)
     end
 
-    case @params[:report_type]
+    case @params[:report_type].to_s
     when 'xlsx'
-      file_excel = generate_excel(data,filter)
+      file_excel = generate_excel(reports,filter)
       @controller.send_file file_excel
     when 'json'
       options = {
@@ -37,11 +26,28 @@ class Report::ItemSalesPercentageService < BaseService
           filter: filter
         }
       }
-      render_json(ItemSalesPercentageSerializer.new(data,options).serializable_hash)
+      render_json(ItemSalesPercentageSerializer.new(reports,options))
     end
   end
 
   private
+
+  def find_reports(filter)
+    query = ItemSalesPercentageReport.order(item_code: :asc)
+    if filter[:brands].present?
+      query = query.where(brand: filter[:brands])
+    end
+    if filter[:suppliers].present?
+      query = query.where(supplier: filter[:suppliers])
+    end
+    if filter[:item_types].present?
+      query = query.where(item_type: filter[:item_types])
+    end
+    if filter[:item_codes].present?
+      query = query.where(item_code: filter[:item_code])
+    end
+    query
+  end
 
   def localized_column_names
     @localized_column_names ||= ItemSalesPercentageReport::TABLE_HEADER.map{|column_name| I18n.t(column_name, scope: LOCALE_SCOPE)}
@@ -129,10 +135,5 @@ class Report::ItemSalesPercentageService < BaseService
     [:brands,:item_codes, :item_types, :suppliers].each_with_object({}) do |key,filter|
       filter[key] = permitted_params[key] if permitted_params[key].present?
     end
-  end
-
-  def execute_and_decorate_sql(sql)
-    results = execute_sql(sql)
-    results.to_a.map{|row| ItemSalesPercentageReport.new(row)}
   end
 end

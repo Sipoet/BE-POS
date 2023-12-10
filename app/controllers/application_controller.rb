@@ -17,7 +17,7 @@ class ApplicationController < ActionController::API
       klass = class_name.constantize
       klass.run(controller)
     rescue NameError => e
-      render_error('service klass not found')
+      render_error(e.backtrace.to_s)
     end
   end
 
