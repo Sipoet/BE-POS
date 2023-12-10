@@ -29,3 +29,5 @@
 /config/master.key
 /config/database.yml
 pass_db.txt
+/public/*
+!/public/
