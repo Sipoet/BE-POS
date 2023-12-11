@@ -3,11 +3,13 @@ class Discount < ApplicationRecord
   attr_readonly :code
 
   validates :code, presence: true
-  validates :discount1, presence: true, numericality:{greater_than: 0}
+  validates :discount1, presence: true, numericality:{greater_than_and_equal_to: 0}
   validates :start_time, presence: true
   validates :end_time, presence: true
 
   validate :range_time_should_valid
+
+  scope :active_today, ->{where(start_time: ..(Time.zone.now),end_time: (Time.zone.now)..)}
 
   private
 

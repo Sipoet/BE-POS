@@ -5,6 +5,7 @@ class Discount::UpdateService < BaseService
     discount = Discount.find_by(code: @params[:code])
     raise BaseService::RecordNotFound if discount.nil?
     if discount.update(permitted_params)
+      RefreshPromotionJob.perform_async(discount.id)
       render_json(DiscountSerializer.new(discount.reload))
     else
       render_json({message: 'gagal disimpan',errors: discount.errors.full_messages},{status: :conflict})

@@ -22,7 +22,15 @@ class DiscountsController < ApplicationController
     run_service_default
   end
 
-  def refresh_item_promotion
+  def refresh_active_promotion
+    run_service_default
+  end
+
+  def refresh_promotion
+    run_service_default
+  end
+
+  def refresh_all_promotion
     run_service_default
   end
 end

@@ -1,7 +1,9 @@
-class ApplicationJob < ActiveJob::Base
-  # Automatically retry jobs that encountered a deadlock
-  # retry_on ActiveRecord::Deadlocked
+class ApplicationJob
+  include Sidekiq::Job # use sidekiq instead of active job for performance issue
 
-  # Most jobs are safe to ignore if the underlying records are no longer available
-  # discard_on ActiveJob::DeserializationError
+  protected
+
+  def debug_log(message)
+    Rails.logger.debug message
+  end
 end

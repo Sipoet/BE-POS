@@ -5,8 +5,8 @@ class BaseService
     service.execute
   end
 
-  def initialize(controller)
-    @params = controller.params
+  def initialize(controller = nil)
+    @params = controller.try(:params)
     @controller = controller
   end
 
@@ -20,7 +20,10 @@ class BaseService
     rescue RecordNotFound => e
       render_not_found_json(record_type:e.record_type, record_id: e.record_id)
     end
+  end
 
+  def run_from_controller?
+    @controller.present?
   end
 
   protected

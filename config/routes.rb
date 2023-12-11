@@ -23,7 +23,9 @@ Rails.application.routes.draw do
   resources :brands,param: :code, only: [:index, :show]
 
   resources :discounts, param: :code, only: [:index, :show, :create, :show, :update, :destroy] do
-    post :refresh_item_promotion, on: :collection
+    post :refresh_active_promotion, on: :collection
+    post :refresh_all_promotion, on: :collection
+    post :refresh_promotion, on: :member
   end
 
 end

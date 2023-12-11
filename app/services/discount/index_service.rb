@@ -22,7 +22,7 @@ class Discount::IndexService < BaseService
   end
 
   def find_discounts
-    Discount.where(['code ilike ?',"*#{@text_search}*"])
+    Discount.where(['code ilike ?',"%#{@text_search}%"])
         .page(@page)
         .per(@per)
   end

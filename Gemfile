@@ -52,3 +52,5 @@ group :development do
   gem "spring"
   # gem 'parallel'
 end
+
+gem "sidekiq", "~> 7.2"
