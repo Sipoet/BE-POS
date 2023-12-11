@@ -1,24 +1,40 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is open source extension Back end API server to database IPOS 5(https://inspirasi.biz/).
 
-Things you may want to cover:
+API standard format use json https://jsonapi.org/format/
 
-* Ruby version
+server use library:
+* ruby v3.2.2 for programming language
+* rails v7.1 for server framework
+* puma for app server
 
-* System dependencies
+system requirement:
+* ipos 5 v9.0.5.1
+* docker
+* git
 
-* Configuration
 
-* Database creation
+how to install:
+* install docker: https://docs.docker.com/get-docker/
+* install git
+* open command line on folder you want to install
+* clone repository git
+  >``git clone https://github.com/Sipoet/BE-POS.git``
+* go to repository
+* create config/database.yml, insert the database password and host
 
-* Database initialization
+* modifed host on docker-compose.yml
+* run command
+  >``docker compose build``
 
-* How to run the test suite
+how to start server:
+* run docker compose
+  >`docker compose up`
+* if want to run on background add option `-d`
+  >`docker compose up -d`
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+how to stop server:
+* go to repository
+* run command
+  >`docker compose down`
