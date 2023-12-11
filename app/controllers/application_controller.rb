@@ -9,13 +9,15 @@ class ApplicationController < ActionController::API
     devise_parameter_sanitizer.permit(:account_update, keys: %i[name avatar])
   end
 
-  def run_service_default(controller)
-    action_name = controller.action_name
-    controller_name = controller.controller_name
+  def run_service(service_klass = nil)
+    service_klass.run(self)
+  end
+
+  def run_service_default
     begin
       class_name = "#{controller_name.classify}::#{action_name.classify}Service"
-      klass = class_name.constantize
-      klass.run(controller)
+      service_klass = class_name.constantize
+      service_klass.run(self)
     rescue NameError => e
       render_error(e.backtrace.to_s)
     end
