@@ -43,7 +43,11 @@ class RefreshPromotionJob < ApplicationJob
     item_promotions = ItemPromotion.where(kodeitem: items.pluck(:kodeitem), iddiskon: iddiskon)
     if item_promotions.present?
       item_promotions.each do |item_promotion|
-        @blacklist_item_codes << item_promotion.kodeitem if item_promotion.diskon1 <= discount.discount1
+        if item_promotion.diskon1 <= discount.discount1
+          @blacklist_item_codes << item_promotion.kodeitem
+        else
+          item_promotion.delete
+        end
         debug_log "conflict diskon #{item_promotion.iddiskon} with item code #{item_promotion.kodeitem}"
       end
 

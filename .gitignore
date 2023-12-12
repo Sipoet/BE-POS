@@ -31,3 +31,4 @@
 pass_db.txt
 /public/*
 !/public/
+.env

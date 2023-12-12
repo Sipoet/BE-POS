@@ -16,7 +16,7 @@ system requirement:
 * docker
 * git
 * ipos 5 lisensi server
-* postgresql database 9.6.xx (from ipos lisensi server)
+* access to postgresql database 9.6.xx (ask ipos customer service)
 
 
 how to install:
@@ -26,9 +26,8 @@ how to install:
 * clone repository git
   >``git clone https://github.com/Sipoet/BE-POS.git``
 * go to repository
-* create config/database.yml, insert the database password and host
-
-* modifed host on docker-compose.yml
+* rename file `example.env` into `.env`
+* edit renamed file `.env`. change data inside that has retangular block([]) in it. ask ipos customer service for data needed
 * run command
   >``docker compose build``
 
@@ -37,7 +36,7 @@ how to start server:
   >`docker compose up`
 * if want to run on background add option `-d`
   >`docker compose up -d`
-* on default, the server will be run in `http://localhost:3000`
+* on default, the back-end server will be run in `http://localhost:3000`
 
 how to stop server:
 * go to repository

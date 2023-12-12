@@ -4,6 +4,6 @@ class ApplicationJob
   protected
 
   def debug_log(message)
-    Rails.logger.debug message
+    Sidekiq.logger.debug message
   end
 end
