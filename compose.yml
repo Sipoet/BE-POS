@@ -14,8 +14,11 @@ services:
       - redis
     environment:
         - HOST=${HOST}
+        - DATABASE_USERNAME=${DATABASE_USERNAME}
         - DATABASE_PASSWORD=${DATABASE_PASSWORD}
         - RAILS_ENV=${RAILS_ENV}
+        - PRODUCTION_DATABASE_NAME=${PRODUCTION_DATABASE_NAME}
+
   sidekiq:
     build: .
     command: bundle exec sidekiq -C config/sidekiq.yml
@@ -27,8 +30,10 @@ services:
       - redis
     environment:
         - HOST=${HOST}
+        - DATABASE_USERNAME=${DATABASE_USERNAME}
         - DATABASE_PASSWORD=${DATABASE_PASSWORD}
         - RAILS_ENV=${RAILS_ENV}
+        - PRODUCTION_DATABASE_NAME=${PRODUCTION_DATABASE_NAME}
   db:
     image: postgres:9.6.24
     restart: always
