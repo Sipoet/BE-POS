@@ -1,4 +1,4 @@
-class Discount::RefreshAllPromotionService < BaseService
+class Discount::RefreshPromotionService < BaseService
   def execute_service
     discount = Discount.find_by(code: @params[:code].to_s)
     raise BaseService::RecordNotFound if discount.nil?

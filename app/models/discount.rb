@@ -1,4 +1,4 @@
-require 'override/big_decimal.rb'
+require 'big_decimal.rb'
 class Discount < ApplicationRecord
   attr_readonly :code
 
