@@ -1,7 +1,7 @@
 class Discount::IndexService < BaseService
   def execute_service
     extract_params
-    discounts = find_discounts
+    @discounts = find_discounts
     render_json(DiscountSerializer.new(discounts,{meta: meta}))
   end
 
@@ -10,20 +10,23 @@ class Discount::IndexService < BaseService
   def meta
     {
       page: @page,
-      per: @per
+      per: @per,
+      total_page: @discounts.total_pages,
     }
   end
 
   def extract_params
-    permitted_params = @params.permit(:page,:per,:text_search)
+    permitted_params = @params.permit(:page,:per,:search_text)
     @page = permitted_params.fetch(:page,1).to_i
     @per = permitted_params.fetch(:per,20).to_i
-    @text_search = permitted_params[:text_search].to_s
+    @search_text = permitted_params[:search_text].to_s
   end
 
   def find_discounts
-    Discount.where(['code ilike ?',"%#{@text_search}%"])
+    discounts = Discount.order(code: :asc)
         .page(@page)
         .per(@per)
+    discounts = discounts.where(['code ilike ?',"%#{@search_text}%"]) if @search_text.present?
+    discounts
   end
 end

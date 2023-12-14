@@ -33,4 +33,8 @@ class DiscountsController < ApplicationController
   def refresh_all_promotion
     run_service_default
   end
+
+  def columns
+    run_service(Discount::ColumnsService)
+  end
 end

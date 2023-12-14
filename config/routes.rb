@@ -10,8 +10,9 @@ Rails.application.routes.draw do
   controllers: {
     sessions: 'users/sessions'
   }
-  resources :reports, only: [] do
-    get :item_sales_percentage, on: :collection
+
+  resources :item_sales_percentage_reports, only: [:index] do
+    get :columns, on: :collection
   end
 
   resources :items, param: :code, only: [:index, :show]
@@ -26,6 +27,7 @@ Rails.application.routes.draw do
     post :refresh_active_promotion, on: :collection
     post :refresh_all_promotion, on: :collection
     post :refresh_promotion, on: :member
+    get :columns, on: :collection
   end
 
 end

@@ -1,4 +1,4 @@
-class Report::ItemSalesPercentageService < BaseService
+class ItemSalesPercentageReport::IndexService < BaseService
   require 'write_xlsx'
   PER_LIMIT = 1000.freeze
   LOCALE_SCOPE = 'item_sales_percentage_report.model'.freeze
@@ -21,8 +21,6 @@ class Report::ItemSalesPercentageService < BaseService
     when 'json'
       options = {
         meta:{
-          column_names: localized_column_names,
-          column_order: ItemSalesPercentageReport::TABLE_HEADER,
           filter: filter
         }
       }

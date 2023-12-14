@@ -2,9 +2,11 @@
 FROM ruby:3.2.2-slim-bullseye
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client build-essential apt-utils libpq-dev git nano
 WORKDIR /myapp
-COPY Gemfile /myapp/Gemfile
-COPY Gemfile.lock /myapp/Gemfile.lock
+COPY . /myapp
+
 RUN bundle install
+# add extra table needed on database
+RUN rails db:migrate
 
 # Add a script to be executed every time the container starts.
 COPY entrypoint.sh /usr/bin/

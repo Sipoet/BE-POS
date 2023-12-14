@@ -41,7 +41,7 @@ services:
       - D:\Documents\sql\postgresql:/var/lib/postgresql/data
       - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
     ports:
-      - "5444:5432"
+      - "5432:5432"
     environment:
         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
   redis:

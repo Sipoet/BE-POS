@@ -1,0 +1,17 @@
+id:
+  activerecord:
+    models:
+      discount: "Diskon"
+    attributes:
+      discount:
+        code: "Kode"
+        item_code: "Kode Item"
+        supplier_code: "Kode Supplier"
+        brand_name: "Merek"
+        item_type: "Jenis/Departemen"
+        discount1: "Diskon 1"
+        discount2: "Diskon 2"
+        discount3: "Diskon 3"
+        discount4: "Diskon 4"
+        start_time: 'Tanggal Mulai'
+        end_time: 'Tanggal Sampai'

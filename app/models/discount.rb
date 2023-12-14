@@ -1,5 +1,18 @@
 require 'big_decimal.rb'
 class Discount < ApplicationRecord
+
+  TABLE_HEADER = [
+    :code,
+    :supplier_code,
+    :item_type,
+    :brand_name,
+    :item_code,
+    :discount1,
+    :discount2,
+    :discount3,
+    :discount4
+  ].freeze
+
   attr_readonly :code
 
   validates :code, presence: true
