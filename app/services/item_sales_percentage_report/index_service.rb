@@ -1,11 +1,8 @@
 class ItemSalesPercentageReport::IndexService < BaseService
   require 'write_xlsx'
   PER_LIMIT = 1000.freeze
-  LOCALE_SCOPE = 'item_sales_percentage_report.model'.freeze
-
 
   def execute_service
-    I18n.locale = :id
     filter = get_filter
     reports = find_reports(filter)
     page = @params[:page]
@@ -48,7 +45,7 @@ class ItemSalesPercentageReport::IndexService < BaseService
   end
 
   def localized_column_names
-    @localized_column_names ||= ItemSalesPercentageReport::TABLE_HEADER.map{|column_name| I18n.t(column_name, scope: LOCALE_SCOPE)}
+    ItemSalesPercentageReport::TABLE_HEADER.map{|column_name| ItemSalesPercentageReport.human_attribute_name(column_name)}
   end
 
   def generate_excel(rows, filter)

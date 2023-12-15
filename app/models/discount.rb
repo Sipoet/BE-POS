@@ -10,7 +10,9 @@ class Discount < ApplicationRecord
     :discount1,
     :discount2,
     :discount3,
-    :discount4
+    :discount4,
+    :start_time,
+    :end_time
   ].freeze
 
   attr_readonly :code

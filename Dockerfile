@@ -6,7 +6,7 @@ COPY . /myapp
 
 RUN bundle install
 # add extra table needed on database
-RUN rails db:migrate
+# RUN rails db:migrate
 
 # Add a script to be executed every time the container starts.
 COPY entrypoint.sh /usr/bin/

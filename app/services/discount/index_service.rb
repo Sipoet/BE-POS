@@ -2,7 +2,7 @@ class Discount::IndexService < BaseService
   def execute_service
     extract_params
     @discounts = find_discounts
-    render_json(DiscountSerializer.new(discounts,{meta: meta}))
+    render_json(DiscountSerializer.new(@discounts,{meta: meta}))
   end
 
   private
@@ -24,9 +24,11 @@ class Discount::IndexService < BaseService
 
   def find_discounts
     discounts = Discount.order(code: :asc)
-        .page(@page)
-        .per(@per)
-    discounts = discounts.where(['code ilike ?',"%#{@search_text}%"]) if @search_text.present?
+      .page(@page)
+      .per(@per)
+    if @search_text.present?
+      discounts = discounts.where(['code ilike ? or item_code ilike ? or item_type ilike ? or supplier_code ilike ? or brand_name ilike ?']+ Array.new(5,"%#{@search_text}%"))
+    end
     discounts
   end
 end
