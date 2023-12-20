@@ -3,10 +3,11 @@ services:
   backend:
     build: .
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    container_name: backend-pos
     volumes:
       - .:/myapp
     ports:
-      - "3000:3000"
+      - "${SERVER_PORT}:3000"
     stdin_open: true
     tty: true
     depends_on:

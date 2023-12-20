@@ -28,17 +28,17 @@ how to install:
 * go to repository
 * rename file `example.env` into `.env`
 * edit renamed file `.env`. change data inside that has retangular block([]) in it. ask ipos customer service for data needed
-* run command
+* to migrate database needed, run command
   >``docker compose build``
-
+  >``docker compose up -d``
+  >``docker exec -it backend-pos rails db:migrate``
+  >``docker compose stop``
 how to start server:
 * run docker compose
-  >`docker compose up`
-* if want to run on background add option `-d`
-  >`docker compose up -d`
+  >`docker compose start`
 * on default, the back-end server will be run in `http://localhost:3000`
-
+* to change server port, you can change in `.env` file variable `SERVER_PORT`
 how to stop server:
 * go to repository
 * run command
-  >`docker compose down`
+  >`docker compose stop`
