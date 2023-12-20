@@ -1,5 +1,5 @@
 class RefreshActivePromotionJob < ApplicationJob
-  sidekiq_options queue: 'default'
+  sidekiq_options queue: 'low'
 
   def perform
     debug_log 'refresh active promotion start'

@@ -11,6 +11,10 @@ Rails.application.routes.draw do
     sessions: 'users/sessions'
   }
 
+  resources :background_jobs, only:[:index, :show, :destroy] do
+    post :retry, on: :member
+  end
+
   resources :item_sales_percentage_reports, only: [:index] do
     get :columns, on: :collection
   end

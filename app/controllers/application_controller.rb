@@ -19,7 +19,7 @@ class ApplicationController < ActionController::API
       service_klass = class_name.constantize
       service_klass.run(self)
     rescue NameError => e
-      render_error(e.backtrace.to_s)
+      render_error("#{e.message} #{e.backtrace.to_s}")
     end
   end
 
