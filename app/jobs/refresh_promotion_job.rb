@@ -2,18 +2,25 @@ class RefreshPromotionJob < ApplicationJob
   sidekiq_options queue: 'default', retry: 1
 
   def perform(id)
+    check_if_cancelled!
     @blacklist_item_codes = []
     discount = Discount.find(id)
     ActiveRecord::Base.transaction do
       delete_old_promotion(discount)
       items = items_based_discount(discount)
       check_conflict_promotion(discount, items)
+      check_if_cancelled!
       items.reject!{|item| @blacklist_item_codes.include?(item.kodeitem)}
       generate_ipos_promotion(discount, items)
+      check_if_cancelled!
     end
+  rescue JobCancelled => e
+    debug_log "job #{jid} cancelled safely"
   end
 
   private
+
+
 
   def delete_old_promotion(discount)
     promotions = Promotion.where('iddiskon ilike ?', "%_#{discount.code}%")

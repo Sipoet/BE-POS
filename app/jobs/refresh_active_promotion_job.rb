@@ -2,6 +2,7 @@ class RefreshActivePromotionJob < ApplicationJob
   sidekiq_options queue: 'low'
 
   def perform
+    check_if_cancelled!
     debug_log 'refresh active promotion start'
     last_updated = Item.where(kodeitem: active_promotion_item_codes)
                 .maximum(:tanggal_add)
@@ -15,9 +16,14 @@ class RefreshActivePromotionJob < ApplicationJob
     end
 
     ActiveRecord::Base.transaction do
-      group_discounts.each {|discount,items| generate_ipos_promotion(discount, items)}
+      group_discounts.each do |discount,items|
+        generate_ipos_promotion(discount, items)
+        check_if_cancelled!
+      end
     end
     debug_log 'refresh active promotion done'
+  rescue JobCancelled => e
+    debug_log "job #{jid} cancelled safely"
   end
 
   private
