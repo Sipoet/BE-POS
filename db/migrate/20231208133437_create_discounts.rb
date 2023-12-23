@@ -6,10 +6,10 @@ class CreateDiscounts < ActiveRecord::Migration[7.0]
       t.string :supplier_code
       t.string :brand_name
       t.string :item_type
-      t.decimal :discount1, null: false
-      t.decimal :discount2
-      t.decimal :discount3
-      t.decimal :discount4
+      t.decimal :discount1, null: false,default: BigDecimal(0)
+      t.decimal :discount2, null: false,default: BigDecimal(0)
+      t.decimal :discount3, null: false,default: BigDecimal(0)
+      t.decimal :discount4, null: false,default: BigDecimal(0)
       t.datetime :start_time, null: false
       t.datetime :end_time, null: false
       t.timestamps

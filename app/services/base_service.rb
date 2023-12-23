@@ -41,6 +41,10 @@ class BaseService
     @controller.render json: {message: "#{record_type} #{record_id} tidak ditemukan"}, status: :not_found
   end
 
+  def render_error_record(record)
+    @controller.render json: {message: 'Gagal disimpan',errors: record.errors.full_messages},status: :conflict
+  end
+
   def execute_sql(query)
     ActiveRecord::Base.connection.execute(query)
   end

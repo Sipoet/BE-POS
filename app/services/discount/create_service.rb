@@ -8,7 +8,7 @@ class Discount::CreateService < BaseService
       RefreshPromotionJob.perform_async(discount.id)
       render_json(DiscountSerializer.new(discount))
     else
-      render_json({message: 'gagal disimpan',errors: discount.errors.full_messages},{status: :conflict})
+      render_error_record(discount)
     end
   end
 
