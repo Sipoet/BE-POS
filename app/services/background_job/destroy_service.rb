@@ -6,9 +6,9 @@ class BackgroundJob::DestroyService < BaseService
       raise BaseService::RecordNotFound.new(record_type: 'background job',record_id: params[:id])
     end
     if job.delete
-      render_json{message: "sukses hapus background job #{job.jid}"}
+      render_json({message: "sukses hapus background job #{job.jid}"})
     else
-      render_json{message: "gagal hapus background job #{job.jid}"}, status: :conflict
+      render_json({message: "gagal hapus background job #{job.jid}"}, {status: :conflict})
     end
   end
 
