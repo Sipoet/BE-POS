@@ -5,6 +5,6 @@ class Discount::RefreshPromotionService < BaseService
     jid = RefreshPromotionJob.perform_async(discount.id)
     render_json({
       data: {jid: jid}
-    })
+    },{status: :accepted})
   end
 end

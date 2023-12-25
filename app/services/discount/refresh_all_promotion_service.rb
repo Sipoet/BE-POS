@@ -7,6 +7,6 @@ class Discount::RefreshAllPromotionService < BaseService
 
     render_json({
       data: {jid: jid}
-    })
+    },{status: :accepted})
   end
 end
