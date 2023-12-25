@@ -1,6 +1,5 @@
 class BaseService
   def self.run(controller)
-    I18n.locale = :id
     service = self.new(controller)
     service.execute
   end

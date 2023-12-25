@@ -26,6 +26,6 @@ class ApplicationController < ActionController::API
   private
 
   def render_error(message)
-    render json: {error_message: message}, status: :conflict
+    render json: {message: message}, status: 500
   end
 end

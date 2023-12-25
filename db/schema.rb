@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_10_142526) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_23_151756) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,17 +19,18 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_10_142526) do
     t.string "item_code"
     t.string "supplier_code"
     t.string "brand_name"
-    t.string "item_type"
-    t.decimal "discount1", null: false
-    t.decimal "discount2"
-    t.decimal "discount3"
-    t.decimal "discount4"
+    t.string "item_type_name"
+    t.decimal "discount1", default: "0.0", null: false
+    t.decimal "discount2", default: "0.0", null: false
+    t.decimal "discount3", default: "0.0", null: false
+    t.decimal "discount4", default: "0.0", null: false
     t.datetime "start_time", null: false
     t.datetime "end_time", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_discounts_on_code", unique: true
-    t.index ["start_time", "end_time"], name: "index_discounts_on_start_time_and_end_time"
+    t.index ["start_time", "end_time", "item_code", "supplier_code", "item_type_name", "brand_name"], name: "active_promotion_idx", order: { end_time: :desc }
+    t.index ["start_time", "end_time"], name: "index_discounts_on_start_time_and_end_time", order: { end_time: :desc }
   end
 
   create_table "tbl_acc_sa", id: false, force: :cascade do |t|
@@ -985,6 +986,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_10_142526) do
     t.decimal "disknom4", precision: 40, scale: 20
     t.string "iddiskon", limit: 50
     t.string "kgruppel", limit: 20
+    t.index ["kodeitem", "iddiskon"], name: "index_tbl_itemdispdt_on_kodeitem_and_iddiskon", unique: true
   end
 
   create_table "tbl_itemhj", primary_key: "iddetail", id: { type: :string, limit: 150 }, force: :cascade do |t|

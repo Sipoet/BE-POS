@@ -20,16 +20,8 @@ class RefreshPromotionJob < ApplicationJob
 
   private
 
-
-
   def delete_old_promotion(discount)
-    promotions = Promotion.where('iddiskon ilike ?', "%_#{discount.code}%")
-    if promotions.exists?
-      ItemPromotion.delete_by_iddiskon(promotions.pluck(:iddiskon))
-      promotions.delete_all
-    else
-      raise "#{discount.code} not exists"
-    end
+    discount.delete_promotion
   end
 
   def items_based_discount(discount)
@@ -37,7 +29,7 @@ class RefreshPromotionJob < ApplicationJob
     {
       kodeitem: discount.item_code,
       supplier1: discount.supplier_code,
-      jenis: discount.item_type,
+      jenis: discount.item_type_name,
       merek: discount.brand_name
     }.each do |key, value|
       items = items.where(key => value) if value.present?
@@ -46,18 +38,15 @@ class RefreshPromotionJob < ApplicationJob
   end
 
   def check_conflict_promotion(discount, items)
-    iddiskon = Promotion.active_today.pluck(:iddiskon)
+    iddiskon = Promotion.active_range(discount.start_time, discount.end_time).pluck(:iddiskon)
     item_promotions = ItemPromotion.where(kodeitem: items.pluck(:kodeitem), iddiskon: iddiskon)
-    if item_promotions.present?
-      item_promotions.each do |item_promotion|
-        if item_promotion.diskon1 <= discount.discount1
-          @blacklist_item_codes << item_promotion.kodeitem
-        else
-          item_promotion.delete
-        end
-        debug_log "conflict diskon #{item_promotion.iddiskon} with item code #{item_promotion.kodeitem}"
+    item_promotions.each do |item_promotion|
+      if item_promotion.diskon1 <= discount.discount1
+        @blacklist_item_codes << item_promotion.kodeitem
+      else
+        item_promotion.delete
       end
-
+      debug_log "conflict diskon #{item_promotion.iddiskon} with item code #{item_promotion.kodeitem}"
     end
   end
 

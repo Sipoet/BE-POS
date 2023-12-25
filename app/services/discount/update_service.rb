@@ -2,7 +2,7 @@ require 'sidekiq/api'
 class Discount::UpdateService < BaseService
   def execute_service
     permitted_params = @params.required(:discount)
-                              .permit(:item_code, :supplier_code, :item_type, :brand_name, :discount1, :discount2,:discount3,:discount4, :start_time, :end_time)
+                              .permit(:item_code, :supplier_code, :item_type_name, :brand_name, :discount1, :discount2,:discount3,:discount4, :start_time, :end_time)
     discount = Discount.find_by(code: @params[:code])
     raise BaseService::RecordNotFound if discount.nil?
     if discount.update(permitted_params)
@@ -21,7 +21,6 @@ class Discount::UpdateService < BaseService
       queue.each do |job|
         if job.klass == 'RefreshPromotionJob' && job.args[0] == discount.id
           job.delete
-          break
         end
       end
     end
@@ -31,7 +30,6 @@ class Discount::UpdateService < BaseService
       work_payload = JSON.parse(work['payload'])
       if work_payload['class'] == 'RefreshPromotionJob' && work_payload['args'][0] == discount.id
         RefreshPromotionJob.cancel!(work_payload['jid'])
-        break
       end
     end
   end

@@ -17,7 +17,6 @@ module Myapp
     config.autoload_lib(ignore: %w(assets tasks generators))
     config.hosts << $HOST
     config.hosts << 'backend'
-    config.time_zone = "Singapore"
     config.active_job.queue_adapter = :sidekiq
     config.i18n.default_locale = :id
     # Configuration for the application, engines, and railties goes here.

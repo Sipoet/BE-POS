@@ -9,13 +9,14 @@ class RefreshActivePromotionJob < ApplicationJob
     items = Item.where('tanggal_add > ?', last_updated)
     group_discounts = {}
     group_discounts.default = []
-    items.each do |item,obj|
+    items.each do |item|
       discount = discount_based_item(item)
       next if discount.nil?
-      group_discounts[discount] << item
+      group_discounts[discount] += [item]
     end
 
     ActiveRecord::Base.transaction do
+      check_active_promotion
       group_discounts.each do |discount,items|
         generate_ipos_promotion(discount, items)
         check_if_cancelled!
@@ -27,6 +28,14 @@ class RefreshActivePromotionJob < ApplicationJob
   end
 
   private
+
+  def check_active_promotion
+    Promotion.where(tglsampai: ...Time.now)
+             .update_all(stsact: false)
+    today = Time.now
+    Promotion.within_range(today,today).update_all(stsact: true)
+
+  end
 
   def generate_ipos_promotion(discount, items)
     items.each_slice(200).with_index(1) do |paginated_items, page|
@@ -51,7 +60,7 @@ class RefreshActivePromotionJob < ApplicationJob
     discounts = Discount.active_today
                         .where(item_code: [item.kodeitem,nil],
                               supplier_code: [item.supplier1,nil],
-                              item_type: [item.jenis,nil],
+                              item_type_name: [item.jenis,nil],
                               brand_name: [item.merek, nil])
                         .to_a
     if discounts.length == 1

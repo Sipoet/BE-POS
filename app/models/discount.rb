@@ -4,7 +4,7 @@ class Discount < ApplicationRecord
   TABLE_HEADER = [
     :code,
     :supplier_code,
-    :item_type,
+    :item_type_name,
     :brand_name,
     :item_code,
     :discount1,
@@ -25,16 +25,41 @@ class Discount < ApplicationRecord
   validates :start_time, presence: true
   validates :end_time, presence: true
 
+  belongs_to :item, optional: true, foreign_key: :item_code, primary_key: :kodeitem
+  belongs_to :item_type, optional: true, foreign_key: :item_type_name, primary_key: :jenis
+  belongs_to :brand, optional: true, foreign_key: :brand_name, primary_key: :merek
+  belongs_to :supplier, optional: true, foreign_key: :supplier_code, primary_key: :kode
+
   validate :range_time_should_valid
   validate :filter_should_be_filled
 
-  scope :active_today, ->{where(start_time: ..(Time.zone.now),end_time: (Time.zone.now)..)}
+  scope :active_today, ->{where(start_time: ..(Time.now),end_time: (Time.now)..)}
+
+  def generate_code
+    self.code = [
+      self.item_code,
+      self.supplier_code,
+      self.item_type_name.try(:[],4..-1),
+      self.brand_name,
+      self.start_time.try(:strftime,'%d%b%y'),
+      self.end_time.try(:strftime,'%d%b%y')
+    ].compact.join('-')
+    return code
+  rescue
+    return nil
+  end
+
+  def delete_promotion
+    Promotion
+      .where('iddiskon ilike ?', "%_#{code}%")
+      .destroy_all
+  end
 
   private
 
   # filter should be filled at least one
   def filter_should_be_filled
-    return true if [item_code,item_type,supplier_code,brand_name].any?
+    return true if [item,item_type,supplier,brand].any?
     errors.add(:base,"Salah satu filter(#{Discount.human_attribute_name(:item_code)}, #{Discount.human_attribute_name(:item_type)}, #{Discount.human_attribute_name(:supplier_code)}, #{Discount.human_attribute_name(:brand_name)}) harus diisi")
   end
 

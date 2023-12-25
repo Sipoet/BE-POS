@@ -2,6 +2,7 @@ version: "3.8"
 services:
   backend:
     build: .
+    image: allegra-pos/backend
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     container_name: backend-pos
     volumes:
@@ -21,7 +22,7 @@ services:
         - PRODUCTION_DATABASE_NAME=${PRODUCTION_DATABASE_NAME}
 
   sidekiq:
-    build: .
+    image: allegra-pos/backend
     command: bundle exec sidekiq -C config/sidekiq.yml
     volumes:
       - .:/myapp
@@ -29,6 +30,7 @@ services:
     tty: true
     depends_on:
       - redis
+      - backend
     environment:
         - HOST=${HOST}
         - DATABASE_USERNAME=${DATABASE_USERNAME}

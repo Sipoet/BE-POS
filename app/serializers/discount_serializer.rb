@@ -1,6 +1,6 @@
 class DiscountSerializer
   include JSONAPI::Serializer
-  attributes :item_code, :supplier_code, :item_type, :brand_name, :code, :start_time, :end_time
+  attributes :item_code, :supplier_code, :brand_name, :item_type_name, :code, :start_time, :end_time
   [:discount1, :discount2,:discount3,:discount4].each do |key|
     attribute key do |object|
       object.send(key).to_f
