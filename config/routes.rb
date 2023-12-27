@@ -34,4 +34,12 @@ Rails.application.routes.draw do
     get :columns, on: :collection
   end
 
+  resources :sales, only:[] do
+    get :today_report, on: :collection
+  end
+
+  resources :item_sales, only:[] do
+    get :today_report, on: :collection
+  end
+
 end
