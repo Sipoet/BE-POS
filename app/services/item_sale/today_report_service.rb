@@ -3,10 +3,10 @@ class ItemSale::TodayReportService < BaseService
   def execute_service
     find_key!
     find_range
-    limit = @params.fetch(:limit,10).to_i
+    limit = @params.fetch(:limit, 10).to_i
     results = execute_sql(query_report(limit))
     render_json({
-      data: results.map {|row| decorate_row(row) },
+      data: results.map { |row| decorate_row(row) },
       meta: {
         group_key: @group_key,
         limit: limit
@@ -18,31 +18,16 @@ class ItemSale::TodayReportService < BaseService
 
   def decorate_row(row)
     Result.new(
-      quantity: row['quantity'], sales_total: row['sales_total'], discount_total: row['subtotal'] - row['sales_total'], identifier: row['identifier']
+      quantity: row['quantity'],
+      sales_total: row['sales_total'],
+      discount_total: row['subtotal'] - row['sales_total'],
+      identifier: row['identifier']
     )
-  end
-
-  def sort_most(report_result)
-    report_result.sort { |rowa, rowb| rowb.sales_total <=> rowa.sales_total }
   end
 
   def find_range
     @start_time = @params.fetch(:start_time,Time.now.utc.beginning_of_day).try(:to_time)
     @end_time = @params.fetch(:end_time,Time.now.utc.end_of_day).try(:to_time)
-  end
-
-  def group_with_key(sales, key)
-    key_item = key_item_of(key)
-    grouped_item_sales = ItemSale
-      .where(sale: sales)
-      .includes(:item)
-      .group_by{|item_sale| item_sale.item.try(key_item)}
-    grouped_item_sales.each_with_object([]) do |(identifier, item_sales), result|
-      result << Result.new(quantity: item_sales.sum(&:jumlah),
-      sales_total: item_sales.sum(&:total),
-      discount_total: item_sales.sum{|item_sale| (item_sale.jumlah * item_sale.harga) - item_sale.total},
-      identifier: identifier)
-    end
   end
 
   def find_key!
