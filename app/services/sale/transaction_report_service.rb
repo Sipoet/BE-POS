@@ -10,7 +10,7 @@ class Sale::TransactionReportService < BaseService
   def query_report
     <<~SQL
     SELECT COALESCE(SUM(totalakhir),0) AS sales_total,
-    COALESCE(SUM(group_sale.discount_total) - sum(potnomfaktur),0) AS discount_total,
+    COALESCE(SUM(group_sale.discount_total), 0) + COALESCE(sum(potnomfaktur), 0) AS discount_total,
     COALESCE(count(*),0) as num_of_transaction,
     COALESCE(SUM(jmldebit),0) AS debit_total,
     COALESCE(SUM(jmlkk),0) AS credit_total,
