@@ -35,11 +35,16 @@ Rails.application.routes.draw do
   end
 
   resources :sales, only:[] do
-    get :today_report, on: :collection
+    get :transaction_report, on: :collection
   end
 
+  # will be removed start
+  get 'sales/today_report', to: 'sales#transaction_report'
+  get 'item_sales/today_report', to: 'item_sales#transaction_report'
+  # will be removed end
+
   resources :item_sales, only:[] do
-    get :today_report, on: :collection
+    get :transaction_report, on: :collection
   end
 
 end
