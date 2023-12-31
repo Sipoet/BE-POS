@@ -42,11 +42,14 @@ RSpec.describe RefreshActivePromotionJob, type: :job do
     it 'should added new item meet requirement' do
       item2 = create(:item, brand: item.brand)
       query = ItemPromotion.where(kodeitem: item2.kodeitem)
+      query_item_discount = ItemPromotion.where("iddiskon ilike '%#{discount.code}%'")
       expect(query.count).to eq(0)
+      expect(query_item_discount.count).to eq(1)
       expect{
         RefreshActivePromotionJob.new.perform
       }.not_to raise_error
       expect(query.count).to eq(1)
+      expect(query_item_discount.count).to eq(2)
       item_promotion = query.first
       expect(item_promotion.iddiskon).to be_include(discount.code)
     end
@@ -54,11 +57,14 @@ RSpec.describe RefreshActivePromotionJob, type: :job do
     it 'should not added item not meet requirement' do
       item2 = create(:item, brand: create(:brand))
       query = ItemPromotion.where(kodeitem: item2.kodeitem)
+      query_item_discount = ItemPromotion.where("iddiskon ilike '%#{discount.code}%'")
       expect(query.count).to eq(0)
+      expect(query_item_discount.count).to eq(1)
       expect{
         RefreshActivePromotionJob.new.perform
       }.not_to raise_error
       expect(query.count).to eq(0)
+      expect(query_item_discount.count).to eq(1)
     end
 
     it 'should choose smallest discount if meet requirement multiple active promotion' do

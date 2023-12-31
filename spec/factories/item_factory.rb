@@ -8,6 +8,7 @@ FactoryBot.define do
     jenis{ item_type.try(:jenis)}
     supplier1{supplier.try(:kode)}
     tanggal_add{Time.now}
+    dateupd{Time.now}
     before(:create) do |record|
       record.merek = record.brand.try(:merek)
       record.supplier1 = record.supplier.try(:kode)

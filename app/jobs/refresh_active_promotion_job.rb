@@ -6,7 +6,7 @@ class RefreshActivePromotionJob < ApplicationJob
     debug_log 'refresh active promotion start'
     last_updated = Item.where(kodeitem: active_promotion_item_codes)
                 .maximum(:tanggal_add)
-    items = Item.where('tanggal_add > ?', last_updated)
+    items = Item.where('dateupd > ? or tanggal_add >?', 1.hours.ago, 1.hours.ago)
     group_discounts = {}
     group_discounts.default = []
     items.each do |item|
