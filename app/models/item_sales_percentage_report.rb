@@ -21,8 +21,8 @@ class ItemSalesPercentageReport < ApplicationRecord
   end
 
   def percentage_sales
-    return '0%' if number_of_purchase == 0
-    value = (number_of_sales.to_f / number_of_purchase.to_f * 100).round(2)
-    "#{value}%"
+    return 0.0 if number_of_purchase == 0
+    return (number_of_sales.to_f / number_of_purchase.to_f * 100).round(2)
+
   end
 end
