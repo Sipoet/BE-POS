@@ -1,5 +1,7 @@
 class ItemSalesPercentageReportsController < ApplicationController
-  before_action :authenticate_user!
+  before_action do
+    authorize_user!(%w{admin})
+  end
 
   def index
     run_service_default

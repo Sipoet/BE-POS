@@ -1,22 +1,21 @@
 class ItemSalesPercentageSerializer
   include JSONAPI::Serializer
-  attributes :item_code, :item_name, :item_type, :supplier, :brand, :percentage_sales
-  attribute :sell_price do |object|
-    object.sell_price.to_f
+  attributes :item_code, :item_name, :item_type, :supplier_code,
+             :supplier_name, :brand, :percentage_sales, :item_type_desc
+
+  %i{avg_buy_price sales_total purchase_total sell_price}.each do |key|
+    attribute key do |object|
+      object.send(key).to_f.round(2)
+    end
   end
-  attribute :avg_buy_price do |object|
-    object.avg_buy_price.to_f.round(2)
+
+  %i{number_of_sales number_of_purchase warehouse_stock store_stock}.each do |key|
+    attribute key do |object|
+      object.send(key).to_i
+    end
   end
-  attribute :number_of_sales do |object|
-    object.number_of_sales.to_i
-  end
-  attribute :sales_total do |object|
-    object.sales_total.to_f
-  end
-  attribute :number_of_purchase do |object|
-    object.number_of_purchase.to_i
-  end
-  attribute :purchase_total do |object|
-    object.purchase_total.to_f
-  end
+
+    attribute :recent_purchase_date do |object|
+      object.recent_purchase_date.try(:iso8601)
+    end
 end
