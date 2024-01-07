@@ -7,7 +7,7 @@ RSpec.describe "DiscountsController", type: :request do
   end
   describe "GET /index" do
     it "should success" do
-      get discounts_url, headers: headers
+      get discounts_path, headers: headers
       expect(response).to have_http_status(:success)
     end
   end
@@ -15,7 +15,7 @@ RSpec.describe "DiscountsController", type: :request do
   describe "GET /show" do
     it "should display discount" do
       discount = create(:discount_all)
-      get discount_url(discount.code), headers: headers
+      get discount_path(discount.code), headers: headers
       expect(response).to have_http_status(:success)
       result = JSON.parse(response.body, symbolize_names: true)
       data = result[:data]
@@ -41,7 +41,7 @@ RSpec.describe "DiscountsController", type: :request do
       start_time = DateTime.new(2023,2,23)
       end_time = DateTime.new(2999,12,31,23,59,59)
       item = create(:item)
-      post discounts_url, headers: headers, params:{discount:{
+      post discounts_path, headers: headers, params:{discount:{
         start_time: start_time.iso8601,
         end_time: end_time.iso8601,
         item_code: item.kodeitem,
@@ -82,7 +82,7 @@ RSpec.describe "DiscountsController", type: :request do
       discount = create(:discount_all)
       old_discount_code = discount.code
       item = create(:item)
-      patch discount_url(old_discount_code), headers: headers, params:{discount:{
+      patch discount_path(old_discount_code), headers: headers, params:{discount:{
         code: 'changed-code',
         start_time: start_time.iso8601,
         end_time: end_time.iso8601,
@@ -117,7 +117,7 @@ RSpec.describe "DiscountsController", type: :request do
 
   it "should delete discount" do
     discount = create(:discount_all)
-    delete discount_url(discount.code), xhr: true, headers: headers
+    delete discount_path(discount.code), xhr: true, headers: headers
     expect(response).to have_http_status(:success), response.body
     discount = Discount.find_by(code: discount.code)
     expect(discount).to be_nil, 'discount should be deleted'

@@ -3,7 +3,7 @@ class Discount::DestroyService < BaseService
 
   def execute_service
     discount = Discount.find_by(code: @params[:code])
-    raise BaseService::RecordNotFound if discount.nil?
+    raise BaseService::RecordNotFound.new(@params[:code],Discount.name) if discount.nil?
     try_stop_background_job(discount)
     begin
       Discount.transaction do
@@ -13,7 +13,7 @@ class Discount::DestroyService < BaseService
       render_json({message: "#{discount.code} sukses dihapus"})
     rescue => e
       Rails.logger.debug e.message
-      render_render_error_record(discount)
+      render_error_record(discount)
     end
   end
 

@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   controllers: {
     sessions: 'users/sessions'
   }
-
+  resources :users, param: :username, only: [:index, :show, :destroy, :update, :create]
   resources :background_jobs, only:[:index, :show, :destroy] do
     post :retry, on: :member
   end
@@ -37,11 +37,6 @@ Rails.application.routes.draw do
   resources :sales, only:[] do
     get :transaction_report, on: :collection
   end
-
-  # will be removed start
-  get 'sales/today_report', to: 'sales#transaction_report'
-  get 'item_sales/today_report', to: 'item_sales#transaction_report'
-  # will be removed end
 
   resources :item_sales, only:[] do
     get :transaction_report, on: :collection

@@ -13,6 +13,18 @@ FactoryBot.define do
       # association :author, factory: :user
       role {:superadmin}
     end
+
+    factory :admin do
+      # The alias allows us to write author instead of
+      # association :author, factory: :user
+      role {:admin}
+    end
+
+    factory :cashier do
+      # The alias allows us to write author instead of
+      # association :author, factory: :user
+      role {:cashier}
+    end
   end
 
 

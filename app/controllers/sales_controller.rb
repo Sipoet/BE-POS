@@ -1,5 +1,8 @@
 class SalesController < ApplicationController
-  before_action :authenticate_user!
+  before_action do
+    authorize_user!(%w{admin})
+  end
+
   def transaction_report
     run_service_default
   end

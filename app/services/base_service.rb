@@ -7,6 +7,7 @@ class BaseService
   def initialize(controller = nil)
     @params = controller.try(:params)
     @controller = controller
+    @current_user = controller.current_user
   end
 
   def execute_service
@@ -53,7 +54,7 @@ class BaseService
     def initialize(record_id, record_type)
       @record_id = record_id
       @record_type = record_type
-      super
+      super()
     end
   end
 end
