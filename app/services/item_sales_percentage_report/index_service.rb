@@ -32,7 +32,7 @@ class ItemSalesPercentageReport::IndexService < BaseService
   def find_reports(filter)
     query = ItemSalesPercentageReport.order(item_code: :asc)
     query = query.where(brand: filter[:brands]) if filter[:brands].present?
-    query = query.where(supplier: filter[:suppliers]) if filter[:suppliers].present?
+    query = query.where(supplier_code: filter[:suppliers]) if filter[:suppliers].present?
     query = query.where(item_type: filter[:item_types]) if filter[:item_types].present?
     query = query.where(item_code: filter[:item_code]) if filter[:item_codes].present?
     query
