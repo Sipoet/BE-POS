@@ -47,16 +47,16 @@ class ItemSale::TransactionReportService < BaseService
   def query_report(limit)
     <<~SQL
     SELECT
-      #{Item.table_name}.#{key_item_of(@group_key)} AS identifier,
-      COALESCE(SUM(#{ItemSale.table_name}.harga * #{ItemSale.table_name}.jumlah),0) AS subtotal,
-      SUM(#{ItemSale.table_name}.jumlah) AS quantity,
-      SUM(#{ItemSale.table_name}.total) AS sales_total
-    FROM #{ItemSale.table_name}
-    INNER JOIN #{Item.table_name} on #{Item.table_name}.kodeitem = #{ItemSale.table_name}.kodeitem
-    INNER JOIN #{Sale.table_name} on #{Sale.table_name}.notransaksi = #{ItemSale.table_name}.notransaksi
-    WHERE #{Sale.table_name}.tanggal between '#{@start_time}' and '#{@end_time}'
+      #{Ipos::Item.table_name}.#{key_item_of(@group_key)} AS identifier,
+      COALESCE(SUM(#{Ipos::ItemSale.table_name}.harga * #{Ipos::ItemSale.table_name}.jumlah),0) AS subtotal,
+      SUM(#{Ipos::ItemSale.table_name}.jumlah) AS quantity,
+      SUM(#{Ipos::ItemSale.table_name}.total) AS sales_total
+    FROM #{Ipos::ItemSale.table_name}
+    INNER JOIN #{Ipos::Item.table_name} on #{Ipos::Item.table_name}.kodeitem = #{Ipos::ItemSale.table_name}.kodeitem
+    INNER JOIN #{Ipos::Sale.table_name} on #{Ipos::Sale.table_name}.notransaksi = #{Ipos::ItemSale.table_name}.notransaksi
+    WHERE #{Ipos::Sale.table_name}.tanggal between '#{@start_time}' and '#{@end_time}'
     GROUP BY
-      #{Item.table_name}.#{key_item_of(@group_key)}
+      #{Ipos::Item.table_name}.#{key_item_of(@group_key)}
     ORDER BY sales_total DESC
     limit #{limit}
     SQL

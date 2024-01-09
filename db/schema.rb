@@ -124,7 +124,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_07_045212) do
     t.datetime "dateupd", precision: nil
     t.text "keterangan"
     t.index ["notransaksi"], name: "notransaksi"
-    t.unique_constraint ["iddetail"], name: "iddetail"
   end
 
   create_table "tbl_acckashd", primary_key: "notransaksi", id: { type: :string, limit: 50 }, force: :cascade do |t|
@@ -806,7 +805,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_07_045212) do
     t.index ["jenis"], name: "jenis"
     t.index ["matauang"], name: "matauang8"
     t.index ["satuan"], name: "satuan"
-    t.unique_constraint ["kodeitem"], name: "kodeitem"
   end
 
   create_table "tbl_item_ik", primary_key: "iddetail", id: { type: :string, limit: 150 }, force: :cascade do |t|
@@ -1039,7 +1037,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_07_045212) do
     t.index ["kodeitem"], name: "kodeitem8"
     t.index ["kodekantor"], name: "kodekantor7"
     t.index ["satuan"], name: "satuan2"
-    t.unique_constraint ["iddetail"], name: "tbl_itemopname_iddetail_key"
   end
 
   create_table "tbl_itempotongan", primary_key: "iddetail", id: { type: :string, limit: 150 }, force: :cascade do |t|

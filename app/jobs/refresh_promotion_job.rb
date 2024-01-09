@@ -25,7 +25,7 @@ class RefreshPromotionJob < ApplicationJob
   end
 
   def items_based_discount(discount)
-    items = Item.order(kodeitem: :asc)
+    items = Ipos::Item.order(kodeitem: :asc)
     {
       kodeitem: discount.item_code,
       supplier1: discount.supplier_code,
@@ -38,8 +38,8 @@ class RefreshPromotionJob < ApplicationJob
   end
 
   def check_conflict_promotion(discount, items)
-    iddiskon = Promotion.active_range(discount.start_time, discount.end_time).pluck(:iddiskon)
-    item_promotions = ItemPromotion.where(kodeitem: items.pluck(:kodeitem), iddiskon: iddiskon)
+    iddiskon = Ipos::Promotion.active_range(discount.start_time, discount.end_time).pluck(:iddiskon)
+    item_promotions = Ipos::ItemPromotion.where(kodeitem: items.pluck(:kodeitem), iddiskon: iddiskon)
     item_promotions.each do |item_promotion|
       if item_promotion.diskon1 <= discount.discount1
         @blacklist_item_codes << item_promotion.kodeitem
@@ -63,10 +63,10 @@ class RefreshPromotionJob < ApplicationJob
   end
 
   def active_promotion_item_codes
-    ids = Promotion.active_today
-                   .pluck(:iddiskon)
-    ItemPromotion.where(iddiskon: ids)
-                 .pluck(:kodeitem)
+    ids = Ipos::Promotion.active_today
+                         .pluck(:iddiskon)
+    Ipos::ItemPromotion.where(iddiskon: ids)
+                       .pluck(:kodeitem)
   end
 
   def create_item_promotions(items:[],promotion:,discount:)
@@ -83,12 +83,12 @@ class RefreshPromotionJob < ApplicationJob
           diskon4: discount.discount4,
         }
     end
-    ItemPromotion.insert_all(item_p_docs)
+    Ipos::ItemPromotion.insert_all(item_p_docs)
   end
 
   def create_promotion!(promo_name:, start_time:, end_time:)
     debug_log "create promotion #{promo_name}"
-    promotion = Promotion.find_or_initialize_by(iddiskon: promo_name)
+    promotion = Ipos::Promotion.find_or_initialize_by(iddiskon: promo_name)
     promotion.tgldari = start_time.strftime('%Y-%m-%d %H:%M:%Sz')
     promotion.tglsampai = end_time.strftime('%Y-%m-%d %H:%M:%Sz')
     promotion.stsact = DateTime.now.between?(start_time,end_time)

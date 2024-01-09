@@ -17,9 +17,9 @@ class Item::IndexService < BaseService
 
   def search_data(text_search)
     if text_search.present?
-      Item.where('kodeitem ilike ? or namaitem ilike ?', "%#{text_search}%", "%#{text_search}%")
+      Ipos::Item.where('kodeitem ilike ? or namaitem ilike ?', "%#{text_search}%", "%#{text_search}%")
     else
-      Item.all
+      Ipos::Item.all
     end
   end
 end

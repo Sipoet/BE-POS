@@ -1,4 +1,4 @@
-class Promotion < ApplicationRecord
+class Ipos::Promotion < ApplicationRecord
   self.table_name = 'tbl_itemdisp'
   self.primary_key = 'iddiskon'
   default_scope { order(iddiskon: :asc) }
@@ -12,5 +12,5 @@ class Promotion < ApplicationRecord
                                                      tglsampai: start_time..,
                                                      stsact: true)}
 
-  has_many :item_promotions, class_name: 'ItemPromotion', foreign_key: 'iddiskon', dependent: :destroy
+  has_many :item_promotions, class_name: 'Ipos::ItemPromotion', foreign_key: 'iddiskon', dependent: :destroy
 end

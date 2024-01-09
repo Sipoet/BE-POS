@@ -25,10 +25,10 @@ class Discount < ApplicationRecord
   validates :start_time, presence: true
   validates :end_time, presence: true
 
-  belongs_to :item, optional: true, foreign_key: :item_code, primary_key: :kodeitem
-  belongs_to :item_type, optional: true, foreign_key: :item_type_name, primary_key: :jenis
-  belongs_to :brand, optional: true, foreign_key: :brand_name, primary_key: :merek
-  belongs_to :supplier, optional: true, foreign_key: :supplier_code, primary_key: :kode
+  belongs_to :item, optional: true, foreign_key: :item_code, primary_key: :kodeitem, class_name:'Ipos::Item'
+  belongs_to :item_type, optional: true, foreign_key: :item_type_name, primary_key: :jenis, class_name:'Ipos::ItemType'
+  belongs_to :brand, optional: true, foreign_key: :brand_name, primary_key: :merek, class_name:'Ipos::Brand'
+  belongs_to :supplier, optional: true, foreign_key: :supplier_code, primary_key: :kode, class_name:'Ipos::Supplier'
 
   validate :range_time_should_valid
   validate :filter_should_be_filled
@@ -50,7 +50,7 @@ class Discount < ApplicationRecord
   end
 
   def delete_promotion
-    Promotion
+    Ipos::Promotion
       .where('iddiskon ilike ?', "%_#{code}%")
       .destroy_all
   end

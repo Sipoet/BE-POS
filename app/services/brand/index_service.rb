@@ -17,9 +17,9 @@ class Brand::IndexService < BaseService
 
   def search_data(text_search)
     if text_search.present?
-      Brand.where('merek ilike ?', "%#{text_search}%")
+      Ipos::Brand.where('merek ilike ?', "%#{text_search}%")
     else
-      Brand.all
+      Ipos::Brand.all
     end
   end
 end

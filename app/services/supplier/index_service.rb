@@ -17,9 +17,9 @@ class Supplier::IndexService < BaseService
 
   def search_data(text_search)
     if text_search.present?
-      Supplier.where('nama ilike ? or kode ilike ?', "%#{text_search}%", "%#{text_search}%")
+      Ipos::Supplier.where('nama ilike ? or kode ilike ?', "%#{text_search}%", "%#{text_search}%")
     else
-      Supplier.all
+      Ipos::Supplier.all
     end
   end
 end

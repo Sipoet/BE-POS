@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :item do
+  factory :item, class: 'Ipos::Item' do
     kodeitem {SecureRandom.hex(8)}
     association :brand, factory: :brand
     association :item_type, factory: :item_type

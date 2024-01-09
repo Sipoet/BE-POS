@@ -5,9 +5,9 @@ RSpec.describe RefreshActivePromotionJob, type: :job do
   describe 'promotion' do
     it 'should active when within range' do
       promotions =[
-        Promotion.create!(iddiskon: 'promotion1', stsact: false, tgldari: DateTime.now, tglsampai: 1.month.from_now),
-        Promotion.create!(iddiskon: 'promotion2', stsact: false, tgldari: 1.month.ago, tglsampai: 1.minute.from_now),
-        Promotion.create!(iddiskon: 'promotion3', stsact: true, tgldari: 1.hour.ago, tglsampai: 1.day.from_now)
+        Ipos::Promotion.create!(iddiskon: 'promotion1', stsact: false, tgldari: DateTime.now, tglsampai: 1.month.from_now),
+        Ipos::Promotion.create!(iddiskon: 'promotion2', stsact: false, tgldari: 1.month.ago, tglsampai: 1.minute.from_now),
+        Ipos::Promotion.create!(iddiskon: 'promotion3', stsact: true, tgldari: 1.hour.ago, tglsampai: 1.day.from_now)
       ]
       expect{
         RefreshActivePromotionJob.new.perform
@@ -19,9 +19,9 @@ RSpec.describe RefreshActivePromotionJob, type: :job do
     end
     it 'should inactive when expired' do
       promotions =[
-        Promotion.create!(iddiskon: 'promotion1', stsact: true, tgldari: 1.year.ago, tglsampai: 1.day.ago),
-        Promotion.create!(iddiskon: 'promotion2', stsact: true, tgldari: 1.month.ago, tglsampai: 1.minute.ago),
-        Promotion.create!(iddiskon: 'promotion3', stsact: true, tgldari: 1.day.ago, tglsampai: 1.hour.ago)
+        Ipos::Promotion.create!(iddiskon: 'promotion1', stsact: true, tgldari: 1.year.ago, tglsampai: 1.day.ago),
+        Ipos::Promotion.create!(iddiskon: 'promotion2', stsact: true, tgldari: 1.month.ago, tglsampai: 1.minute.ago),
+        Ipos::Promotion.create!(iddiskon: 'promotion3', stsact: true, tgldari: 1.day.ago, tglsampai: 1.hour.ago)
       ]
       expect{
         RefreshActivePromotionJob.new.perform
@@ -41,8 +41,8 @@ RSpec.describe RefreshActivePromotionJob, type: :job do
     end
     it 'should added new item meet requirement' do
       item2 = create(:item, brand: item.brand)
-      query = ItemPromotion.where(kodeitem: item2.kodeitem)
-      query_item_discount = ItemPromotion.where("iddiskon ilike '%#{discount.code}%'")
+      query = Ipos::ItemPromotion.where(kodeitem: item2.kodeitem)
+      query_item_discount = Ipos::ItemPromotion.where("iddiskon ilike '%#{discount.code}%'")
       expect(query.count).to eq(0)
       expect(query_item_discount.count).to eq(1)
       expect{
@@ -56,8 +56,8 @@ RSpec.describe RefreshActivePromotionJob, type: :job do
 
     it 'should not added item not meet requirement' do
       item2 = create(:item, brand: create(:brand))
-      query = ItemPromotion.where(kodeitem: item2.kodeitem)
-      query_item_discount = ItemPromotion.where("iddiskon ilike '%#{discount.code}%'")
+      query = Ipos::ItemPromotion.where(kodeitem: item2.kodeitem)
+      query_item_discount = Ipos::ItemPromotion.where("iddiskon ilike '%#{discount.code}%'")
       expect(query.count).to eq(0)
       expect(query_item_discount.count).to eq(1)
       expect{
@@ -70,7 +70,7 @@ RSpec.describe RefreshActivePromotionJob, type: :job do
     it 'should choose smallest discount if meet requirement multiple active promotion' do
       discount2 = create(:discount,item: nil,brand: nil, item_type: nil)
       item2 = create(:item, supplier: discount2.supplier)
-      query = ItemPromotion.where(kodeitem: item2.kodeitem)
+      query = Ipos::ItemPromotion.where(kodeitem: item2.kodeitem)
       expect(query.count).to eq(0)
       expect{
         RefreshActivePromotionJob.new.perform

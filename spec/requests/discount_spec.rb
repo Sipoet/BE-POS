@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "DiscountsController", type: :request do
+RSpec.describe "Discounts", type: :request do
 
   before :each do
     login!
@@ -117,7 +117,7 @@ RSpec.describe "DiscountsController", type: :request do
 
   it "should delete discount" do
     discount = create(:discount_all)
-    delete discount_path(discount.code), xhr: true, headers: headers
+    delete discount_path(discount.code),  headers: headers
     expect(response).to have_http_status(:success), response.body
     discount = Discount.find_by(code: discount.code)
     expect(discount).to be_nil, 'discount should be deleted'
@@ -125,7 +125,7 @@ RSpec.describe "DiscountsController", type: :request do
 
   def login!
     user = create(:superadmin)
-    post user_session_path, xhr: true, params: {"user":{
+    post user_session_path, params: {"user":{
       "username": user.username,
       "password": user.password
     }}

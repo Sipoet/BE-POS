@@ -17,13 +17,13 @@ class Sale::TransactionReportService < BaseService
     COALESCE(SUM(case when jmltunai > 0 then totalakhir else 0 end),0) AS cash_total,
     COALESCE(SUM(case when byr_emoney_prod = 'QRIS' then jmlemoney else 0 end),0) AS qris_total,
     COALESCE(SUM(case when byr_emoney_prod = 'online transfer' then jmlemoney else 0 end),0) AS online_total
-    FROM #{Sale.table_name}
+    FROM #{Ipos::Sale.table_name}
     INNER JOIN (
       SELECT notransaksi,
       SUM(jumlah * harga) - sum(total) AS discount_total
-      FROM #{ItemSale.table_name}
+      FROM #{Ipos::ItemSale.table_name}
       GROUP BY notransaksi
-    )group_sale ON group_sale.notransaksi = #{Sale.table_name}.notransaksi
+    )group_sale ON group_sale.notransaksi = #{Ipos::Sale.table_name}.notransaksi
     WHERE tanggal between '#{start_time}' and '#{end_time}'
     SQL
   end

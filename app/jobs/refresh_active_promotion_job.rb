@@ -4,9 +4,9 @@ class RefreshActivePromotionJob < ApplicationJob
   def perform
     check_if_cancelled!
     debug_log 'refresh active promotion start'
-    last_updated = Item.where(kodeitem: active_promotion_item_codes)
+    last_updated = Ipos::Item.where(kodeitem: active_promotion_item_codes)
                 .maximum(:tanggal_add)
-    items = Item.where('dateupd > ? or tanggal_add >?', 1.hours.ago, 1.hours.ago)
+    items = Ipos::Item.where('dateupd > ? or tanggal_add >?', 1.hours.ago, 1.hours.ago)
     group_discounts = {}
     group_discounts.default = []
     items.each do |item|
@@ -30,10 +30,10 @@ class RefreshActivePromotionJob < ApplicationJob
   private
 
   def check_active_promotion
-    Promotion.where(tglsampai: ...Time.now)
+    Ipos::Promotion.where(tglsampai: ...Time.now)
              .update_all(stsact: false)
     today = Time.now
-    Promotion.within_range(today,today).update_all(stsact: true)
+    Ipos::Promotion.within_range(today,today).update_all(stsact: true)
 
   end
 
@@ -50,10 +50,10 @@ class RefreshActivePromotionJob < ApplicationJob
   end
 
   def active_promotion_item_codes
-    ids = Promotion.active_today
-                   .pluck(:iddiskon)
-    ItemPromotion.where(iddiskon: ids)
-                 .pluck(:kodeitem)
+    ids = Ipos::Promotion.active_today
+                         .pluck(:iddiskon)
+    Ipos::ItemPromotion.where(iddiskon: ids)
+                       .pluck(:kodeitem)
   end
 
   def discount_based_item(item)
@@ -88,12 +88,12 @@ class RefreshActivePromotionJob < ApplicationJob
           diskon4: discount.discount4,
         }
     end
-    ItemPromotion.insert_all(item_p_docs)
+    Ipos::ItemPromotion.insert_all(item_p_docs)
   end
 
   def create_promotion!(promo_name:, start_time:, end_time:)
     debug_log "create promotion #{promo_name}"
-    promotion = Promotion.find_or_initialize_by(iddiskon: promo_name)
+    promotion = Ipos::Promotion.find_or_initialize_by(iddiskon: promo_name)
     promotion.tgldari = start_time.strftime('%Y-%m-%d %H:%M:%Sz')
     promotion.tglsampai = end_time.strftime('%Y-%m-%d %H:%M:%Sz')
     promotion.stsact = DateTime.now.between?(start_time,end_time)

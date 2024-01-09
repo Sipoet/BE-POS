@@ -11,10 +11,10 @@ RSpec.describe RefreshPromotionJob, type: :job do
       expect{
         RefreshPromotionJob.new.perform(discount.id)
       }.not_to raise_error
-      query =ItemPromotion.where(kodeitem: item.kodeitem)
+      query = Ipos::ItemPromotion.where(kodeitem: item.kodeitem)
       expect(query.count).to eq(1)
       expect(query.first.iddiskon).to be_include(discount.code)
-      expect(ItemPromotion.where(kodeitem: item2.kodeitem).count).to eq(0)
+      expect(Ipos::ItemPromotion.where(kodeitem: item2.kodeitem).count).to eq(0)
     end
   end
 
@@ -27,10 +27,10 @@ RSpec.describe RefreshPromotionJob, type: :job do
       expect{
         RefreshPromotionJob.new.perform(discount.id)
       }.not_to raise_error
-      query =ItemPromotion.where(kodeitem: item.kodeitem)
+      query = Ipos::ItemPromotion.where(kodeitem: item.kodeitem)
       expect(query.count).to eq(1)
       expect(query.first.iddiskon).to be_include(discount.code)
-      expect(ItemPromotion.where(kodeitem: item2.kodeitem).count).to eq(0)
+      expect(Ipos::ItemPromotion.where(kodeitem: item2.kodeitem).count).to eq(0)
     end
   end
 
@@ -43,10 +43,10 @@ RSpec.describe RefreshPromotionJob, type: :job do
       expect{
         RefreshPromotionJob.new.perform(discount.id)
       }.not_to raise_error
-      query =ItemPromotion.where(kodeitem: item.kodeitem)
+      query = Ipos::ItemPromotion.where(kodeitem: item.kodeitem)
       expect(query.count).to eq(1)
       expect(query.first.iddiskon).to be_include(discount.code)
-      expect(ItemPromotion.where(kodeitem: item2.kodeitem).count).to eq(0)
+      expect(Ipos::ItemPromotion.where(kodeitem: item2.kodeitem).count).to eq(0)
     end
   end
 
@@ -57,10 +57,10 @@ RSpec.describe RefreshPromotionJob, type: :job do
     expect{
       RefreshPromotionJob.new.perform(discount.id)
     }.not_to raise_error
-    query =ItemPromotion.where(kodeitem: item.kodeitem)
+    query = Ipos::ItemPromotion.where(kodeitem: item.kodeitem)
     expect(query.count).to eq(1)
     expect(query.first.iddiskon).to be_include(discount.code)
-    expect(ItemPromotion.where(kodeitem: item2.kodeitem).count).to eq(0)
+    expect(Ipos::ItemPromotion.where(kodeitem: item2.kodeitem).count).to eq(0)
   end
 
 end

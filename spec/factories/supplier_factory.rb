@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :supplier do
+  factory :supplier, class: 'Ipos::Supplier' do
     # The alias allows us to write author instead of
     kode {SecureRandom.hex(4)}
     tipe{'SU'}
