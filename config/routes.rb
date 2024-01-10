@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
   resources :brands,param: :code, only: [:index, :show]
 
-  resources :discounts, param: :code, only: [:index, :show, :create, :show, :update, :destroy] do
+  resources :discounts, only: [:index, :show, :create, :show, :update, :destroy] do
     post :refresh_active_promotion, on: :collection
     post :refresh_all_promotion, on: :collection
     post :refresh_promotion, on: :member
@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
   resources :item_sales, only:[] do
     get :transaction_report, on: :collection
+    get :period_report, on: :collection
   end
 
 end
