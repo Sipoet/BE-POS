@@ -1,0 +1,14 @@
+id:
+  activemodel:
+    attributes:
+      item_sales_period_report:
+        item_code: 'Kode Item'
+        item_name: 'Nama Item'
+        supplier_code: 'Kode Supplier'
+        item_type_name: 'Jenis/Departemen'
+        brand_name: 'Merek'
+        discount_percentage: 'Diskon(%)'
+        quantity: 'Jumlah'
+        subtotal: 'Subtotal'
+        discount_total: 'Total Diskon'
+        sales_total: 'Total'
