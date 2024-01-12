@@ -34,7 +34,7 @@ class ItemSalesPercentageReport::IndexService < BaseService
     query = query.where(brand: filter[:brands]) if filter[:brands].present?
     query = query.where(supplier_code: filter[:suppliers]) if filter[:suppliers].present?
     query = query.where(item_type: filter[:item_types]) if filter[:item_types].present?
-    query = query.where(item_code: filter[:item_code]) if filter[:item_codes].present?
+    query = query.where(item_code: filter[:item_codes]) if filter[:item_codes].present?
     query
   end
 
@@ -99,10 +99,10 @@ class ItemSalesPercentageReport::IndexService < BaseService
   def add_data(workbook, worksheet, rows)
     num_format = workbook.add_format(size: 12, num_format: '#,##0')
     general_format = workbook.add_format(size: 12)
-    worksheet.set_column(5, 8, 24, num_format)
-    worksheet.set_column(0, 4, 17, general_format)
-    worksheet.set_column(1, 1, 45)
-    worksheet.set_column(9, 9, 20, general_format)
+    # worksheet.set_column(5, 8, 24, num_format)
+    # worksheet.set_column(0, 4, 17, general_format)
+    # worksheet.set_column(1, 1, 45)
+    # worksheet.set_column(9, 9, 20, general_format)
     rows.each.with_index(1) do |row, index_vertical|
       ItemSalesPercentageReport::TABLE_HEADER.each.with_index(0) do |key, index|
         value = row.send(key)
@@ -116,7 +116,7 @@ class ItemSalesPercentageReport::IndexService < BaseService
   end
 
   def filename
-    'Laporan-penjualan-persentase'
+    'laporan-penjualan-persentase'
   end
 
   def fetch_filter
