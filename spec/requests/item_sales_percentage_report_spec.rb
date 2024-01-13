@@ -12,6 +12,17 @@ RSpec.describe "ItemSalesPercentageReports", type: :request do
       expect(response).to have_http_status(:success)
     end
     context 'filter' do
+      before :each do
+        sale = Sale.create(notransaksi: 'test1')
+        item = create(:item)
+        item_sale = ItemSale.create(notransaksi:'test1',
+                                    kodeitem: item.kodeitem,
+                                    jumlah:1,
+                                    harga:10,
+                                    total:10,
+                                    subtotal:10)
+
+      end
       it "supplier" do
         get item_sales_percentage_reports_path,params:{suppliers:['S013']}, headers: headers
         expect(response).to have_http_status(:success)

@@ -9,6 +9,8 @@ class ItemSalesPeriodReport
     :item_type_name,
     :brand_name,
     :discount_percentage,
+    :buy_price,
+    :sell_price,
     :quantity,
     :subtotal,
     :discount_total,
@@ -19,6 +21,8 @@ class ItemSalesPeriodReport
                 :supplier_code,
                 :item_type_name,
                 :brand_name,
+                :buy_price,
+                :sell_price,
                 :quantity,
                 :sales_total,
                 :discount_percentage,
@@ -33,6 +37,8 @@ class ItemSalesPeriodReport
     @sales_total = row['sales_total'].to_f
     @discount_percentage = row['discount_percentage'].to_f
     @subtotal = row['subtotal'].to_f
+    @buy_price = row['buy_price'].to_f
+    @sell_price = row['sell_price'].to_f
   end
 
   def id

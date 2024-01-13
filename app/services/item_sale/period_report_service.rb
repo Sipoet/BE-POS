@@ -87,23 +87,11 @@ class ItemSale::PeriodReportService < BaseService
     end
   end
 
-  ALPHABETS = ('A'..'Z').to_a.freeze
-
-  def get_column_number(index)
-    col_number = ''
-    unit = index % ALPHABETS.length
-    dozens = (index / ALPHABETS.length)
-    col_number = ALPHABETS[(dozens - 1)] if dozens >= 1
-    col_number += ALPHABETS[(unit - 1)]
-    col_number
-  end
-
   def add_header(workbook, worksheet)
     header_format = workbook.add_format(bold: true, size: 14)
     worksheet.set_row(0, 22, header_format)
     localized_column_names.each.with_index(1) do |header_name, index|
-      col_number = get_column_number(index)
-      worksheet.write("#{col_number}1", header_name, header_format)
+      worksheet.write(0,index, header_name, header_format)
     end
   end
 
@@ -143,6 +131,8 @@ class ItemSale::PeriodReportService < BaseService
         #{Ipos::Item.table_name}.merek AS brand_name,
         #{Ipos::Item.table_name}.jenis AS item_type_name,
         #{Ipos::ItemSale.table_name}.potongan AS discount_percentage,
+        #{Ipos::Item.table_name}.hargapokok AS buy_price,
+        #{Ipos::Item.table_name}.hargajual1 AS sell_price,
         COALESCE(SUM(#{Ipos::ItemSale.table_name}.harga * #{Ipos::ItemSale.table_name}.jumlah),0) AS subtotal,
         SUM(#{Ipos::ItemSale.table_name}.jumlah) AS quantity,
         SUM(#{Ipos::ItemSale.table_name}.total) AS sales_total
@@ -161,6 +151,8 @@ class ItemSale::PeriodReportService < BaseService
         #{Ipos::Item.table_name}.supplier1,
         #{Ipos::Item.table_name}.merek,
         #{Ipos::Item.table_name}.jenis,
+        #{Ipos::Item.table_name}.hargapokok,
+        #{Ipos::Item.table_name}.hargajual1,
         #{Ipos::ItemSale.table_name}.potongan
     SQL
   end

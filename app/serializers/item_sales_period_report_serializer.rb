@@ -6,6 +6,8 @@ class ItemSalesPeriodReportSerializer
               :item_type_name,
               :brand_name,
               :discount_percentage,
+              :buy_price,
+              :sell_price,
               :quantity,
               :subtotal,
               :discount_total,
