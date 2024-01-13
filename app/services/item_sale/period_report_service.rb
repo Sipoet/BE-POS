@@ -90,7 +90,7 @@ class ItemSale::PeriodReportService < BaseService
   def add_header(workbook, worksheet)
     header_format = workbook.add_format(bold: true, size: 14)
     worksheet.set_row(0, 22, header_format)
-    localized_column_names.each.with_index(1) do |header_name, index|
+    localized_column_names.each.with_index(0) do |header_name, index|
       worksheet.write(0,index, header_name, header_format)
     end
   end
