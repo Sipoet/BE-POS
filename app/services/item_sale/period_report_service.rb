@@ -102,7 +102,7 @@ class ItemSale::PeriodReportService < BaseService
   def add_data(workbook, worksheet, data)
     num_format = workbook.add_format(size: 12, num_format: '#,##0')
     general_format = workbook.add_format(size: 12)
-    worksheet.set_column(5, 8, 24, num_format)
+    worksheet.set_column(5, 11, 24, num_format)
     worksheet.set_column(0, 4, 17, general_format)
     worksheet.set_column(1, 1, 45)
     worksheet.set_column(9, 9, 20, general_format)
@@ -145,6 +145,7 @@ class ItemSale::PeriodReportService < BaseService
         #{filter_query_item_types}
         #{filter_query_brands}
         #{filter_query_items}
+        #{filter_query_discount}
       GROUP BY
         #{Ipos::ItemSale.table_name}.kodeitem,
         #{Ipos::Item.table_name}.namaitem,
@@ -154,6 +155,8 @@ class ItemSale::PeriodReportService < BaseService
         #{Ipos::Item.table_name}.hargapokok,
         #{Ipos::Item.table_name}.hargajual1,
         #{Ipos::ItemSale.table_name}.potongan
+      ORDER BY
+        item_code ASC
     SQL
   end
 
@@ -175,6 +178,11 @@ class ItemSale::PeriodReportService < BaseService
   def filter_query_items
     return if @items.blank?
     return "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.kodeitem in (?)",@items])}"
+  end
+
+  def filter_query_discount
+    return if @discount_code.blank?
+    return "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Sale.table_name}.kode ilike '%?%'",@discount_code])}"
   end
 
   def decorate_result(query)
