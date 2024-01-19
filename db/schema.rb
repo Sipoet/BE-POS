@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_07_045212) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_19_112331) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,6 +28,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_07_045212) do
     t.datetime "end_time", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "weight", default: 1, null: false
     t.index ["code"], name: "index_discounts_on_code", unique: true
     t.index ["start_time", "end_time", "item_code", "supplier_code", "item_type_name", "brand_name"], name: "active_promotion_idx", order: { end_time: :desc }
     t.index ["start_time", "end_time"], name: "index_discounts_on_start_time_and_end_time", order: { end_time: :desc }
@@ -124,6 +125,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_07_045212) do
     t.datetime "dateupd", precision: nil
     t.text "keterangan"
     t.index ["notransaksi"], name: "notransaksi"
+    t.unique_constraint ["iddetail"], name: "iddetail"
   end
 
   create_table "tbl_acckashd", primary_key: "notransaksi", id: { type: :string, limit: 50 }, force: :cascade do |t|
@@ -805,6 +807,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_07_045212) do
     t.index ["jenis"], name: "jenis"
     t.index ["matauang"], name: "matauang8"
     t.index ["satuan"], name: "satuan"
+    t.unique_constraint ["kodeitem"], name: "kodeitem"
   end
 
   create_table "tbl_item_ik", primary_key: "iddetail", id: { type: :string, limit: 150 }, force: :cascade do |t|
@@ -1037,6 +1040,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_07_045212) do
     t.index ["kodeitem"], name: "kodeitem8"
     t.index ["kodekantor"], name: "kodekantor7"
     t.index ["satuan"], name: "satuan2"
+    t.unique_constraint ["iddetail"], name: "tbl_itemopname_iddetail_key"
   end
 
   create_table "tbl_itempotongan", primary_key: "iddetail", id: { type: :string, limit: 150 }, force: :cascade do |t|

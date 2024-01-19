@@ -15,3 +15,4 @@ id:
         discount4: "Diskon 4(%)"
         start_time: 'Tanggal Mulai'
         end_time: 'Tanggal Sampai'
+        weight: 'Level Diskon'

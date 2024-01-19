@@ -7,6 +7,7 @@ class Discount < ApplicationRecord
     :item_type_name,
     :brand_name,
     :item_code,
+    :weight,
     :discount1,
     :discount2,
     :discount3,
@@ -18,6 +19,7 @@ class Discount < ApplicationRecord
   attr_readonly :code
 
   validates :code, presence: true
+  validates :weight, presence: true, numericality:{greater_than: 0, integer: true}
   validates :discount1, presence: true, numericality:{greater_than_and_equal_to: 0, less_than: 100}
   validates :discount2, presence: true, numericality:{greater_than_and_equal_to: 0, less_than: 100}
   validates :discount3, presence: true, numericality:{greater_than_and_equal_to: 0, less_than: 100}

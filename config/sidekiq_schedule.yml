@@ -1,4 +1,4 @@
 refresh_discount:
-  cron: "*/30 * * * *"
+  cron: "0 */6 * * *"
   class: "RefreshActivePromotionJob"
   queue: low

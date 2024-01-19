@@ -41,7 +41,8 @@ class RefreshPromotionJob < ApplicationJob
     iddiskon = Ipos::Promotion.active_range(discount.start_time, discount.end_time).pluck(:iddiskon)
     item_promotions = Ipos::ItemPromotion.where(kodeitem: items.pluck(:kodeitem), iddiskon: iddiskon)
     item_promotions.each do |item_promotion|
-      if item_promotion.diskon1 <= discount.discount1
+      promotion_weight = item_promotion.discount.try(:weight) || 0
+      if promotion_weight >= discount.weight
         @blacklist_item_codes << item_promotion.kodeitem
       else
         item_promotion.delete
