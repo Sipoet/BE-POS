@@ -102,6 +102,8 @@ class ItemSale::PeriodReportService < BaseService
   def add_data(workbook, worksheet, data)
     num_format = workbook.add_format(size: 12, num_format: '#,##0')
     general_format = workbook.add_format(size: 12)
+    date_format = workbook.add_format(size: 12, num_format: 'dd/mm/yy')
+    datetime_format = workbook.add_format(size: 12, num_format: 'dd/mm/yy hh:mm')
     worksheet.set_column(5, 11, 24, num_format)
     worksheet.set_column(0, 4, 17, general_format)
     worksheet.set_column(1, 1, 45)
@@ -109,10 +111,16 @@ class ItemSale::PeriodReportService < BaseService
     data.each.with_index(1) do |row, index_vertical|
       ItemSalesPeriodReport::TABLE_HEADER.each.with_index(0) do |key, index|
         value = row.send(key)
-        if value.is_a?(String)
-          worksheet.write_string(index_vertical, index, value)
+        if value.nil?
+          worksheet.write_blank(3, 0)
+        elsif value.is_a?(Numeric)
+          worksheet.write_number(index_vertical, index, value.to_f,num_format)
+        elsif value.is_a?(Date)
+          worksheet.write(index_vertical, index, value.strftime('%d/%m/%Y'),date_format)
+        elsif value.respond_to?(:strftime)
+          worksheet.write(index_vertical, index, value.strftime('%d/%m/%Y %H:%M'),datetime_format)
         else
-          worksheet.write_number(index_vertical, index, value)
+          worksheet.write_string(index_vertical, index, value.to_s,general_format)
         end
       end
     end

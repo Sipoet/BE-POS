@@ -18,7 +18,7 @@ class Discount < ApplicationRecord
 
   attr_readonly :code
 
-  validates :code, presence: true
+  validates :code, presence: true, uniqueness: true
   validates :weight, presence: true, numericality:{greater_than: 0, integer: true}
   validates :discount1, presence: true, numericality:{greater_than_and_equal_to: 0, less_than: 100}
   validates :discount2, presence: true, numericality:{greater_than_and_equal_to: 0, less_than: 100}
