@@ -116,9 +116,9 @@ class ItemSale::PeriodReportService < BaseService
         elsif value.is_a?(Numeric)
           worksheet.write_number(index_vertical, index, value.to_f,num_format)
         elsif value.is_a?(Date)
-          worksheet.write(index_vertical, index, value.strftime('%d/%m/%Y'),date_format)
+          worksheet.write_date_time(index_vertical, index, value.iso8601,date_format)
         elsif value.respond_to?(:strftime)
-          worksheet.write(index_vertical, index, value.strftime('%d/%m/%Y %H:%M'),datetime_format)
+          worksheet.write_date_time(index_vertical, index, value.iso8601,datetime_format)
         else
           worksheet.write_string(index_vertical, index, value.to_s,general_format)
         end

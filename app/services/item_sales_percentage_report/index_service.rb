@@ -89,17 +89,19 @@ class ItemSalesPercentageReport::IndexService < BaseService
     general_format = workbook.add_format(size: 12)
     date_format = workbook.add_format(size: 12, num_format: 'dd/mm/yy')
     datetime_format = workbook.add_format(size: 12, num_format: 'dd/mm/yy hh:mm')
+    headers = ItemSalesPercentageReport::TABLE_HEADER
+    worksheet.set_column(0, headers.length - 1, 30)
     rows.each.with_index(1) do |row, index_vertical|
-      ItemSalesPercentageReport::TABLE_HEADER.each.with_index(0) do |key, index|
+      headers.each.with_index(0) do |key, index|
         value = row.send(key)
         if value.nil?
           worksheet.write_blank(3, 0)
         elsif value.is_a?(Numeric)
           worksheet.write_number(index_vertical, index, value.to_f,num_format)
         elsif value.is_a?(Date)
-          worksheet.write(index_vertical, index, value.strftime('%d/%m/%Y'),date_format)
+          worksheet.write_date_time(index_vertical, index, value.iso8601,date_format)
         elsif value.respond_to?(:strftime)
-          worksheet.write(index_vertical, index, value.strftime('%d/%m/%Y %H:%M'),datetime_format)
+          worksheet.write_date_time(index_vertical, index, value.iso8601,datetime_format)
         else
           worksheet.write_string(index_vertical, index, value.to_s,general_format)
         end
