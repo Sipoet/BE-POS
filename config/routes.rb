@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
   resources :item_sales_percentage_reports, only: [:index] do
     get :columns, on: :collection
+    get :group_by_supplier, on: :collection
   end
 
   resources :items, param: :code, only: [:index, :show]
@@ -33,6 +34,8 @@ Rails.application.routes.draw do
     post :refresh_all_promotion, on: :collection
     post :refresh_promotion, on: :member
     get :columns, on: :collection
+    delete :delete_inactive_past_discount, on: :collection
+    get :template_mass_upload_excel, on: :collection
   end
 
   resources :sales, only:[] do
@@ -44,4 +47,14 @@ Rails.application.routes.draw do
     get :period_report, on: :collection
   end
 
+  resources :employee_attendances, only: [:index, :create, :destroy] do
+    post :mass_upload, on: :collection
+  end
+
+  resources :employee_payslips, only:[:index, :update] do
+    post :generate_payslip, on: :collection
+    post :confirm, on: :member
+    post :cancel, on: :member
+    post :pay, on: :member
+  end
 end

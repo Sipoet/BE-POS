@@ -1,10 +1,9 @@
 class Discount::RefreshAllPromotionService < BaseService
   def execute_service
-    discount_ids = Discount.where(end_time: (DateTime.now)..)
+    discount_ids = Discount.all
                            .pluck(:id)
-    list_jobs = []
+                           .map{|id|[id]}
     jid = RefreshPromotionJob.perform_bulk(discount_ids)
-
     render_json({
       data: {jid: jid}
     },{status: :accepted})

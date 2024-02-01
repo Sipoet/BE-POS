@@ -1,13 +1,15 @@
 class BaseService
+
+  attr_reader :params, :current_user
   def self.run(controller)
-    service = self.new(controller)
+    service = self.new(controller: controller, current_user: controller.current_user, params: controller.params)
     service.execute
   end
 
-  def initialize(controller = nil)
-    @params = controller.try(:params)
+  def initialize(params:,current_user:, controller: nil)
+    @params = params
     @controller = controller
-    @current_user = controller.current_user
+    @current_user = current_user
   end
 
   def execute_service

@@ -41,7 +41,7 @@ class Discount < ApplicationRecord
     self.code = [
       self.item_code,
       self.supplier_code,
-      self.item_type_name.try(:[],4..-1),
+      self.item_type_name,
       self.brand_name,
       self.start_time.try(:strftime,'%d%b%y'),
       self.end_time.try(:strftime,'%d%b%y')

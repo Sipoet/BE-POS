@@ -34,6 +34,14 @@ class DiscountsController < ApplicationController
     run_service_default
   end
 
+  def delete_inactive_past_discount
+    run_service_default
+  end
+
+  def template_mass_upload_excel
+    run_service_default
+  end
+
   def columns
     run_service(Discount::ColumnsService)
   end
