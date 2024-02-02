@@ -27,7 +27,7 @@ gem 'redis', '~> 4.8'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[ mingw mswin x64_mingw jruby ]
-
+gem 'rubyzip'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
 gem 'write_xlsx', '~> 1.11.1'
@@ -43,6 +43,8 @@ gem 'sidekiq-cron', '~>1.12.0'
 gem 'rswag-api', '~>2.13.0'
 gem 'rswag-ui', '~>2.13.0'
 gem 'sidekiq', '~> 7.2'
+gem 'xsv','~> 1.3.0'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[ mri mingw x64_mingw ]
@@ -50,13 +52,16 @@ group :development, :test do
   gem 'pry'
   gem 'rspec-rails', '~>6.1.0'
   gem 'rswag-specs', '~>2.13.0'
-  gem 'rspec-sidekiq', '~>4.1.0'
 end
 
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   gem 'spring'
   # gem 'parallel'
+  gem 'solargraph'
+  gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-performance', require: false
 end
 
 group :test do
@@ -64,4 +69,5 @@ group :test do
   gem 'database_cleaner-redis', '~>2.0.0'
   gem 'factory_bot_rails','~>6.4.2'
   gem 'ffaker', '~>2.23.0'
+  gem 'rspec-sidekiq', '~>4.1.0'
 end

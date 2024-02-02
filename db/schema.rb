@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_19_112331) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_01_094452) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,6 +32,108 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_19_112331) do
     t.index ["code"], name: "index_discounts_on_code", unique: true
     t.index ["start_time", "end_time", "item_code", "supplier_code", "item_type_name", "brand_name"], name: "active_promotion_idx", order: { end_time: :desc }
     t.index ["start_time", "end_time"], name: "index_discounts_on_start_time_and_end_time", order: { end_time: :desc }
+  end
+
+  create_table "employee_attendances", force: :cascade do |t|
+    t.integer "employee_id", null: false
+    t.datetime "start_time", null: false
+    t.datetime "end_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "employee_payrolls", force: :cascade do |t|
+    t.integer "employee_id", null: false
+    t.integer "payroll_id", null: false
+    t.integer "shift", default: 1, null: false
+  end
+
+  create_table "employee_payslip_lines", force: :cascade do |t|
+    t.integer "employee_payslip_id", null: false
+    t.integer "group", null: false
+    t.integer "type"
+    t.string "description", null: false
+    t.decimal "amount", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_payslip_id", "type"], name: "emp_pay_line_idx"
+    t.index ["employee_payslip_id"], name: "index_employee_payslip_lines_on_employee_payslip_id"
+  end
+
+  create_table "employee_payslips", force: :cascade do |t|
+    t.integer "employee_id", null: false
+    t.integer "status", default: 0, null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.datetime "payment_time"
+    t.decimal "gross_salary", null: false
+    t.text "notes"
+    t.decimal "tax_amount", default: "0.0", null: false
+    t.decimal "nett_salary", null: false
+    t.integer "sick_leave", default: 0, null: false
+    t.integer "absence", default: 0, null: false
+    t.integer "paid_time_off", default: 0, null: false
+    t.integer "overtime_hour", default: 0, null: false
+    t.integer "late", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "employees", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "name", null: false
+    t.integer "role_id", null: false
+    t.decimal "debt", null: false
+    t.date "start_working_date", null: false
+    t.date "end_working_date"
+    t.integer "status", default: 0, null: false
+    t.text "description"
+    t.string "contact_number"
+    t.string "address"
+    t.string "bank"
+    t.string "bank_account"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_employees_on_code", unique: true
+  end
+
+  create_table "payroll_lines", force: :cascade do |t|
+    t.integer "payroll_id", null: false
+    t.integer "row"
+    t.integer "group", null: false
+    t.integer "type"
+    t.integer "formula"
+    t.string "description", null: false
+    t.string "variable1"
+    t.string "variable2"
+    t.string "variable3"
+    t.string "variable4"
+    t.string "variable5"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payroll_id"], name: "index_payroll_lines_on_payroll_id"
+  end
+
+  create_table "payrolls", force: :cascade do |t|
+    t.integer "name", null: false
+    t.decimal "base_salary", null: false
+    t.decimal "overtime_paid", null: false
+    t.string "begin_schedule1", null: false
+    t.string "end_schedule1", null: false
+    t.string "begin_schedule2", null: false
+    t.string "end_schedule2", null: false
+    t.decimal "positional_incentive", null: false
+    t.decimal "attendance_incentive", null: false
+    t.integer "paid_time_off", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
   create_table "tbl_acc_sa", id: false, force: :cascade do |t|
@@ -2056,6 +2158,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_19_112331) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "discounts", "tbl_item", column: "item_code", primary_key: "kodeitem"
+  add_foreign_key "discounts", "tbl_itemjenis", column: "item_type_name", primary_key: "jenis"
+  add_foreign_key "discounts", "tbl_itemmerek", column: "brand_name", primary_key: "merek"
+  add_foreign_key "discounts", "tbl_supel", column: "supplier_code", primary_key: "kode"
+  add_foreign_key "employee_attendances", "employees"
+  add_foreign_key "employee_payrolls", "employees"
+  add_foreign_key "employee_payrolls", "payrolls"
+  add_foreign_key "employee_payslip_lines", "employee_payslips"
+  add_foreign_key "employee_payslips", "employees"
+  add_foreign_key "employees", "roles"
+  add_foreign_key "payroll_lines", "payrolls"
   add_foreign_key "tbl_acc_sa", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_acc_sa_matauang", on_update: :cascade
   add_foreign_key "tbl_acc_sa", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_acc_sa_kodeacc", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tbl_accdepositdt", "tbl_accdeposithd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_accdepodt_hd", on_update: :cascade

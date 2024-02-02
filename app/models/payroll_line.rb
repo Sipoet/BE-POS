@@ -1,0 +1,2 @@
+class PayrollLine < ApplicationRecord
+end
