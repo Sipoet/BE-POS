@@ -1,6 +1,6 @@
-class ApplicationRecord < ActiveRecord::Base
-  primary_abstract_class
-  TABLE_HEADER = []
+class ApplicationModel
+  extend ActiveModel::Naming
+  extend ActiveModel::Translation
 
   def self.datatable_column(klass,key,type, width = 25)
     Datatable::TableColumn.new(

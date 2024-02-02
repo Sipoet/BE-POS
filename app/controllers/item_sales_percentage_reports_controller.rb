@@ -7,6 +7,10 @@ class ItemSalesPercentageReportsController < ApplicationController
     run_service_default
   end
 
+  def group_by_supplier
+    run_service_default
+  end
+
   def columns
     run_service(ItemSalesPercentageReport::ColumnsService)
   end

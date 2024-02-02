@@ -1,4 +1,4 @@
-class BackgroundJob::ShowService < BaseService
+class BackgroundJob::ShowService < ApplicationService
   require 'sidekiq/api'
   def execute_service
     job = Sidekiq::Queue.new.find_job(params[:id])

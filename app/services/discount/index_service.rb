@@ -1,4 +1,4 @@
-class Discount::IndexService < BaseService
+class Discount::IndexService < ApplicationService
   def execute_service
     extract_params
     @discounts = find_discounts
@@ -20,7 +20,7 @@ class Discount::IndexService < BaseService
     @page = permitted_params.fetch(:page,1).to_i
     @per = permitted_params.fetch(:per,20).to_i
     @search_text = permitted_params[:search_text].to_s
-    @order_key =  permitted_params[:order_key] if Discount::TABLE_HEADER.include?(permitted_params[:order_key])
+    @order_key = permitted_params[:order_key] if Discount::TABLE_HEADER.map(&:name).include?(permitted_params[:order_key])
     @order_value = permitted_params[:is_order_asc].try(:downcase) == 'true' ? :asc : :desc
   end
 

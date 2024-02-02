@@ -1,9 +1,9 @@
 require 'sidekiq/api'
-class Discount::DestroyService < BaseService
+class Discount::DestroyService < ApplicationService
 
   def execute_service
     discount = Discount.find(@params[:id])
-    raise BaseService::RecordNotFound.new(@params[:id],Discount.name) if discount.nil?
+    raise ApplicationService::RecordNotFound.new(@params[:id],Discount.name) if discount.nil?
     try_stop_background_job(discount)
     begin
       Discount.transaction do

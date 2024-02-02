@@ -1,4 +1,4 @@
-class Discount::DeleteInactivePastDiscountService < BaseService
+class Discount::DeleteInactivePastDiscountService < ApplicationService
 
   def execute_service
     Discount.transaction do

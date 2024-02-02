@@ -1,0 +1,11 @@
+id:
+  activemodel:
+    attributes:
+      sales_group_by_supplier_report:
+        supplier_code: 'Kode Supplier'
+        item_type_name: 'Jenis/Departemen'
+        brand_name: 'Merek'
+        sales_percentage: 'Persentase Terjual(%)'
+        number_of_purchase: 'Jumlah Pembelian'
+        number_of_sales: 'Jumlah Penjualan'
+        stock_left: 'Sisa Stok'

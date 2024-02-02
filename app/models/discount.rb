@@ -2,18 +2,18 @@ require 'big_decimal.rb'
 class Discount < ApplicationRecord
 
   TABLE_HEADER = [
-    :code,
-    :supplier_code,
-    :item_type_name,
-    :brand_name,
-    :item_code,
-    :weight,
-    :discount1,
-    :discount2,
-    :discount3,
-    :discount4,
-    :start_time,
-    :end_time
+    datatable_column(self,:code, :string),
+    datatable_column(self,:supplier_code, :string),
+    datatable_column(self,:item_type_name, :string),
+    datatable_column(self,:brand_name, :string),
+    datatable_column(self,:item_code, :string),
+    datatable_column(self,:weight, :string),
+    datatable_column(self,:discount1, :string),
+    datatable_column(self,:discount2, :string),
+    datatable_column(self,:discount3, :string),
+    datatable_column(self,:discount4, :string),
+    datatable_column(self,:start_time, :string),
+    datatable_column(self,:end_time, :string)
   ].freeze
 
   attr_readonly :code

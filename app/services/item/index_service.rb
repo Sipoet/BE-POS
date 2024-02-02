@@ -1,4 +1,4 @@
-class Item::IndexService < BaseService
+class Item::IndexService < ApplicationService
   def execute_service
     text_search = @params[:query].to_s
     page = @params.fetch(:page,1)

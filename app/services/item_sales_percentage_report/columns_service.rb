@@ -1,16 +1,13 @@
-class ItemSalesPercentageReport::ColumnsService < BaseService
+class ItemSalesPercentageReport::ColumnsService < ApplicationService
 
   def execute_service
-    headers = ItemSalesPercentageReport::TABLE_HEADER
+    headers = target_class::TABLE_HEADER
     render_json({data:{
-      column_names: localized_column_names(headers),
+      column_names: headers.map(&:humanize_name),
       column_order: headers
     }})
   end
 
   private
 
-  def localized_column_names(headers)
-    headers.map{|column_name| ItemSalesPercentageReport.human_attribute_name(column_name)}
-  end
 end

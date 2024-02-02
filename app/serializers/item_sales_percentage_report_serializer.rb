@@ -1,4 +1,4 @@
-class ItemSalesPercentageSerializer
+class ItemSalesPercentageReportSerializer
   include JSONAPI::Serializer
   attributes :item_code, :item_name, :item_type, :supplier_code,
              :supplier_name, :brand, :percentage_sales, :item_type_desc

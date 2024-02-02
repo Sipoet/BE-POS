@@ -10,7 +10,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
 
   def create_file_service(model_name, service_name)
     create_file "app/services/#{model_name}/#{service_name}_service.rb", <<~END
-    class #{model_name.classify}::#{service_name.classify}Service < BaseService
+    class #{model_name.classify}::#{service_name.classify}Service < ApplicationService
 
       def execute_service
         # insert code here

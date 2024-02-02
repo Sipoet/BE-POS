@@ -1,4 +1,4 @@
-class BackgroundJob::IndexService < BaseService
+class BackgroundJob::IndexService < ApplicationService
   require 'sidekiq/api'
 
   def execute_service

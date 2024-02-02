@@ -1,4 +1,4 @@
-class User::IndexService < BaseService
+class User::IndexService < ApplicationService
 
   def execute_service
     extract_params

@@ -1,4 +1,4 @@
-class Sale::TransactionReportService < BaseService
+class Sale::TransactionReportService < ApplicationService
 
   def execute_service
     query = execute_sql(query_report)

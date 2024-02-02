@@ -2,23 +2,23 @@ class ItemSalesPercentageReport < ApplicationRecord
   self.table_name = 'item_sales_percentage_reports'
   self.primary_key = 'item_code'
   TABLE_HEADER = [
-    :item_code,
-    :item_name,
-    :item_type,
-    :item_type_desc,
-    :supplier_code,
-    :supplier_name,
-    :brand,
-    :recent_purchase_date,
-    :warehouse_stock,
-    :store_stock,
-    :avg_buy_price,
-    :number_of_purchase,
-    :purchase_total,
-    :sell_price,
-    :number_of_sales,
-    :sales_total,
-    :percentage_sales
+    datatable_column(self,:item_code, :string),
+    datatable_column(self,:item_name, :string),
+    datatable_column(self,:item_type, :string),
+    datatable_column(self,:item_type_desc, :string),
+    datatable_column(self,:supplier_code, :string),
+    datatable_column(self,:supplier_name, :string),
+    datatable_column(self,:brand, :string),
+    datatable_column(self,:recent_purchase_date, :date),
+    datatable_column(self,:warehouse_stock, :integer),
+    datatable_column(self,:store_stock, :integer),
+    datatable_column(self,:avg_buy_price, :decimal),
+    datatable_column(self,:number_of_purchase, :integer),
+    datatable_column(self,:purchase_total, :decimal),
+    datatable_column(self,:sell_price, :decimal),
+    datatable_column(self,:number_of_sales, :integer),
+    datatable_column(self,:sales_total, :decimal),
+    datatable_column(self,:percentage_sales , :percentage)
   ].freeze
 
   def id

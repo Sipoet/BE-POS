@@ -1,4 +1,4 @@
-class Discount::RefreshAllPromotionService < BaseService
+class Discount::RefreshAllPromotionService < ApplicationService
   def execute_service
     discount_ids = Discount.all
                            .pluck(:id)

@@ -1,4 +1,4 @@
-class ItemSale::PeriodReportService < BaseService
+class ItemSale::PeriodReportService < ApplicationService
 
   def execute_service
     extract_params
@@ -27,7 +27,7 @@ class ItemSale::PeriodReportService < BaseService
       render_json(ItemSalesPeriodReportSerializer.new(data, {meta: meta}))
     elsif @report_type == 'xlsx'
       file_excel = generate_excel(data)
-      @controller.send_file file_excel
+      @controller.send_file file_excel.path
     end
   end
 
@@ -45,9 +45,6 @@ class ItemSale::PeriodReportService < BaseService
   end
 
   def generate_excel(data)
-    file = Tempfile.new([filename, '.xlsx'])
-    workbook = WriteXLSX.new(file.path)
-    insert_to_sheet_data(workbook, data)
     filter = {
       'Start time': @start_time,
       'End time': @end_time,
@@ -57,73 +54,11 @@ class ItemSale::PeriodReportService < BaseService
       'Items': @items,
       'Item types': @item_types
     }
-    insert_metadata(workbook, filter)
-    workbook.close
-    file
-  end
-
-  def insert_to_sheet_data(workbook, data)
-    worksheet = workbook.add_worksheet('data')
-    add_header(workbook, worksheet)
-    add_data(workbook, worksheet, data)
-  end
-
-  def insert_metadata(workbook, filter)
-    worksheet = workbook.add_worksheet('metadata')
-    label_format = workbook.add_format(bold: true, align: 'right')
-    datetime_format = workbook.add_format(num_format: 'dd mmmm yyyy hh:mm')
-    filter_format = workbook.add_format(bold: true, align: 'right', size: 14)
-    worksheet.set_column(0, 0, 20, label_format)
-    worksheet.set_column(1, 1, 25)
-    worksheet.set_column(3, 3, 20, label_format)
-    worksheet.write_string(0, 0, 'Report generated at :')
-    worksheet.write_date_time('B1', DateTime.now.iso8601[0..18], datetime_format)
-    worksheet.write_string(1, 0, 'FILTER', filter_format)
-    index = 2
-    filter.each do |key, value|
-      worksheet.write_string(index, 0, "#{key} :")
-      worksheet.write_string(index, 1, value.is_a?(Array) ? value.join(', ') : value.to_s)
-      index += 1
-    end
-  end
-
-  def add_header(workbook, worksheet)
-    header_format = workbook.add_format(bold: true, size: 14)
-    worksheet.set_row(0, 22, header_format)
-    localized_column_names.each.with_index(0) do |header_name, index|
-      worksheet.write(0,index, header_name, header_format)
-    end
-  end
-
-  def localized_column_names
-    ItemSalesPeriodReport::TABLE_HEADER.map { |column_name| ItemSalesPeriodReport.human_attribute_name(column_name) }
-  end
-
-  def add_data(workbook, worksheet, data)
-    num_format = workbook.add_format(size: 12, num_format: '#,##0')
-    general_format = workbook.add_format(size: 12)
-    date_format = workbook.add_format(size: 12, num_format: 'dd/mm/yy')
-    datetime_format = workbook.add_format(size: 12, num_format: 'dd/mm/yy hh:mm')
-    worksheet.set_column(5, 11, 24, num_format)
-    worksheet.set_column(0, 4, 17, general_format)
-    worksheet.set_column(1, 1, 45)
-    worksheet.set_column(9, 9, 20, general_format)
-    data.each.with_index(1) do |row, index_vertical|
-      ItemSalesPeriodReport::TABLE_HEADER.each.with_index(0) do |key, index|
-        value = row.send(key)
-        if value.nil?
-          worksheet.write_blank(3, 0)
-        elsif value.is_a?(Numeric)
-          worksheet.write_number(index_vertical, index, value.to_f,num_format)
-        elsif value.is_a?(Date)
-          worksheet.write_date_time(index_vertical, index, value.iso8601,date_format)
-        elsif value.respond_to?(:strftime)
-          worksheet.write_date_time(index_vertical, index, value.iso8601,datetime_format)
-        else
-          worksheet.write_string(index_vertical, index, value.to_s,general_format)
-        end
-      end
-    end
+    generator = ExcelGenerator.new
+    generator.add_column_definitions(ItemSalesPeriodReport::TABLE_HEADER)
+    generator.add_data(data)
+    generator.add_metadata(filter)
+    generator.generate(filename)
   end
 
   def filename
@@ -198,13 +133,14 @@ class ItemSale::PeriodReportService < BaseService
   end
 
   def extract_params
-    @start_time = @params.fetch(:start_time,Time.now.utc.beginning_of_day).try(:to_time)
-    @end_time = @params.fetch(:end_time,Time.now.utc.end_of_day).try(:to_time)
-    @discount_code = @params[:discount_code]
-    @suppliers = *@params[:suppliers]
-    @brands = *@params[:brands]
-    @items = *@params[:items]
-    @item_types = *@params[:item_types]
-    @report_type = @params[:report_type]
+    permitted_params = @params.permit(:start_time,:end_time,:discount_code,:report_type,suppliers:[],brands:[],item_types:[],items:[])
+    @start_time = permitted_params.fetch(:start_time,Time.now.utc.beginning_of_day).try(:to_time)
+    @end_time = permitted_params.fetch(:end_time,Time.now.utc.end_of_day).try(:to_time)
+    @discount_code = permitted_params[:discount_code]
+    @suppliers = *permitted_params[:suppliers]
+    @brands = *permitted_params[:brands]
+    @items = *permitted_params[:items]
+    @item_types = *permitted_params[:item_types]
+    @report_type = permitted_params[:report_type]
   end
 end

@@ -1,4 +1,4 @@
-class ItemSale::TransactionReportService < BaseService
+class ItemSale::TransactionReportService < ApplicationService
 
   def execute_service
     find_key!

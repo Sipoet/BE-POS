@@ -1,4 +1,4 @@
-class Home::SettingService < BaseService
+class Home::SettingService < ApplicationService
 
   def execute_service
     menus = find_menus(@current_user.role)
@@ -17,15 +17,16 @@ class Home::SettingService < BaseService
     [
       ItemSalesPercentageReport,
       Discount,
-      ItemSalesPeriodReport
+      ItemSalesPeriodReport,
+      SalesGroupBySupplierReport
     ].each_with_object({}) do |klass,obj|
       obj[klass.name.camelize(:lower)] = table_names(klass)
     end
   end
 
   def table_names(klass)
-    klass::TABLE_HEADER.each_with_object({}) do |column_name,obj|
-      obj[column_name] = klass.human_attribute_name(column_name)
+    klass::TABLE_HEADER.each_with_object({}) do |column,obj|
+      obj[column.name] = column.humanize_name
     end
   end
 end

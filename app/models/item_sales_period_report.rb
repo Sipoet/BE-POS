@@ -1,21 +1,20 @@
-class ItemSalesPeriodReport
-  extend ActiveModel::Naming
-  extend ActiveModel::Translation
+class ItemSalesPeriodReport < ApplicationModel
 
   TABLE_HEADER = [
-    :item_code,
-    :item_name,
-    :supplier_code,
-    :item_type_name,
-    :brand_name,
-    :discount_percentage,
-    :buy_price,
-    :sell_price,
-    :quantity,
-    :subtotal,
-    :discount_total,
-    :sales_total
-  ]
+    datatable_column(self,:item_code, :string),
+    datatable_column(self,:item_name, :string),
+    datatable_column(self,:supplier_code, :string),
+    datatable_column(self,:item_type_name, :string),
+    datatable_column(self,:brand_name, :string),
+    datatable_column(self,:discount_percentage, :decimal),
+    datatable_column(self,:buy_price, :decimal),
+    datatable_column(self,:sell_price, :decimal),
+    datatable_column(self,:quantity, :integer),
+    datatable_column(self,:subtotal, :decimal),
+    datatable_column(self,:discount_total, :decimal),
+    datatable_column(self,:sales_total, :decimal)
+  ].freeze
+
   attr_accessor :item_code,
                 :item_name,
                 :supplier_code,

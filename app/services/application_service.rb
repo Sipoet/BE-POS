@@ -1,4 +1,4 @@
-class BaseService
+class ApplicationService
 
   attr_reader :params, :current_user
   def self.run(controller)
@@ -29,6 +29,10 @@ class BaseService
   end
 
   protected
+
+  def target_class
+    @target_class ||= self.class.name.split('::').first.constantize
+  end
 
   def render_json(data, options = {status: :ok})
     if data.is_a?(String)

@@ -1,10 +1,10 @@
 require 'sidekiq/api'
-class Discount::UpdateService < BaseService
+class Discount::UpdateService < ApplicationService
   def execute_service
     permitted_params = @params.required(:discount)
                               .permit(:item_code,:weight, :supplier_code, :item_type_name, :brand_name, :discount1, :discount2,:discount3,:discount4, :start_time, :end_time)
     discount = Discount.find(@params[:id])
-    raise BaseService::RecordNotFound.new(@params[:id],Discount.name) if discount.nil?
+    raise ApplicationService::RecordNotFound.new(@params[:id],Discount.name) if discount.nil?
     if discount.update(permitted_params)
       try_stop_background_job(discount)
       RefreshPromotionJob.perform_async(discount.id)

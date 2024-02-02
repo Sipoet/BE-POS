@@ -1,4 +1,4 @@
-class User::CreateService < BaseService
+class User::CreateService < ApplicationService
 
   def execute_service
     permitted_params = @params.required(:user)

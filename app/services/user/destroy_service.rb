@@ -1,8 +1,8 @@
-class User::DestroyService < BaseService
+class User::DestroyService < ApplicationService
 
   def execute_service
     user = User.find_by(username: @params[:username])
-    raise BaseService::RecordNotFound.new(@params[:username],User.name) if user.nil?
+    raise ApplicationService::RecordNotFound.new(@params[:username],User.name) if user.nil?
     begin
       User.transaction do
         user.destroy!

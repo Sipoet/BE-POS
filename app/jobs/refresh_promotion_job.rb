@@ -7,6 +7,7 @@ class RefreshPromotionJob < ApplicationJob
     discount = Discount.find(id)
     ActiveRecord::Base.transaction do
       delete_old_promotion(discount)
+      return if DateTime.now < discount.start_time
       items = items_based_discount(discount)
       check_conflict_promotion(discount, items)
       check_if_cancelled!

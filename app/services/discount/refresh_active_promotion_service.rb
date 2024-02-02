@@ -1,4 +1,4 @@
-class Discount::RefreshActivePromotionService < BaseService
+class Discount::RefreshActivePromotionService < ApplicationService
 
   def execute_service
     jid = RefreshActivePromotionJob.perform_async
