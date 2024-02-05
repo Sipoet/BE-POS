@@ -34,6 +34,14 @@ class ItemSalesPercentageReport::IndexService < ApplicationService
     query = query.where(supplier_code: filter[:suppliers]) if filter[:suppliers].present?
     query = query.where(item_type: filter[:item_types]) if filter[:item_types].present?
     query = query.where(item_code: filter[:item_codes]) if filter[:item_codes].present?
+    if filter[:warehouse_stock].present?
+      sign_symbol, num = filter[:warehouse_stock].split('-')
+      query = query.where("warehouse_stock #{comparion_sign(sign_symbol)} ?",num.to_i)
+    end
+    if filter[:store_stock].present?
+      sign_symbol, num = filter[:store_stock].split('-')
+      query = query.where("store_stock #{comparion_sign(sign_symbol)} ?",num.to_i)
+    end
     query
   end
 
@@ -45,10 +53,23 @@ class ItemSalesPercentageReport::IndexService < ApplicationService
     generator.generate('laporan-penjualan-item')
   end
 
+  def comparion_sign(symbol)
+    case symbol.to_sym
+    when :lt then '<'
+    when :gt then '>'
+    when :lte then '<='
+    when :gte then '>='
+    when :nt then '!='
+    when :eq then '='
+    else '='
+    end
+  end
+
   def fetch_filter
-    permitted_params = @params.permit(brands: [], item_codes: [], item_types: [], suppliers: [])
-    %i[brands item_codes item_types suppliers].each_with_object({}) do |key, filter|
+    permitted_params = @params.permit(:warehouse_stock,:store_stock,brands: [], item_codes: [], item_types: [], suppliers: [])
+    %i[warehouse_stock store_stock brands item_codes item_types suppliers].each_with_object({}) do |key, filter|
       filter[key] = permitted_params[key] if permitted_params[key].present?
     end
+
   end
 end

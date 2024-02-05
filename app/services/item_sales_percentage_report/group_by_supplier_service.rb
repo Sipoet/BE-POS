@@ -50,6 +50,7 @@ class ItemSalesPercentageReport::GroupBySupplierService < ApplicationService
     <<~SQL
       SELECT
         supplier_code,
+        supplier_name,
         item_type AS item_type_name,
         brand AS brand_name,
         ROUND(SUM(number_of_purchase),0) AS number_of_purchase,
@@ -62,6 +63,7 @@ class ItemSalesPercentageReport::GroupBySupplierService < ApplicationService
         #{filter_query_brands}
       GROUP BY
         supplier_code,
+        supplier_name,
         item_type,
         brand
       ORDER BY

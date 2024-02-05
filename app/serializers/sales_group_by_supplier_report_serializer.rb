@@ -1,6 +1,7 @@
 class SalesGroupBySupplierReportSerializer
   include JSONAPI::Serializer
   attributes  :supplier_code,
+              :supplier_name,
               :item_type_name,
               :brand_name
   [

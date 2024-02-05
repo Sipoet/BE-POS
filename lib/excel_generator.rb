@@ -71,7 +71,7 @@ class ExcelGenerator
         return
       end
       case column.type
-      when :integer,:float,:decimal,:big_decimal
+      when :integer,:float,:decimal,:big_decimal,:money
         worksheet.write_number(y, x, value.to_f, @num_format)
       when :percentage
         worksheet.write_number(y, x, value.to_f, @num_format)
@@ -94,7 +94,7 @@ class ExcelGenerator
     worksheet.set_column(1, 1, 25)
     worksheet.set_column(3, 3, 20, label_format)
     worksheet.write_string(0, 0, 'Report generated at :')
-    worksheet.write_date_time(0,1, DateTime.now.iso8601[0..18], datetime_format)
+    worksheet.write_date_time(0,1, DateTime.now.in_time_zone('Singapore').iso8601[0..18], datetime_format)
     @metadata.each.with_index(2) do |(key, value), index|
       worksheet.write_string(index, 0, "#{key} :")
       worksheet.write_string(index, 1, value.is_a?(Array) ? value.join(', ') : value.to_s)

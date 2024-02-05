@@ -2,7 +2,10 @@ class Sale::TransactionReportService < ApplicationService
 
   def execute_service
     query = execute_sql(query_report)
-    render_json({data:query.to_a.first})
+    sales_transaction_report = SalesTransactionReport.new(query.to_a.first)
+    sales_transaction_report.start_time = start_time
+    sales_transaction_report.end_time = end_time
+    render_json(SalesTransactionReportSerializer.new(sales_transaction_report))
   end
 
   private

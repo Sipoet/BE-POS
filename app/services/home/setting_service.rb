@@ -18,9 +18,10 @@ class Home::SettingService < ApplicationService
       ItemSalesPercentageReport,
       Discount,
       ItemSalesPeriodReport,
-      SalesGroupBySupplierReport
+      SalesGroupBySupplierReport,
+      SalesTransactionReport
     ].each_with_object({}) do |klass,obj|
-      obj[klass.name.camelize(:lower)] = table_names(klass)
+      obj[klass.name.camelize(:lower)] = klass::TABLE_HEADER
     end
   end
 

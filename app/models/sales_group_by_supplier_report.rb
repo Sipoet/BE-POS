@@ -2,6 +2,7 @@ class SalesGroupBySupplierReport < ApplicationModel
 
   TABLE_HEADER = [
     datatable_column(self, :supplier_code, :string),
+    datatable_column(self, :supplier_name, :string),
     datatable_column(self, :item_type_name, :string),
     datatable_column(self, :brand_name, :string),
     datatable_column(self, :number_of_purchase, :integer),
@@ -11,20 +12,22 @@ class SalesGroupBySupplierReport < ApplicationModel
 ].freeze
 
   attr_accessor :supplier_code,
+                :supplier_name,
                 :item_type_name,
                 :number_of_purchase,
                 :number_of_sales,
                 :brand_name
   def initialize(row)
     @supplier_code = row['supplier_code']
+    @supplier_name = row['supplier_name']
     @item_type_name = row['item_type_name']
-    @number_of_purchase = row['number_of_purchase']
-    @number_of_sales = row['number_of_sales']
+    @number_of_purchase = row['number_of_purchase'].to_i
+    @number_of_sales = row['number_of_sales'].to_i
     @brand_name = row['brand_name']
   end
 
   def id
-    @supplier_code
+    "#{@supplier_code}-#{@item_type_name}-#{@brand_name}"
   end
 
   def stock_left
