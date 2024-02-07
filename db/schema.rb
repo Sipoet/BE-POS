@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_01_094452) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_06_103148) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,6 +29,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_01_094452) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "weight", default: 1, null: false
+    t.integer "calculation_type", default: 0, null: false
+    t.string "blacklist_supplier_code"
+    t.string "blacklist_item_type_name"
+    t.string "blacklist_brand_name"
     t.index ["code"], name: "index_discounts_on_code", unique: true
     t.index ["start_time", "end_time", "item_code", "supplier_code", "item_type_name", "brand_name"], name: "active_promotion_idx", order: { end_time: :desc }
     t.index ["start_time", "end_time"], name: "index_discounts_on_start_time_and_end_time", order: { end_time: :desc }
@@ -2159,8 +2163,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_01_094452) do
   end
 
   add_foreign_key "discounts", "tbl_item", column: "item_code", primary_key: "kodeitem"
+  add_foreign_key "discounts", "tbl_itemjenis", column: "blacklist_item_type_name", primary_key: "jenis"
   add_foreign_key "discounts", "tbl_itemjenis", column: "item_type_name", primary_key: "jenis"
+  add_foreign_key "discounts", "tbl_itemmerek", column: "blacklist_brand_name", primary_key: "merek"
   add_foreign_key "discounts", "tbl_itemmerek", column: "brand_name", primary_key: "merek"
+  add_foreign_key "discounts", "tbl_supel", column: "blacklist_supplier_code", primary_key: "kode"
   add_foreign_key "discounts", "tbl_supel", column: "supplier_code", primary_key: "kode"
   add_foreign_key "employee_attendances", "employees"
   add_foreign_key "employee_payrolls", "employees"

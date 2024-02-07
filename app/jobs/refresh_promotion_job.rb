@@ -35,6 +35,14 @@ class RefreshPromotionJob < ApplicationJob
     }.each do |key, value|
       items = items.where(key => value) if value.present?
     end
+    {
+      supplier1: discount.blacklist_supplier_code,
+      jenis: discount.blacklist_item_type_name,
+      merek: discount.blacklist_brand_name
+    }.each do |key, value|
+      items = items.where.not(key => value) if value.present?
+    end
+
     items.to_a
   end
 
@@ -78,7 +86,7 @@ class RefreshPromotionJob < ApplicationJob
           iddiskon: promotion.iddiskon,
           kodeitem: item.kodeitem,
           satuan: item.satuan,
-          opsidiskon: 1,
+          opsidiskon: discount.percentage? ? 1 : 2,
           diskon1: discount.discount1,
           diskon2: discount.discount2,
           diskon3: discount.discount3,

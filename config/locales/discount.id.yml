@@ -16,3 +16,7 @@ id:
         start_time: 'Tanggal Mulai'
         end_time: 'Tanggal Sampai'
         weight: 'Level Diskon'
+        calculation_type: 'Tipe Kalkulasi'
+        blacklist_supplier_code: "Blacklist Kode Supplier"
+        blacklist_brand_name: "Blacklist Merek"
+        blacklist_item_type: "Blacklist Jenis/Departemen"
