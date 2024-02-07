@@ -2,7 +2,10 @@ require 'sidekiq/api'
 class Discount::UpdateService < ApplicationService
   def execute_service
     permitted_params = @params.required(:discount)
-                              .permit(:item_code,:weight, :supplier_code, :item_type_name, :brand_name, :discount1, :discount2,:discount3,:discount4, :start_time, :end_time)
+                              .permit(:item_code,:weight,:calculation_type, :supplier_code, :item_type_name,
+                                      :brand_name,:blacklist_supplier_code, :blacklist_item_type_name,
+                                      :blacklist_brand_name, :discount1, :discount2,:discount3,
+                                      :discount4, :start_time, :end_time)
     discount = Discount.find(@params[:id])
     raise ApplicationService::RecordNotFound.new(@params[:id],Discount.name) if discount.nil?
     if discount.update(permitted_params)

@@ -50,7 +50,7 @@ group :development, :test do
   gem 'pry'
   gem 'rspec-rails', '~>6.1.0'
   gem 'rswag-specs', '~>2.13.0'
-  gem 'rspec-sidekiq', '~>4.1.0'
+
 end
 
 group :development do
@@ -64,4 +64,5 @@ group :test do
   gem 'database_cleaner-redis', '~>2.0.0'
   gem 'factory_bot_rails','~>6.4.2'
   gem 'ffaker', '~>2.23.0'
+  gem 'rspec-sidekiq', '~>4.1.0'
 end

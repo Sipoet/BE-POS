@@ -7,6 +7,10 @@ class Discount < ApplicationRecord
     datatable_column(self,:item_type_name, :string),
     datatable_column(self,:brand_name, :string),
     datatable_column(self,:item_code, :string),
+    datatable_column(self,:blacklist_supplier_code, :string),
+    datatable_column(self,:blacklist_item_type_name, :string),
+    datatable_column(self,:blacklist_brand_name, :string),
+    datatable_column(self,:calculation_type, :string),
     datatable_column(self,:weight, :string),
     datatable_column(self,:discount1, :string),
     datatable_column(self,:discount2, :string),
@@ -18,19 +22,30 @@ class Discount < ApplicationRecord
 
   attr_readonly :code
 
+  enum :calculation_type,{
+    percentage: 0,
+    nominal: 1
+  }
+
   validates :code, presence: true, uniqueness: true
   validates :weight, presence: true, numericality:{greater_than: 0, integer: true}
-  validates :discount1, presence: true, numericality:{greater_than_and_equal_to: 0, less_than: 100}
+  validates :discount1, presence: true, numericality:{greater_than_and_equal_to: 0, less_than: 100}, if: :percentage?
+  validates :discount1, presence: true, numericality:{greater_than: 0}, if: :nominal?
   validates :discount2, presence: true, numericality:{greater_than_and_equal_to: 0, less_than: 100}
   validates :discount3, presence: true, numericality:{greater_than_and_equal_to: 0, less_than: 100}
   validates :discount4, presence: true, numericality:{greater_than_and_equal_to: 0, less_than: 100}
   validates :start_time, presence: true
   validates :end_time, presence: true
+  validates :calculation_type, presence: true
 
   belongs_to :item, optional: true, foreign_key: :item_code, primary_key: :kodeitem, class_name:'Ipos::Item'
   belongs_to :item_type, optional: true, foreign_key: :item_type_name, primary_key: :jenis, class_name:'Ipos::ItemType'
   belongs_to :brand, optional: true, foreign_key: :brand_name, primary_key: :merek, class_name:'Ipos::Brand'
   belongs_to :supplier, optional: true, foreign_key: :supplier_code, primary_key: :kode, class_name:'Ipos::Supplier'
+
+  belongs_to :blacklist_item_type, optional: true, foreign_key: :item_type_name, primary_key: :jenis, class_name:'Ipos::ItemType'
+  belongs_to :blacklist_brand, optional: true, foreign_key: :brand_name, primary_key: :merek, class_name:'Ipos::Brand'
+  belongs_to :blacklist_supplier, optional: true, foreign_key: :supplier_code, primary_key: :kode, class_name:'Ipos::Supplier'
 
   validate :range_time_should_valid
   validate :filter_should_be_filled
