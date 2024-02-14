@@ -19,7 +19,8 @@ class Home::SettingService < ApplicationService
       Discount,
       ItemSalesPeriodReport,
       SalesGroupBySupplierReport,
-      SalesTransactionReport
+      SalesTransactionReport,
+      Employee
     ].each_with_object({}) do |klass,obj|
       obj[klass.name.camelize(:lower)] = klass::TABLE_HEADER
     end

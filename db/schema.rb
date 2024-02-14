@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_06_103148) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_10_141436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,12 +55,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_06_103148) do
   create_table "employee_payslip_lines", force: :cascade do |t|
     t.integer "employee_payslip_id", null: false
     t.integer "group", null: false
-    t.integer "type"
+    t.integer "payslip_type", null: false
     t.string "description", null: false
     t.decimal "amount", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["employee_payslip_id", "type"], name: "emp_pay_line_idx"
+    t.index ["employee_payslip_id", "payslip_type"], name: "emp_pay_line_idx"
     t.index ["employee_payslip_id"], name: "index_employee_payslip_lines_on_employee_payslip_id"
   end
 
@@ -87,11 +87,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_06_103148) do
     t.string "code", null: false
     t.string "name", null: false
     t.integer "role_id", null: false
-    t.decimal "debt", null: false
+    t.decimal "debt", default: "0.0", null: false
     t.date "start_working_date", null: false
     t.date "end_working_date"
     t.integer "status", default: 0, null: false
     t.text "description"
+    t.string "id_number"
     t.string "contact_number"
     t.string "address"
     t.string "bank"
@@ -101,18 +102,28 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_06_103148) do
     t.index ["code"], name: "index_employees_on_code", unique: true
   end
 
+  create_table "file_stores", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "filename", null: false
+    t.binary "file", null: false
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_file_stores_on_code", unique: true
+  end
+
   create_table "payroll_lines", force: :cascade do |t|
     t.integer "payroll_id", null: false
-    t.integer "row"
+    t.integer "row", null: false
     t.integer "group", null: false
-    t.integer "type"
-    t.integer "formula"
+    t.integer "payroll_type"
+    t.integer "formula", null: false
     t.string "description", null: false
-    t.string "variable1"
-    t.string "variable2"
-    t.string "variable3"
-    t.string "variable4"
-    t.string "variable5"
+    t.decimal "variable1"
+    t.decimal "variable2"
+    t.decimal "variable3"
+    t.decimal "variable4"
+    t.decimal "variable5"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["payroll_id"], name: "index_payroll_lines_on_payroll_id"
@@ -120,14 +131,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_06_103148) do
 
   create_table "payrolls", force: :cascade do |t|
     t.integer "name", null: false
-    t.decimal "base_salary", null: false
-    t.decimal "overtime_paid", null: false
     t.string "begin_schedule1", null: false
     t.string "end_schedule1", null: false
     t.string "begin_schedule2", null: false
     t.string "end_schedule2", null: false
-    t.decimal "positional_incentive", null: false
-    t.decimal "attendance_incentive", null: false
     t.integer "paid_time_off", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -2160,6 +2167,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_06_103148) do
     t.index ["jti"], name: "index_users_on_jti"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
+  end
+
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.bigint "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
   add_foreign_key "discounts", "tbl_item", column: "item_code", primary_key: "kodeitem"

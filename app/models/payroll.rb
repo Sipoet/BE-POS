@@ -1,4 +1,5 @@
 class Payroll < ApplicationRecord
+  has_paper_trail
 
   def begin_schedule_of(date)
     DateTime.parse("#{date.iso8601} #{begin_schedule}")

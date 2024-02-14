@@ -57,4 +57,13 @@ Rails.application.routes.draw do
     post :cancel, on: :member
     post :pay, on: :member
   end
+
+  resources :assets, param: :code, only: [:show]
+
+  resources :employees, param: :code, only:[:index,:create,:update] do
+    post :activate, on: :member
+    post :deactivate, on: :member
+  end
+
+  resources :roles, only: [:index, :create, :destroy]
 end

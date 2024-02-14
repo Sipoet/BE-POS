@@ -1,2 +1,3 @@
 class EmployeePayroll < ApplicationRecord
+
 end

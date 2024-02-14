@@ -8,7 +8,7 @@ class ItemType::IndexService < ApplicationService
                           .per(per)
                           .pluck(:jenis,:ketjenis)
                           .map do|(type,description)|
-      {id: type, name: "#{type}-#{description}"}
+      {id: type, name: description}
     end
     @controller.render json: {data: item_types}, status: 200
   end

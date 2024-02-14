@@ -4,7 +4,7 @@ class EmployeePayslipLine < ApplicationRecord
     deduction: 1,
   }
 
-  enum :type, {
+  enum :payslip_type, {
     base_salary: 0, #gaji pokok
     incentive: 1, #tunjangan
     insurance: 2,

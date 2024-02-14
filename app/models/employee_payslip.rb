@@ -1,4 +1,6 @@
 class EmployeePayslip < ApplicationRecord
+  has_paper_trail
+
   enum :status, {
     draft: 0,
     confirmed: 1,

@@ -1,6 +1,6 @@
 class DiscountsController < ApplicationController
 
-  before_action :authenticate_user!
+  before_action :authorize_user!
 
   def index
     run_service_default
