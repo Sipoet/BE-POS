@@ -1,6 +1,6 @@
 require 'big_decimal.rb'
 class Discount < ApplicationRecord
-
+  has_paper_trail
   TABLE_HEADER = [
     datatable_column(self,:code, :string),
     datatable_column(self,:supplier_code, :string),

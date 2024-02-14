@@ -44,6 +44,7 @@ gem 'rswag-api', '~>2.13.0'
 gem 'rswag-ui', '~>2.13.0'
 gem 'sidekiq', '~> 7.2'
 gem 'xsv','~> 1.3.0'
+gem 'paper_trail','~> 15.1.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
