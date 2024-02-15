@@ -21,8 +21,22 @@ class Employee < ApplicationRecord
 
   belongs_to :role
 
+
+  validates :role, presence: true
+  validates :code, presence: true
+  validates :name, presence: true
+  validates :start_working_date, presence: true
+  validate :end_working_date_should_valid
+
   def generate_code
     code = SecureRandom.alphanumeric(6).upcase
+  end
+
+  private
+  def end_working_date_should_valid
+    if end_working_date.present? && end_working_date < start_working_date
+      errors.add(:end_working_date,:greater_than, count: start_working_date.strftime('%d/%m/%y'))
+    end
   end
 
 end
