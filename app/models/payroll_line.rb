@@ -19,6 +19,6 @@ class PayrollLine < ApplicationRecord
     basic: 0,
     fulltime: 1,
     overtime_hour: 2,
-    proportional_based_period: 3,
+    period_proportional: 3,
   }
 end

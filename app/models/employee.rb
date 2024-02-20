@@ -20,16 +20,17 @@ class Employee < ApplicationRecord
   }
 
   belongs_to :role
-
+  belongs_to :payroll, optional: true
 
   validates :role, presence: true
   validates :code, presence: true
   validates :name, presence: true
   validates :start_working_date, presence: true
   validate :end_working_date_should_valid
+  validates :payroll, presence: true, if: :active?
 
   def generate_code
-    code = SecureRandom.alphanumeric(6).upcase
+    self.code = SecureRandom.alphanumeric(6).upcase
   end
 
   private

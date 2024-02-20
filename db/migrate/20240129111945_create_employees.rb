@@ -7,7 +7,9 @@ class CreateEmployees < ActiveRecord::Migration[7.1]
       t.decimal :debt, null: false, default: 0
       t.date :start_working_date, null: false
       t.date :end_working_date
+      t.integer :payroll_id
       t.integer :status, null: false, default: 0
+      t.integer :shift, null: false, default: 1
       t.text :description
       t.string :id_number
       t.string :contact_number
@@ -17,5 +19,6 @@ class CreateEmployees < ActiveRecord::Migration[7.1]
       t.timestamps
     end
     add_foreign_key :employees, :roles, column: :role_id
+    add_foreign_key :employees, :payrolls, column: :payroll_id
   end
 end

@@ -4,6 +4,7 @@ class CreateFileStore < ActiveRecord::Migration[7.1]
       t.string :code, null: false, index: {unique: true}
       t.string :filename, null: false
       t.binary :file, null: false
+      t.boolean :is_temporary, null: false, default: false
       t.string :description
       t.timestamps
     end

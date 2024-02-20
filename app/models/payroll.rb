@@ -1,11 +1,21 @@
 class Payroll < ApplicationRecord
   has_paper_trail
 
-  def begin_schedule_of(date)
-    DateTime.parse("#{date.iso8601} #{begin_schedule}")
-  end
+  TABLE_HEADER = [
+    datatable_column(self,:name, :string),
+    datatable_column(self,:paid_time_off, :integer),
+    datatable_column(self,:description, :integer),
+  ].freeze
 
-  def end_schedule_of(date)
-    DateTime.parse("#{date.iso8601} #{end_schedule}")
-  end
+  validates :name, presence: true
+
+  validates :payroll_lines, presence: true
+  validates :work_schedules, presence: true
+
+  has_many :payroll_lines, dependent: :destroy
+  has_many :employees, through: :employee_payrolls
+  has_many :work_schedules, dependent: :destroy
+
+  accepts_nested_attributes_for :payroll_lines, :work_schedules, allow_destroy: true
+
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_10_141436) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_20_032827) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -46,12 +46,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_10_141436) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "employee_payrolls", force: :cascade do |t|
-    t.integer "employee_id", null: false
-    t.integer "payroll_id", null: false
-    t.integer "shift", default: 1, null: false
-  end
-
   create_table "employee_payslip_lines", force: :cascade do |t|
     t.integer "employee_payslip_id", null: false
     t.integer "group", null: false
@@ -66,6 +60,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_10_141436) do
 
   create_table "employee_payslips", force: :cascade do |t|
     t.integer "employee_id", null: false
+    t.integer "payroll_id", null: false
     t.integer "status", default: 0, null: false
     t.date "start_date", null: false
     t.date "end_date", null: false
@@ -90,7 +85,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_10_141436) do
     t.decimal "debt", default: "0.0", null: false
     t.date "start_working_date", null: false
     t.date "end_working_date"
+    t.integer "payroll_id"
     t.integer "status", default: 0, null: false
+    t.integer "shift", default: 1, null: false
     t.text "description"
     t.string "id_number"
     t.string "contact_number"
@@ -106,6 +103,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_10_141436) do
     t.string "code", null: false
     t.string "filename", null: false
     t.binary "file", null: false
+    t.boolean "is_temporary", default: false, null: false
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -130,11 +128,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_10_141436) do
   end
 
   create_table "payrolls", force: :cascade do |t|
-    t.integer "name", null: false
-    t.string "begin_schedule1", null: false
-    t.string "end_schedule1", null: false
-    t.string "begin_schedule2", null: false
-    t.string "end_schedule2", null: false
+    t.string "name", null: false
+    t.text "description"
     t.integer "paid_time_off", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -2179,6 +2174,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_10_141436) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  create_table "work_schedules", force: :cascade do |t|
+    t.integer "payroll_id", null: false
+    t.integer "shift", null: false
+    t.string "begin_work", null: false
+    t.string "end_work", null: false
+    t.integer "day_of_week", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payroll_id"], name: "index_work_schedules_on_payroll_id"
+  end
+
   add_foreign_key "discounts", "tbl_item", column: "item_code", primary_key: "kodeitem"
   add_foreign_key "discounts", "tbl_itemjenis", column: "blacklist_item_type_name", primary_key: "jenis"
   add_foreign_key "discounts", "tbl_itemjenis", column: "item_type_name", primary_key: "jenis"
@@ -2187,10 +2193,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_10_141436) do
   add_foreign_key "discounts", "tbl_supel", column: "blacklist_supplier_code", primary_key: "kode"
   add_foreign_key "discounts", "tbl_supel", column: "supplier_code", primary_key: "kode"
   add_foreign_key "employee_attendances", "employees"
-  add_foreign_key "employee_payrolls", "employees"
-  add_foreign_key "employee_payrolls", "payrolls"
   add_foreign_key "employee_payslip_lines", "employee_payslips"
   add_foreign_key "employee_payslips", "employees"
+  add_foreign_key "employee_payslips", "payrolls"
+  add_foreign_key "employees", "payrolls"
   add_foreign_key "employees", "roles"
   add_foreign_key "payroll_lines", "payrolls"
   add_foreign_key "tbl_acc_sa", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_acc_sa_matauang", on_update: :cascade
@@ -2490,4 +2496,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_10_141436) do
   add_foreign_key "tbl_user", "tbl_userg", column: "kelompok", primary_key: "kelompok", name: "tbl_user_kelompokacc", on_update: :cascade
   add_foreign_key "tbl_userakses", "tbl_userg", column: "klpakses", primary_key: "kelompok", name: "tbl_userakses_klp", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tbl_usercus_acc", "tbl_userg", column: "klpakses", primary_key: "kelompok", name: "tbl_usercus_acc_userg", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "work_schedules", "payrolls"
 end

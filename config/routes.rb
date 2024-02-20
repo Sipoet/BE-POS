@@ -66,4 +66,5 @@ Rails.application.routes.draw do
   end
 
   resources :roles, only: [:index, :create, :destroy]
+  resources :payrolls, only: [:index, :show, :create, :update, :destroy]
 end
