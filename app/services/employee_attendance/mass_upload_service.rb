@@ -4,9 +4,13 @@ class EmployeeAttendance::MassUploadService < ApplicationService
     sheet = read_excel!(params[:file])
     range = extract_period(sheet)
     employee_attendances = extract_to_employee_attendance(sheet, range)
-    puts employee_attendances
     remove_old_attendances(range)
-    EmployeeAttendance.insert_all!(employee_attendances)
+    ApplicationRecord.transaction do
+      result = EmployeeAttendance.insert_all!(employee_attendances, returning: [:id])
+      ids = result.to_a.map{|row|row['id']}
+      employee_attendances = EmployeeAttendance.where(id: ids).includes(:employee)
+      render_json(EmployeeAttendanceSerializer.new(employee_attendances,{include:['employee'],field:{employee: [:id,:name]}}),{status: :created})
+    end
   end
 
   private
@@ -49,14 +53,15 @@ class EmployeeAttendance::MassUploadService < ApplicationService
       time_attendance << {
         employee_id: selected_employee.id,
         start_time: start_time,
-        end_time: end_time
+        end_time: end_time,
+        date: start_time.to_date,
       }
     end
     time_attendance
   end
 
   def find_employee(rows)
-    employee_code = rows[2]
+    employee_code = rows[10].downcase
     Employee.find_by(code: employee_code, status: :active)
   end
 

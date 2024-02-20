@@ -4,7 +4,7 @@ class Payroll::ShowService < ApplicationService
     extract_params
     payroll = Payroll.find(params[:id])
     raise RecordNotFound.new(params[:id],Payroll.model_name.human) if payroll.nil?
-    render_json(PayrollSerializer.new(payroll,{fields: @fields, include: @included}))
+    render_json(PayrollSerializer.new(payroll,{fields: @fields, include: @included, params: {include:@included}}))
   end
 
   private

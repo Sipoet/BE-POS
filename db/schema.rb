@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_20_032827) do
 
   create_table "employee_attendances", force: :cascade do |t|
     t.integer "employee_id", null: false
+    t.datetime "date", null: false
     t.datetime "start_time", null: false
     t.datetime "end_time"
     t.datetime "created_at", null: false
@@ -103,7 +104,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_20_032827) do
     t.string "code", null: false
     t.string "filename", null: false
     t.binary "file", null: false
-    t.boolean "is_temporary", default: false, null: false
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

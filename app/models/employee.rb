@@ -23,7 +23,7 @@ class Employee < ApplicationRecord
   belongs_to :payroll, optional: true
 
   validates :role, presence: true
-  validates :code, presence: true
+  validates :code, presence: true, uniqueness: true
   validates :name, presence: true
   validates :start_working_date, presence: true
   validate :end_working_date_should_valid

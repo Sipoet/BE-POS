@@ -3,7 +3,7 @@ class Employee::UpdateService < ApplicationService
   def execute_service
     permitted_params = @params.required(:employee)
                               .permit(:name,:role_id,:start_working_date,
-                                      :end_working_date, :description,
+                                      :end_working_date, :description,:payroll_id,
                                       :id_number,:contact_number, :address,
                                       :bank, :bank_account, :status
                                       )
