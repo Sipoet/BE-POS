@@ -1,3 +1,0 @@
-class EmployeePayroll < ApplicationRecord
-
-end

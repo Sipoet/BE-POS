@@ -12,7 +12,7 @@ class Payroll < ApplicationRecord
   validates :payroll_lines, presence: true
   validates :work_schedules, presence: true
 
-  has_many :payroll_lines, dependent: :destroy
+  has_many :payroll_lines, -> { order(row: :asc) }, dependent: :destroy
   has_many :employees, through: :employee_payrolls
   has_many :work_schedules, dependent: :destroy
 

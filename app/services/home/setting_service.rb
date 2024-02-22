@@ -22,7 +22,7 @@ class Home::SettingService < ApplicationService
       SalesTransactionReport,
       Employee,
       Payroll,
-      EmployeePayslip,
+      Payslip,
       EmployeeAttendance
     ].each_with_object({}) do |klass,obj|
       obj[klass.name.camelize(:lower)] = klass::TABLE_HEADER

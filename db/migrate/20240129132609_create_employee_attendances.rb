@@ -9,5 +9,6 @@ class CreateEmployeeAttendances < ActiveRecord::Migration[7.1]
     end
 
     add_foreign_key :employee_attendances, :employees, column: :employee_id
+    add_index :employee_attendances, [:employee_id,:date], unique: true
   end
 end

@@ -1,4 +1,4 @@
-class EmployeePayslipLine < ApplicationRecord
+class PayslipLine < ApplicationRecord
   enum :group, {
     earning: 0,
     deduction: 1,
@@ -12,6 +12,8 @@ class EmployeePayslipLine < ApplicationRecord
     commission: 4,
     tax: 5
   }
+  validates :amount, presence: true, numericality:{greater_than: 0}
+  validates :group, presence: true
 
-  belongs_to :employee_payslip, inverse_of: :employee_payslip_lines
+  belongs_to :payslip, inverse_of: :payslip_lines
 end

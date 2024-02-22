@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_20_032827) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_21_101140) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -45,38 +45,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_20_032827) do
     t.datetime "end_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["employee_id", "date"], name: "index_employee_attendances_on_employee_id_and_date", unique: true
   end
 
-  create_table "employee_payslip_lines", force: :cascade do |t|
-    t.integer "employee_payslip_id", null: false
-    t.integer "group", null: false
-    t.integer "payslip_type", null: false
-    t.string "description", null: false
-    t.decimal "amount", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["employee_payslip_id", "payslip_type"], name: "emp_pay_line_idx"
-    t.index ["employee_payslip_id"], name: "index_employee_payslip_lines_on_employee_payslip_id"
-  end
-
-  create_table "employee_payslips", force: :cascade do |t|
+  create_table "employee_leaves", force: :cascade do |t|
     t.integer "employee_id", null: false
-    t.integer "payroll_id", null: false
-    t.integer "status", default: 0, null: false
-    t.date "start_date", null: false
-    t.date "end_date", null: false
-    t.datetime "payment_time"
-    t.decimal "gross_salary", null: false
-    t.text "notes"
-    t.decimal "tax_amount", default: "0.0", null: false
-    t.decimal "nett_salary", null: false
-    t.integer "sick_leave", default: 0, null: false
-    t.integer "absence", default: 0, null: false
-    t.integer "paid_time_off", default: 0, null: false
-    t.integer "overtime_hour", default: 0, null: false
-    t.integer "late", null: false
+    t.integer "leave_type", null: false
+    t.date "date", null: false
+    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["employee_id", "date"], name: "index_employee_leaves_on_employee_id_and_date", unique: true
   end
 
   create_table "employees", force: :cascade do |t|
@@ -131,6 +110,39 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_20_032827) do
     t.string "name", null: false
     t.text "description"
     t.integer "paid_time_off", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "payslip_lines", force: :cascade do |t|
+    t.integer "payslip_id", null: false
+    t.integer "group", null: false
+    t.integer "payslip_type", null: false
+    t.string "description", null: false
+    t.decimal "amount", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payslip_id", "payslip_type"], name: "emp_pay_line_idx"
+    t.index ["payslip_id"], name: "index_payslip_lines_on_payslip_id"
+  end
+
+  create_table "payslips", force: :cascade do |t|
+    t.integer "employee_id", null: false
+    t.integer "payroll_id", null: false
+    t.integer "status", default: 0, null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.datetime "payment_time"
+    t.decimal "gross_salary", null: false
+    t.text "notes"
+    t.decimal "tax_amount", default: "0.0", null: false
+    t.decimal "nett_salary", null: false
+    t.integer "sick_leave", default: 0, null: false
+    t.integer "known_absence", default: 0, null: false
+    t.integer "unknown_absence", default: 0, null: false
+    t.integer "paid_time_off", default: 0, null: false
+    t.integer "overtime_hour", default: 0, null: false
+    t.integer "late", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -2193,12 +2205,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_20_032827) do
   add_foreign_key "discounts", "tbl_supel", column: "blacklist_supplier_code", primary_key: "kode"
   add_foreign_key "discounts", "tbl_supel", column: "supplier_code", primary_key: "kode"
   add_foreign_key "employee_attendances", "employees"
-  add_foreign_key "employee_payslip_lines", "employee_payslips"
-  add_foreign_key "employee_payslips", "employees"
-  add_foreign_key "employee_payslips", "payrolls"
+  add_foreign_key "employee_leaves", "employees"
   add_foreign_key "employees", "payrolls"
   add_foreign_key "employees", "roles"
   add_foreign_key "payroll_lines", "payrolls"
+  add_foreign_key "payslip_lines", "payslips"
+  add_foreign_key "payslips", "employees"
+  add_foreign_key "payslips", "payrolls"
   add_foreign_key "tbl_acc_sa", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_acc_sa_matauang", on_update: :cascade
   add_foreign_key "tbl_acc_sa", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_acc_sa_kodeacc", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tbl_accdepositdt", "tbl_accdeposithd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_accdepodt_hd", on_update: :cascade
