@@ -10,9 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_21_101140) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_23_074702) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "access_authorizes", force: :cascade do |t|
+    t.string "controller", null: false
+    t.string "action", null: false
+    t.integer "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_access_authorizes_on_role_id"
+  end
+
+  create_table "column_authorizes", force: :cascade do |t|
+    t.string "table", null: false
+    t.string "column", null: false
+    t.integer "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_column_authorizes_on_role_id"
+  end
 
   create_table "discounts", force: :cascade do |t|
     t.string "code", null: false
@@ -66,6 +84,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_101140) do
     t.date "start_working_date", null: false
     t.date "end_working_date"
     t.integer "payroll_id"
+    t.integer "image_id"
     t.integer "status", default: 0, null: false
     t.integer "shift", default: 1, null: false
     t.text "description"
@@ -2158,7 +2177,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_101140) do
     t.string "email"
     t.string "username", null: false
     t.string "encrypted_password", null: false
-    t.integer "role", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -2170,6 +2188,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_101140) do
     t.string "jti", null: false
     t.integer "failed_attempts", default: 0, null: false
     t.datetime "locked_at"
+    t.integer "role_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -2197,6 +2216,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_101140) do
     t.index ["payroll_id"], name: "index_work_schedules_on_payroll_id"
   end
 
+  add_foreign_key "access_authorizes", "roles"
+  add_foreign_key "column_authorizes", "roles"
   add_foreign_key "discounts", "tbl_item", column: "item_code", primary_key: "kodeitem"
   add_foreign_key "discounts", "tbl_itemjenis", column: "blacklist_item_type_name", primary_key: "jenis"
   add_foreign_key "discounts", "tbl_itemjenis", column: "item_type_name", primary_key: "jenis"
@@ -2509,5 +2530,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_101140) do
   add_foreign_key "tbl_user", "tbl_userg", column: "kelompok", primary_key: "kelompok", name: "tbl_user_kelompokacc", on_update: :cascade
   add_foreign_key "tbl_userakses", "tbl_userg", column: "klpakses", primary_key: "kelompok", name: "tbl_userakses_klp", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tbl_usercus_acc", "tbl_userg", column: "klpakses", primary_key: "kelompok", name: "tbl_usercus_acc_userg", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "users", "roles"
   add_foreign_key "work_schedules", "payrolls"
 end

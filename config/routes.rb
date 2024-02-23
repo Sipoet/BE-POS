@@ -67,4 +67,7 @@ Rails.application.routes.draw do
 
   resources :roles, only: [:index, :create, :destroy]
   resources :payrolls, only: [:index, :show, :create, :update, :destroy]
+  resources :employee_leaves, only: [:index, :show, :create, :update, :destroy]
+  resources :access_authorizes, only: [:index, :show, :create, :update, :destroy]
+  resources :column_authorizes, only: [:index, :show, :create, :update, :destroy]
 end
