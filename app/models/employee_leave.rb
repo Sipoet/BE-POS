@@ -1,4 +1,9 @@
 class EmployeeLeave < ApplicationRecord
+  TABLE_HEADER = [
+    datatable_column(self,:employee_name, :string),
+    datatable_column(self,:date, :string),
+    datatable_column(self,:leave_type, :string)
+  ]
   enum :leave_type, {
     sick_leave: 0,
     annual_leave: 1,

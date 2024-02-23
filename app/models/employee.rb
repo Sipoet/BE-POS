@@ -21,6 +21,7 @@ class Employee < ApplicationRecord
 
   belongs_to :role
   belongs_to :payroll, optional: true
+  belongs_to :image, optional: true
 
   validates :role, presence: true
   validates :code, presence: true, uniqueness: true
