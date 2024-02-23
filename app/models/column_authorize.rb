@@ -1,0 +1,2 @@
+class ColumnAuthorize < ApplicationRecord
+end

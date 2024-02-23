@@ -1,11 +1,7 @@
-class UsersController < ApplicationController
+class EmployeeLeavesController < ApplicationController
   before_action :authorize_user!
 
   def index
-    run_service_default
-  end
-
-  def show
     run_service_default
   end
 
@@ -18,6 +14,10 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    run_service_default
+  end
+
+  def show
     run_service_default
   end
 end

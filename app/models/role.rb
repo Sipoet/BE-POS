@@ -3,7 +3,6 @@ class Role < ApplicationRecord
     datatable_column(self,:name, :string),
   ]
 
-  def dummy_var
-    SecureRandom.uuid
-  end
+  has_many :access_authorizes, dependent: :destroy
+  has_many :column_authorizes, dependent: :destroy
 end

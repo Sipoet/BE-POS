@@ -1,7 +1,5 @@
 class ItemSalesController < ApplicationController
-  before_action do
-    authorize_user!(%w{admin})
-  end
+  before_action :authorize_user!
 
   def transaction_report
     run_service_default

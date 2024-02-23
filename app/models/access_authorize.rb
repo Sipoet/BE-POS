@@ -1,0 +1,2 @@
+class AccessAuthorize < ApplicationRecord
+end

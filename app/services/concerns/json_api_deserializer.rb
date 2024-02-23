@@ -4,7 +4,7 @@ module JsonApiDeserializer
 
     def initialize(params, allowed_fields, allowed_columns)
       @params = params.permit(
-        :search_text,:include,:sort
+        :search_text,:include,:sort,
         fields: allowed_fields,
         filter: allowed_columns.map{|column| {column => filter_operators}},
         page:[:page,:limit])
@@ -24,7 +24,7 @@ module JsonApiDeserializer
       end
       result.page, result.limit = deserialize_pagination
       result.field = deserialize_field
-      result.included = deserialize_included & allowed_fields
+      result.included = deserialize_included & @allowed_fields
       result
     end
 
@@ -35,8 +35,8 @@ module JsonApiDeserializer
     private
 
     class Result
-      attr_accessor :filters, :sort, :page, :limit
-                    :field, :included
+      attr_accessor :filters, :sort, :page, :limit,
+                    :field, :included, :search_text
     end
 
     def deserialize_filters
@@ -77,7 +77,12 @@ module JsonApiDeserializer
     end
 
     def deserialize_pagination
-      [@params[:page][:page].to_i, @params[:page][:per].to_i]
+      return [nil, nil] if @params[:page].blank?
+      page = @params[:page][:page]
+      limit = @params[:page][:limit]
+      page = page.to_i if page.present?
+      limit = limit.to_i if limit.present?
+      [page, limit]
     end
 
     def deserialize_sort
