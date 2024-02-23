@@ -1,41 +1,57 @@
 class Role::IndexService < ApplicationService
 
+  include JsonApiDeserializer
   def execute_service
     extract_params
     @roles = find_roles
-    render_json(RoleSerializer.new(@roles,{meta: meta, fields: @fields}))
+    options = {
+      meta: meta,
+      fields: @fields,
+      params:{include: @included},
+      include: @included
+    }
+    render_json(RoleSerializer.new(@roles,options))
   end
 
   def meta
     {
       page: @page,
-      per: @per,
+      limit: @limit,
       total_pages: @roles.total_pages,
     }
   end
 
   def extract_params
-    permitted_params = @params.permit(:page,:per,:search_text,:order_key,:is_order_asc,fields:[:roles])
-    @page = permitted_params.fetch(:page,1).to_i
-    @per = permitted_params.fetch(:per,20).to_i
-    @search_text = permitted_params[:search_text].to_s
-    @order_key = permitted_params[:order_key] if Role::TABLE_HEADER.map(&:name).include?(permitted_params[:order_key])
-    @order_value = permitted_params[:is_order_asc].try(:downcase) == 'true' ? :asc : :desc
-    @fields = permitted_params[:fields].each_with_object({}){|(key,value),obj| obj[key] = value.split(',').map(&:to_sym)} rescue nil
+    allowed_columns = Role::TABLE_HEADER.map(&:name)
+    allowed_fields = [:role]
+    result = dezerialize_table_params(params,
+      allowed_fields: allowed_fields,
+      allowed_columns: allowed_columns)
+    @page = result.page || 1
+    @limit = result.limit || 20
+    @search_text = result.search_text
+    @sort = result.sort
+    @included = result.included
+    @filters = result.filters
+    @field = result.field
   end
 
   def find_roles
-    roles = Role.all
+    roles = Role.all.includes(@included)
       .page(@page)
-      .per(@per)
+      .per(@limit)
     if @search_text.present?
-      roles = roles.where(['name ilike ?',"%#{@search_text}%"])
+      roles = roles.where(['name ilike ? ']+ Array.new(1,"%%"))
     end
-    if @order_key.present?
-      roles = roles.order(@order_key => @order_value)
+    @filters.each do |filter|
+      roles = roles.where(filter.to_query)
+    end
+    if @sort.present?
+      roles = roles.order(@sort)
     else
       roles = roles.order(name: :asc)
     end
     roles
   end
+
 end
