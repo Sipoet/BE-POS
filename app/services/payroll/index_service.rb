@@ -1,5 +1,5 @@
 class Payroll::IndexService < ApplicationService
-include JsonApiDeserializer
+  include JsonApiDeserializer
   def execute_service
     extract_params
     @payrolls = find_payrolls
@@ -26,7 +26,7 @@ include JsonApiDeserializer
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
-    @page = result.page
+    @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
     @sort = result.sort

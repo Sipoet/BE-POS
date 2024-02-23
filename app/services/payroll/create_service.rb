@@ -51,7 +51,7 @@ class Payroll::CreateService < ApplicationService
     permitted_params = params.required(:data)
                               .required(:attributes)
                               .permit(:name,:paid_time_off,:description)
-    payroll.update!(permitted_params)
+    payroll.attributes = permitted_params
   end
 
 end
