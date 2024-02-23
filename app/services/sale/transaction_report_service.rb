@@ -24,7 +24,7 @@ class Sale::TransactionReportService < ApplicationService
       FROM #{Ipos::ItemSale.table_name}
       GROUP BY notransaksi
     )group_sale ON group_sale.notransaksi = #{Ipos::Sale.table_name}.notransaksi
-    WHERE tanggal between '#{start_time}' and '#{end_time}'
+    WHERE tanggal between '#{start_time}' and '#{end_time}' and #{Ipos::Sale.table_name}.tipe in('KSR','JL')
     SQL
   end
 
