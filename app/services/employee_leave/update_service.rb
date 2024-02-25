@@ -1,7 +1,7 @@
 class EmployeeLeave::UpdateService < ApplicationService
 
   def execute_service
-    employee_leave = EmployeeLeave.find(id: params[:id])
+    employee_leave = EmployeeLeave.find( params[:id])
     raise RecordNotFound.new(params[:id],EmployeeLeave.model_name.human) if employee_leave.nil?
     if record_save?(employee_leave)
       render_json({message: "#{employee_leave.name} sukses dihapus"})
@@ -17,13 +17,13 @@ class EmployeeLeave::UpdateService < ApplicationService
     end
     return true
   rescue => e
-    Rails.logger.errors e.message
-    Rails.logger.errors e.backtrace
+    Rails.logger.error e.message
+    Rails.logger.error e.backtrace
     return false
   end
 
   def update_attribute(employee_leave)
-    allowed_columns = EmployeeLeave::TABLE_HEADER.map(&:key)
+    allowed_columns = EmployeeLeave::TABLE_HEADER.map(&:name)
     permitted_params = params.required(:data)
                               .required(:attributes)
                               .permit(allowed_columns)

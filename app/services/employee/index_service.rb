@@ -27,7 +27,7 @@ class Employee::IndexService < ApplicationService
   end
 
   def find_employees
-    employees = Employee.all.includes(:role)
+    employees = Employee.all.includes(@included)
       .page(@page)
       .per(@per)
     if @search_text.present?

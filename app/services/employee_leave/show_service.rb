@@ -3,14 +3,14 @@ class EmployeeLeave::ShowService < ApplicationService
   include JsonApiDeserializer
   def execute_service
     extract_params
-    employee_leave = EmployeeLeave.find(id: params[:id])
+    employee_leave = EmployeeLeave.find( params[:id])
     raise RecordNotFound.new(params[:id],EmployeeLeave.model_name.human) if employee_leave.nil?
     options = {
-      fields: @fields,
+      field: @field,
       params:{include: @included},
       include: @included
     }
-    render_json(EmployeeLeaveSerializer.new(@employee_leaves,options))
+    render_json(EmployeeLeaveSerializer.new(employee_leave,options))
   end
 
   def extract_params

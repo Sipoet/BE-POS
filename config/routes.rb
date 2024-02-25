@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   controllers: {
     sessions: 'users/sessions'
   }
+
   resources :users, param: :username, only: [:index, :show, :destroy, :update, :create]
   resources :background_jobs, only:[:index, :show, :destroy] do
     post :retry, on: :member
@@ -65,7 +66,12 @@ Rails.application.routes.draw do
     post :deactivate, on: :member
   end
 
-  resources :roles, only: [:index, :create, :destroy]
+  resources :roles, only: [:index,:show, :create, :update, :destroy] do
+    get :controller_names, on: :collection
+    get :action_names, on: :collection
+    get :table_names, on: :collection
+    get :column_names, on: :collection
+  end
   resources :payrolls, only: [:index, :show, :create, :update, :destroy]
   resources :employee_leaves, only: [:index, :show, :create, :update, :destroy]
   resources :access_authorizes, only: [:index, :show, :create, :update, :destroy]

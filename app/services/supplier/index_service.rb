@@ -1,6 +1,6 @@
 class Supplier::IndexService < ApplicationService
   def execute_service
-    text_search = @params[:query].to_s
+    text_search = @params[:search_text].to_s
     page = @params.fetch(:page,1)
     per =@params.fetch(:per,10)
     suppliers = search_data(text_search)

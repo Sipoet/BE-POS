@@ -1,8 +1,9 @@
 class User::CreateService < ApplicationService
 
   def execute_service
-    permitted_params = @params.required(:user)
-                              .permit(:username,:role,:email,:password,:password_confirmation)
+    permitted_params = @params.required(:data)
+                              .required(:attributes)
+                              .permit(:role_id,:username,:email,:password,:password_confirmation)
     user = User.new(permitted_params)
     if user.save
       render_json(UserSerializer.new(user),{status: :created})

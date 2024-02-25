@@ -23,7 +23,7 @@ class User::IndexService < ApplicationService
 
   def extract_params
     allowed_columns = User::TABLE_HEADER.map(&:name)
-    allowed_fields = [:user]
+    allowed_fields = [:role,:user]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
@@ -49,7 +49,7 @@ class User::IndexService < ApplicationService
     if @sort.present?
       users = users.order(@sort)
     else
-      users = users.order(name: :asc)
+      users = users.order(username: :asc)
     end
     users
   end

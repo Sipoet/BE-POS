@@ -1,5 +1,5 @@
 class Cache
-  @@redis = Redis.new
+  @@redis = Redis.new(url: 'redis://redis:6379/1')
   def self.get(key)
     @@redis.get(key)
   end

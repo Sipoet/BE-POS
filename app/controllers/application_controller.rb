@@ -15,10 +15,10 @@ class ApplicationController < ActionController::API
     devise_parameter_sanitizer.permit(:account_update, keys: %i[name avatar])
   end
 
-  def authorize_user!(allowed_roles = [])
+  def authorize_user!
     authenticate_user!
     set_paper_trail_whodunnit
-    user_authorize(current_user)
+    authorize_role!(current_user.role)
   end
 
   def run_service(service_klass = nil)

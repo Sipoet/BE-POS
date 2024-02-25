@@ -16,13 +16,13 @@ class EmployeeLeave::CreateService < ApplicationService
     end
     return true
   rescue => e
-    Rails.logger.errors e.message
-    Rails.logger.errors e.backtrace
+    Rails.logger.error e.message
+    Rails.logger.error e.backtrace
     return false
   end
 
   def update_attribute(employee_leave)
-    allowed_columns = EmployeeLeave::TABLE_HEADER.map(&:key)
+    allowed_columns = EmployeeLeave::TABLE_HEADER.map(&:name)
     permitted_params = params.required(:data)
                               .required(:attributes)
                               .permit(allowed_columns)

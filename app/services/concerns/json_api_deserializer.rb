@@ -18,7 +18,7 @@ module JsonApiDeserializer
       result.search_text = @params[:search_text].to_s
       result.filters = deserialize_filters
       result.sort = deserialize_sort
-      if @allowed_columns.present?
+      if @allowed_columns.present? & result.sort.present?
         not_allowed_column = result.sort.keys.map(&:to_s) - @allowed_columns
         not_allowed_column.each{|key| result.sort.delete(key.to_sym)}
       end

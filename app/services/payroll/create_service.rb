@@ -18,8 +18,8 @@ class Payroll::CreateService < ApplicationService
     end
     return true
   rescue => e
-    Rails.logger.errors e.message
-    Rails.logger.errors e.backtrace
+    Rails.logger.error e.message
+    Rails.logger.error e.backtrace
     return false
   end
 

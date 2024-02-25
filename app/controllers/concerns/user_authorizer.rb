@@ -1,5 +1,4 @@
 module UserAuthorizer
-  SUPERADMIN = 'superadmin'.freeze
   extend ActiveSupport::Concern
 
   class AuthorizeChecker
@@ -10,23 +9,23 @@ module UserAuthorizer
 
 
     def has_authorize?(controller_name, action)
-      access = self.class.access_of(@role)
+      access = role_access
       return false if access[controller_name].blank?
       access[controller_name].include?(action)
     end
 
-    def self.access_of(role)
+    def role_access
       key = "role-#{role.id}-auth"
       cache = Cache.get(key)
       return JSON.parse(cache) if cache.present?
-      value = decorate_access(role)
+      value = decorate_access
       Cache.set(key,value.to_json)
       return value
     end
 
     private
 
-    def decorate_access(role)
+    def decorate_access
       result = {}
       role.access_authorizes
           .group_by(&:controller)
@@ -42,9 +41,9 @@ module UserAuthorizer
     protected
     def authorize_role!(role)
       raise 'not a role' if !role.is_a?(Role)
-      return if role.name == SUPERADMIN
+      return if role.name == Role::SUPERADMIN
       checker = AuthorizeChecker.new(role)
-      raise ForbiddenError unless checker.has_authorize?(controller_name, action)
+      raise ForbiddenError unless checker.has_authorize?(controller_name, action_name)
     end
 
     def allowed_columns(role, model_class)

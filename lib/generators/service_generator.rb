@@ -26,7 +26,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
   end
 
   def default_template(model_name, service_name)
-    create_file "app/services/#{model_name}/#{service_name}_service.rb", <<~END
+    create_file "app/services/#{model_name}/#{service_name.singularize}_service.rb", <<~END
     class #{model_name.classify}::#{service_name.classify}Service < ApplicationService
 
       def execute_service
@@ -49,7 +49,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         @#{plural_name} = find_#{plural_name}
         options = {
           meta: meta,
-          fields: @fields,
+          field: @field,
           params:{include: @included},
           include: @included
         }
@@ -92,7 +92,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         if @sort.present?
           #{plural_name} = #{plural_name}.order(@sort)
         else
-          #{plural_name} = #{plural_name}.order(name: :asc)
+          #{plural_name} = #{plural_name}.order(id: :asc)
         end
         #{plural_name}
       end
@@ -110,14 +110,14 @@ class ServiceGenerator < Rails::Generators::NamedBase
       include JsonApiDeserializer
       def execute_service
         extract_params
-        #{model_name} = #{klass_name}.find(id: params[:id])
+        #{model_name} = #{klass_name}.find(params[:id])
         raise RecordNotFound.new(params[:id],#{klass_name}.model_name.human) if #{model_name}.nil?
         options = {
-          fields: @fields,
+          field: @field,
           params:{include: @included},
           include: @included
         }
-        render_json(#{klass_name}Serializer.new(@#{plural_name},options))
+        render_json(#{klass_name}Serializer.new(#{model_name},options))
       end
 
       def extract_params
@@ -156,13 +156,13 @@ class ServiceGenerator < Rails::Generators::NamedBase
         end
         return true
       rescue => e
-        Rails.logger.errors e.message
-        Rails.logger.errors e.backtrace
+        Rails.logger.error e.message
+        Rails.logger.error e.backtrace
         return false
       end
 
       def update_attribute(#{model_name})
-        allowed_columns = #{klass_name}::TABLE_HEADER.map(&:key)
+        allowed_columns = #{klass_name}::TABLE_HEADER.map(&:name)
         permitted_params = params.required(:data)
                                   .required(:attributes)
                                   .permit(allowed_columns)
@@ -179,7 +179,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
     class #{model_name.classify}::UpdateService < ApplicationService
 
       def execute_service
-        #{model_name} = #{klass_name}.find(id: params[:id])
+        #{model_name} = #{klass_name}.find(params[:id])
         raise RecordNotFound.new(params[:id],#{klass_name}.model_name.human) if #{model_name}.nil?
         if record_save?(#{model_name})
           render_json({message: "\#{#{model_name}.name} sukses dihapus"})
@@ -195,13 +195,13 @@ class ServiceGenerator < Rails::Generators::NamedBase
         end
         return true
       rescue => e
-        Rails.logger.errors e.message
-        Rails.logger.errors e.backtrace
+        Rails.logger.error e.message
+        Rails.logger.error e.backtrace
         return false
       end
 
       def update_attribute(#{model_name})
-        allowed_columns = #{klass_name}::TABLE_HEADER.map(&:key)
+        allowed_columns = #{klass_name}::TABLE_HEADER.map(&:name)
         permitted_params = params.required(:data)
                                   .required(:attributes)
                                   .permit(allowed_columns)
@@ -219,7 +219,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
     class #{model_name.classify}::DestroyService < ApplicationService
 
       def execute_service
-        #{model_name} = #{klass_name}.find(id: params[:id])
+        #{model_name} = #{klass_name}.find( params[:id])
         raise RecordNotFound.new(params[:id],#{klass_name}.model_name.human) if #{model_name}.nil?
         if #{model_name}.destroy
           render_json(#{klass_name}Serializer.new(#{model_name}),{status: :created})
