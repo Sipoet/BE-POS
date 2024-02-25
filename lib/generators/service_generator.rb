@@ -182,7 +182,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         #{model_name} = #{klass_name}.find(params[:id])
         raise RecordNotFound.new(params[:id],#{klass_name}.model_name.human) if #{model_name}.nil?
         if record_save?(#{model_name})
-          render_json({message: "\#{#{model_name}.name} sukses dihapus"})
+          render_json(#{klass_name}Serializer.new(#{model_name}))
         else
           render_error_record(#{model_name})
         end
@@ -222,7 +222,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         #{model_name} = #{klass_name}.find( params[:id])
         raise RecordNotFound.new(params[:id],#{klass_name}.model_name.human) if #{model_name}.nil?
         if #{model_name}.destroy
-          render_json(#{klass_name}Serializer.new(#{model_name}),{status: :created})
+          render_json({message: "\#{#{model_name}.id} sukses dihapus"})
         else
           render_error_record(#{model_name})
         end

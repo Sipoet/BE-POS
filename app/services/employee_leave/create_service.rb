@@ -22,10 +22,9 @@ class EmployeeLeave::CreateService < ApplicationService
   end
 
   def update_attribute(employee_leave)
-    allowed_columns = EmployeeLeave::TABLE_HEADER.map(&:name)
     permitted_params = params.required(:data)
                               .required(:attributes)
-                              .permit(allowed_columns)
+                              .permit(:date,:description,:leave_type, :employee_id)
     employee_leave.attributes = permitted_params
   end
 end

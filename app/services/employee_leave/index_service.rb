@@ -23,7 +23,7 @@ class EmployeeLeave::IndexService < ApplicationService
 
   def extract_params
     allowed_columns = EmployeeLeave::TABLE_HEADER.map(&:name)
-    allowed_fields = [:employee_leave]
+    allowed_fields = [:employee_leave, :employee]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
@@ -40,16 +40,14 @@ class EmployeeLeave::IndexService < ApplicationService
     employee_leaves = EmployeeLeave.all.includes(@included)
       .page(@page)
       .per(@limit)
-    if @search_text.present?
-      employee_leaves = employee_leaves.where(['name ilike ? ']+ Array.new(1,"%%"))
-    end
+
     @filters.each do |filter|
       employee_leaves = employee_leaves.where(filter.to_query)
     end
     if @sort.present?
       employee_leaves = employee_leaves.order(@sort)
     else
-      employee_leaves = employee_leaves.order(name: :asc)
+      employee_leaves = employee_leaves.order(id: :asc)
     end
     employee_leaves
   end

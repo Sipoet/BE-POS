@@ -4,7 +4,7 @@ class EmployeeLeave::UpdateService < ApplicationService
     employee_leave = EmployeeLeave.find( params[:id])
     raise RecordNotFound.new(params[:id],EmployeeLeave.model_name.human) if employee_leave.nil?
     if record_save?(employee_leave)
-      render_json({message: "#{employee_leave.name} sukses dihapus"})
+      render_json(EmployeeLeaveSerializer.new(employee_leave, include:[:employee]))
     else
       render_error_record(employee_leave)
     end
@@ -23,10 +23,9 @@ class EmployeeLeave::UpdateService < ApplicationService
   end
 
   def update_attribute(employee_leave)
-    allowed_columns = EmployeeLeave::TABLE_HEADER.map(&:name)
     permitted_params = params.required(:data)
                               .required(:attributes)
-                              .permit(allowed_columns)
+                              .permit(:date,:description,:leave_type, :employee_id)
     employee_leave.attributes = permitted_params
   end
 end

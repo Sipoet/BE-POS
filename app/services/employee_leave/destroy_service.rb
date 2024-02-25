@@ -4,7 +4,7 @@ class EmployeeLeave::DestroyService < ApplicationService
     employee_leave = EmployeeLeave.find(params[:id])
     raise RecordNotFound.new(params[:id],EmployeeLeave.model_name.human) if employee_leave.nil?
     if employee_leave.destroy
-      render_json(EmployeeLeaveSerializer.new(employee_leave),{status: :created})
+      render_json({message: "#{employee_leave.id} sukses dihapus"})
     else
       render_error_record(employee_leave)
     end

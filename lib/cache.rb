@@ -6,4 +6,13 @@ class Cache
   def self.set(key, value)
     @@redis.set(key, value)
   end
+
+  def self.keys(namespace)
+    @@redis.keys("*#{namespace}*")
+  end
+
+  def self.delete_namespace(key)
+    keys = @@redis.keys("*#{key}*")
+    @@redis.del(keys)
+  end
 end
