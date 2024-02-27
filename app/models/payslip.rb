@@ -2,9 +2,9 @@ class Payslip < ApplicationRecord
   has_paper_trail
 
   TABLE_HEADER = [
-    datatable_column(self,:employee_name, :string),
-    datatable_column(self,:payroll_name, :string),
-    datatable_column(self,:status, :string),
+    datatable_column(self,:employee_id, :link,path:'employees',attribute_key: 'employee.name', sort_key:'employees.name'),
+    datatable_column(self,:payroll_id, :link,path:'payrolls',attribute_key: 'payroll.name', sort_key:'payrolls.name'),
+    datatable_column(self,:status, :enum),
     datatable_column(self,:start_date, :date),
     datatable_column(self,:end_date, :date),
     datatable_column(self,:gross_salary, :decimal),

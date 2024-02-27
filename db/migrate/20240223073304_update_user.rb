@@ -7,8 +7,8 @@ class UpdateUser < ActiveRecord::Migration[7.1]
 
 
   def down
-    add_column :users, :role, :integer
-    remove_column :users, :role_id
     remove_foreign_key :users, :roles, column: :role_id
+    remove_column :users, :role_id
+    add_column :users, :role, :integer
   end
 end

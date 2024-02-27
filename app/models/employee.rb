@@ -3,9 +3,9 @@ class Employee < ApplicationRecord
   TABLE_HEADER = [
     datatable_column(self,:code, :string),
     datatable_column(self,:name, :string),
-    datatable_column(self,:status, :string),
-    datatable_column(self,:role_name, :string),
-    datatable_column(self,:payroll_name, :string),
+    datatable_column(self,:status, :enum),
+    datatable_column(self,:role_id, :link, path:'roles',attribute_key: 'role.name', sort_key:'roles.name'),
+    datatable_column(self,:payroll_id, :link, path:'payrolls',attribute_key: 'payroll.name', sort_key:'payrolls.name'),
     datatable_column(self,:shift, :string),
     datatable_column(self,:start_working_date, :date),
     datatable_column(self,:end_working_date, :date),

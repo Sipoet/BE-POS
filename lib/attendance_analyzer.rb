@@ -8,16 +8,20 @@ class AttendanceAnalyzer
   end
 
   def analyze
+    @work_schedules = @payroll.work_schedules
+                             .group_by(&:day_of_week)
+                             .each_with_object({}) do |(key,values),obj|
+      obj[key] = values.sort_by(&:shift)
+    end
     employee_attendances = find_attendances
     result = Result.new
+    result.work_days, result.late, result.overtime_hours = attendance_summary(employee_attendances)
     # total day employee work since beginning
-    result.employee_work_days = BigDecimal(total_employee_work_days)
+    result.employee_worked_days = BigDecimal(total_employee_worked_days)
     result.total_day = BigDecimal(total_day)
     result.sick_leave = BigDecimal(total_sick_leave)
     result.known_absence = BigDecimal(total_known_absence_leave)
-    result.work_days = BigDecimal(employee_attendances.count)
-    result.unknown_absence = BigDecimal(total_unknown_leave(employee_attendances))
-    result.late, result.overtime_hours = total_late_and_overtime(employee_attendances)
+    result.unknown_absence = [result.total_day, result.employee_worked_days].min - [result.work_days, result.known_absence, result.sick_leave].sum
     result.paid_time_off = BigDecimal(@payroll.paid_time_off)
     result
   end
@@ -29,8 +33,8 @@ class AttendanceAnalyzer
                              date: @start_date..@end_date)
   end
 
-  def total_employee_work_days
-    @total_employee_work_days ||= (@employee.start_working_date..@end_date).to_a.length
+  def total_employee_worked_days
+    @total_employee_worked_days ||= (@employee.start_working_date..@end_date).to_a.length
   end
 
   def total_day
@@ -38,45 +42,73 @@ class AttendanceAnalyzer
   end
 
   def total_unknown_leave(employee_attendances)
-    [total_day, total_employee_work_days].min - employee_attendances.count
+    [total_day, total_employee_worked_days].min - employee_attendances.count
   end
 
-  def total_late_and_overtime(employee_attendances)
-    work_schedules = @payroll.work_schedules
-                             .to_a
-                             .sort_by{|work_schedule| schedule_of(Date.today, work_schedule.begin_work) }
+  def attendance_summary(employee_attendances)
     late = 0
     overtime = []
-    total_shift = work_schedules.length
+    work_days = 0
     employee_attendances.each do |employee_attendance|
-      flag = false
-      work_schedules.each.with_index(1) do |work_schedule, index|
-        begin_work_time = schedule_of(employee_attendance.date, work_schedule.begin_work)
-        end_work_time = schedule_of(employee_attendance.date, work_schedule.end_work)
-        if employee_attendance.start_time.between?(begin_work_time, end_work_time)
-          flag = true
-          next
-        end
-        if flag && employee.end_time < end_work_time
-          late +=1
-          flag = false
-        else
-          flag = false
-        end
-        if employee_attendance.end_time> end_work_time && employee_attendance.start_time <= begin_work_time
-          overtime << difference_hour(employee_attendance.end_time, end_work_time)
-          break
-        end
-
+      work_schedule = find_work_schedule(employee_attendance)
+      if work_schedule.blank?
+        overtime << difference_hour(employee_attendance.start_time, employee_attendance.end_time)
+        work_days += 1
+        next
       end
 
+      begin_work_time = schedule_of(employee_attendance.date, work_schedule.begin_work)
+      end_work_time = schedule_of(employee_attendance.date, work_schedule.end_work)
+      if employee_attendance.start_time > begin_work_time
+        late += 1
+        if employee_attendance.end_time >= end_work_time
+          work_days += 1
+        end
+      elsif employee_attendance.end_time>= end_work_time
+        overtime << difference_hour(employee_attendance.end_time, end_work_time)
+        work_days += 1
+      end
     end
+    return [BigDecimal(work_days),BigDecimal(late), overtime]
+  end
 
-    return BigDecimal(late), overtime
+  def find_work_schedule(employee_attendance)
+    day_work_schedules = @work_schedules[employee_attendance.date.cwday]
+    if day_work_schedules.nil?
+      shift = find_changed_shift(employee_attendance.date)
+      return nil if shift.nil?
+      return @payroll.work_schedules.find_by(shift: shift)
+    end
+    flag = nil
+    day_work_schedules.each do |work_schedule|
+      begin_work_time = schedule_of(employee_attendance.date, work_schedule.begin_work)
+      end_work_time = schedule_of(employee_attendance.date, work_schedule.end_work)
+      if employee_attendance.start_time <= begin_work_time && employee_attendance.end_time >= end_work_time
+        return work_schedule
+      end
+
+      if employee_attendance.start_time.between?(begin_work_time, end_work_time)
+        flag = work_schedule
+        next
+      end
+      if flag.present? && employee_attendance.end_time < end_work_time
+        return flag
+      else
+        return work_schedule
+      end
+    end
+    return flag
+  end
+
+  def find_changed_shift(date)
+    employee_leave = EmployeeLeave.find_by(
+      employee_id: @employee.id,
+      change_date: date)
+    employee_leave&.shift
   end
 
   def difference_hour(time_a, time_b)
-    BigDecimal((time_a.to_time - time_b.to_time)/1.hour).abs.ceil
+    BigDecimal(((time_a.to_time - time_b.to_time)/1.hour).abs.ceil.to_s)
   end
 
   def schedule_of(date, time)
@@ -103,7 +135,7 @@ class AttendanceAnalyzer
                   :work_days,
                   :total_day,
                   :paid_time_off,
-                  :employee_work_days,
+                  :employee_worked_days,
                   :overtime_hours,
                   :unknown_absence,
                   :late

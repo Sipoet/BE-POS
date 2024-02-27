@@ -59,7 +59,9 @@ Rails.application.routes.draw do
     post :pay, on: :member
   end
 
-  resources :assets, param: :code, only: [:show]
+  resources :assets, param: :code, only: [:show] do
+    post :temporary_save, on: :collection
+  end
 
   resources :employees, param: :code, only:[:index,:create,:update] do
     post :activate, on: :member

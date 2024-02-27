@@ -33,7 +33,7 @@ class User::IndexService < ApplicationService
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @field = result.field
+    @field = result.fields
   end
 
   def find_users
@@ -41,7 +41,7 @@ class User::IndexService < ApplicationService
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      users = users.where(['name ilike ? ']+ Array.new(1,"%%"))
+      users = users.where(['username ilike ? ']+ Array.new(1,"%#{@search_text}%"))
     end
     @filters.each do |filter|
       users = users.where(filter.to_query)

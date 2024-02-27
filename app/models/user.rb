@@ -5,7 +5,7 @@ class User < ApplicationRecord
   TABLE_HEADER = [
     datatable_column(self,:username, :string),
     datatable_column(self,:email, :string),
-    datatable_column(self,:role_name, :string)
+    datatable_column(self,:role_id, :link, path:'roles',attribute_key: 'role.name', sort_key:'roles.name'),
   ]
   belongs_to :role
 

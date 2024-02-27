@@ -23,20 +23,20 @@ module JsonApiDeserializer
         not_allowed_column.each{|key| result.sort.delete(key.to_sym)}
       end
       result.page, result.limit = deserialize_pagination
-      result.field = deserialize_field
+      result.fields = deserialize_field
       result.included = deserialize_included & @allowed_fields
       result
     end
 
     def filter_operators
-      [:eq,:not,:lt,:lte,:gt,:gte,:btw]
+      [:eq,:not,:lt,:lte,:gt,:gte,:btw,:like]
     end
 
     private
 
     class Result
       attr_accessor :filters, :sort, :page, :limit,
-                    :field, :included, :search_text
+                    :fields, :included, :search_text
     end
 
     def deserialize_filters
@@ -46,17 +46,13 @@ module JsonApiDeserializer
         if param_value.is_a?(Hash)
           param_value.each do |operator, value|
             filter << Filter.new(
-              key: key,
-              operator: operator.to_sym,
-              value: value
+              key,
+              operator.to_sym,
+              value
             )
           end
         else
-          filter << Filter.new(
-            key: key,
-            operator: :eq,
-            value: param_value.to_s
-          )
+          raise 'filter invalid pattern'
         end
       end
       filter
@@ -71,6 +67,7 @@ module JsonApiDeserializer
       return nil if @params[:field].blank?
       field = {}
       @params[:field].to_h.each do |key,value|
+        puts "======|======#{value}"
         field[key] = value.split(',')
       end
       field
@@ -104,10 +101,10 @@ module JsonApiDeserializer
       def initialize(key, op, val)
         @key = key
         @operator = op
-        value = val
+        set_value(val)
       end
 
-      def value=(val)
+      def set_value(val)
         values = val.split(',')
         if values.length == 1
           @value = values[0]
@@ -118,8 +115,9 @@ module JsonApiDeserializer
 
       def to_query
         case @operator
-        when :eq then ["#{key} = ?", value]
-        when :not then ["#{key} = ?", value]
+        when :eq then {key => value}
+        when :not then ["#{key} != ?", value]
+        when :like then ["#{key} ilike ?", "%#{value}%"]
         when :gt then ["#{key} > ?", value]
         when :gte then ["#{key} >= ?", value]
         when :lt then ["#{key} < ?", value]

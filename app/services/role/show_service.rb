@@ -20,7 +20,7 @@ class Role::ShowService < ApplicationService
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
     @included = result.included
-    @field = result.field
+    @field = result.fields
   end
 
 end

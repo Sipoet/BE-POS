@@ -33,7 +33,7 @@ class EmployeeLeave::IndexService < ApplicationService
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @field = result.field
+    @field = result.fields
   end
 
   def find_employee_leaves

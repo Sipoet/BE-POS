@@ -24,18 +24,19 @@ class Payslip::GeneratePayslipService < ApplicationService
 
   def create_payslip!(payroll,employee)
     attendance_summary = attendance_summary_of(payroll,employee)
-    Rails.logger.info "===work_day = #{attendance_summary.work_days}"
-    Rails.logger.info "===total work day = #{attendance_summary.total_day}"
-    payslip = Payslip.find_or_initialize_by(payroll: payroll,
-                                            employee: employee,
-                                            start_date: @start_date,
-                                            end_date: @end_date,
-                                            sick_leave: attendance_summary.sick_leave.to_i,
-                                            known_absence: attendance_summary.known_absence.to_i,
-                                            unknown_absence: attendance_summary.unknown_absence.to_i,
-                                            late: attendance_summary.late.to_i,
-                                            overtime_hour: attendance_summary.overtime_hours.sum.to_i,
-                                            paid_time_off: payroll.paid_time_off)
+    payslip = Payslip.find_or_initialize_by(
+      payroll: payroll,
+      employee: employee,
+      start_date: @start_date,
+      end_date: @end_date)
+
+    payslip.sick_leave = attendance_summary.sick_leave.to_i
+    payslip.known_absence = attendance_summary.known_absence.to_i
+    payslip.unknown_absence = attendance_summary.unknown_absence.to_i
+    payslip.late = attendance_summary.late.to_i
+    payslip.overtime_hour = attendance_summary.overtime_hours.sum.to_i
+    payslip.paid_time_off = payroll.paid_time_off
+    payslip.notes="w#{attendance_summary.work_days}ovt#{payslip.overtime_hour}"
     recent_sum = 0
     payslip.payslip_lines.map(&:mark_for_destruction)
     payroll.payroll_lines.each do |payroll_line|
@@ -56,6 +57,7 @@ class Payslip::GeneratePayslipService < ApplicationService
     end
     calculate_payslip(payslip)
     payslip.save!
+    payslip.reload
     payslip
   end
 

@@ -20,5 +20,7 @@ class PayrollLine < ApplicationRecord
     fulltime: 1,
     overtime_hour: 2,
     period_proportional: 3,
+    annual_leave_cut: 4,
+    sick_leave_cust: 5
   }
 end

@@ -31,7 +31,9 @@ class ApplicationController < ActionController::API
       service_klass = class_name.constantize
       service_klass.run(self)
     rescue NameError => e
-      render_error("#{e.message} #{e.backtrace.to_s}")
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace.to_s
+      render_error("Internal Server Error")
     end
   end
 

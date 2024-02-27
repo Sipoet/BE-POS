@@ -33,7 +33,7 @@ class Role::IndexService < ApplicationService
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @field = result.field
+    @field = result.fields
   end
 
   def find_roles
@@ -41,7 +41,7 @@ class Role::IndexService < ApplicationService
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      roles = roles.where(['name ilike ? ']+ Array.new(1,"%%"))
+      roles = roles.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
     end
     @filters.each do |filter|
       roles = roles.where(filter.to_query)

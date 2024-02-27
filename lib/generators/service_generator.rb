@@ -49,7 +49,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         @#{plural_name} = find_#{plural_name}
         options = {
           meta: meta,
-          field: @field,
+          fields: @fields,
           params:{include: @included},
           include: @included
         }
@@ -76,7 +76,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         @sort = result.sort
         @included = result.included
         @filters = result.filters
-        @field = result.field
+        @fields = result.fields
       end
 
       def find_#{plural_name}
@@ -84,7 +84,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
           .page(@page)
           .per(@limit)
         if @search_text.present?
-          #{plural_name} = #{plural_name}.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+          #{plural_name} = #{plural_name}.where(['name ilike ? ']+ Array.new(1,"%\#{@search_text}%"))
         end
         @filters.each do |filter|
           #{plural_name} = #{plural_name}.where(filter.to_query)
@@ -113,7 +113,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         #{model_name} = #{klass_name}.find(params[:id])
         raise RecordNotFound.new(params[:id],#{klass_name}.model_name.human) if #{model_name}.nil?
         options = {
-          field: @field,
+          fields: @fields,
           params:{include: @included},
           include: @included
         }
@@ -127,7 +127,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
           allowed_fields: allowed_fields,
           allowed_columns: allowed_columns)
         @included = result.included
-        @field = result.field
+        @fields = result.fields
       end
 
     end
@@ -143,7 +143,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
       def execute_service
         #{model_name} = #{klass_name}.new
         if record_save?(#{model_name})
-          render_json(#{klass_name}Serializer.new(#{model_name}),{status: :created})
+          render_json(#{klass_name}Serializer.new(#{model_name},fields:@fields),{status: :created})
         else
           render_error_record(#{model_name})
         end
@@ -163,6 +163,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
 
       def update_attribute(#{model_name})
         allowed_columns = #{klass_name}::TABLE_HEADER.map(&:name)
+        @fields = {#{model_name}: allowed_columns}
         permitted_params = params.required(:data)
                                   .required(:attributes)
                                   .permit(allowed_columns)
@@ -182,7 +183,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         #{model_name} = #{klass_name}.find(params[:id])
         raise RecordNotFound.new(params[:id],#{klass_name}.model_name.human) if #{model_name}.nil?
         if record_save?(#{model_name})
-          render_json(#{klass_name}Serializer.new(#{model_name}))
+          render_json(#{klass_name}Serializer.new(#{model_name},{fields: @fields}))
         else
           render_error_record(#{model_name})
         end
@@ -202,6 +203,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
 
       def update_attribute(#{model_name})
         allowed_columns = #{klass_name}::TABLE_HEADER.map(&:name)
+        @fields = {#{model_name}: allowed_columns}
         permitted_params = params.required(:data)
                                   .required(:attributes)
                                   .permit(allowed_columns)

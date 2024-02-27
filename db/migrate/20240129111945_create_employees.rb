@@ -16,6 +16,7 @@ class CreateEmployees < ActiveRecord::Migration[7.1]
       t.string :contact_number
       t.string :address
       t.string :bank
+      t.string :bank_register_name
       t.string :bank_account
       t.timestamps
     end

@@ -1,25 +1,57 @@
 class Supplier::IndexService < ApplicationService
+
+  include JsonApiDeserializer
   def execute_service
-    text_search = @params[:search_text].to_s
-    page = @params.fetch(:page,1)
-    per =@params.fetch(:per,10)
-    suppliers = search_data(text_search)
-    suppliers = suppliers.page(page)
-                          .per(per)
-                        .pluck(:kode,:nama)
-                          .map do|(code,name)|
-      {id: code, name: name}
-    end
-    @controller.render json: {data: suppliers}, status: 200
+    extract_params
+    @suppliers = find_suppliers
+    options = {
+      meta: meta,
+      fields: @fields,
+      params:{include: @included},
+      include: @included
+    }
+    render_json(SupplierSerializer.new(@suppliers,options))
   end
 
-  private
+  def meta
+    {
+      page: @page,
+      limit: @limit,
+      total_pages: @suppliers.total_pages,
+    }
+  end
 
-  def search_data(text_search)
-    if text_search.present?
-      Ipos::Supplier.where('nama ilike ? or kode ilike ?', "%#{text_search}%", "%#{text_search}%")
+  def extract_params
+    allowed_columns = Ipos::Supplier::TABLE_HEADER.map(&:name)
+    allowed_fields = [:supplier]
+    result = dezerialize_table_params(params,
+      allowed_fields: allowed_fields,
+      allowed_columns: allowed_columns)
+    @page = result.page || 1
+    @limit = result.limit || 20
+    @search_text = result.search_text
+    @sort = result.sort
+    @included = result.included
+    @filters = result.filters
+    @fields = result.fields
+  end
+
+  def find_suppliers
+    suppliers = Ipos::Supplier.all.includes(@included)
+      .page(@page)
+      .per(@limit)
+    if @search_text.present?
+      suppliers = suppliers.where(['kode ilike ? OR nama ilike ?']+ Array.new(2,"%#{@search_text}%"))
+    end
+    @filters.each do |filter|
+      suppliers = suppliers.where(filter.to_query)
+    end
+    if @sort.present?
+      suppliers = suppliers.order(@sort)
     else
-      Ipos::Supplier.all
+      suppliers = suppliers.order(kode: :asc)
     end
+    suppliers
   end
+
 end

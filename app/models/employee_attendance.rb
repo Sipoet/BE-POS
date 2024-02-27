@@ -1,11 +1,9 @@
 class EmployeeAttendance < ApplicationRecord
   TABLE_HEADER = [
-    datatable_column(self,:employee_name, :string),
+    datatable_column(self,:employee_id, :link,path:'employees',attribute_key: 'employee.name'),
     datatable_column(self,:date, :date),
-    datatable_column(self,:start_time, :datetime),
-    datatable_column(self,:end_time, :datetime),
-    datatable_column(self,:start_work, :string),
-    datatable_column(self,:end_work, :string),
+    datatable_column(self,:start_time, :time, attribute_key:'start_work'),
+    datatable_column(self,:end_time, :time, attribute_key:'end_work'),
   ];
 
   validates :date, presence: true
