@@ -51,8 +51,9 @@ class Payslip::UpdateService < ApplicationService
   def update_attribute(payslip)
     permitted_params = params.required(:data)
                               .required(:attributes)
-                              .permit(:start_date,:end_date,:notes,:sick_leave
-                              :absence,
+                              .permit(:start_date,:end_date,:notes,:sick_leave,
+                              :known_absence,
+                              :unknown_absence,
                               :paid_time_off,
                               :overtime_hour,
                               :late,)

@@ -7,6 +7,7 @@ class CreateWorkSchedules < ActiveRecord::Migration[7.1]
       t.string :begin_work, null: false
       t.string :end_work, null: false
       t.integer :day_of_week, null: false
+      t.integer :long_shift_per_week
       t.timestamps
     end
     add_foreign_key :work_schedules, :payrolls, column: :payroll_id

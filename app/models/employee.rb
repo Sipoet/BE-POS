@@ -14,6 +14,7 @@ class Employee < ApplicationRecord
     datatable_column(self,:address, :string),
     datatable_column(self,:bank, :string),
     datatable_column(self,:bank_account, :string),
+    datatable_column(self,:bank_register_name, :string),
     datatable_column(self,:description, :string),
     datatable_column(self,:debt, :decimal),
   ]
@@ -33,6 +34,7 @@ class Employee < ApplicationRecord
   validates :start_working_date, presence: true
   validate :end_working_date_should_valid
   validates :payroll, presence: true, if: :active?
+  validates :shift, presence: true
 
   def generate_code
     self.code = SecureRandom.alphanumeric(6).upcase

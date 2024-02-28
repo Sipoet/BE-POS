@@ -13,6 +13,7 @@ class CreatePayslips < ActiveRecord::Migration[7.1]
       t.decimal :nett_salary, null: false
       t.integer :sick_leave, null: false, default: 0
       t.integer :known_absence, null: false, default: 0
+      t.integer :work_days, null: false, default: 0
       t.integer :unknown_absence, null: false, default: 0
       t.integer :paid_time_off, null: false, default: 0
       t.integer :overtime_hour, null: false, default: 0

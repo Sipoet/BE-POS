@@ -94,6 +94,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_074702) do
     t.string "contact_number"
     t.string "address"
     t.string "bank"
+    t.string "bank_register_name"
     t.string "bank_account"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -160,6 +161,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_074702) do
     t.decimal "nett_salary", null: false
     t.integer "sick_leave", default: 0, null: false
     t.integer "known_absence", default: 0, null: false
+    t.integer "work_days", default: 0, null: false
     t.integer "unknown_absence", default: 0, null: false
     t.integer "paid_time_off", default: 0, null: false
     t.integer "overtime_hour", default: 0, null: false
@@ -2213,6 +2215,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_074702) do
     t.string "begin_work", null: false
     t.string "end_work", null: false
     t.integer "day_of_week", null: false
+    t.integer "long_shift_per_week"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["payroll_id"], name: "index_work_schedules_on_payroll_id"

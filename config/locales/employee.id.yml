@@ -1,0 +1,25 @@
+id:
+  activerecord:
+    models:
+      employee: "Karyawan"
+    attributes:
+      employee:
+        code: "Kode"
+        name: 'Nama'
+        role: 'Jabatan'
+        role_id: 'Jabatan'
+        debt: "Hutang"
+        start_working_date: "Tanggal Mulai Kerja"
+        end_working_date: "Tanggal Terakhir Kerja"
+        shift: "Shift"
+        payroll: 'Payroll'
+        payroll_id: 'Payroll'
+        status: 'Status'
+        description: 'Keterangan'
+        image: 'Gambar'
+        id_number: 'No KTP'
+        contact_number: "Kontak"
+        address: 'Alamat'
+        bank: 'Bank'
+        bank_account: 'No Rekening Bank'
+        bank_register_name: 'Bank Atas Nama'
