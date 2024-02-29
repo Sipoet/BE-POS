@@ -8,6 +8,7 @@ class Payroll::Formula::OvertimeHourCalculator < Payroll::Formula::ApplicationCa
       offset_hour = 0 if offset_hour < 0
       [offset_hour, max_hour_per_day].min
     end
+    attendance_summary.overtime_hours = [@total_overtime]
     @total_overtime.to_d * payroll_line.variable1
   end
 

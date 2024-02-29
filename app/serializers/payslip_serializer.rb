@@ -4,7 +4,8 @@ class PayslipSerializer
               :gross_salary, :notes, :tax_amount,
               :nett_salary, :sick_leave, :work_days,
               :known_absence,:unknown_absence,
-              :paid_time_off, :overtime_hour, :late, :status
+              :paid_time_off, :overtime_hour, :late, :status,
+              :bank_register_name
   belongs_to :payroll
   belongs_to :employee
 

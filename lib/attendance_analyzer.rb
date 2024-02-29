@@ -53,7 +53,8 @@ class AttendanceAnalyzer
         employee_total_hours =((employee_attendance.end_time - employee_attendance.start_time)/1.hour).round
 
         if employee_total_hours >= schedule_total_hours
-          result.work_days +=2
+          result.work_days += 2
+          result.total_day += 1
           if employee_attendance.start_time <= begin_work_time && employee_attendance.end_time >= end_work_time
             result.overtime_hours << difference_hour(employee_attendance.end_time, end_work_time)
           elsif employee_attendance.start_time > begin_work_time

@@ -1,4 +1,5 @@
 class EmployeeAttendance < ApplicationRecord
+  has_paper_trail
   TABLE_HEADER = [
     datatable_column(self,:employee_id, :link,path:'employees',attribute_key: 'employee.name'),
     datatable_column(self,:date, :date),
