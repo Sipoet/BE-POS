@@ -23,7 +23,7 @@ class Item::IndexService < ApplicationService
 
   def extract_params
     allowed_columns = Ipos::Item::TABLE_HEADER.map(&:name)
-    allowed_fields = [:item]
+    allowed_fields = [:item,:supplier,:brand, :item_type]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)

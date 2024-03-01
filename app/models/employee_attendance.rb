@@ -5,6 +5,8 @@ class EmployeeAttendance < ApplicationRecord
     datatable_column(self,:date, :date),
     datatable_column(self,:start_time, :time, attribute_key:'start_work'),
     datatable_column(self,:end_time, :time, attribute_key:'end_work'),
+    datatable_column(self,:created_at, :datetime),
+    datatable_column(self,:updated_at, :datetime),
   ];
 
   validates :date, presence: true

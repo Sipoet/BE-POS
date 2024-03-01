@@ -6,7 +6,11 @@ class User < ApplicationRecord
     datatable_column(self,:username, :string),
     datatable_column(self,:email, :string),
     datatable_column(self,:role_id, :link, path:'roles',attribute_key: 'role.name', sort_key:'roles.name'),
+    datatable_column(self,:created_at, :datetime),
+    datatable_column(self,:updated_at, :datetime),
   ]
+  has_paper_trail
+
   belongs_to :role
 
   devise :database_authenticatable,  :trackable, :lockable,

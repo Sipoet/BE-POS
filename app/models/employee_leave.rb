@@ -7,6 +7,8 @@ class EmployeeLeave < ApplicationRecord
     datatable_column(self,:change_date, :date),
     datatable_column(self,:change_shift, :integer),
     datatable_column(self,:description, :string),
+    datatable_column(self,:created_at, :datetime),
+    datatable_column(self,:updated_at, :datetime),
   ]
   enum :leave_type, {
     sick_leave: 0,

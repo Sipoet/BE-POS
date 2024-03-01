@@ -8,5 +8,5 @@ class PayslipSerializer
   belongs_to :payroll
   belongs_to :employee
 
-  has_many :payslip_lines
+  has_many :payslip_lines, if: Proc.new { |record, params| params[:include].include?('payslip_lines') rescue false }
 end

@@ -17,6 +17,8 @@ class Employee < ApplicationRecord
     datatable_column(self,:bank_register_name, :string),
     datatable_column(self,:description, :string),
     datatable_column(self,:debt, :decimal),
+    datatable_column(self,:created_at, :datetime),
+    datatable_column(self,:updated_at, :datetime),
   ]
 
   enum :status, {
