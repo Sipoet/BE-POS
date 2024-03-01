@@ -16,8 +16,8 @@ class Discount < ApplicationRecord
     datatable_column(self,:discount2, :string),
     datatable_column(self,:discount3, :string),
     datatable_column(self,:discount4, :string),
-    datatable_column(self,:start_time, :string),
-    datatable_column(self,:end_time, :string)
+    datatable_column(self,:start_time, :datetime),
+    datatable_column(self,:end_time, :datetime)
   ].freeze
 
   attr_readonly :code
