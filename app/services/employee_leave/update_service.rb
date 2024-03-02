@@ -25,7 +25,7 @@ class EmployeeLeave::UpdateService < ApplicationService
   def update_attribute(employee_leave)
     permitted_params = params.required(:data)
                               .required(:attributes)
-                              .permit(:date,:description,:leave_type, :employee_id)
+                              .permit(:date,:description,:leave_type, :employee_id,:change_date,:change_shift)
     employee_leave.attributes = permitted_params
   end
 end

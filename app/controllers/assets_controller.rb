@@ -3,7 +3,7 @@ class AssetsController < ApplicationController
     run_service_default
   end
 
-  def temporary_save
+  def create
     run_service_default
   end
 end

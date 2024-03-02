@@ -1,0 +1,13 @@
+id:
+  activerecord:
+    models:
+      employee_leave: "Cuti Karyawan"
+    attributes:
+      employee_leave:
+        employee_id: 'Karyawan'
+        employee_name: 'Nama Karyawan'
+        date: "Tanggal"
+        leave_type: 'Tipe Cuti'
+        description: 'Keterangan'
+        change_date: 'Tanggal Ganti Hari'
+        change_shift: 'Ganti Shift'

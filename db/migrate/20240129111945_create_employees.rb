@@ -22,6 +22,5 @@ class CreateEmployees < ActiveRecord::Migration[7.1]
     end
     add_foreign_key :employees, :roles, column: :role_id
     add_foreign_key :employees, :payrolls, column: :payroll_id
-    # add_foreign_key :employees, :file_stores, column: :image_id
   end
 end

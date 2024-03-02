@@ -1,17 +1,18 @@
 class Employee::CreateService < ApplicationService
 
   def execute_service
-    permitted_params = @params.required(:employee)
+    permitted_params = params.required(:data)
+                              .required(:attributes)
                               .permit(:code, :name,:role_id,:start_working_date,
                                       :end_working_date, :description,:payroll_id,
                                       :id_number,:contact_number, :address,
-                                      :bank, :bank_account
+                                      :bank, :bank_account, :image_code
                                       )
     employee = Employee.new(permitted_params)
     begin
       ApplicationRecord.transaction do
-        if params[:image_path].present?
-          employee.image = find_and_save_file(params.permit(:image_path)[:image_path])
+        if permitted_params[:image_code].present?
+          FileStore.where(code: permitted_params[:image_code]).update(expired_at: nil)
         end
         employee.generate_code if employee.code.blank?
         employee.save!
@@ -28,13 +29,5 @@ class Employee::CreateService < ApplicationService
 
   private
 
-  def find_and_save_file(file_path)
-    file = find_temp_file(file_path.to_s)
-    FileStore.create!(code: SecureRandom.uuid, filename: file_path, file: file.read)
-  end
-
-  def find_temp_file(file_path)
-    File.open("#{Rails.root}/tmp/#{file_path}",'rb');
-  end
 
 end

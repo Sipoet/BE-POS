@@ -1,0 +1,13 @@
+id:
+  activerecord:
+    models:
+      employee_attendance: "Absensi Karyawan"
+    attributes:
+      employee_attendance:
+        employee_id: 'Karyawan'
+        employee_name: 'Nama Karyawan'
+        date: "Tanggal"
+        start_time: 'Jam Masuk'
+        end_time: 'Jam Pulang'
+        start_work: 'Masuk Kerja'
+        end_work: 'Pulang Kerja'

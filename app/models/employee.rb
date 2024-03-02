@@ -17,6 +17,7 @@ class Employee < ApplicationRecord
     datatable_column(self,:bank_register_name, :string),
     datatable_column(self,:description, :string),
     datatable_column(self,:debt, :decimal),
+    datatable_column(self,:image_code, :image),
     datatable_column(self,:created_at, :datetime),
     datatable_column(self,:updated_at, :datetime),
   ]
@@ -28,7 +29,6 @@ class Employee < ApplicationRecord
 
   belongs_to :role
   belongs_to :payroll, optional: true
-  belongs_to :image, optional: true
 
   validates :role, presence: true
   validates :code, presence: true, uniqueness: true
