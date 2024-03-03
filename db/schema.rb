@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_23_074702) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_03_092132) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -86,7 +86,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_074702) do
     t.date "start_working_date", null: false
     t.date "end_working_date"
     t.integer "payroll_id"
-    t.integer "image_id"
     t.integer "status", default: 0, null: false
     t.integer "shift", default: 1, null: false
     t.text "description"
@@ -98,6 +97,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_074702) do
     t.string "bank_account"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image_code"
     t.index ["code"], name: "index_employees_on_code", unique: true
   end
 
@@ -108,6 +108,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_074702) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "expired_at"
     t.index ["code"], name: "index_file_stores_on_code", unique: true
   end
 
@@ -175,6 +176,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_074702) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_roles_on_name", unique: true
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "key_name", null: false
+    t.integer "user_id"
+    t.text "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key_name"], name: "index_settings_on_key_name"
+    t.index ["user_id"], name: "index_settings_on_user_id"
   end
 
   create_table "tbl_acc_sa", id: false, force: :cascade do |t|
@@ -2238,6 +2249,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_074702) do
   add_foreign_key "payslip_lines", "payslips"
   add_foreign_key "payslips", "employees"
   add_foreign_key "payslips", "payrolls"
+  add_foreign_key "settings", "users"
   add_foreign_key "tbl_acc_sa", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_acc_sa_matauang", on_update: :cascade
   add_foreign_key "tbl_acc_sa", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_acc_sa_kodeacc", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tbl_accdepositdt", "tbl_accdeposithd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_accdepodt_hd", on_update: :cascade

@@ -30,3 +30,8 @@
 /public/*
 !/public/
 .env
+
+# Ignone psql backup file
+*.dump
+/db/backups/*
+.pgpass
