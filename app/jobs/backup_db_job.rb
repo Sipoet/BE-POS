@@ -12,7 +12,7 @@ class BackupDbJob < ApplicationJob
     dir_path = "/backups"
     create_dir(dir_path)
     on_db_scope(config_db) do
-      cmd = "pg_dump --host #{host} --port #{port} --username #{user} --verbose --clean --no-owner --no-password --no-acl --format=c #{db} > #{dir_path}/#{filename}"
+      cmd = "pg_dump --host #{host} --port #{port} --username #{user} --verbose --clean --no-owner --no-password --format=c #{db} > #{dir_path}/#{filename}"
       Sidekiq.logger.debug cmd
       exec cmd
     end
@@ -31,7 +31,7 @@ class BackupDbJob < ApplicationJob
     total_db = files.length
     limit_db = Setting.get('number_of_db_saved') || 50
     files.sort_by{|file| file.ctime}.each do |file|
-      if file.ctime <= before_time || total_db > limit_db
+      if file.birthtime <= before_time || total_db > limit_db
         Sidekiq.logger.info "==========DELETE #{file.path}"
         file.close
         File.delete(file.path)

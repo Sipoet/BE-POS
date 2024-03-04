@@ -1,4 +1,5 @@
 class PayslipLine < ApplicationRecord
+  has_paper_trail
   enum :group, {
     earning: 0,
     deduction: 1,

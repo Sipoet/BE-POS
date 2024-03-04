@@ -13,4 +13,5 @@ class Setting < ApplicationRecord
     Cache.get("setting-#{key_name}",setting.value.to_json)
     return value['data']
   end
+
 end
