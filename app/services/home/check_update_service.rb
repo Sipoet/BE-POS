@@ -12,8 +12,10 @@ class Home::CheckUpdateService < ApplicationService
       render_json({message:'not supported platform'},{status: :unprocessed_entity})
     end
     current_version = get_version(platform)
-    if client_version == current_version
+    Rails.logger.debug "#{platform} client_version: #{client_version}, current_version #{current_version}"
+    if client_version.strip == current_version.strip
       render_json({message: 'app is up to date'})
+      return
     end
     render_json({
       data:{
