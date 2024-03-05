@@ -1,9 +1,6 @@
-require 'rake'
-Myapp::Application.load_tasks
-class BackupDbJob < ApplicationJob
-  sidekiq_options queue: 'default', retry: false
-
-  def perform
+namespace :db do
+  desc 'backup db psql'
+  task backup: :environment do
     config_db = Rails.configuration.database_configuration[Rails.env]
     host = config_db['host']
     port = config_db['port']
@@ -15,13 +12,11 @@ class BackupDbJob < ApplicationJob
     create_dir(dir_path)
     on_db_scope(config_db) do
       cmd = "pg_dump --host #{host} --port #{port} --username #{user} --verbose --clean --no-owner --no-password --format=c #{db} -f #{dir_path}/#{filename}"
-      Sidekiq.logger.debug cmd
+      puts cmd
       system(cmd, exception: true)
     end
     remove_file(dir_path, before_time: 1.month.ago)
   end
-
-  private
 
   def remove_file(dir_path, before_time: )
     files = []
@@ -61,5 +56,4 @@ class BackupDbJob < ApplicationJob
     yield
     File.delete(pg_pass_path)
   end
-
 end
