@@ -9,7 +9,7 @@ class ItemSalesPercentageReportSerializer
     end
   end
 
-  %i{number_of_sales number_of_purchase warehouse_stock store_stock}.each do |key|
+  %i{number_of_sales number_of_purchase warehouse_stock store_stock item_out}.each do |key|
     attribute key do |object|
       object.send(key).to_i
     end
