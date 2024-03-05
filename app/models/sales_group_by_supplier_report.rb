@@ -1,7 +1,7 @@
 class SalesGroupBySupplierReport < ApplicationModel
 
   TABLE_HEADER = [
-    datatable_column(self, :supplier, :string),
+    datatable_column(self, :supplier_name, :string),
     datatable_column(self, :item_type_name, :string),
     datatable_column(self, :brand_name, :string),
     datatable_column(self, :number_of_purchase, :integer),

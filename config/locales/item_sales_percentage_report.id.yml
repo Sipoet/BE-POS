@@ -21,3 +21,4 @@ id:
         purchase_total: 'Total Pembelian'
         percentage_sales: 'Laku Terjual(%)'
         recent_purchase_date: "Tanggal Akhir Beli"
+        item_out: "Jumlah Item Keluar"

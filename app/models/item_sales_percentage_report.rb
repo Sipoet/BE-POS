@@ -12,6 +12,7 @@ class ItemSalesPercentageReport < ApplicationRecord
     datatable_column(self,:recent_purchase_date, :date),
     datatable_column(self,:warehouse_stock, :integer),
     datatable_column(self,:store_stock, :integer),
+    datatable_column(self,:item_out, :integer),
     datatable_column(self,:avg_buy_price, :decimal),
     datatable_column(self,:number_of_purchase, :integer),
     datatable_column(self,:purchase_total, :decimal),

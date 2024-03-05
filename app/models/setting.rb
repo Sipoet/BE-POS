@@ -4,14 +4,25 @@ class Setting < ApplicationRecord
   validates :value, presence: true
   belongs_to :user, optional: true
 
+  after_save :delete_cache
+  after_destroy :delete_cache
+  private
 
-  def self.get(key_name)
-    cache_data = Cache.get("setting-#{key_name}")
+  def delete_cache
+    if user_id.present?
+      Cache.delete("setting-#{user_id}-#{setting.key_name}")
+    end
+    Cache.delete("setting-#{setting.key_name}")
+  end
+
+  def self.get(key_name, user_id: nil)
+    cache_key = user_id.present? ? "setting-#{user_id}-#{key_name}" : "setting-#{key_name}"
+    cache_data = Cache.get(cache_key)
     return JSON.parse(cache_data)['data'] if cache_data.present?
-    setting =  self.find_by(key_name: key_name)
+    setting =  self.find_by(key_name: key_name, user_id: user_id)
     return nil if setting.nil?
-    Cache.get("setting-#{key_name}",setting.value.to_json)
-    return value['data']
+    Cache.set(cache_key,setting.value)
+    return JSON.parse(setting.value)['data']
   end
 
 end

@@ -53,7 +53,8 @@ class ItemSale::TransactionReportService < ApplicationService
       SUM(#{Ipos::ItemSale.table_name}.total) AS sales_total
     FROM #{Ipos::ItemSale.table_name}
     INNER JOIN #{Ipos::Item.table_name} on #{Ipos::Item.table_name}.kodeitem = #{Ipos::ItemSale.table_name}.kodeitem
-    INNER JOIN #{Ipos::Sale.table_name} on #{Ipos::Sale.table_name}.notransaksi = #{Ipos::ItemSale.table_name}.notransaksi
+    INNER JOIN #{Ipos::Sale.table_name} on #{Ipos::Sale.table_name}.notransaksi = #{Ipos::ItemSale.table_name}.notransaksi AND
+    #{Ipos::Sale.table_name}.tipe IN ('KSR','JL')
     WHERE #{Ipos::Sale.table_name}.tanggal between '#{@start_time}' and '#{@end_time}'
     GROUP BY
       #{Ipos::Item.table_name}.#{key_item_of(@group_key)}

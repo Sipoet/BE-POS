@@ -15,4 +15,8 @@ class Cache
     keys = @@redis.keys("*#{key}*")
     @@redis.del(keys)
   end
+
+  def self.delete(key)
+    @@redis.del(key)
+  end
 end
