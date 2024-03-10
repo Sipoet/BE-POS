@@ -35,3 +35,8 @@
 *.dump
 /db/backups/*
 .pgpass
+
+# Ignore test rake
+tasks/test.rake
+tasks/data_modifier.rake
+.byebug_history
