@@ -61,8 +61,9 @@ class EmployeeAttendance::MassUploadService < ApplicationService
   end
 
   def find_employee(rows)
-    employee_code = rows[10].downcase
-    Employee.find_by(code: employee_code, status: :active)
+    employee_code = rows[10].try(:downcase)
+    return nil if employee_code.nil?
+    Employee.find_by(code: employee_code, status: :active) || Employee.find_by(code: employee_code)
   end
 
   def extract_period(sheet)

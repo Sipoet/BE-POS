@@ -15,6 +15,7 @@ class Employee::CreateService < ApplicationService
           FileStore.where(code: permitted_params[:image_code]).update(expired_at: nil)
         end
         employee.generate_code if employee.code.blank?
+        employee.code = employee.code.downcase
         employee.save!
         render_json(EmployeeSerializer.new(employee),{status: :created})
       end

@@ -1,0 +1,25 @@
+id:
+  activemodel:
+    models:
+      payslip_report: "Laporan Slip Gaji"
+    attributes:
+      payslip_report:
+        employee_name: "Nama Karyawan"
+        employee_start_working_date: "Tanggal Karyawan Mulai Berkerja"
+        start_date: "Periode Mulai"
+        end_date: "Periode Sampai"
+        work_days: "Hari Kerja"
+        total_day: "Total Kerja"
+        overtime_hour: "Jam Overtime"
+        late: "Terlambat"
+        sick_leave: "Sakit"
+        known_absence: "Cuti"
+        unknown_absence: "Alpha(Tanpa Kabar)"
+        base_salary: "Gaji Pokok"
+        overtime_incentive: "Uang Lembur"
+        positional_incentive: "Tunjangan Jabatan"
+        attendance_incentive: "Uang Kerajinan"
+        other_incentive: "Tunjangan lainnya"
+        debt: "Hutang/Panjar"
+        tax_amount: "Pajak"
+        nett_salary: "Total Gaji Bersih"

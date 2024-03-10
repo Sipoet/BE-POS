@@ -1,5 +1,7 @@
 id:
   activemodel:
+    models:
+      item_sales_period_report: "Laporan Transaksi Penjualan Item"
     attributes:
       item_sales_period_report:
         item_code: 'Kode Item'

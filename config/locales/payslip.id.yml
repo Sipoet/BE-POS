@@ -1,0 +1,21 @@
+id:
+  activerecord:
+    models:
+      payslip: "Slip Gaji"
+    attributes:
+      payslip:
+        employee_name: "Nama Karyawan"
+        start_date: "periode mulai"
+        end_date: "periode sampai"
+        work_days: "Hari Kerja"
+        total_day: "Total Kerja"
+        overtime_hour: "jam overtime"
+        late: "terlambat"
+        sick_leave: "sakit"
+        known_absence: "Cuti"
+        unknown_absence: "Alpha(Tanpa Kabar)"
+        gross_salary: "Total Gaji Kotor"
+        paid_time_off: "PTO"
+        debt: "Hutang/Panjar"
+        tax_amount: "Pajak"
+        nett_salary: "Total Gaji Bersih"

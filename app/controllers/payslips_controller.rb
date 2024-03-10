@@ -25,6 +25,10 @@ class PayslipsController < ApplicationController
     run_service_default
   end
 
+  def report
+    run_service_default
+  end
+
   def generate_payslip
     run_service_default
   end

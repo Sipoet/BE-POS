@@ -60,6 +60,7 @@ Rails.application.routes.draw do
     post :confirm, on: :member
     post :cancel, on: :member
     post :pay, on: :member
+    get :report, on: :collection
   end
 
   resources :assets, param: :code, only: [:show, :create]
