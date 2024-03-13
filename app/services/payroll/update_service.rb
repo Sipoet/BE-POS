@@ -28,7 +28,7 @@ class Payroll::UpdateService < ApplicationService
     permitted_params = params.required(:data)
                               .required(:relationships)
                               .required(:work_schedules)
-                              .permit(data:[:type,:id, attributes:[:shift, :begin_work, :end_work,:day_of_week,:long_shift_per_week]])
+                              .permit(data:[:type,:id, attributes:[:shift, :begin_work, :end_work,:day_of_week,:active_week]])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
     work_schedules = payroll.work_schedules.index_by(&:id)
     permitted_params[:data].each do |line_params|
