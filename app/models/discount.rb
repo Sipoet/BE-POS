@@ -12,10 +12,10 @@ class Discount < ApplicationRecord
     datatable_column(self,:blacklist_brand_name, :link, path:'brands',attribute_key: 'blacklist_brand.merek'),
     datatable_column(self,:calculation_type, :enum),
     datatable_column(self,:weight, :string),
-    datatable_column(self,:discount1, :string),
-    datatable_column(self,:discount2, :string),
-    datatable_column(self,:discount3, :string),
-    datatable_column(self,:discount4, :string),
+    datatable_column(self,:discount1, :percentage),
+    datatable_column(self,:discount2, :percentage),
+    datatable_column(self,:discount3, :percentage),
+    datatable_column(self,:discount4, :percentage),
     datatable_column(self,:start_time, :datetime),
     datatable_column(self,:end_time, :datetime)
   ].freeze
