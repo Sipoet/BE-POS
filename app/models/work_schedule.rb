@@ -1,13 +1,11 @@
 class WorkSchedule < ApplicationRecord
-  # enum :day_of_week, {
-  #   sunday: 7,
-  #   monday: 1,
-  #   tuesday: 2,
-  #   wednesday: 3,
-  #   thursday: 4,
-  #   friday: 5,
-  #   saturday: 6
-  # }
+  enum :active_week, {
+    all_week: 0,
+    odd_week: 1,
+    even_week: 2,
+    first_week_of_month: 3,
+    last_week_of_month: 4,
+  }
 
   validates :begin_work, presence: true
   validates :end_work, presence: true

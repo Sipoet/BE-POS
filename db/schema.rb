@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_05_063901) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_08_134042) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -2226,9 +2226,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_05_063901) do
     t.string "begin_work", null: false
     t.string "end_work", null: false
     t.integer "day_of_week", null: false
-    t.integer "long_shift_per_week"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "active_week", default: 0, null: false
     t.index ["payroll_id"], name: "index_work_schedules_on_payroll_id"
   end
 

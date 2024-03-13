@@ -9,6 +9,7 @@ id:
         supplier_code: "Kode Supplier"
         brand_name: "Merek"
         item_type: "Jenis/Departemen"
+        item_type_name: "Jenis/Departemen"
         discount1: "Diskon 1(%)"
         discount2: "Diskon 2(%)"
         discount3: "Diskon 3(%)"
@@ -20,3 +21,4 @@ id:
         blacklist_supplier_code: "Blacklist Kode Supplier"
         blacklist_brand_name: "Blacklist Merek"
         blacklist_item_type: "Blacklist Jenis/Departemen"
+        blacklist_item_type_name: "Blacklist Jenis/Departemen"

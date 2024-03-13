@@ -11,7 +11,7 @@ class AttendanceAnalyzer
     @work_schedules = @payroll.work_schedules
                              .group_by(&:day_of_week)
                              .each_with_object({}) do |(key,values),obj|
-      obj[key] = values.sort_by(&:shift)
+      obj[key] = values.sort_by{|value| -1 * value.active_week_for_database}
     end
     employee_leaves = EmployeeLeave.where(employee_id: @employee.id,
                                           date: @start_date..@end_date)
@@ -45,26 +45,7 @@ class AttendanceAnalyzer
         end
         next
       end
-      work_schedule = find_work_schedule(day_work_schedules,employee_attendance)
-      if work_schedule.long_shift_per_week.present? && work_schedule.long_shift_per_week > 0
-        begin_work_time = schedule_of(date, day_work_schedules.first.begin_work)
-        end_work_time = schedule_of(date, day_work_schedules.last.end_work)
-        schedule_total_hours =((end_work_time - begin_work_time)/1.hour).round
-        employee_total_hours =((employee_attendance.end_time - employee_attendance.start_time)/1.hour).round
-
-        if employee_total_hours >= schedule_total_hours
-          result.work_days += 2
-          result.total_day += 1
-          if employee_attendance.start_time <= begin_work_time && employee_attendance.end_time >= end_work_time
-            result.overtime_hours << difference_hour(employee_attendance.end_time, end_work_time)
-          elsif employee_attendance.start_time > begin_work_time
-            result.late += 1
-          end
-          next
-        elsif employee_total_hours.to_f < (schedule_total_hours/2.0)
-          next
-        end
-      end
+      work_schedule = find_work_schedule(day_work_schedules,date)
       begin_work_time = schedule_of(date, work_schedule.begin_work)
       end_work_time = schedule_of(date, work_schedule.end_work)
       if employee_attendance.start_time > begin_work_time
@@ -105,53 +86,22 @@ class AttendanceAnalyzer
     [total_day, total_employee_worked_days].min - employee_attendances.count
   end
 
-  def check_attendance(result,employee_attendance)
-    late = 0
-    overtime = []
-    work_days = 0
-    employee_attendances.each do |employee_attendance|
-      work_schedule = find_work_schedule(employee_attendance)
-      if work_schedule.blank?
-        overtime << difference_hour(employee_attendance.start_time, employee_attendance.end_time)
-        work_days += 1
-        next
-      end
-
-      begin_work_time = schedule_of(employee_attendance.date, work_schedule.begin_work)
-      end_work_time = schedule_of(employee_attendance.date, work_schedule.end_work)
-      if employee_attendance.start_time > begin_work_time
-        late += 1
-        if employee_attendance.end_time >= end_work_time
-          work_days += 1
-        end
-      elsif employee_attendance.end_time>= end_work_time
-        overtime << difference_hour(employee_attendance.end_time, end_work_time)
-        work_days += 1
-      end
-    end
-    return [BigDecimal(work_days),BigDecimal(late), overtime]
-  end
-
-  def find_work_schedule(day_work_schedules,employee_attendance)
-    flag = nil
+  def find_work_schedule(day_work_schedules,date)
+    date_status = [
+      date.cweek.odd?,
+      date.cweek.even?,
+      date.prev_week.end_of_week.month < date.month,
+      date.next_week.month > date.month
+    ]
     day_work_schedules.each do |work_schedule|
-      begin_work_time = schedule_of(employee_attendance.date, work_schedule.begin_work)
-      end_work_time = schedule_of(employee_attendance.date, work_schedule.end_work)
-      if employee_attendance.start_time <= begin_work_time && employee_attendance.end_time >= end_work_time
-        return work_schedule
-      end
-
-      if employee_attendance.start_time.between?(begin_work_time, end_work_time)
-        flag = work_schedule
-        next
-      end
-      if flag.present? && employee_attendance.end_time < end_work_time
-        return flag
-      else
+      if work_schedule.all_week? || (date_status[0] && work_schedule.odd_week?) ||
+        (date_status[1] && work_schedule.even_week?) ||
+        (date_status[2] && work_schedule.first_week_of_month?) ||
+        (date_status[3] && work_schedule.last_week_of_month?)
         return work_schedule
       end
     end
-    return flag
+    nil
   end
 
   def find_changed_shift(date)
