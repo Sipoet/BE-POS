@@ -30,11 +30,9 @@ class RefreshActivePromotionJob < ApplicationJob
   private
 
   def check_active_promotion
-    Ipos::Promotion.where(tglsampai: ...Time.now)
-             .update_all(stsact: false)
     today = Time.now
-    Ipos::Promotion.within_range(today,today).update_all(stsact: true)
-
+    Ipos::Promotion.where(tglsampai: ...today)
+             .update_all(stsact: false)
   end
 
 
