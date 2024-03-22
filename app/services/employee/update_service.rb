@@ -8,7 +8,7 @@ class Employee::UpdateService < ApplicationService
                                       :id_number,:contact_number, :address,
                                       :bank, :bank_account, :status, :image_code
                                       )
-    employee = Employee.find_by(code: params[:code].to_s)
+    employee = Employee.find_by(code: params[:code].to_s.downcase)
     raise RecordNotFound.new(params[:code],Employee.model_name.human) if employee.nil?
     begin
       ApplicationRecord.transaction do
