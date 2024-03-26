@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_08_134042) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_25_053652) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -2221,7 +2221,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_08_134042) do
   end
 
   create_table "work_schedules", force: :cascade do |t|
-    t.integer "payroll_id", null: false
     t.integer "shift", null: false
     t.string "begin_work", null: false
     t.string "end_work", null: false
@@ -2229,7 +2228,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_08_134042) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "active_week", default: 0, null: false
-    t.index ["payroll_id"], name: "index_work_schedules_on_payroll_id"
+    t.integer "employee_id", null: false
   end
 
   add_foreign_key "access_authorizes", "roles"
@@ -2548,5 +2547,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_08_134042) do
   add_foreign_key "tbl_userakses", "tbl_userg", column: "klpakses", primary_key: "kelompok", name: "tbl_userakses_klp", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tbl_usercus_acc", "tbl_userg", column: "klpakses", primary_key: "kelompok", name: "tbl_usercus_acc_userg", on_update: :cascade, on_delete: :cascade
   add_foreign_key "users", "roles"
-  add_foreign_key "work_schedules", "payrolls"
+  add_foreign_key "work_schedules", "employees"
 end

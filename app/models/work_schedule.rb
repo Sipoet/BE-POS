@@ -13,8 +13,7 @@ class WorkSchedule < ApplicationRecord
   validate :end_work_must_valid
   validates :shift, presence: true, numericality: {greater_than: 0}
 
-
-  belongs_to :payroll
+  belongs_to :employee
 
   def end_work_must_valid
     today = Date.today

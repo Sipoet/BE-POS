@@ -12,7 +12,6 @@ class Payroll::CreateService < ApplicationService
   def payroll_save?(payroll)
     ApplicationRecord.transaction do
       build_lines(payroll)
-      build_schedule(payroll)
       update_attribute(payroll)
       payroll.save!
     end
@@ -21,17 +20,6 @@ class Payroll::CreateService < ApplicationService
     Rails.logger.error e.message
     Rails.logger.error e.backtrace
     return false
-  end
-
-  def build_schedule(payroll)
-    permitted_params = params.required(:data)
-                              .required(:relationships)
-                              .required(:work_schedules)
-                              .permit(data:[:type,:id, attributes:[:shift, :begin_work, :end_work,:day_of_week, :active_week]])
-    return if (permitted_params.blank? || permitted_params[:data].blank?)
-    permitted_params[:data].each do |line_params|
-      payroll.work_schedules.build(line_params[:attributes])
-    end
   end
 
   def build_lines(payroll)

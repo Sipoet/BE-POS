@@ -65,7 +65,7 @@ Rails.application.routes.draw do
 
   resources :assets, param: :code, only: [:show, :create]
 
-  resources :employees, param: :code, only:[:index,:create,:update] do
+  resources :employees, only:[:index, :show, :create,:update] do
     post :activate, on: :member
     post :deactivate, on: :member
   end

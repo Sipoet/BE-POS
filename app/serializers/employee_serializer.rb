@@ -9,4 +9,8 @@ class EmployeeSerializer
   belongs_to :role, if: Proc.new { |record, params| params[:include].include?('role') rescue false }
   belongs_to :payroll, if: Proc.new { |record, params| params[:include].include?('payroll') rescue false }
 
+  has_many :work_schedules, if: Proc.new { |record, params| params[:include].include?('work_schedules') rescue false } do |employee|
+    employee.work_schedules.order(shift: :asc, day_of_week: :asc)
+  end
+
 end

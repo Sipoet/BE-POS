@@ -13,7 +13,7 @@ class Payroll::UpdateService < ApplicationService
   def payroll_save?(payroll)
     ApplicationRecord.transaction do
       build_lines(payroll)
-      build_schedule(payroll)
+
       update_attribute(payroll)
       payroll.save!
     end

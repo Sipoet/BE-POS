@@ -38,6 +38,9 @@ class Employee < ApplicationRecord
   validates :payroll, presence: true, if: :active?
   validates :shift, presence: true
 
+  has_many :work_schedules, dependent: :destroy
+  accepts_nested_attributes_for :work_schedules, allow_destroy: true
+
   def generate_code
     self.code = SecureRandom.alphanumeric(6).upcase
   end
