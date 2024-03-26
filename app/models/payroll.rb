@@ -12,7 +12,6 @@ class Payroll < ApplicationRecord
   validates :name, presence: true
 
   validates :payroll_lines, presence: true
-  validates :work_schedules, presence: true
 
   has_many :payroll_lines, -> { order(row: :asc) }, dependent: :destroy
   has_many :employees, through: :employee_payrolls

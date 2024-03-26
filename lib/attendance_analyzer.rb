@@ -78,14 +78,6 @@ class AttendanceAnalyzer
     @total_employee_worked_days ||= (@employee.start_working_date..@end_date).to_a.length
   end
 
-  def total_day
-    @total_day ||= (@start_date..@end_date).to_a.length
-  end
-
-  def total_unknown_leave(employee_attendances)
-    [total_day, total_employee_worked_days].min - employee_attendances.count
-  end
-
   def find_work_schedule(day_work_schedules,date)
     date_status = [
       date.cweek.odd?,
