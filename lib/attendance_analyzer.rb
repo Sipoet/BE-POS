@@ -8,7 +8,7 @@ class AttendanceAnalyzer
   end
 
   def analyze
-    @work_schedules = @payroll.work_schedules
+    @work_schedules = @employee.work_schedules
                              .group_by(&:day_of_week)
                              .each_with_object({}) do |(key,values),obj|
       obj[key] = values.sort_by{|value| -1 * value.active_week_for_database}
@@ -19,44 +19,43 @@ class AttendanceAnalyzer
     employee_attendances = find_attendances
     result = Result.new
     paid_time_off = @payroll.paid_time_off
-    start_date = [@start_date, @employee.start_working_date].max
-    (start_date..@end_date).each do |date|
-      day_work_schedules = @work_schedules[date.cwday]
+    end_period = @start_date.next_month
+    (@start_date..@end_date).each do |date|
       employee_attendance = employee_attendances[date]
-      if day_work_schedules.blank?
+      work_schedule = find_work_schedule(date)
+      employee_leave = employee_leaves[date]
+      if work_schedule.blank?
         if employee_attendance.present?
           result.work_days += 1
         end
         next
       end
-      result.total_day += 1
+
+      result.total_day += 1 if date <= end_period
+      next if @employee.start_working_date > date
+
       if employee_attendance.blank?
         employee_leave = employee_leaves[date]
         if employee_leave.blank?
-          if paid_time_off > 0
-            paid_time_off -= 1
-          else
+          # if paid_time_off > 0
+          #   paid_time_off -= 1
+          # else
             result.unknown_absence += 1
-          end
+          # end
         elsif employee_leave.sick_leave?
           result.sick_leave += 1
-        else
+        elsif !employee_leave.change_day?
           result.known_absence += 1
         end
         next
       end
-      work_schedule = find_work_schedule(day_work_schedules,date)
       begin_work_time = schedule_of(date, work_schedule.begin_work)
       end_work_time = schedule_of(date, work_schedule.end_work)
+      result.work_days += 1
       if employee_attendance.start_time > begin_work_time
         result.late += 1
-
-        if employee_attendance.end_time >= end_work_time
-          result.work_days += 1
-        end
       elsif employee_attendance.end_time>= end_work_time
         result.overtime_hours << difference_hour(employee_attendance.end_time, end_work_time)
-        result.work_days += 1
       end
 
     end
@@ -78,7 +77,8 @@ class AttendanceAnalyzer
     @total_employee_worked_days ||= (@employee.start_working_date..@end_date).to_a.length
   end
 
-  def find_work_schedule(day_work_schedules,date)
+  def find_work_schedule(date)
+    day_work_schedules = @work_schedules[date.cwday]
     date_status = [
       date.cweek.odd?,
       date.cweek.even?,
@@ -93,7 +93,12 @@ class AttendanceAnalyzer
         return work_schedule
       end
     end
-    nil
+    employee_leave = EmployeeLeave.find_by(employee_id: @employee.id, change_date: date)
+    return nil if employee_leave.blank?
+    @work_schedules.values
+                   .flatten
+                   .find{|work_schedule|work_schedule.shift == employee_leave.change_shift}
+
   end
 
   def find_changed_shift(date)
@@ -104,7 +109,7 @@ class AttendanceAnalyzer
   end
 
   def difference_hour(time_a, time_b)
-    BigDecimal(((time_a.to_time - time_b.to_time)/1.hour).abs.ceil.to_s)
+    BigDecimal(((time_a.to_time - time_b.to_time)/1.hour).abs.round(1).to_s)
   end
 
   def schedule_of(date, time)

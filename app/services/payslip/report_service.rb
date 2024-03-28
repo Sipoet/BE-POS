@@ -43,9 +43,12 @@ class Payslip::ReportService < ApplicationService
     if employee.present?
       result.employee_name = employee.name
       result.employee_start_working_date = employee.start_working_date
+      result.bank = employee.bank
+      result.bank_account = employee.bank_account
+      result.bank_register_name = employee.bank_register_name
     end
     payslip_lines = payslip.payslip_lines
-    result.total_day = payslip.work_days + payslip.sick_leave + payslip.known_absence + payslip.unknown_absence
+    result.total_day = payslip.total_day
     result.work_days = payslip.work_days
     result.sick_leave = payslip.sick_leave
     result.overtime_hour = payslip.overtime_hour
@@ -57,6 +60,7 @@ class Payslip::ReportService < ApplicationService
     result.base_salary = 0
     result.debt = 0
     result.overtime_incentive = 0
+
 
     payslip_lines.each do |payslip_line|
       if payslip_line.incentive?

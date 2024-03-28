@@ -19,7 +19,10 @@ class PayslipReport < ApplicationModel
     datatable_column(self, :other_incentive, :decimal),
     datatable_column(self, :debt, :decimal),
     datatable_column(self, :tax_amount, :decimal),
-    datatable_column(self, :nett_salary, :decimal)
+    datatable_column(self, :nett_salary, :decimal),
+    datatable_column(self,:bank, :string),
+    datatable_column(self,:bank_account, :string),
+    datatable_column(self,:bank_register_name, :string),
   ]
 
   attr_accessor :start_date, :end_date, :employee_id, :employee_name,
@@ -27,7 +30,7 @@ class PayslipReport < ApplicationModel
                 :total_day, :work_days, :sick_leave, :overtime_hour,
                 :known_absence, :unknown_absence, :positional_incentive,
                 :attendance_incentive, :base_salary, :tax_amount, :nett_salary,
-                :payslip_id, :other_incentive
+                :payslip_id, :other_incentive, :bank, :bank_account, :bank_register_name
 
 
   def employee

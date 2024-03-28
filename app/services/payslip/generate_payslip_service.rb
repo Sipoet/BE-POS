@@ -4,7 +4,7 @@ class Payslip::GeneratePayslipService < ApplicationService
     extract_params
     employees = find_employees
     payrolls = Payroll.where(id: employees.map(&:payroll_id))
-                      .includes(:payroll_lines,:work_schedules)
+                      .includes(:payroll_lines)
                       .index_by(&:id)
 
     payslips = []
@@ -34,6 +34,7 @@ class Payslip::GeneratePayslipService < ApplicationService
     payslip.known_absence = attendance_summary.known_absence.to_i
     payslip.unknown_absence = attendance_summary.unknown_absence.to_i
     payslip.work_days = attendance_summary.work_days.to_i
+    payslip.total_day = attendance_summary.total_day.to_i
     payslip.late = attendance_summary.late.to_i
     payslip.overtime_hour = attendance_summary.overtime_hours.sum.to_i
     payslip.paid_time_off = payroll.paid_time_off

@@ -2,7 +2,7 @@ class HomeController < ApplicationController
   before_action :authenticate_user!, only: [:settings]
   def dashboard
     render json: {
-      version: version
+      version: $APP_VERSION
     }
   end
 
@@ -18,9 +18,4 @@ class HomeController < ApplicationController
     run_service_default
   end
 
-  private
-
-  def version
-    Setting.get('version')
-  end
 end
