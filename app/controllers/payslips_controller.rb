@@ -13,6 +13,10 @@ class PayslipsController < ApplicationController
     run_service_default
   end
 
+  def destroy
+    run_service_default
+  end
+
   def confirm
     run_service_default
   end

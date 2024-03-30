@@ -55,7 +55,7 @@ Rails.application.routes.draw do
     post :mass_upload, on: :collection
   end
 
-  resources :payslips, only:[:index, :show, :update] do
+  resources :payslips, only:[:index, :show, :update, :destroy] do
     post :generate_payslip, on: :collection
     post :confirm, on: :member
     post :cancel, on: :member

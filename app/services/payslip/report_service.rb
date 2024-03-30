@@ -68,7 +68,7 @@ class Payslip::ReportService < ApplicationService
           result.positional_incentive += payslip_line.amount
         elsif payslip_line.description.downcase.include?('kerajinan')
           result.attendance_incentive += payslip_line.amount
-        elsif payslip_line.description.downcase.include?('overtime')
+        elsif payslip_line.description.downcase.include?('overtime') || payslip_line.description.downcase.include?('lembur')
           result.overtime_incentive += payslip_line.amount
         else
           result.other_incentive += payslip_line.amount

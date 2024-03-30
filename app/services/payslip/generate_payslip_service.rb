@@ -38,7 +38,14 @@ class Payslip::GeneratePayslipService < ApplicationService
     payslip.late = attendance_summary.late.to_i
     payslip.overtime_hour = attendance_summary.overtime_hours.sum.to_i
     payslip.paid_time_off = payroll.paid_time_off
-    payslip.notes="kerja #{attendance_summary.work_days} hari, overtime #{payslip.overtime_hour} jam, total hari #{attendance_summary.total_day}, Tanpa Kabar #{attendance_summary.unknown_absence} hari, izin Cuti #{attendance_summary.known_absence} hari, sakit #{attendance_summary.sick_leave} hari"
+    payslip.notes="""
+    kerja #{attendance_summary.work_days} hari,
+    total hari kerja per bulan #{attendance_summary.total_day} hari
+    overtime #{payslip.overtime_hour} jam,
+    total hari #{attendance_summary.total_day},
+    Tanpa Kabar #{attendance_summary.unknown_absence} hari,
+    izin Cuti #{attendance_summary.known_absence} hari,
+    sakit #{attendance_summary.sick_leave} hari"
     recent_sum = 0
     payslip.payslip_lines.map(&:mark_for_destruction)
     payroll.payroll_lines.each do |payroll_line|
