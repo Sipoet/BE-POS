@@ -13,7 +13,7 @@ class Home::CheckUpdateService < ApplicationService
     end
     current_version = get_version(platform)
     Rails.logger.debug "#{platform} client_version: #{client_version}, current_version #{current_version}"
-    if client_version.strip == current_version.strip
+    if version_uptodated?(client_version.strip, current_version.strip)
       render_json({message: 'app is up to date'})
       return
     end
@@ -29,5 +29,15 @@ class Home::CheckUpdateService < ApplicationService
 
   def get_version(platform)
     File.read("#{Rails.root}/app/assets/installer/#{platform}/version.txt")
+  end
+
+  def version_uptodated?(client_version, current_version)
+    client_version_level = client_version.split('.')
+    current_version_level = current_version.split('.')
+    client_version_level.each.with_index do |level, index|
+      next if level.to_i == current_version[index].to_i
+      return level.to_i > current_version[index].to_i
+    end
+    true
   end
 end
