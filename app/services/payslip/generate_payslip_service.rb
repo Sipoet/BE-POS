@@ -36,12 +36,13 @@ class Payslip::GeneratePayslipService < ApplicationService
     payslip.work_days = attendance_summary.work_days.to_i
     payslip.total_day = attendance_summary.total_day.to_i
     payslip.late = attendance_summary.late.to_i
-    payslip.overtime_hour = attendance_summary.overtime_hours.sum.to_i
+    overtime_hour = attendance_summary.overtime_hours.sum
+    payslip.overtime_hour = overtime_hour
     payslip.paid_time_off = payroll.paid_time_off
     payslip.notes="""
     kerja #{attendance_summary.work_days} hari,
     total hari kerja per bulan #{attendance_summary.total_day} hari
-    overtime #{payslip.overtime_hour} jam,
+    overtime #{overtime_hour} jam,
     total hari #{attendance_summary.total_day},
     Tanpa Kabar #{attendance_summary.unknown_absence} hari,
     izin Cuti #{attendance_summary.known_absence} hari,

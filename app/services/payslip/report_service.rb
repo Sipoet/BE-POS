@@ -17,6 +17,7 @@ class Payslip::ReportService < ApplicationService
   rescue ExpectedError => e
     render_json({message: e.message}, {status: :conflict})
   end
+
   private
 
   def json_response(results)

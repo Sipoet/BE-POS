@@ -40,7 +40,6 @@ class Payslip::IndexService < ApplicationService
     payslips = Payslip.all.includes(@included)
       .page(@page)
       .per(@limit)
-    puts "============#{@filters}"
     @filters.each do |filter|
       payslips = payslips.where(filter.to_query)
     end

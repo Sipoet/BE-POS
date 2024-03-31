@@ -109,7 +109,7 @@ class AttendanceAnalyzer
   end
 
   def difference_hour(time_a, time_b)
-    BigDecimal(((time_a.to_time - time_b.to_time)/1.hour).abs.round(1).to_s)
+    BigDecimal(((time_a.to_time - time_b.to_time)/1.hour).round(1).to_s)
   end
 
   def schedule_of(date, time)

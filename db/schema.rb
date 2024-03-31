@@ -165,7 +165,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_031202) do
     t.integer "work_days", default: 0, null: false
     t.integer "unknown_absence", default: 0, null: false
     t.integer "paid_time_off", default: 0, null: false
-    t.integer "overtime_hour", default: 0, null: false
+    t.decimal "overtime_hour", default: "0.0", null: false
     t.integer "late", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
