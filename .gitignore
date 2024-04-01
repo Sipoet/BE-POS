@@ -37,6 +37,6 @@
 .pgpass
 
 # Ignore test rake
-tasks/test.rake
-tasks/data_modifier.rake
+lib/tasks/test.rake
+lib/tasks/data_modifier.rake
 .byebug_history

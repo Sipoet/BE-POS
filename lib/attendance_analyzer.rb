@@ -33,7 +33,9 @@ class AttendanceAnalyzer
 
       result.total_day += 1 if date <= end_period
       next if @employee.start_working_date > date
-
+      if(@employee.end_working_date.present? && @employee.end_working_date < date)
+        next
+      end
       if employee_attendance.blank?
         employee_leave = employee_leaves[date]
         if employee_leave.blank?
