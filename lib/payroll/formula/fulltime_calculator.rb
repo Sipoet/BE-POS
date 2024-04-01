@@ -18,7 +18,12 @@ class Payroll::Formula::FulltimeCalculator < Payroll::Formula::ApplicationCalcul
 
   def decrement_value
     offset = payroll_line.variable3 || 0
-    value = payroll_line.variable1 - (payroll_line.variable2 * (attendance_summary.known_absence - offset)) - (payroll_line.variable2 * attendance_summary.unknown_absence)
+    offset2 = payroll_line.variable4 || 0
+    known_offset = (attendance_summary.known_absence - offset)
+    known_offset = 0 if known_offset < 0
+    unknown_offset = (attendance_summary.unknown_absence - offset2)
+    unknown_offset = 0 if unknown_offset < 0
+    value = payroll_line.variable1 - (payroll_line.variable2 * known_offset) - (payroll_line.variable2 * unknown_offset)
     value > 0 ? value : 0
   end
 
