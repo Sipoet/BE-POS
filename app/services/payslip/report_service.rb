@@ -81,8 +81,12 @@ class Payslip::ReportService < ApplicationService
     end
     result.tax_amount = payslip.tax_amount
     result.nett_salary = payslip.nett_salary
-    result.description = "HK#{result.work_days},L#{result.overtime_incentive},KRJ#{result.attendance_incentive}"
+    result.description = "HK#{result.work_days},L#{amount_format(result.overtime_incentive)},KRJ#{amount_format(result.attendance_incentive)}"
     result
+  end
+
+  def amount_format(amount)
+    (amount/1000).floor.to_s
   end
 
   def find_response_type
