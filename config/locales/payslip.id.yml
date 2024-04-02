@@ -12,7 +12,7 @@ id:
         overtime_hour: "jam overtime"
         late: "terlambat"
         sick_leave: "sakit"
-        known_absence: "Cuti"
+        known_absence: "Izin"
         unknown_absence: "Alpha(Tanpa Kabar)"
         gross_salary: "Total Gaji Kotor"
         paid_time_off: "PTO"

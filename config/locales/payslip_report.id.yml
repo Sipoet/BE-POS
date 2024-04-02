@@ -13,7 +13,7 @@ id:
         overtime_hour: "Lembur (Jam)"
         late: "Telat"
         sick_leave: "Sakit"
-        known_absence: "Cuti"
+        known_absence: "Izin"
         unknown_absence: "Alpha (Tanpa Kabar)"
         base_salary: "Gaji Pokok"
         overtime_incentive: "Uang Lembur"
