@@ -18,26 +18,28 @@ class AttendanceAnalyzer
                                     .index_by(&:date)
     employee_attendances = find_attendances
     result = Result.new
+    result.is_first_work = @employee.start_working_date.between?(@start_date,@end_date)
+    result.is_first_work = @employee.end_working_date.present? && @employee.end_working_date.between?(@start_date,@end_date)
     paid_time_off = @payroll.paid_time_off
     end_period = @start_date.next_month
     (@start_date..@end_date).each do |date|
       employee_attendance = employee_attendances[date]
       work_schedule = find_work_schedule(date)
-      employee_leave = employee_leaves[date]
+      if work_schedule.blank?
+        work_schedule = find_work_schedule_from_leave(date)
+      else
+        result.total_day += 1 if date < end_period
+      end
       if work_schedule.blank?
         if employee_attendance.present?
           result.work_days += 1
         end
         next
       end
-
-      result.total_day += 1 if date <= end_period
-      next if @employee.start_working_date > date
-      if(@employee.end_working_date.present? && @employee.end_working_date < date)
-        next
-      end
+      next if @employee.start_working_date > date ||
+      next if @employee.end_working_date.present? && @employee.end_working_date < date
+      employee_leave = employee_leaves[date]
       if employee_attendance.blank?
-        employee_leave = employee_leaves[date]
         if employee_leave.blank?
           # if paid_time_off > 0
           #   paid_time_off -= 1
@@ -51,6 +53,7 @@ class AttendanceAnalyzer
         end
         next
       end
+
       begin_work_time = schedule_of(date, work_schedule.begin_work)
       end_work_time = schedule_of(date, work_schedule.end_work)
       result.work_days += 1
@@ -62,7 +65,6 @@ class AttendanceAnalyzer
 
     end
 
-    result.employee_worked_days = BigDecimal(total_employee_worked_days)
     result.paid_time_off = BigDecimal(@payroll.paid_time_off)
     result
   end
@@ -73,10 +75,6 @@ class AttendanceAnalyzer
     EmployeeAttendance.where(employee_id: @employee.id,
                              date: @start_date..@end_date)
                       .index_by(&:date)
-  end
-
-  def total_employee_worked_days
-    @total_employee_worked_days ||= (@employee.start_working_date..@end_date).to_a.length
   end
 
   def find_work_schedule(date)
@@ -95,12 +93,15 @@ class AttendanceAnalyzer
         return work_schedule
       end
     end
+    nil
+  end
+
+  def find_work_schedule_from_leave(date)
     employee_leave = EmployeeLeave.find_by(employee_id: @employee.id, change_date: date)
     return nil if employee_leave.blank?
     @work_schedules.values
                    .flatten
                    .find{|work_schedule|work_schedule.shift == employee_leave.change_shift}
-
   end
 
   def find_changed_shift(date)
@@ -124,10 +125,11 @@ class AttendanceAnalyzer
                   :work_days,
                   :total_day,
                   :paid_time_off,
-                  :employee_worked_days,
                   :overtime_hours,
                   :unknown_absence,
-                  :late
+                  :late,
+                  :is_first_work,
+                  :is_last_work
 
     def initialize
       @sick_leave = 0
@@ -135,7 +137,6 @@ class AttendanceAnalyzer
       @work_days = 0
       @total_day = 0
       @paid_time_off = 0
-      @employee_worked_days = 0
       @overtime_hours = []
       @unknown_absence = 0
       @late = 0

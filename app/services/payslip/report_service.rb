@@ -62,7 +62,6 @@ class Payslip::ReportService < ApplicationService
     result.debt = 0
     result.overtime_incentive = 0
 
-
     payslip_lines.each do |payslip_line|
       if payslip_line.incentive?
         if payslip_line.description.downcase.include?('jabatan')
@@ -82,6 +81,7 @@ class Payslip::ReportService < ApplicationService
     end
     result.tax_amount = payslip.tax_amount
     result.nett_salary = payslip.nett_salary
+    result.description = "HK#{result.work_days},L#{result.overtime_incentive},KRJ#{result.attendance_incentive}"
     result
   end
 

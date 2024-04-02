@@ -4,7 +4,7 @@ class RefreshAllPromotionJob < ApplicationJob
   def perform
     ApplicationRecord.transaction do
       Discount.all.pluck(:id).each do |id|
-        check_if_cancelled
+        check_if_cancelled!
         RefreshPromotionJob.perform_sync(id)
       end
     end
