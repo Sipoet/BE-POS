@@ -9,5 +9,6 @@ class SalesTransactionReportSerializer
               :debit_total,
               :credit_total,
               :qris_total,
-              :online_total
+              :online_total,
+              :gross_profit
 end

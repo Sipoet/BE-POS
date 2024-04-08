@@ -4,6 +4,7 @@ class SalesTransactionReport < ApplicationModel
     datatable_column(self,:start_time, :date),
     datatable_column(self,:end_time, :date),
     datatable_column(self,:sales_total, :decimal),
+    datatable_column(self,:gross_profit, :decimal),
     datatable_column(self,:num_of_transaction, :int),
     datatable_column(self,:discount_total, :decimal),
     datatable_column(self,:cash_total, :decimal),
@@ -22,7 +23,8 @@ class SalesTransactionReport < ApplicationModel
                 :debit_total,
                 :credit_total,
                 :qris_total,
-                :online_total
+                :online_total,
+                :gross_profit
 
   def initialize(row)
     @start_time = row['start_time'].try(:to_datetime)
@@ -35,6 +37,7 @@ class SalesTransactionReport < ApplicationModel
     @credit_total = row['credit_total']
     @qris_total = row['qris_total']
     @online_total = row['online_total']
+    @gross_profit = row['gross_profit']
   end
 
   def id
