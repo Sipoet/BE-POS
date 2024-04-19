@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_28_031202) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_19_004900) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -63,7 +63,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_031202) do
     t.datetime "end_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["employee_id", "date"], name: "index_employee_attendances_on_employee_id_and_date", unique: true
+    t.index ["employee_id", "start_time"], name: "index_employee_attendances_on_employee_id_and_start_time", unique: true
   end
 
   create_table "employee_leaves", force: :cascade do |t|
@@ -110,6 +110,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_031202) do
     t.datetime "updated_at", null: false
     t.datetime "expired_at"
     t.index ["code"], name: "index_file_stores_on_code", unique: true
+  end
+
+  create_table "holidays", force: :cascade do |t|
+    t.date "date", null: false
+    t.text "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_holidays_on_date", unique: true
   end
 
   create_table "payroll_lines", force: :cascade do |t|
