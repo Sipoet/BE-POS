@@ -1,4 +1,4 @@
-class Payroll::Formula::FulltimeCalculator < Payroll::Formula::ApplicationCalculator
+class Payroll::Formula::FulltimeScheduleCalculator < Payroll::Formula::ApplicationCalculator
 
   def calculate
     leave_day_without_sick = attendance_summary.known_absence + attendance_summary.unknown_absence

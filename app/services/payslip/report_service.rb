@@ -81,7 +81,11 @@ class Payslip::ReportService < ApplicationService
     end
     result.tax_amount = payslip.tax_amount
     result.nett_salary = payslip.nett_salary
-    result.description = "HK#{result.work_days},L#{amount_format(result.overtime_incentive)},KRJ#{amount_format(result.attendance_incentive)}"
+    result.description = [
+       result.work_days > 0 ? "HK#{result.work_days}" : nil,
+       result.overtime_incentive > 0 ? "L#{amount_format(result.overtime_incentive)}" : nil,
+       result.attendance_incentive > 0 ? "KRJ#{amount_format(result.attendance_incentive)}" : nil
+  ].compact.join(',')
     result
   end
 

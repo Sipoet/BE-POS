@@ -16,56 +16,50 @@ class AttendanceAnalyzer
     employee_leaves = EmployeeLeave.where(employee_id: @employee.id,
                                           date: @start_date..@end_date)
                                     .index_by(&:date)
+    holidays = Holiday.where(date: @start_date..@end_date)
+                      .index_by(&:date)
     employee_attendances = find_attendances
     result = Result.new
+    result.paid_time_off = BigDecimal(@payroll.paid_time_off)
     result.is_first_work = @employee.start_working_date.between?(@start_date,@end_date)
-    result.is_first_work = @employee.end_working_date.present? && @employee.end_working_date.between?(@start_date,@end_date)
+    result.is_last_work = @employee.end_working_date.present? && @employee.end_working_date.between?(@start_date,@end_date)
     paid_time_off = @payroll.paid_time_off
     end_period = @start_date.next_month
     (@start_date..@end_date).each do |date|
-      employee_attendance = employee_attendances[date]
+      grouped_employee_attendances = employee_attendances[date]
       work_schedule = find_work_schedule(date)
       if work_schedule.blank?
         work_schedule = find_work_schedule_from_leave(date)
-      else
-        result.total_day += 1 if date < end_period
+      elsif holidays[date].nil?
+        result.total_day += 1
       end
       if work_schedule.blank?
-        if employee_attendance.present?
-          result.work_days += 1
+        if grouped_employee_attendances.present?
+          work_hours = sum_work_hours(grouped_employee_attendances)
+          result.add_detail(date: date, work_hours: work_hours)
         end
         next
       end
-      next if @employee.start_working_date > date ||
+      next if @employee.start_working_date > date
       next if @employee.end_working_date.present? && @employee.end_working_date < date
       employee_leave = employee_leaves[date]
-      if employee_attendance.blank?
+      if grouped_employee_attendances.blank?
+        next if holidays[date].present?
         if employee_leave.blank?
-          # if paid_time_off > 0
-          #   paid_time_off -= 1
-          # else
-            result.unknown_absence += 1
-          # end
+          result.add_detail(date: date, is_unknown_leave: true)
         elsif employee_leave.sick_leave?
-          result.sick_leave += 1
+          result.add_detail(date: date, is_sick: true)
         elsif !employee_leave.change_day?
-          result.known_absence += 1
+          result.add_detail(date: date, is_known_leave: true)
         end
         next
       end
-
+      work_hours = sum_work_hours(grouped_employee_attendances)
+      employee_attendance = grouped_employee_attendances.first
       begin_work_time = schedule_of(date, work_schedule.begin_work)
-      end_work_time = schedule_of(date, work_schedule.end_work)
-      result.work_days += 1
-      if employee_attendance.start_time > begin_work_time
-        result.late += 1
-      elsif employee_attendance.end_time>= end_work_time
-        result.overtime_hours << difference_hour(employee_attendance.end_time, end_work_time)
-      end
-
+      result.add_detail(date: date, work_hours: work_hours, is_late: employee_attendance.start_time > begin_work_time)
     end
-
-    result.paid_time_off = BigDecimal(@payroll.paid_time_off)
+    result.total_day = 28 if result.total_day < 28
     result
   end
 
@@ -74,7 +68,13 @@ class AttendanceAnalyzer
   def find_attendances
     EmployeeAttendance.where(employee_id: @employee.id,
                              date: @start_date..@end_date)
-                      .index_by(&:date)
+                      .group_by(&:date)
+  end
+
+  def sum_work_hours(employee_attendances)
+    employee_attendances.sum do |employee_attendance|
+      difference_hour(employee_attendance.start_time, employee_attendance.end_time)
+    end
   end
 
   def find_work_schedule(date)
@@ -112,7 +112,7 @@ class AttendanceAnalyzer
   end
 
   def difference_hour(time_a, time_b)
-    BigDecimal(((time_a.to_time - time_b.to_time)/1.hour).round(1).to_s)
+    BigDecimal(((time_a.to_time - time_b.to_time)/1.hour).round(1).abs.to_s)
   end
 
   def schedule_of(date, time)
@@ -120,26 +120,74 @@ class AttendanceAnalyzer
   end
 
   class Result
-    attr_accessor :sick_leave,
-                  :known_absence,
-                  :work_days,
-                  :total_day,
+    attr_accessor :total_day,
                   :paid_time_off,
-                  :overtime_hours,
-                  :unknown_absence,
-                  :late,
                   :is_first_work,
-                  :is_last_work
+                  :is_last_work,
+                  :overtime_hours,
+                  :total_full_work_days
+
+    attr_reader :details
 
     def initialize
-      @sick_leave = 0
-      @known_absence = 0
-      @work_days = 0
       @total_day = 0
       @paid_time_off = 0
-      @overtime_hours = []
-      @unknown_absence = 0
-      @late = 0
+      @overtime_hours = 0
+      @total_full_work_days = 0
+      @details = []
+    end
+
+    def add_detail(date:, is_late: false, work_hours: 0, is_sick: false, is_known_leave: false, is_unknown_leave: false)
+      @details << ResultDetail.new(
+        date: date,
+        is_late: is_late,
+        work_hours: work_hours,
+        is_sick: is_sick,
+        is_known_leave: is_known_leave,
+        is_unknown_leave: is_unknown_leave
+      )
+    end
+
+    def sick_leave
+      details.count(&:is_sick)
+    end
+
+    def late
+      details.count(&:is_late)
+    end
+
+    def known_absence
+      details.count(&:is_known_leave)
+    end
+
+    def work_days
+      details.count(&:work_in?)
+    end
+
+    def unknown_absence
+      details.count(&:is_unknown_leave)
+    end
+
+    def work_hours
+      details.map(&:work_hours)
+    end
+
+  end
+
+  class ResultDetail
+    attr_accessor :date, :is_worked, :is_late, :work_hours,
+                  :is_sick, :is_known_leave, :is_unknown_leave
+    def initialize(date:, is_late: false, work_hours: 0, is_sick: false, is_known_leave: false, is_unknown_leave: false)
+      @date = date
+      @is_late = is_late
+      @work_hours = work_hours
+      @is_sick = is_sick
+      @is_known_leave = is_known_leave
+      @is_unknown_leave = is_unknown_leave
+    end
+
+    def work_in?
+      work_hours > 0
     end
   end
 end

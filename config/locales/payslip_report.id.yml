@@ -5,7 +5,7 @@ id:
     attributes:
       payslip_report:
         employee_name: "Nama Karyawan"
-        employee_start_working_date: "Tanggal Karyawan Mulai Berkerja"
+        employee_start_working_date: "Mulai Berkerja"
         start_date: "Periode Mulai"
         end_date: "Periode Sampai"
         work_days: "Hari Kerja"

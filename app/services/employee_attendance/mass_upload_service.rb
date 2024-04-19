@@ -44,26 +44,61 @@ class EmployeeAttendance::MassUploadService < ApplicationService
 
   def extract_time_attendance(rows,selected_employee,range)
     time_attendance = []
+
     range.each.with_index do |date, index|
       row = rows[index]
       next if row.nil?
       attendances = row.split("\r\n")
-      start_time = DateTime.parse("#{date.iso8601} #{attendances[0].strip}")
-      end_time = DateTime.parse("#{date.iso8601} #{attendances[-1].strip}")
-      time_attendance << {
-        employee_id: selected_employee.id,
-        start_time: start_time,
-        end_time: end_time,
-        date: start_time.to_date,
-      }
+                       .map{|hour| parse_time(date,hour)}
+
+      if rows[index + 1].present?
+        last_hour = rows[index + 1].split("\r\n")[0]
+        attendances << parse_time(date.tomorrow, last_hour) if parse_time(date.tomorrow, last_hour) < parse_time(date.tomorrow, '07:00')
+        attendances.shift if attendances.first < parse_time(date, open_hour_offset)
+      end
+      attendances.uniq!
+      start_time = nil
+      end_time = nil
+      attendances.each do |datetime|
+        if start_time.nil?
+          start_time = datetime
+          next
+        end
+        end_time = datetime
+        next if difference_minute(start_time,end_time) > time_offset
+        time_attendance << {
+          employee_id: selected_employee.id,
+          start_time: start_time,
+          end_time: end_time,
+          date: date,
+        }
+        start_time = nil
+        end_time = nil
+      end
     end
     time_attendance
+  end
+
+  def open_hour_offset
+    @store_open_hour ||= (Setting.get('open_hour_offset') || '07:00')
+  end
+
+  def time_offset
+    @time_offset ||= ((Setting.get('attendance_end_time_offset') || '60').to_i.minute)
   end
 
   def find_employee(rows)
     employee_code = rows[10].try(:downcase)
     return nil if employee_code.nil?
     Employee.find_by(code: employee_code, status: :active) || Employee.find_by(code: employee_code)
+  end
+
+  def parse_time(date, hour)
+    Time.parse("#{date.iso8601} #{hour}")
+  end
+
+  def difference_minute(time_a,time_b)
+    BigDecimal(((time_a.to_time - time_b.to_time)/1.minute).round.abs.to_s)
   end
 
   def extract_period(sheet)

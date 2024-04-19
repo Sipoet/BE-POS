@@ -17,10 +17,12 @@ class PayrollLine < ApplicationRecord
 
   enum :formula,{
     basic: 0,
-    fulltime: 1,
+    fulltime_schedule: 1,
     overtime_hour: 2,
     period_proportional: 3,
     annual_leave_cut: 4,
-    sick_leave_cut: 5
+    sick_leave_cut: 5,
+    hourly_daily: 6,
+    fulltime_hour_per_day: 7,
   }
 end
