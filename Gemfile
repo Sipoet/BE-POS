@@ -40,19 +40,18 @@ gem 'jsonapi-serializer', '~>2.2.0'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 gem 'sidekiq-cron', '~>1.12.0'
-gem 'rswag-api', '~>2.13.0'
-gem 'rswag-ui', '~>2.13.0'
+gem 'rswag'
 gem 'sidekiq', '~> 7.2'
 gem 'xsv','~> 1.3.0'
 gem 'paper_trail','~> 15.1.0'
+
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[ mri mingw x64_mingw ]
   gem 'byebug'
   gem 'pry'
-  gem 'rspec-rails', '~>6.1.0'
-  gem 'rswag-specs', '~>2.13.0'
+  gem 'rspec-rails'
 end
 
 group :development do
