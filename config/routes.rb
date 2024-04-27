@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   controllers: {
     sessions: 'users/sessions'
   }
+  mount Rswag::Api::Engine => 'api-docs'
+  mount Rswag::Ui::Engine => 'api-blueprint'
 
   resources :users, param: :username, only: [:index, :show, :destroy, :update, :create]
   resources :background_jobs, only:[:index, :show, :destroy] do
