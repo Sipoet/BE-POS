@@ -4,27 +4,16 @@ FactoryBot.define do
     # association :author, factory: :user
     username {FFaker::Internet.user_name}
     email {FFaker::Internet.email}
-    role {:admin}
     jti {SecureRandom.uuid}
     password {'password'}
     password_confirmation {'password'}
+    association :role, factory: :role
     factory :superadmin do
-      # The alias allows us to write author instead of
-      # association :author, factory: :user
-      role {:superadmin}
+      after(:build) do |record|
+        record.role = Role.find_by(name: Role::SUPERADMIN) || create(:role_superadmin)
+      end
     end
 
-    factory :admin do
-      # The alias allows us to write author instead of
-      # association :author, factory: :user
-      role {:admin}
-    end
-
-    factory :cashier do
-      # The alias allows us to write author instead of
-      # association :author, factory: :user
-      role {:cashier}
-    end
   end
 
 
