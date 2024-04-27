@@ -59,13 +59,14 @@ class EmployeeAttendance::MassUploadService < ApplicationService
       attendances.uniq!
       start_time = nil
       end_time = nil
-      attendances.each do |datetime|
+      attendances.each.with_index do |datetime, index|
         if start_time.nil?
           start_time = datetime
           next
         end
         end_time = datetime
-        next if difference_minute(start_time,end_time) > time_offset
+        next if difference_minute(start_time,end_time) < time_offset
+        next if (attendances[index + 1].present? && difference_minute(end_time, attendances[index + 1]) < time_offset)
         time_attendance << {
           employee_id: selected_employee.id,
           start_time: start_time,
@@ -80,11 +81,11 @@ class EmployeeAttendance::MassUploadService < ApplicationService
   end
 
   def open_hour_offset
-    @store_open_hour ||= (Setting.get('open_hour_offset') || '07:00')
+    @store_open_hour ||= (Setting.get('day_separator_at') || '07:00')
   end
 
   def time_offset
-    @time_offset ||= ((Setting.get('attendance_end_time_offset') || '60').to_i.minute)
+    @time_offset ||= ((Setting.get('attendance_minute_offset') || '60').to_d)
   end
 
   def find_employee(rows)

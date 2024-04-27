@@ -10,13 +10,13 @@ class Setting < ApplicationRecord
 
   def delete_cache
     if user_id.present?
-      Cache.delete("setting-#{user_id}-#{setting.key_name}")
+      Cache.delete("setting-#{user_id}-#{key_name}")
     end
-    Cache.delete("setting-#{setting.key_name}")
+    Cache.delete("setting-#{key_name}")
   end
 
   def self.get(key_name, user_id: nil)
-    cache_key = user_id.present? ? "setting-#{user_id}-#{key_name}" : "setting-#{key_name}"
+    cache_key = ['setting',key_name,user_id].compact.join('-')
     cache_data = Cache.get(cache_key)
     return JSON.parse(cache_data)['data'] if cache_data.present?
     setting =  self.find_by(key_name: key_name, user_id: user_id)

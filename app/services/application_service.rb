@@ -60,7 +60,7 @@ class ApplicationService
     def initialize(record_id, record_type)
       @record_id = record_id
       @record_type = record_type
-      super()
+      super
     end
   end
 end
