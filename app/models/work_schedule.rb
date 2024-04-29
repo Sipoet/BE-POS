@@ -22,6 +22,7 @@ class WorkSchedule < ApplicationRecord
     end
   end
 
+  private
   def schedule_of(date,time)
     DateTime.parse("#{date.iso8601} #{time}")
   end

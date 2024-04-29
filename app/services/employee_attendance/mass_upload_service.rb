@@ -54,8 +54,8 @@ class EmployeeAttendance::MassUploadService < ApplicationService
       if rows[index + 1].present?
         last_hour = rows[index + 1].split("\r\n")[0]
         attendances << parse_time(date.tomorrow, last_hour) if parse_time(date.tomorrow, last_hour) < parse_time(date.tomorrow, '07:00')
-        attendances.shift if attendances.first < parse_time(date, open_hour_offset)
       end
+      attendances.shift if attendances.first < parse_time(date, open_hour_offset)
       attendances.uniq!
       start_time = nil
       end_time = nil
@@ -75,6 +75,14 @@ class EmployeeAttendance::MassUploadService < ApplicationService
         }
         start_time = nil
         end_time = nil
+      end
+      if start_time.present? && end_time.blank?
+        time_attendance << {
+          employee_id: selected_employee.id,
+          start_time: start_time,
+          end_time: start_time + 4.hour,
+          date: date,
+        }
       end
     end
     time_attendance

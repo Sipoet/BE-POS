@@ -33,11 +33,10 @@ class Payslip::GeneratePayslipService < ApplicationService
     payslip.known_absence = attendance_summary.known_absence.to_i
     payslip.unknown_absence = attendance_summary.unknown_absence.to_i
     payslip.total_day = attendance_summary.total_day.to_i
-    payslip.late = attendance_summary.late.to_i
+    payslip.late = attendance_summary.late
     overtime_hour = attendance_summary.overtime_hours
     payslip.overtime_hour = overtime_hour
     payslip.paid_time_off = payroll.paid_time_off
-    payslip.notes="HK#{attendance_summary.work_days},TK#{attendance_summary.total_day},OT#{overtime_hour},TK#{attendance_summary.unknown_absence},IZ#{attendance_summary.known_absence},SKS#{attendance_summary.sick_leave}"
     recent_sum = 0
     payslip.payslip_lines.map(&:mark_for_destruction)
     payroll.payroll_lines.each do |payroll_line|
@@ -57,6 +56,7 @@ class Payslip::GeneratePayslipService < ApplicationService
       recent_sum += amount *(payroll_line.earning? ? 1 : -1)
     end
     payslip.work_days = attendance_summary.total_full_work_days > 0 ? attendance_summary.total_full_work_days.to_i : attendance_summary.work_days.to_i
+    payslip.notes="HK#{payslip.work_days},TK#{attendance_summary.total_day},OT#{overtime_hour},TK#{attendance_summary.unknown_absence},IZ#{attendance_summary.known_absence},SKS#{attendance_summary.sick_leave}"
     calculate_payslip(payslip)
     payslip.save!
     payslip.reload

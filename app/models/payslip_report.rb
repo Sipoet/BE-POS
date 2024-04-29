@@ -4,7 +4,7 @@ class PayslipReport < ApplicationModel
     datatable_column(self, :employee_name, :link,path:'employees',attribute_key: 'employee_name', sort_key:'employee_name'),
     datatable_column(self, :employee_start_working_date, :date, width:14),
     datatable_column(self, :start_date, :date, width:14),
-    datatable_column(self, :end_date, :date, width:14),
+    datatable_column(self, :end_date, :date, width:15),
     datatable_column(self, :work_days, :integer, width:10),
     datatable_column(self, :total_day, :integer, width:10),
     datatable_column(self, :overtime_hour, :integer, width:10),
@@ -20,10 +20,10 @@ class PayslipReport < ApplicationModel
     datatable_column(self, :debt, :decimal, width:12),
     datatable_column(self, :tax_amount, :decimal, width:6),
     datatable_column(self, :nett_salary, :decimal, width:12),
-    datatable_column(self,:description, :string, width:12),
+    datatable_column(self,:description, :string, width:17),
     datatable_column(self,:bank, :string, width:6),
-    datatable_column(self,:bank_account, :string, width:14),
-    datatable_column(self,:bank_register_name, :string),
+    datatable_column(self,:bank_account, :string, width:20),
+    datatable_column(self,:bank_register_name, :string, width:35),
   ]
 
   attr_accessor :start_date, :end_date, :employee_id, :employee_name,

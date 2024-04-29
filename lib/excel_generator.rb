@@ -76,9 +76,9 @@ class ExcelGenerator
       when :percentage
         worksheet.write_number(y, x, value.to_f, @num_format)
       when :date
-        worksheet.write_date_time(y, x, value.iso8601, @date_format)
+        worksheet.write_date_time(y, x, value.strftime('%d/%m/%Y'), @date_format)
       when :datetime, :time
-        worksheet.write_date_time(y, x, value.iso8601, @datetime_format)
+        worksheet.write_date_time(y, x, value.strftime('%d/%m/%Y %H:%M'), @datetime_format)
       else
         worksheet.write_string(y, x, value.to_s, @general_format)
       end

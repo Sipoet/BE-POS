@@ -59,7 +59,7 @@ class AttendanceAnalyzer
       begin_work_time = schedule_of(date, work_schedule.begin_work)
       result.add_detail(date: date, work_hours: work_hours, is_late: employee_attendance.start_time > begin_work_time)
     end
-    result.total_day = 28 if result.total_day < 28
+    result.total_day = 27 if result.total_day < 27
     result
   end
 
@@ -78,7 +78,7 @@ class AttendanceAnalyzer
   end
 
   def find_work_schedule(date)
-    day_work_schedules = @work_schedules[date.cwday]
+    day_work_schedules = @work_schedules[date.cwday] || []
     date_status = [
       date.cweek.odd?,
       date.cweek.even?,

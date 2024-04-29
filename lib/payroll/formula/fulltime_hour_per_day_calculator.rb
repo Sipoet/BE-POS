@@ -3,13 +3,10 @@ class Payroll::Formula::FulltimeHourPerDayCalculator < Payroll::Formula::Applica
   def calculate
     full_work_days = 0
     attendance_summary.work_hours.each do |hour|
-      if hour >= payroll_line.variable2
-        full_work_days += 1
-      end
+      full_work_days += [hour,payroll_line.variable2].min.to_d / payroll_line.variable2.to_d
     end
     attendance_summary.total_full_work_days = full_work_days
     total = payroll_line.variable1
-    Rails.logger.info "==== full work #{full_work_days} total day #{attendance_summary.total_day}, work days #{attendance_summary.work_days} from GP #{payroll_line.variable1} "
     if attendance_summary.is_first_work || attendance_summary.is_last_work
       total *= full_work_days.to_d / attendance_summary.total_day.to_d
     end

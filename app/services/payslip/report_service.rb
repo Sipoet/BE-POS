@@ -29,7 +29,7 @@ class Payslip::ReportService < ApplicationService
     generator.add_column_definitions(PayslipReport::TABLE_HEADER)
     generator.add_data(results)
     generator.add_metadata({start_date: @start_date,end_date: @end_date, employee_ids: @employee_ids.try(:join,',')})
-    file_excel = generator.generate("payslip_report-#{@start_date.iso8601}-#{@end_date.iso8601}")
+    file_excel = generator.generate("laporan-slip-gaji-#{@start_date.strftime('%d%b%y')}-#{@end_date.strftime('%d%b%y')}-")
     @controller.send_file file_excel
   end
 
@@ -39,7 +39,6 @@ class Payslip::ReportService < ApplicationService
     result.end_date = payslip.end_date
     result.employee_id = payslip.employee_id
     result.payslip_id = payslip.id
-    result.late = 0
     employee = payslip.employee
     if employee.present?
       result.employee_name = employee.name
@@ -55,6 +54,7 @@ class Payslip::ReportService < ApplicationService
     result.overtime_hour = payslip.overtime_hour
     result.known_absence = payslip.known_absence
     result.unknown_absence = payslip.unknown_absence
+    result.late = payslip.late
     result.positional_incentive = 0
     result.attendance_incentive = 0
     result.other_incentive = 0
