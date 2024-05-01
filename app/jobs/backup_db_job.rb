@@ -1,5 +1,3 @@
-require 'rake'
-Myapp::Application.load_tasks
 class BackupDbJob < ApplicationJob
   sidekiq_options queue: 'default', retry: false
 
