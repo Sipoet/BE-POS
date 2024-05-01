@@ -83,6 +83,7 @@ class Payslip::ReportService < ApplicationService
     result.nett_salary = payslip.nett_salary
     result.description = [
        result.work_days > 0 ? "HK#{result.work_days}" : nil,
+       result.positional_incentive > 0 ? "TJ#{amount_format(result.positional_incentive)}" : nil,
        result.overtime_incentive > 0 ? "L#{amount_format(result.overtime_incentive)}" : nil,
        result.attendance_incentive > 0 ? "KRJ#{amount_format(result.attendance_incentive)}" : nil
   ].compact.join(',')
@@ -125,5 +126,6 @@ class Payslip::ReportService < ApplicationService
     end
     query
   end
+
   class ExpectedError < StandardError; end
 end

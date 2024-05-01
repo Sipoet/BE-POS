@@ -1,6 +1,7 @@
 class Payroll::Formula::FulltimeHourPerDayCalculator < Payroll::Formula::ApplicationCalculator
 
   def calculate
+    return 0 if attendance_summary.details.length <= 7
     full_work_days = 0
     attendance_summary.work_hours.each do |hour|
       full_work_days += [hour,payroll_line.variable2].min.to_d / payroll_line.variable2.to_d
