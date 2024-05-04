@@ -1,7 +1,9 @@
 class Payroll::Formula::FulltimeHourPerDayCalculator < Payroll::Formula::ApplicationCalculator
 
   def calculate
-    return 0 if attendance_summary.details.length <= 7
+    last_date = attendance_summary.details.last.date
+    begin_date = employee.start_working_date
+    return 0 if ((begin_date..last_date).to_a.length < 7 && attendance_summary.is_last_work)
     full_work_days = 0
     attendance_summary.work_hours.each do |hour|
       full_work_days += [hour,payroll_line.variable2].min.to_d / payroll_line.variable2.to_d
@@ -17,7 +19,7 @@ class Payroll::Formula::FulltimeHourPerDayCalculator < Payroll::Formula::Applica
   private
 
   def decrement_value(amount)
-    offset = payroll_line.variable4 || 0
+    offset = payroll_lipne.variable4 || 0
     offset2 = payroll_line.variable5 || 0
     known_offset = (attendance_summary.known_absence - offset)
     known_offset = 0 if known_offset < 0

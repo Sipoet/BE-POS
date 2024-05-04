@@ -14,6 +14,7 @@ class Payslip::GeneratePayslipService < ApplicationService
         payslips << create_payslip!(payroll,employee)
       end
     end
+    payslips.compact!
     render_json(PayslipSerializer.new(payslips,{include:['employee','payroll'],
                                                 field:{employee: ['name'],payroll:['name']},
                                                 meta: {message: 'success generate payslip'}}),
@@ -24,6 +25,7 @@ class Payslip::GeneratePayslipService < ApplicationService
 
   def create_payslip!(payroll,employee)
     attendance_summary = attendance_summary_of(payroll,employee)
+    return nil if attendance_summary.work_days == 0
     payslip = Payslip.find_or_initialize_by(
       payroll: payroll,
       employee: employee,
@@ -42,6 +44,7 @@ class Payslip::GeneratePayslipService < ApplicationService
     payroll.payroll_lines.each do |payroll_line|
       calculator =  Payroll::Calculator.new(payroll_line: payroll_line,
                                             attendance_summary: attendance_summary,
+                                            employee: employee,
                                             recent_sum: recent_sum)
       amount = calculator.calculate!
       if payroll_line.overtime_hour?
@@ -76,7 +79,7 @@ class Payslip::GeneratePayslipService < ApplicationService
   end
 
   def find_employees
-    employees = Employee.active
+    employees = Employee.all
     employees = employees.where(id: @employee_ids) if @employee_ids.present?
     employees
   end

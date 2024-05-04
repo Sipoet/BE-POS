@@ -1,7 +1,9 @@
 class Payroll::Formula::FulltimeScheduleCalculator < Payroll::Formula::ApplicationCalculator
 
   def calculate
-    return 0 if attendance_summary.details.length <= 7
+    last_date = attendance_summary.details.last.date
+    begin_date = employee.start_working_date
+    return 0 if ((begin_date..last_date).to_a.length < 7 && attendance_summary.is_last_work)
     leave_day_without_sick = attendance_summary.known_absence + attendance_summary.unknown_absence
     total = payroll_line.variable1.to_d
     if  attendance_summary.is_first_work || attendance_summary.is_last_work
