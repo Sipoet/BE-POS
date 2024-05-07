@@ -1,19 +1,21 @@
 class RefreshPromotionJob < ApplicationJob
-  sidekiq_options queue: 'default', retry: 1
+  sidekiq_options queue: 'default', retry: 2
 
   def perform(id)
-    check_if_cancelled!
-    @blacklist_item_codes = []
-    discount = Discount.find(id)
-    ActiveRecord::Base.transaction do
-      delete_old_promotion(discount)
-      return if DateTime.now < discount.start_time
-      items = items_based_discount(discount)
-      check_conflict_promotion(discount, items)
+    dont_run_in_parallel! do
       check_if_cancelled!
-      items.reject!{|item| @blacklist_item_codes.include?(item.kodeitem)}
-      generate_ipos_promotion(discount, items)
-      check_if_cancelled!
+      @blacklist_item_codes = []
+      discount = Discount.find(id)
+      ActiveRecord::Base.transaction do
+        delete_old_promotion(discount)
+        return if DateTime.now < discount.start_time
+        items = items_based_discount(discount)
+        check_conflict_promotion(discount, items)
+        check_if_cancelled!
+        items.reject!{|item| @blacklist_item_codes.include?(item.kodeitem)}
+        generate_ipos_promotion(discount, items)
+        check_if_cancelled!
+      end
     end
   rescue JobCancelled => e
     debug_log "job #{jid} cancelled safely"
