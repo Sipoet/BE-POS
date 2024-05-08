@@ -8,12 +8,20 @@ class Discount::UpdateService < ApplicationService
                                       :discount4, :start_time, :end_time)
     discount = Discount.find(@params[:id])
     raise ApplicationService::RecordNotFound.new(@params[:id],Discount.name) if discount.nil?
-    if discount.update(permitted_params)
-      try_stop_background_job(discount)
-      RefreshPromotionJob.perform_async(discount.id)
-      render_json(DiscountSerializer.new(discount.reload))
-    else
+    begin
+      ApplicationRecord.transaction do
+        try_stop_background_job(discount)
+        build_discount_items(discount)
+        discount.update!(permitted_params)
+        RefreshPromotionJob.perform_async(discount.id)
+        render_json(DiscountSerializer.new(discount.reload))
+      end
+    rescue ActiveRecord::RecordInvalid => e
       render_error_record(discount)
+    rescue => e
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace
+      render_json({message: e.message},{status: :conflict})
     end
   end
 
@@ -35,5 +43,24 @@ class Discount::UpdateService < ApplicationService
         RefreshPromotionJob.cancel!(work_payload['jid'])
       end
     end
+  end
+
+  def build_discount_items(discount)
+    permitted_params = params.required(:data)
+                              .required(:relationships)
+                              .required(:discount_items)
+                              .permit(data:[:type,:id, attributes:[:item_code]])
+    return if (permitted_params.blank? || permitted_params[:data].blank?)
+    discount_items = discount.discount_items.index_by(&:id)
+    permitted_params[:data].each do |line_params|
+      discount_item = discount_items[line_params[:id].to_i]
+      if discount_item.present?
+        discount_item.attributes = line_params[:attributes]
+        discount_items.delete(line_params[:id])
+      else
+        discount_item = discount.discount_items.build(line_params[:attributes])
+      end
+    end
+    discount_items.values.map(&:mark_for_destruction)
   end
 end

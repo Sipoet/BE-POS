@@ -27,6 +27,12 @@ class Discount < ApplicationRecord
     nominal: 1
   }
 
+  enum :discount_type,{
+    period: 0,
+    repeated_hour_on_period: 1,
+    day_of_week: 2,
+  }
+
   validates :code, presence: true, uniqueness: true
   validates :weight, presence: true, numericality:{greater_than: 0, integer: true}
   validates :discount1, presence: true, numericality:{greater_than_and_equal_to: 0, less_than: 100}, if: :percentage?
@@ -37,6 +43,9 @@ class Discount < ApplicationRecord
   validates :start_time, presence: true
   validates :end_time, presence: true
   validates :calculation_type, presence: true
+
+  has_many :discount_items, dependent: :destroy
+  accepts_nested_attributes_for :discount_items, allow_destroy: true
 
   belongs_to :item, optional: true, foreign_key: :item_code, primary_key: :kodeitem, class_name:'Ipos::Item'
   belongs_to :item_type, optional: true, foreign_key: :item_type_name, primary_key: :jenis, class_name:'Ipos::ItemType'
@@ -76,7 +85,7 @@ class Discount < ApplicationRecord
 
   # filter should be filled at least one
   def filter_should_be_filled
-    return true if [item,item_type,supplier,brand].any?
+    return true if [item,discount_items,item_type,supplier,brand].any?
     errors.add(:base,"Salah satu filter(#{Discount.human_attribute_name(:item_code)}, #{Discount.human_attribute_name(:item_type)}, #{Discount.human_attribute_name(:supplier_code)}, #{Discount.human_attribute_name(:brand_name)}) harus diisi")
   end
 

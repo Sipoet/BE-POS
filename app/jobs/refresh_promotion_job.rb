@@ -30,7 +30,7 @@ class RefreshPromotionJob < ApplicationJob
   def items_based_discount(discount)
     items = Ipos::Item.order(kodeitem: :asc)
     {
-      kodeitem: discount.item_code,
+      kodeitem: discount.discount_items.pluck(:item_code),
       supplier1: discount.supplier_code,
       jenis: discount.item_type_name,
       merek: discount.brand_name
@@ -52,13 +52,25 @@ class RefreshPromotionJob < ApplicationJob
     iddiskon = Ipos::Promotion.active_range(discount.start_time, discount.end_time).pluck(:iddiskon)
     item_promotions = Ipos::ItemPromotion.where(kodeitem: items.pluck(:kodeitem), iddiskon: iddiskon)
     item_promotions.each do |item_promotion|
-      promotion_weight = item_promotion.discount.try(:weight) || 0
+      ip_discount = item_promotion.discount
+      if ip_discount.day_of_week? && discount.day_of_week? && ![ip_discount.week1 == discount.week1,
+        ip_discount.week2 == discount.week2,
+        ip_discount.week3 == discount.week3,
+        ip_discount.week4 == discount.week4,
+        ip_discount.week5 == discount.week5,
+        ip_discount.week6 == discount.week6,
+        ip_discount.week7 == discount.week7
+      ].any?
+        next
+      end
+      promotion_weight = discount.try(:weight) || 0
       if promotion_weight >= discount.weight
         @blacklist_item_codes << item_promotion.kodeitem
       else
         item_promotion.delete
       end
       debug_log "conflict diskon #{item_promotion.iddiskon} with item code #{item_promotion.kodeitem}"
+
     end
   end
 
@@ -66,8 +78,7 @@ class RefreshPromotionJob < ApplicationJob
     items.each_slice(200).with_index(1) do |paginated_items, page|
       promo_name = "#{page}_#{discount.code}"
       promotion = create_promotion!(promo_name: promo_name,
-                                    start_time: discount.start_time,
-                                    end_time: discount.end_time)
+                                    discount: discount)
       create_item_promotions(items: paginated_items,
                             promotion: promotion,
                             discount: discount)
@@ -98,20 +109,33 @@ class RefreshPromotionJob < ApplicationJob
     Ipos::ItemPromotion.insert_all(item_p_docs)
   end
 
-  def create_promotion!(promo_name:, start_time:, end_time:)
+  def create_promotion!(promo_name:, discount:)
     debug_log "create promotion #{promo_name}"
     promotion = Ipos::Promotion.find_or_initialize_by(iddiskon: promo_name)
-    promotion.tgldari = start_time.strftime('%Y-%m-%d %H:%M:%Sz')
-    promotion.tglsampai = end_time.strftime('%Y-%m-%d %H:%M:%Sz')
-    promotion.stsact = DateTime.now.between?(start_time,end_time)
+    promotion.tgldari = discount.start_time.strftime('%Y-%m-%d %H:%M:%Sz')
+    promotion.tglsampai = discount.end_time.strftime('%Y-%m-%d %H:%M:%Sz')
+    promotion.stsact = if discount.day_of_week?
+      day_of_week = DateTime.now.cwday
+      discount.try("week#{day_of_week}")
+    else
+      DateTime.now.between?(discount.start_time,discount.end_time)
+    end
     promotion.jamdari = promotion.tgldari
     promotion.jamsampai = promotion.tglsampai
+    promotion.w1 = discount.week1
+    promotion.w2 = discount.week2
+    promotion.w3 = discount.week3
+    promotion.w4 = discount.week4
+    promotion.w5 = discount.week5
+    promotion.w6 = discount.week6
+    promotion.w7 = discount.week7
     promotion.prioritas = 1
     promotion.pot1 = 0
     promotion.pot2 = 0
     promotion.pot3 = 0
     promotion.pot4 = 0
-    promotion.tipeper = '1'
+    promotion.tipeper = (Discount.discount_types[discount.discount_type] + 1).to_s
+    Sidekiq.logger.info "======= #{promotion.tipeper}"
     promotion.save!
     promotion
   end

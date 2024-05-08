@@ -1,0 +1,2 @@
+class DiscountItem < ApplicationRecord
+end

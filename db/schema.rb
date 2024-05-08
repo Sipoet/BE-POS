@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_19_004900) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_08_104543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,6 +32,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_19_004900) do
     t.index ["role_id"], name: "index_column_authorizes_on_role_id"
   end
 
+  create_table "discount_items", force: :cascade do |t|
+    t.string "item_code", null: false
+    t.integer "discount_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "discounts", force: :cascade do |t|
     t.string "code", null: false
     t.string "item_code"
@@ -51,6 +58,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_19_004900) do
     t.string "blacklist_supplier_code"
     t.string "blacklist_item_type_name"
     t.string "blacklist_brand_name"
+    t.integer "discount_type", default: 0, null: false
+    t.boolean "week1", default: false, null: false
+    t.boolean "week2", default: false, null: false
+    t.boolean "week3", default: false, null: false
+    t.boolean "week4", default: false, null: false
+    t.boolean "week5", default: false, null: false
+    t.boolean "week6", default: false, null: false
+    t.boolean "week7", default: false, null: false
+    t.string "discount_group"
     t.index ["code"], name: "index_discounts_on_code", unique: true
     t.index ["start_time", "end_time", "item_code", "supplier_code", "item_type_name", "brand_name"], name: "active_promotion_idx", order: { end_time: :desc }
     t.index ["start_time", "end_time"], name: "index_discounts_on_start_time_and_end_time", order: { end_time: :desc }
@@ -2242,6 +2258,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_19_004900) do
 
   add_foreign_key "access_authorizes", "roles"
   add_foreign_key "column_authorizes", "roles"
+  add_foreign_key "discount_items", "discounts"
   add_foreign_key "discounts", "tbl_item", column: "item_code", primary_key: "kodeitem"
   add_foreign_key "discounts", "tbl_itemjenis", column: "blacklist_item_type_name", primary_key: "jenis"
   add_foreign_key "discounts", "tbl_itemjenis", column: "item_type_name", primary_key: "jenis"
