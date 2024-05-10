@@ -91,7 +91,7 @@ class RefreshPromotionJob < ApplicationJob
 
   def create_item_promotions(items:[],promotion:,discount:)
     item_p_docs = items.map do |item|
-      debug_log "item #{item.kodeitem} diskon #{discount}"
+      debug_log "item #{item.kodeitem} diskon #{discount.code}"
         {
           iddiskon: promotion.iddiskon,
           kodeitem: item.kodeitem,
