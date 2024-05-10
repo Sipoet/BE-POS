@@ -30,21 +30,20 @@ class RefreshPromotionJob < ApplicationJob
   def items_based_discount(discount)
     items = Ipos::Item.order(kodeitem: :asc)
     {
-      kodeitem: discount.discount_items.pluck(:item_code),
-      supplier1: discount.supplier_code,
-      jenis: discount.item_type_name,
-      merek: discount.brand_name
+      kodeitem: discount.discount_items.where(is_exclude: false).pluck(:item_code),
+      supplier1: discount.discount_suppliers.where(is_exclude: false).pluck(:supplier_code),
+      jenis: discount.discount_item_types.where(is_exclude: false).pluck(:item_type_name),
+      merek: discount.discount_brands.where(is_exclude: false).pluck(:brand_name)
     }.each do |key, value|
       items = items.where(key => value) if value.present?
     end
     {
-      supplier1: discount.blacklist_supplier_code,
-      jenis: discount.blacklist_item_type_name,
-      merek: discount.blacklist_brand_name
+      supplier1: discount.discount_suppliers.where(is_exclude: true).pluck(:supplier_code),
+      jenis: discount.discount_item_types.where(is_exclude: true).pluck(:item_type_name),
+      merek: discount.discount_brands.where(is_exclude: true).pluck(:brand_name)
     }.each do |key, value|
       items = items.where.not(key => value) if value.present?
     end
-
     items.to_a
   end
 

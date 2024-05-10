@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_08_104543) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_09_035707) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,8 +32,32 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_08_104543) do
     t.index ["role_id"], name: "index_column_authorizes_on_role_id"
   end
 
+  create_table "discount_brands", force: :cascade do |t|
+    t.string "brand_name", null: false
+    t.boolean "is_exclude", default: false, null: false
+    t.integer "discount_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "discount_item_types", force: :cascade do |t|
+    t.string "item_type_name", null: false
+    t.boolean "is_exclude", default: false, null: false
+    t.integer "discount_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "discount_items", force: :cascade do |t|
     t.string "item_code", null: false
+    t.integer "discount_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "discount_suppliers", force: :cascade do |t|
+    t.string "supplier_code", null: false
+    t.boolean "is_exclude", default: false, null: false
     t.integer "discount_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -2258,7 +2282,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_08_104543) do
 
   add_foreign_key "access_authorizes", "roles"
   add_foreign_key "column_authorizes", "roles"
+  add_foreign_key "discount_brands", "discounts"
+  add_foreign_key "discount_brands", "tbl_itemmerek", column: "brand_name", primary_key: "merek"
+  add_foreign_key "discount_item_types", "discounts"
+  add_foreign_key "discount_item_types", "tbl_itemjenis", column: "item_type_name", primary_key: "jenis"
   add_foreign_key "discount_items", "discounts"
+  add_foreign_key "discount_items", "tbl_item", column: "item_code", primary_key: "kodeitem"
+  add_foreign_key "discount_suppliers", "discounts"
+  add_foreign_key "discount_suppliers", "tbl_supel", column: "supplier_code", primary_key: "kode"
   add_foreign_key "discounts", "tbl_item", column: "item_code", primary_key: "kodeitem"
   add_foreign_key "discounts", "tbl_itemjenis", column: "blacklist_item_type_name", primary_key: "jenis"
   add_foreign_key "discounts", "tbl_itemjenis", column: "item_type_name", primary_key: "jenis"

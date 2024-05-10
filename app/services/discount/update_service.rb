@@ -1,17 +1,20 @@
 require 'sidekiq/api'
 class Discount::UpdateService < ApplicationService
   def execute_service
-    permitted_params = @params.required(:discount)
-                              .permit(:item_code,:weight,:calculation_type, :supplier_code, :item_type_name,
-                                      :brand_name,:blacklist_supplier_code, :blacklist_item_type_name,
-                                      :blacklist_brand_name, :discount1, :discount2,:discount3,
+    permitted_params = @params.required(:data)
+                              .required(:attributes)
+                              .permit(:weight,:calculation_type,
+                                      :discount1, :discount2,:discount3,
                                       :discount4, :start_time, :end_time)
     discount = Discount.find(@params[:id])
-    raise ApplicationService::RecordNotFound.new(@params[:id],Discount.name) if discount.nil?
+    raise RecordNotFound.new(@params[:id],Discount.model_name.human) if discount.nil?
     begin
       ApplicationRecord.transaction do
         try_stop_background_job(discount)
         build_discount_items(discount)
+        build_discount_item_types(discount)
+        build_discount_suppliers(discount)
+        build_discount_brands(discount)
         discount.update!(permitted_params)
         RefreshPromotionJob.perform_async(discount.id)
         render_json(DiscountSerializer.new(discount.reload))
@@ -62,5 +65,62 @@ class Discount::UpdateService < ApplicationService
       end
     end
     discount_items.values.map(&:mark_for_destruction)
+  end
+
+  def build_discount_item_types(discount)
+    permitted_params = params.required(:data)
+                              .required(:relationships)
+                              .required(:discount_item_types)
+                              .permit(data:[:type,:id, attributes:[:item_type_name, :is_exclude]])
+    return if (permitted_params.blank? || permitted_params[:data].blank?)
+    discount_item_types = discount.discount_item_types.index_by(&:id)
+    permitted_params[:data].each do |line_params|
+      discount_item_type = discount_item_types[line_params[:id].to_i]
+      if discount_item_type.present?
+        discount_item_type.attributes = line_params[:attributes]
+        discount_item_types.delete(line_params[:id])
+      else
+        discount_item_type = discount.discount_item_types.build(line_params[:attributes])
+      end
+    end
+    discount_item_types.values.map(&:mark_for_destruction)
+  end
+
+  def build_discount_brands(discount)
+    permitted_params = params.required(:data)
+                              .required(:relationships)
+                              .required(:discount_brands)
+                              .permit(data:[:type,:id, attributes:[:brand_name, :is_exclude]])
+    return if (permitted_params.blank? || permitted_params[:data].blank?)
+    discount_brands = discount.discount_brands.index_by(&:id)
+    permitted_params[:data].each do |line_params|
+      discount_brand = discount_brands[line_params[:id].to_i]
+      if discount_brand.present?
+        discount_brand.attributes = line_params[:attributes]
+        discount_brands.delete(line_params[:id])
+      else
+        discount_brand = discount.discount_brands.build(line_params[:attributes])
+      end
+    end
+    discount_brands.values.map(&:mark_for_destruction)
+  end
+
+  def build_discount_suppliers(discount)
+    permitted_params = params.required(:data)
+                              .required(:relationships)
+                              .required(:discount_suppliers)
+                              .permit(data:[:type,:id, attributes:[:supplier_code, :is_exclude]])
+    return if (permitted_params.blank? || permitted_params[:data].blank?)
+    discount_suppliers = discount.discount_suppliers.index_by(&:id)
+    permitted_params[:data].each do |line_params|
+      discount_supplier = discount_suppliers[line_params[:id].to_i]
+      if discount_supplier.present?
+        discount_supplier.attributes = line_params[:attributes]
+        discount_suppliers.delete(line_params[:id])
+      else
+        discount_supplier = discount.discount_suppliers.build(line_params[:attributes])
+      end
+    end
+    discount_suppliers.values.map(&:mark_for_destruction)
   end
 end

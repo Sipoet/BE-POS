@@ -6,7 +6,7 @@ class Discount < ApplicationRecord
     datatable_column(self,:supplier_code, :link, path:'suppliers',attribute_key: 'supplier.kode'),
     datatable_column(self,:item_type_name, :link, path:'item_types',attribute_key: 'item_type.jenis'),
     datatable_column(self,:brand_name, :link, path:'brands',attribute_key: 'brand.merek'),
-    datatable_column(self,:item_code, :link, path:'items',attribute_key: 'item.namaitem'),
+    datatable_column(self,:item_code, :link, path:'items',attribute_key: 'item.kodeitem'),
     datatable_column(self,:blacklist_supplier_code, :link, path:'suppliers',attribute_key: 'blacklist_supplier.kode'),
     datatable_column(self,:blacklist_item_type_name, :link, path:'item_types',attribute_key: 'blacklist_item_type.jenis'),
     datatable_column(self,:blacklist_brand_name, :link, path:'brands',attribute_key: 'blacklist_brand.merek'),
@@ -45,7 +45,10 @@ class Discount < ApplicationRecord
   validates :calculation_type, presence: true
 
   has_many :discount_items, dependent: :destroy
-  accepts_nested_attributes_for :discount_items, allow_destroy: true
+  has_many :discount_suppliers, dependent: :destroy
+  has_many :discount_brands, dependent: :destroy
+  has_many :discount_item_types, dependent: :destroy
+  accepts_nested_attributes_for :discount_items, :discount_suppliers,:discount_brands,:discount_item_types, allow_destroy: true
 
   belongs_to :item, optional: true, foreign_key: :item_code, primary_key: :kodeitem, class_name:'Ipos::Item'
   belongs_to :item_type, optional: true, foreign_key: :item_type_name, primary_key: :jenis, class_name:'Ipos::ItemType'
@@ -63,10 +66,10 @@ class Discount < ApplicationRecord
 
   def generate_code
     self.code = [
-      self.item_code,
-      self.supplier_code,
-      self.item_type_name,
-      self.brand_name,
+      self.discount_items.first.try(:item_code),
+      self.discount_suppliers.first.try(:supplier_code),
+      self.discount_item_types.first.try(:item_type_name),
+      self.discount_brands.first.try(:brand_name),
       self.start_time.try(:strftime,'%d%b%y'),
       self.end_time.try(:strftime,'%d%b%y')
     ].compact.join('-')
