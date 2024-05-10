@@ -2,20 +2,18 @@ class RefreshPromotionJob < ApplicationJob
   sidekiq_options queue: 'default', retry: 2
 
   def perform(id)
-    dont_run_in_parallel! do
+    check_if_cancelled!
+    @blacklist_item_codes = []
+    discount = Discount.find(id)
+    ActiveRecord::Base.transaction do
+      delete_old_promotion(discount)
+      return if DateTime.now < discount.start_time
+      items = items_based_discount(discount)
+      check_conflict_promotion(discount, items)
       check_if_cancelled!
-      @blacklist_item_codes = []
-      discount = Discount.find(id)
-      ActiveRecord::Base.transaction do
-        delete_old_promotion(discount)
-        return if DateTime.now < discount.start_time
-        items = items_based_discount(discount)
-        check_conflict_promotion(discount, items)
-        check_if_cancelled!
-        items.reject!{|item| @blacklist_item_codes.include?(item.kodeitem)}
-        generate_ipos_promotion(discount, items)
-        check_if_cancelled!
-      end
+      items.reject!{|item| @blacklist_item_codes.include?(item.kodeitem)}
+      generate_ipos_promotion(discount, items)
+      check_if_cancelled!
     end
   rescue JobCancelled => e
     debug_log "job #{jid} cancelled safely"
@@ -30,7 +28,7 @@ class RefreshPromotionJob < ApplicationJob
   def items_based_discount(discount)
     items = Ipos::Item.order(kodeitem: :asc)
     {
-      kodeitem: discount.discount_items.where(is_exclude: false).pluck(:item_code),
+      kodeitem: discount.discount_items.pluck(:item_code),
       supplier1: discount.discount_suppliers.where(is_exclude: false).pluck(:supplier_code),
       jenis: discount.discount_item_types.where(is_exclude: false).pluck(:item_type_name),
       merek: discount.discount_brands.where(is_exclude: false).pluck(:brand_name)
