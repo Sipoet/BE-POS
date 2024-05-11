@@ -16,8 +16,16 @@ class Discount < ApplicationRecord
     datatable_column(self,:discount2, :percentage),
     datatable_column(self,:discount3, :percentage),
     datatable_column(self,:discount4, :percentage),
+    datatable_column(self,:discount_type, :enum),
     datatable_column(self,:start_time, :datetime),
-    datatable_column(self,:end_time, :datetime)
+    datatable_column(self,:end_time, :datetime),
+    datatable_column(self,:week1, :boolean),
+    datatable_column(self,:week2, :boolean),
+    datatable_column(self,:week3, :boolean),
+    datatable_column(self,:week4, :boolean),
+    datatable_column(self,:week5, :boolean),
+    datatable_column(self,:week6, :boolean),
+    datatable_column(self,:week7, :boolean),
   ].freeze
 
   attr_readonly :code

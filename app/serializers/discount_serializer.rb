@@ -1,7 +1,9 @@
 class DiscountSerializer
   include JSONAPI::Serializer
   attributes :code, :start_time, :end_time, :weight,
-             :calculation_type,:created_at,:updated_at
+             :calculation_type,:created_at,:updated_at,
+             :week1, :week2, :week3, :week4, :week5, :week6,
+             :week7, :discount_type
   [:discount1, :discount2,:discount3,:discount4].each do |key|
     attribute key do |object|
       object.send(key).to_f

@@ -2,10 +2,11 @@ class Discount::CreateService < ApplicationService
   def execute_service
     permitted_params = @params.required(:data)
                               .required(:attributes)
-                              .permit(:brande, :weight,:calculation_type,:blacklist_supplier_code,
-                                      :blacklist_item_type_name, :blacklist_brand_name,
-                                      :supplier_code, :item_type_name, :brand_name, :discount1,
-                                      :discount2, :discount3, :discount4, :start_time, :end_time)
+                              .permit(:code,:weight,:calculation_type, :discount_type,
+                              :week1, :week2, :week3, :week4,
+                              :week5, :week6, :week7,
+                              :discount1, :discount2,:discount3,
+                              :discount4, :start_time, :end_time)
     discount = Discount.new(permitted_params)
     build_discount_items(discount)
     build_discount_suppliers(discount)
