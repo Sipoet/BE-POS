@@ -11,7 +11,7 @@ class DiscountSerializer
   end
 
   attribute :item_code do |object|
-    filter_text(object.discount_items.limit(3).map(&:item_code))
+    filter_text(object.discount_items.included_items.limit(3).map(&:item_code))
   end
   attribute :supplier_code do |object|
     filter_text(object.discount_suppliers.included_suppliers.limit(3).map(&:supplier_code))
@@ -23,6 +23,9 @@ class DiscountSerializer
     filter_text(object.discount_item_types.included_item_types.limit(3).map(&:item_type_name))
   end
 
+  attribute :blacklist_item_code do |object|
+    filter_text(object.discount_items.included_items.limit(3).map(&:item_code))
+  end
   attribute :blacklist_supplier_code do |object|
     filter_text(object.discount_suppliers.excluded_suppliers.limit(3).map(&:supplier_code))
   end

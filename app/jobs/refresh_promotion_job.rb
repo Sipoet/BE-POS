@@ -28,17 +28,18 @@ class RefreshPromotionJob < ApplicationJob
   def items_based_discount(discount)
     items = Ipos::Item.order(kodeitem: :asc)
     {
-      kodeitem: discount.discount_items.pluck(:item_code),
-      supplier1: discount.discount_suppliers.where(is_exclude: false).pluck(:supplier_code),
-      jenis: discount.discount_item_types.where(is_exclude: false).pluck(:item_type_name),
-      merek: discount.discount_brands.where(is_exclude: false).pluck(:brand_name)
+      kodeitem: discount.discount_items.included_items.pluck(:item_code),
+      supplier1: discount.discount_suppliers.included_suppliers.pluck(:supplier_code),
+      jenis: discount.discount_item_types.included_item_types.pluck(:item_type_name),
+      merek: discount.discount_brands.included_brands.pluck(:brand_name)
     }.each do |key, value|
       items = items.where(key => value) if value.present?
     end
     {
-      supplier1: discount.discount_suppliers.where(is_exclude: true).pluck(:supplier_code),
-      jenis: discount.discount_item_types.where(is_exclude: true).pluck(:item_type_name),
-      merek: discount.discount_brands.where(is_exclude: true).pluck(:brand_name)
+      kodeitem: discount.discount_items.excluded_items.pluck(:item_code),
+      supplier1: discount.discount_suppliers.excluded_suppliers.pluck(:supplier_code),
+      jenis: discount.discount_item_types.excluded_item_types.pluck(:item_type_name),
+      merek: discount.discount_brands.excluded_brands.pluck(:brand_name)
     }.each do |key, value|
       items = items.where.not(key => value) if value.present?
     end
@@ -50,7 +51,7 @@ class RefreshPromotionJob < ApplicationJob
     item_promotions = Ipos::ItemPromotion.where(kodeitem: items.pluck(:kodeitem), iddiskon: iddiskon)
     item_promotions.each do |item_promotion|
       ip_discount = item_promotion.discount
-      if ip_discount.day_of_week? && discount.day_of_week? && ![ip_discount.week1 == discount.week1,
+      if ip_discount.try(:day_of_week?) && discount.day_of_week? && ![ip_discount.week1 == discount.week1,
         ip_discount.week2 == discount.week2,
         ip_discount.week3 == discount.week3,
         ip_discount.week4 == discount.week4,
