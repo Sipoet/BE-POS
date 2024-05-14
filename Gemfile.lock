@@ -197,6 +197,8 @@ GEM
     paper_trail (15.1.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
+    paper_trail-association_tracking (2.2.1)
+      paper_trail (>= 12.0)
     parallel (1.24.0)
     parser (3.2.2.4)
       ast (~> 2.4.1)
@@ -393,6 +395,7 @@ DEPENDENCIES
   jsonapi-serializer (~> 2.2.0)
   kaminari (~> 1.2.2)
   paper_trail (~> 15.1.0)
+  paper_trail-association_tracking
   pg (~> 1.1)
   pry
   puma (~> 5.0)

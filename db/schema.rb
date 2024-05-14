@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_11_095933) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_12_092123) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -2260,6 +2260,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_11_095933) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "version_associations", force: :cascade do |t|
+    t.integer "version_id"
+    t.string "foreign_key_name", null: false
+    t.integer "foreign_key_id"
+    t.string "foreign_type"
+    t.index ["foreign_key_name", "foreign_key_id", "foreign_type"], name: "index_version_associations_on_foreign_key"
+    t.index ["version_id"], name: "index_version_associations_on_version_id"
+  end
+
   create_table "versions", force: :cascade do |t|
     t.string "item_type", null: false
     t.bigint "item_id", null: false
@@ -2267,7 +2276,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_11_095933) do
     t.string "whodunnit"
     t.text "object"
     t.datetime "created_at"
+    t.text "object_changes"
+    t.integer "transaction_id"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+    t.index ["transaction_id"], name: "index_versions_on_transaction_id"
   end
 
   create_table "work_schedules", force: :cascade do |t|
