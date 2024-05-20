@@ -6,15 +6,11 @@ class ActivityLog::ByItemService < ApplicationService
                       .includes(:user, :item)
                       .order(created_at: :desc)
     activity_logs = convert_versions_to_log(versions)
-    version_associations = VersionAssociation.where(version_id: versions.pluck(:id))
-                         .group_by(&:foreign_type)
-    version_associations.each do|foreign_type, values|
-      acc_versions = Version.where(item_type: foreign_type,
-                                   item_id: values.pluck(:foreign_id))
-                            .includes(:user, :item)
-                            .order(created_at: :desc)
-      activity_logs += convert_versions_to_log(acc_versions)
-    end
+    acc_version_ids = VersionAssociation.where(foreign_type: permitted_params[:item_type],
+                                               foreign_key_id: permitted_params[:item_id])
+                         .pluck(:version_id)
+    acc_versions = Version.find(acc_version_ids) rescue []
+    activity_logs += convert_versions_to_log(acc_versions)
     activity_logs.sort!{|a,b|b.created_at <=> a.created_at}
     render_json(ActivityLogSerializer.new(activity_logs,{meta: meta}))
   end

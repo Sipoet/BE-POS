@@ -1,5 +1,8 @@
 class PayrollLine < ApplicationRecord
-  has_paper_trail ignore: [:created_at, :updated_at]
+  has_paper_trail ignore: [:id, :created_at, :updated_at]
+
+
+  belongs_to :payroll, inverse_of: :payroll_lines
 
   enum :group,{
     earning: 0,

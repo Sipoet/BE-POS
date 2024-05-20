@@ -1,5 +1,5 @@
 class Payroll < ApplicationRecord
-  has_paper_trail ignore: [:created_at, :updated_at]
+  has_paper_trail ignore: [:id, :created_at, :updated_at]
 
   TABLE_HEADER = [
     datatable_column(self,:name, :string),
@@ -13,8 +13,8 @@ class Payroll < ApplicationRecord
 
   validates :payroll_lines, presence: true
 
-  has_many :payroll_lines, -> { order(row: :asc) }, dependent: :destroy
-  has_many :employees, through: :employee_payrolls
+  has_many :payroll_lines, -> { order(row: :asc) }, dependent: :destroy, inverse_of: :payroll
+
 
   accepts_nested_attributes_for :payroll_lines, allow_destroy: true
 
