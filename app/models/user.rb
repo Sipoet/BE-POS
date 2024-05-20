@@ -9,7 +9,7 @@ class User < ApplicationRecord
     datatable_column(self,:created_at, :datetime),
     datatable_column(self,:updated_at, :datetime),
   ]
-  has_paper_trail ignore: [:created_at, :updated_at, :jti,:encrypted_password]
+  has_paper_trail ignore: [:id,:created_at, :updated_at, :jti,:encrypted_password]
 
   belongs_to :role
 
