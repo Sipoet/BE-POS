@@ -20,7 +20,7 @@ class ActivityLog < ApplicationModel
 
   def user=(value)
     @user = value
-    user_id = value.try(:id)
+    @user_id = value.try(:id)
   end
 
   def item_klass
@@ -34,7 +34,7 @@ class ActivityLog < ApplicationModel
     activity_log.item_type = version.item_type
     activity_log.description = version.changeset
     activity_log.event = version.event
-    activity_log.user_id = version.whodunnit.present? ? version.whodunnit.to_i : nil
+    activity_log.user = version.user
     activity_log.created_at = version.created_at
     activity_log
   end
