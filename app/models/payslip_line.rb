@@ -1,5 +1,5 @@
 class PayslipLine < ApplicationRecord
-  has_paper_trail
+  has_paper_trail ignore: [:created_at, :updated_at]
   enum :group, {
     earning: 0,
     deduction: 1,
