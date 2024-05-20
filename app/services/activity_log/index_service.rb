@@ -1,29 +1,29 @@
-class History::IndexService < ApplicationService
+class ActivityLog::IndexService < ApplicationService
 
   include JsonApiDeserializer
   def execute_service
     extract_params
-    @histories = find_histories
+    @activity_logs = find_activity_logs
     options = {
       meta: meta,
       fields: @fields,
       params:{include: @included},
       include: @included
     }
-    render_json(HistorySerializer.new(@histories,options))
+    render_json(ActivityLogSerializer.new(@activity_logs,options))
   end
 
   def meta
     {
       page: @page,
       limit: @limit,
-      total_pages: @histories.total_pages,
+      total_pages: @versions.total_pages,
     }
   end
 
   def extract_params
-    allowed_columns = History::TABLE_HEADER.map(&:name)
-    allowed_fields = [:history]
+    allowed_columns = ActivityLog::TABLE_HEADER.map(&:name)
+    allowed_fields = [:activity_log,:user]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
@@ -36,19 +36,21 @@ class History::IndexService < ApplicationService
     @fields = result.fields
   end
 
-  def find_histories
-    histories = History.all.includes(@included)
+  def find_activity_logs
+    @versions = Version.all.includes(@included)
       .page(@page)
       .per(@limit)
     @filters.each do |filter|
-      histories = histories.where(filter.to_query)
+      @versions = @versions.where(filter.to_query)
     end
     if @sort.present?
-      histories = histories.order(@sort)
+      @versions = @versions.order(@sort)
     else
-      histories = histories.order(created_at: :desc)
+      @versions = @versions.order(created_at: :desc)
     end
-    histories
+    @versions.map do |version|
+      ActivityLog.from_version(version)
+    end
   end
 
 end

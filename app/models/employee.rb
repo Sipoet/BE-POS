@@ -1,5 +1,5 @@
 class Employee < ApplicationRecord
-  has_paper_trail
+  has_paper_trail ignore: [:created_at, :updated_at]
   TABLE_HEADER = [
     datatable_column(self,:code, :string),
     datatable_column(self,:name, :string),

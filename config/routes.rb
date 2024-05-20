@@ -17,7 +17,11 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => 'api-docs'
   mount Rswag::Ui::Engine => 'api-blueprint'
 
-  resources :histories, only: [:index]
+  resources :activity_logs, only: [:index] do
+    get :by_item, on: :collection
+    get :by_user, on: :collection
+  end
+
   resources :users, param: :username, only: [:index, :show, :destroy, :update, :create]
   resources :background_jobs, only:[:index, :show, :destroy] do
     post :retry, on: :member

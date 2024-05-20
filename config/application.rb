@@ -20,6 +20,7 @@ module Myapp
     config.hosts << 'backend'
     config.active_job.queue_adapter = :sidekiq
     config.i18n.default_locale = :id
+    config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time, ActiveSupport::TimeWithZone, ActiveSupport::TimeZone, BigDecimal]
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

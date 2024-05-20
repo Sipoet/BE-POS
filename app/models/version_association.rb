@@ -1,0 +1,3 @@
+class VersionAssociation < ApplicationRecord
+
+end
