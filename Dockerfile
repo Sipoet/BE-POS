@@ -1,10 +1,11 @@
 # syntax=docker/dockerfile:1
-FROM ruby:3.2.2-slim-bullseye
+FROM ruby:3.2.4-slim-bullseye
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client build-essential apt-utils libpq-dev git nano
 WORKDIR /myapp
 COPY . /myapp
 
-RUN bundle install
+RUN  bundle config set --local path '.gemset'
+RUN  bundle install
 # add extra table needed on database
 # RUN rails db:migrate
 
