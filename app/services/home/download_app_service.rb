@@ -11,8 +11,7 @@ class Home::DownloadAppService < ApplicationService
     if !['android','windows'].include? platform
       render_json({message:'not supported platform'},{status: :unprocessed_entity})
     else
-      file_path = Dir["#{Rails.root}/app/assets/installer/#{platform}/*.#{APP_EXT[platform]}"].first
-      @controller.send_file file_path
+      @controller.redirect_to "https://raw.githubusercontent.com/Sipoet/FE-POS/main/src/#{platform}/Output/allegra-pos.#{APP_EXT[platform]}"
     end
 
 

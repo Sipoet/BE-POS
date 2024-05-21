@@ -1,3 +1,5 @@
+require 'yaml'
+require 'net/http'
 class Home::CheckUpdateService < ApplicationService
 
   APP_NAME  = {
@@ -28,15 +30,18 @@ class Home::CheckUpdateService < ApplicationService
   private
 
   def get_version(platform)
-    File.read("#{Rails.root}/app/assets/installer/#{platform}/version.txt")
+    uri = URI('https://raw.githubusercontent.com/Sipoet/FE-POS/main/pubspec.yaml')
+    yaml_string = Net::HTTP.get(uri)
+    data =  YAML.load(yaml_string) rescue {}
+    data['version']
   end
 
   def version_uptodated?(client_version, current_version)
     client_version_level = client_version.split('.')
     current_version_level = current_version.split('.')
     client_version_level.each.with_index do |level, index|
-      next if level.to_i == current_version[index].to_i
-      return level.to_i > current_version[index].to_i
+      next if level.to_i == current_version_level[index].to_i
+      return level.to_i > current_version_level[index].to_i
     end
     true
   end
