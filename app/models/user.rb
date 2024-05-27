@@ -8,8 +8,9 @@ class User < ApplicationRecord
     datatable_column(self,:role_id, :link, path:'roles',attribute_key: 'role.name', sort_key:'roles.name'),
     datatable_column(self,:created_at, :datetime),
     datatable_column(self,:updated_at, :datetime),
+    datatable_column(self,:current_sign_in_at, :datetime),
   ]
-  has_paper_trail ignore: [:id,:created_at, :updated_at, :jti,:encrypted_password]
+  has_paper_trail ignore: [:id,:created_at, :updated_at, :jti,:encrypted_password, :sign_in_count, :current_sign_in_at,:last_sign_in_at]
 
   belongs_to :role
 
