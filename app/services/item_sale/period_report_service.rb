@@ -83,7 +83,7 @@ class ItemSale::PeriodReportService < ApplicationService
       INNER JOIN #{Ipos::Sale.table_name} ON #{Ipos::Sale.table_name}.notransaksi  = #{Ipos::ItemSale.table_name}.notransaksi
       INNER JOIN #{Ipos::Item.table_name} ON #{Ipos::Item.table_name}.kodeitem  = #{Ipos::ItemSale.table_name}.kodeitem
       WHERE
-        #{Ipos::Sale.table_name}.tipe IN('KSR','JL')
+        #{Ipos::Sale.table_name}.tipe IN('KSR','JL') AND
         #{Ipos::Sale.table_name}.tanggal BETWEEN '#{@start_time}' AND '#{@end_time}'
         #{filter_query_suppliers}
         #{filter_query_item_types}

@@ -1,4 +1,6 @@
 class Payroll::Formula::HourlyDailyCalculator < Payroll::Formula::ApplicationCalculator
+  # variable1 = amount get per month
+  # variable2 = how many work hour include rest hour per day
 
   def calculate
     total_work_day = 0

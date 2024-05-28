@@ -1,5 +1,11 @@
 class Payroll::Formula::FulltimeHourPerDayCalculator < Payroll::Formula::ApplicationCalculator
 
+  # variable1 = total full amount when min full schedule day work
+  # variable2 = how many work hour include rest hour per day
+  # variable3 = how many deduction amount per day of absence after offset
+  # variable4 = offset of whether known absence is okay
+  # variable5 = offset of whether unknown absence is okay
+
   def calculate
     last_date = attendance_summary.details.last.date
     begin_date = employee.start_working_date
@@ -19,7 +25,7 @@ class Payroll::Formula::FulltimeHourPerDayCalculator < Payroll::Formula::Applica
   private
 
   def decrement_value(amount)
-    offset = payroll_lipne.variable4 || 0
+    offset = payroll_line.variable4 || 0
     offset2 = payroll_line.variable5 || 0
     known_offset = (attendance_summary.known_absence - offset)
     known_offset = 0 if known_offset < 0
