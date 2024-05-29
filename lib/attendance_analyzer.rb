@@ -46,6 +46,7 @@ class AttendanceAnalyzer
       if grouped_employee_attendances.blank?
         next if holidays[date].present?
         if employee_leave.blank?
+          Rails.logger.info "=== date: #{date}"
           result.add_detail(date: date, is_unknown_leave: true)
         elsif employee_leave.sick_leave?
           result.add_detail(date: date, is_sick: true)
@@ -54,9 +55,9 @@ class AttendanceAnalyzer
         end
         next
       end
-      work_hours = sum_work_hours(grouped_employee_attendances)
-      employee_attendance = grouped_employee_attendances.first
       begin_work_time = schedule_of(date, work_schedule.begin_work)
+      work_hours = sum_work_hours(grouped_employee_attendances, begin_work_time)
+      employee_attendance = grouped_employee_attendances.first
       result.add_detail(date: date, work_hours: work_hours, is_late: employee_attendance.start_time > begin_work_time)
     end
     result.total_day = 27 if result.total_day < 27
@@ -71,9 +72,10 @@ class AttendanceAnalyzer
                       .group_by(&:date)
   end
 
-  def sum_work_hours(employee_attendances)
+  def sum_work_hours(employee_attendances, schedule_start_time = nil)
     employee_attendances.sum do |employee_attendance|
-      difference_hour(employee_attendance.start_time, employee_attendance.end_time)
+      start_time = schedule_start_time.present? && schedule_start_time > employee_attendance.start_time ? schedule_start_time : employee_attendance.start_time
+      difference_hour(start_time, employee_attendance.end_time)
     end
   end
 

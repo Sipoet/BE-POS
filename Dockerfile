@@ -6,6 +6,7 @@ COPY . /myapp
 
 RUN  bundle config set --local path '.gemset'
 RUN  bundle install
+# RUN git config --global core.symlinks false
 # add extra table needed on database
 # RUN rails db:migrate
 
