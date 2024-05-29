@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_12_092123) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_29_074018) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -211,7 +211,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_12_092123) do
     t.decimal "nett_salary", null: false
     t.integer "sick_leave", default: 0, null: false
     t.integer "known_absence", default: 0, null: false
-    t.integer "work_days", default: 0, null: false
+    t.decimal "work_days", default: "0.0", null: false
     t.integer "unknown_absence", default: 0, null: false
     t.integer "paid_time_off", default: 0, null: false
     t.decimal "overtime_hour", default: "0.0", null: false
