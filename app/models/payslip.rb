@@ -7,7 +7,7 @@ class Payslip < ApplicationRecord
     datatable_column(self,:status, :enum),
     datatable_column(self,:start_date, :date),
     datatable_column(self,:end_date, :date),
-    datatable_column(self,:work_days, :integer),
+    datatable_column(self,:work_days, :decimal),
     datatable_column(self,:overtime_hour, :integer),
     datatable_column(self,:late, :integer),
     datatable_column(self,:sick_leave, :integer),

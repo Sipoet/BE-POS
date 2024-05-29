@@ -5,7 +5,7 @@ class PayslipReport < ApplicationModel
     datatable_column(self, :employee_start_working_date, :date, width:14),
     datatable_column(self, :start_date, :date, width:14),
     datatable_column(self, :end_date, :date, width:15),
-    datatable_column(self, :work_days, :integer, width:10),
+    datatable_column(self, :work_days, :decimal, width:10),
     datatable_column(self, :total_day, :integer, width:10),
     datatable_column(self, :overtime_hour, :integer, width:10),
     datatable_column(self, :late, :integer, width:5),
