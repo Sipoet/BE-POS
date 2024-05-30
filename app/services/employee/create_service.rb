@@ -17,6 +17,7 @@ class Employee::CreateService < ApplicationService
         employee.generate_code if employee.code.blank?
         employee.code = employee.code.downcase
         build_schedule(employee)
+        build_day_offs(employee)
         employee.save!
         render_json(EmployeeSerializer.new(employee),{status: :created})
       end
@@ -39,6 +40,17 @@ class Employee::CreateService < ApplicationService
     return if (permitted_params.blank? || permitted_params[:data].blank?)
     permitted_params[:data].each do |line_params|
       employee.work_schedules.build(line_params[:attributes])
+    end
+  end
+
+  def build_day_offs(employee)
+    permitted_params = params.required(:data)
+                              .required(:relationships)
+                              .required(:employee_day_offs)
+                              .permit(data:[:type,:id, attributes:[:day_of_week, :active_week]])
+    return if (permitted_params.blank? || permitted_params[:data].blank?)
+    permitted_params[:data].each do |line_params|
+      employee.employee_day_offs.build(line_params[:attributes])
     end
   end
 end

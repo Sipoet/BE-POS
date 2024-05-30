@@ -13,6 +13,7 @@ class Role::CreateService < ApplicationService
 
   def record_save?(role)
     ApplicationRecord.transaction do
+      update_work_schedules(role)
       update_access_authorizes(role)
       update_column_authorizes(role)
       update_attribute(role)
@@ -38,6 +39,18 @@ class Role::CreateService < ApplicationService
           controller: line_params[:attributes][:controller],
           action: action)
       end
+    end
+  end
+
+  def update_work_schedules(role)
+    permitted_params = params.required(:data)
+                              .required(:relationships)
+                              .required(:role_work_schedules)
+                              .permit(data:[:type,:id, attributes:[:group_name, :begin_active_at,:end_active_at, :level, :shift, :begin_work, :end_work, :day_of_week]])
+    return if (permitted_params.blank? || permitted_params[:data].blank?)
+    permitted_params[:data].each do |line_params|
+      actions = line_params[:attributes][:action].split(',') rescue []
+      role.role_work_schedules.build(line_params[:attributes])
     end
   end
 

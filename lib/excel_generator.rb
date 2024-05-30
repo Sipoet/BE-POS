@@ -40,7 +40,7 @@ class ExcelGenerator
 
   def add_format(workbook)
     @header_format = workbook.add_format(bold: true, size: 12)
-    @num_format = workbook.add_format(size: 12, num_format: '#,##0')
+    @num_format = workbook.add_format(size: 12, num_format: '#,##0.0')
     @general_format = workbook.add_format(size: 12)
     @date_format = workbook.add_format(size: 12, num_format: 'dd/mm/yyyy')
     @datetime_format = workbook.add_format(size: 12, num_format: 'dd/mm/yyyy hh:mm')

@@ -13,4 +13,8 @@ class RoleSerializer
       AccessAuthorize.new(id:actions.first.id, controller: controller, action: actions.map(&:action).join(','))
     end
   end
+
+  has_many :role_work_schedules, if: Proc.new { |record, params| params[:include].include?('role_work_schedules') rescue false } do |record, params|
+    record.role_work_schedules.order(level: :asc, day_of_week: :asc, shift: :asc)
+  end
 end

@@ -58,7 +58,7 @@ class Payslip::GeneratePayslipService < ApplicationService
         amount: amount)
       recent_sum += amount *(payroll_line.earning? ? 1 : -1)
     end
-    payslip.work_days = attendance_summary.total_full_work_days > 0 ? attendance_summary.total_full_work_days.to_i : attendance_summary.work_days.to_i
+    payslip.work_days = attendance_summary.total_full_work_days > 0 ? attendance_summary.total_full_work_days : attendance_summary.work_days
     payslip.notes="HK#{payslip.work_days},TK#{attendance_summary.total_day},OT#{overtime_hour},TK#{attendance_summary.unknown_absence},IZ#{attendance_summary.known_absence},SKS#{attendance_summary.sick_leave}"
     calculate_payslip(payslip)
     payslip.save!

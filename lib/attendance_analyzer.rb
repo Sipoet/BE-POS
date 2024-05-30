@@ -8,63 +8,104 @@ class AttendanceAnalyzer
   end
 
   def analyze
-    @work_schedules = @employee.work_schedules
-                             .group_by(&:day_of_week)
-                             .each_with_object({}) do |(key,values),obj|
-      obj[key] = values.sort_by{|value| -1 * value.active_week_for_database}
-    end
-    employee_leaves = EmployeeLeave.where(employee_id: @employee.id,
+    @work_schedules = find_employee_work_schedules
+    @employee_leaves = EmployeeLeave.where(employee_id: @employee.id,
                                           date: @start_date..@end_date)
                                     .index_by(&:date)
-    holidays = Holiday.where(date: @start_date..@end_date)
+    @changed_employee_leaves = EmployeeLeave.where(employee_id: @employee.id,
+                                    change_date: @start_date..@end_date)
+                              .index_by(&:change_date)
+    @employee_day_offs = EmployeeDayOff.where(employee: @employee)
+                                       .group_by(&:day_of_week)
+    @holidays = Holiday.where(date: @start_date..@end_date)
                       .index_by(&:date)
     employee_attendances = find_attendances
     result = Result.new
     result.paid_time_off = BigDecimal(@payroll.paid_time_off)
     result.is_first_work = @employee.start_working_date.between?(@start_date,@end_date)
     result.is_last_work = @employee.end_working_date.present? && @employee.end_working_date.between?(@start_date,@end_date)
-    paid_time_off = @payroll.paid_time_off
-    end_period = @start_date.next_month
     (@start_date..@end_date).each do |date|
-      grouped_employee_attendances = employee_attendances[date]
-      work_schedule = find_work_schedule(date)
-      if work_schedule.blank?
-        work_schedule = find_work_schedule_from_leave(date)
-      elsif holidays[date].nil?
+      is_scheduled_work = scheduled_work?(date)
+      if is_scheduled_work
         result.total_day += 1
       end
-      if work_schedule.blank?
-        if grouped_employee_attendances.present?
-          work_hours = sum_work_hours(grouped_employee_attendances)
-          result.add_detail(date: date, work_hours: work_hours)
-        end
-        next
+      grouped_employee_attendances = employee_attendances[date] || []
+
+      work_hours = 0
+      is_late = false
+      grouped_employee_attendances.each do |employee_attendance|
+        day_work_schedules = day_work_schedules = @work_schedules[date.cwday] || find_work_schedules_from_leave(date) || @work_schedules.values.try(:first)
+        work_schedule = find_estimate_work_schedule(day_work_schedules,employee_attendance)
+        work_hours += work_hours_of(employee_attendance, work_schedule)
+        is_late ||= employee_attendance.start_time > schedule_of(date,work_schedule.begin_work)
       end
-      next if @employee.start_working_date > date
-      next if @employee.end_working_date.present? && @employee.end_working_date < date
-      employee_leave = employee_leaves[date]
-      if grouped_employee_attendances.blank?
-        next if holidays[date].present?
-        if employee_leave.blank?
-          Rails.logger.info "=== date: #{date}"
-          result.add_detail(date: date, is_unknown_leave: true)
-        elsif employee_leave.sick_leave?
-          result.add_detail(date: date, is_sick: true)
-        elsif !employee_leave.change_day?
-          result.add_detail(date: date, is_known_leave: true)
-        end
-        next
+      if work_hours > 0
+        result.add_detail(
+          date: date,
+          work_hours: work_hours,
+          is_late: is_late
+        )
+      elsif employee_still_working?(date) && is_scheduled_work
+        add_leave(result, date)
       end
-      begin_work_time = schedule_of(date, work_schedule.begin_work)
-      work_hours = sum_work_hours(grouped_employee_attendances, begin_work_time)
-      employee_attendance = grouped_employee_attendances.first
-      result.add_detail(date: date, work_hours: work_hours, is_late: employee_attendance.start_time > begin_work_time)
     end
-    result.total_day = 27 if result.total_day < 27
+    result.total_day = 26 if result.total_day < 26
     result
   end
 
   private
+
+  def find_employee_work_schedules
+    @employee.role
+            .role_work_schedules
+            .where(begin_active_at: ..@end_date, end_active_at: @start_date..)
+            .group_by(&:day_of_week)
+            .each_with_object({}) do |(key,values),obj|
+      current_level = 0
+      values.group_by(&:level).each do |level, level_values|
+        if current_level <= level
+          obj[key] = level_values.sort_by(&:shift)
+        end
+      end
+    end
+  end
+
+  def employee_still_working?(date)
+    return false if @employee.start_working_date > date
+    return !(@employee.end_working_date.present? && @employee.end_working_date < date)
+  end
+
+  def add_leave(result, date)
+    employee_leave = @employee_leaves[date]
+    if employee_leave.blank?
+      result.add_detail(date: date, is_unknown_leave: true)
+    elsif employee_leave.sick_leave?
+      result.add_detail(date: date, is_sick: true)
+    elsif !employee_leave.change_day?
+      result.add_detail(date: date, is_known_leave: true)
+    end
+  end
+
+  def scheduled_work?(date)
+    return false if @holidays[date].present?
+    day_offs = @employee_day_offs[date.cwday] || []
+    day_offs.each do |employee_day_off|
+      return false if employee_day_off.all_week?
+      if employee_day_off.odd_week? == date.cweek.odd?
+        return false
+      end
+      if employee_day_off.even_week? == date.cweek.even?
+        return false
+      end
+      if date.prev_week.end_of_week.month < date.month && employee_day_off.first_week_of_month?
+        return false
+      end
+      if date.next_week.month > date.month && employee_day_off.last_week_of_month?
+        return false
+      end
+    end
+    @work_schedules[date.cwday].present?
+  end
 
   def find_attendances
     EmployeeAttendance.where(employee_id: @employee.id,
@@ -72,45 +113,44 @@ class AttendanceAnalyzer
                       .group_by(&:date)
   end
 
-  def sum_work_hours(employee_attendances, schedule_start_time = nil)
-    employee_attendances.sum do |employee_attendance|
-      start_time = schedule_start_time.present? && schedule_start_time > employee_attendance.start_time ? schedule_start_time : employee_attendance.start_time
-      difference_hour(start_time, employee_attendance.end_time)
+  def work_hours_of(employee_attendance, work_schedule, is_allowed_overtime = true)
+    schedule_start_time = schedule_of(employee_attendance.date, work_schedule.begin_work)
+    start_time = schedule_start_time >= employee_attendance.start_time ? schedule_start_time : employee_attendance.start_time
+    end_time = if is_allowed_overtime
+      employee_attendance.end_time
+    else
+      [employee_attendance.end_time, schedule_of(employee_attendance.date, work_schedule.end_work)].min
     end
+    difference_hour(start_time, end_time)
+
   end
 
-  def find_work_schedule(date)
-    day_work_schedules = @work_schedules[date.cwday] || []
-    date_status = [
-      date.cweek.odd?,
-      date.cweek.even?,
-      date.prev_week.end_of_week.month < date.month,
-      date.next_week.month > date.month
-    ]
-    day_work_schedules.each do |work_schedule|
-      if work_schedule.all_week? || (date_status[0] && work_schedule.odd_week?) ||
-        (date_status[1] && work_schedule.even_week?) ||
-        (date_status[2] && work_schedule.first_week_of_month?) ||
-        (date_status[3] && work_schedule.last_week_of_month?)
+  def find_estimate_work_schedule(day_work_schedules, employee_attendance)
+    probably_index = 0
+    diff_hour = 48
+    date = employee_attendance.date
+    day_work_schedules = day_work_schedules.sort_by{|work_schedule| schedule_of(date,work_schedule.begin_work)}
+    day_work_schedules.each.with_index do |work_schedule, index|
+      schedule_start_time = schedule_of(date, work_schedule.begin_work)
+      schedule_end_time = schedule_of(date, work_schedule.end_work)
+      if employee_attendance.end_time >= schedule_end_time && schedule_start_time >= employee_attendance.start_time
         return work_schedule
       end
+      line_diff_hour = difference_hour(employee_attendance.end_time, schedule_end_time) + difference_hour(employee_attendance.start_time, schedule_start_time)
+      if diff_hour > line_diff_hour
+        diff_hour = line_diff_hour
+        probably_index = index
+      end
     end
-    nil
+    day_work_schedules[probably_index]
   end
 
-  def find_work_schedule_from_leave(date)
-    employee_leave = EmployeeLeave.find_by(employee_id: @employee.id, change_date: date)
+  def find_work_schedules_from_leave(date)
+    employee_leave = @changed_employee_leaves[date]
     return nil if employee_leave.blank?
     @work_schedules.values
                    .flatten
-                   .find{|work_schedule|work_schedule.shift == employee_leave.change_shift}
-  end
-
-  def find_changed_shift(date)
-    employee_leave = EmployeeLeave.find_by(
-      employee_id: @employee.id,
-      change_date: date)
-    employee_leave&.shift
+                   .select{|work_schedule|work_schedule.shift == employee_leave.change_shift}
   end
 
   def difference_hour(time_a, time_b)

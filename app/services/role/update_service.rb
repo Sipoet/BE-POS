@@ -14,6 +14,7 @@ class Role::UpdateService < ApplicationService
 
   def record_save?(role)
     ApplicationRecord.transaction do
+      build_schedule(role)
       update_access_authorizes(role)
       update_column_authorizes(role)
       update_attribute(role)
@@ -41,6 +42,25 @@ class Role::UpdateService < ApplicationService
           action: action)
       end
     end
+  end
+
+  def build_schedule(role)
+    permitted_params = params.required(:data)
+                              .required(:relationships)
+                              .required(:role_work_schedules)
+                              .permit(data:[:type, :id, attributes:[:group_name, :begin_active_at,:end_active_at, :level,:shift, :begin_work, :end_work,:day_of_week]])
+    return if (permitted_params.blank? || permitted_params[:data].blank?)
+    role_work_schedules = role.role_work_schedules.index_by(&:id)
+    permitted_params[:data].each do |line_params|
+      work_schedule = role_work_schedules[line_params[:id].to_i]
+      if work_schedule.present?
+        work_schedule.attributes = line_params[:attributes]
+        role_work_schedules.delete(line_params[:id])
+      else
+        work_schedule = role.role_work_schedules.build(line_params[:attributes])
+      end
+    end
+    role_work_schedules.values.map(&:mark_for_destruction)
   end
 
   def update_column_authorizes(role)

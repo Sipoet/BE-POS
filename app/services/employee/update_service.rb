@@ -16,6 +16,7 @@ class Employee::UpdateService < ApplicationService
           FileStore.where(code: employee.image_code).delete_all
         end
         build_schedule(employee)
+        build_day_offs(employee)
         permitted_params[:code] = permitted_params[:code].try(:downcase)
         employee.update!(permitted_params)
         render_json(EmployeeSerializer.new(employee))
@@ -48,5 +49,24 @@ class Employee::UpdateService < ApplicationService
       end
     end
     work_schedules.values.map(&:mark_for_destruction)
+  end
+
+  def build_schedule(employee)
+    permitted_params = params.required(:data)
+                              .required(:relationships)
+                              .required(:employee_day_offs)
+                              .permit(data:[:type,:id, attributes:[:day_of_week,:active_week]])
+    return if (permitted_params.blank? || permitted_params[:data].blank?)
+    employee_day_offs = employee.employee_day_offs.index_by(&:id)
+    permitted_params[:data].each do |line_params|
+      employee_day_off = employee_day_offs[line_params[:id].to_i]
+      if employee_day_off.present?
+        employee_day_off.attributes = line_params[:attributes]
+        employee_day_offs.delete(line_params[:id])
+      else
+        employee_day_off = employee.employee_day_offs.build(line_params[:attributes])
+      end
+    end
+    employee_day_offs.values.map(&:mark_for_destruction)
   end
 end

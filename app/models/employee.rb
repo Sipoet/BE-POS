@@ -39,7 +39,8 @@ class Employee < ApplicationRecord
   validates :shift, presence: true
 
   has_many :work_schedules, dependent: :destroy
-  accepts_nested_attributes_for :work_schedules, allow_destroy: true
+  has_many :employee_day_offs, dependent: :destroy
+  accepts_nested_attributes_for :work_schedules, :employee_day_offs, allow_destroy: true
 
   def generate_code
     self.code = SecureRandom.alphanumeric(6).upcase

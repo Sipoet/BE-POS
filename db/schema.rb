@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_29_074018) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_30_003858) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -105,6 +105,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_29_074018) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["employee_id", "start_time"], name: "index_employee_attendances_on_employee_id_and_start_time", unique: true
+  end
+
+  create_table "employee_day_offs", force: :cascade do |t|
+    t.integer "day_of_week", null: false
+    t.integer "active_week", default: 0, null: false
+    t.integer "employee_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "employee_leaves", force: :cascade do |t|
@@ -219,6 +227,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_29_074018) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "total_day", default: 0, null: false
+  end
+
+  create_table "role_work_schedules", force: :cascade do |t|
+    t.string "group_name", null: false
+    t.date "begin_active_at", null: false
+    t.date "end_active_at", null: false
+    t.integer "level", default: 1, null: false
+    t.integer "shift", null: false
+    t.string "begin_work", null: false
+    t.string "end_work", null: false
+    t.integer "day_of_week", null: false
+    t.integer "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id", "level", "day_of_week", "shift"], name: "idx_on_role_id_level_day_of_week_shift_c9edb7ea3c"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -2311,6 +2334,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_29_074018) do
   add_foreign_key "discounts", "tbl_supel", column: "blacklist_supplier_code", primary_key: "kode"
   add_foreign_key "discounts", "tbl_supel", column: "supplier_code", primary_key: "kode"
   add_foreign_key "employee_attendances", "employees"
+  add_foreign_key "employee_day_offs", "employees"
   add_foreign_key "employee_leaves", "employees"
   add_foreign_key "employees", "payrolls"
   add_foreign_key "employees", "roles"
@@ -2318,6 +2342,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_29_074018) do
   add_foreign_key "payslip_lines", "payslips"
   add_foreign_key "payslips", "employees"
   add_foreign_key "payslips", "payrolls"
+  add_foreign_key "role_work_schedules", "roles"
   add_foreign_key "settings", "users"
   add_foreign_key "tbl_acc_sa", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_acc_sa_matauang", on_update: :cascade
   add_foreign_key "tbl_acc_sa", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_acc_sa_kodeacc", on_update: :cascade, on_delete: :cascade
