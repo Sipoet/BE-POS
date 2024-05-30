@@ -13,4 +13,8 @@ class EmployeeSerializer
     employee.work_schedules.order(shift: :asc, day_of_week: :asc)
   end
 
+  has_many :employee_day_offs, if: Proc.new { |record, params| params[:include].include?('employee_day_offs') rescue false } do |employee|
+    employee.employee_day_offs.order(day_of_week: :asc)
+  end
+
 end
