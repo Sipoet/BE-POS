@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM ruby:3.2.4-slim-bullseye
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client build-essential apt-utils libpq-dev git nano
+RUN apt-get update -qq && apt-get install -y nodejs postgresql-client build-essential apt-utils libpq-dev nano
 WORKDIR /myapp
 COPY . /myapp
 
