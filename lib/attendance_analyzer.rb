@@ -73,7 +73,6 @@ class AttendanceAnalyzer
             .role_work_schedules
             .where(begin_active_at: ..@end_date, end_active_at: @start_date..)
             .group_by(&:day_of_week)
-    end
   end
 
   def employee_still_working?(date)
