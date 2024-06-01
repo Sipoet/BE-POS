@@ -23,3 +23,5 @@ id:
         bank: 'Bank'
         bank_account: 'No Rekening Bank'
         bank_register_name: 'Bank Atas Nama'
+        tax_number: 'NPWP'
+        marital_status: 'Status Nikah'
