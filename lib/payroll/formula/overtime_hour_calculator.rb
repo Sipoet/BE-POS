@@ -10,11 +10,10 @@ class Payroll::Formula::OvertimeHourCalculator < Payroll::Formula::ApplicationCa
     @total_overtime = 0
     offset = payroll_line.variable2
     attendance_summary.details.each do|detail|
-      min_work_hour = payroll_line.variable3
+      min_work_hour = detail.scheduled_work_hours
       min_work_hour += (payroll_line.variable5 || 1) if detail.is_late
       if detail.work_hours >= min_work_hour + offset
         @total_overtime += [(detail.work_hours - min_work_hour),max_hour_per_day].min
-        # Rails.logger.info "work_hours #{detail.work_hours} offset : #{offset}, total overtime #{@total_overtime} max hour: #{max_hour_per_day}"
       end
     end
     attendance_summary.overtime_hours = @total_overtime

@@ -15,6 +15,8 @@ class Employee < ApplicationRecord
     datatable_column(self,:bank, :string),
     datatable_column(self,:bank_account, :string),
     datatable_column(self,:bank_register_name, :string),
+    datatable_column(self,:marital_status, :enum),
+    datatable_column(self,:tax_number, :string),
     datatable_column(self,:description, :string),
     datatable_column(self,:debt, :decimal),
     datatable_column(self,:image_code, :image),
@@ -25,6 +27,14 @@ class Employee < ApplicationRecord
   enum :status, {
     inactive: 0 ,
     active: 1
+  }
+
+  enum :marital_status, {
+    single: 0,
+    married: 1,
+    married_1_child: 2,
+    married_2_child: 3,
+    married_3_or_more_child: 4
   }
 
   belongs_to :role

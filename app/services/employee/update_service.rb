@@ -1,13 +1,17 @@
 class Employee::UpdateService < ApplicationService
 
   def execute_service
+    permitted_column = permitted_column_names(Employee)
+    if permitted_column == ALL_COLUMN
+      permitted_column = [:code,:name,:role_id,:start_working_date,
+      :end_working_date, :description,:payroll_id,
+      :id_number,:contact_number, :address, :bank_register_name,
+      :marital_status, :tax_number,
+      :bank, :bank_account, :status, :image_code]
+    end
     permitted_params = @params.required(:data)
                               .required(:attributes)
-                              .permit(:code,:name,:role_id,:start_working_date,
-                                      :end_working_date, :description,:payroll_id,
-                                      :id_number,:contact_number, :address,
-                                      :bank, :bank_account, :status, :image_code
-                                      )
+                              .permit(*permitted_column)
     employee = Employee.find(params[:id])
     raise RecordNotFound.new(params[:id],Employee.model_name.human) if employee.nil?
     begin
@@ -51,7 +55,7 @@ class Employee::UpdateService < ApplicationService
     work_schedules.values.map(&:mark_for_destruction)
   end
 
-  def build_schedule(employee)
+  def build_day_offs(employee)
     permitted_params = params.required(:data)
                               .required(:relationships)
                               .required(:employee_day_offs)

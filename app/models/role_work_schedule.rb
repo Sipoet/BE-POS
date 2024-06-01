@@ -1,6 +1,6 @@
 class RoleWorkSchedule < ApplicationRecord
   LAST_END_DATE = Date.new(99999,12,31).freeze
-
+  has_paper_trail ignore: [:id, :created_at, :updated_at]
   validates :begin_work, presence: true
   validates :end_work, presence: true
   validates :day_of_week, presence: true, numericality: {greater_than:0, less_than: 8, integer: true}

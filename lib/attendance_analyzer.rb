@@ -32,17 +32,20 @@ class AttendanceAnalyzer
       grouped_employee_attendances = employee_attendances[date] || []
 
       work_hours = 0
+      scheduled_work_hours = 0
       is_late = false
       grouped_employee_attendances.each do |employee_attendance|
         day_work_schedules = day_work_schedules = @work_schedules[date.cwday] || find_work_schedules_from_leave(date) || @work_schedules.values.try(:first)
         work_schedule = find_estimate_work_schedule(day_work_schedules,employee_attendance)
         work_hours += work_hours_of(employee_attendance, work_schedule)
+        scheduled_work_hours += schedule_work_hours(work_schedule)
         is_late ||= employee_attendance.start_time > schedule_of(date,work_schedule.begin_work)
       end
       if work_hours > 0
         result.add_detail(
           date: date,
           work_hours: work_hours,
+          scheduled_work_hours: scheduled_work_hours,
           is_late: is_late
         )
       elsif employee_still_working?(date) && is_scheduled_work
@@ -55,18 +58,21 @@ class AttendanceAnalyzer
 
   private
 
+  def find_work_schedules_based_shift(shift,date)
+    (@work_schedules[date.cwday] || []).select{|x|x.shift == shift}
+  end
+
+  def schedule_work_hours(work_schedule)
+    date1 = Date.today
+    date2 = work_schedule.begin_work > work_schedule.end_work ? Date.tomorrow : Date.today
+    difference_hour(schedule_of(date1,work_schedule.begin_work),schedule_of(date2,work_schedule.end_work))
+  end
+
   def find_employee_work_schedules
     @employee.role
             .role_work_schedules
             .where(begin_active_at: ..@end_date, end_active_at: @start_date..)
             .group_by(&:day_of_week)
-            .each_with_object({}) do |(key,values),obj|
-      current_level = 0
-      values.group_by(&:level).each do |level, level_values|
-        if current_level <= level
-          obj[key] = level_values.sort_by(&:shift)
-        end
-      end
     end
   end
 
@@ -78,6 +84,7 @@ class AttendanceAnalyzer
   def add_leave(result, date)
     employee_leave = @employee_leaves[date]
     if employee_leave.blank?
+      Rails.logger.info "=== alpha #{date}"
       result.add_detail(date: date, is_unknown_leave: true)
     elsif employee_leave.sick_leave?
       result.add_detail(date: date, is_sick: true)
@@ -122,15 +129,17 @@ class AttendanceAnalyzer
       [employee_attendance.end_time, schedule_of(employee_attendance.date, work_schedule.end_work)].min
     end
     difference_hour(start_time, end_time)
-
   end
 
   def find_estimate_work_schedule(day_work_schedules, employee_attendance)
     probably_index = 0
     diff_hour = 48
     date = employee_attendance.date
-    day_work_schedules = day_work_schedules.sort_by{|work_schedule| schedule_of(date,work_schedule.begin_work)}
-    day_work_schedules.each.with_index do |work_schedule, index|
+    date_work_schedules = day_work_schedules.select{|work_schedule|employee_attendance.date.between?(work_schedule.begin_active_at,work_schedule.end_active_at)}
+    level = date_work_schedules.map(&:level).uniq.max
+    date_work_schedules = date_work_schedules.select{|work_schedule| work_schedule.level == level}
+                                              .sort_by{|work_schedule| schedule_of(date,work_schedule.begin_work)}
+    date_work_schedules.each.with_index do |work_schedule, index|
       schedule_start_time = schedule_of(date, work_schedule.begin_work)
       schedule_end_time = schedule_of(date, work_schedule.end_work)
       if employee_attendance.end_time >= schedule_end_time && schedule_start_time >= employee_attendance.start_time
@@ -179,11 +188,12 @@ class AttendanceAnalyzer
       @details = []
     end
 
-    def add_detail(date:, is_late: false, work_hours: 0, is_sick: false, is_known_leave: false, is_unknown_leave: false)
+    def add_detail(date:, is_late: false, work_hours: 0,scheduled_work_hours: 0, is_sick: false, is_known_leave: false, is_unknown_leave: false)
       @details << ResultDetail.new(
         date: date,
         is_late: is_late,
         work_hours: work_hours,
+        scheduled_work_hours: scheduled_work_hours,
         is_sick: is_sick,
         is_known_leave: is_known_leave,
         is_unknown_leave: is_unknown_leave
@@ -218,14 +228,16 @@ class AttendanceAnalyzer
 
   class ResultDetail
     attr_accessor :date, :is_worked, :is_late, :work_hours,
-                  :is_sick, :is_known_leave, :is_unknown_leave
-    def initialize(date:, is_late: false, work_hours: 0, is_sick: false, is_known_leave: false, is_unknown_leave: false)
+                  :is_sick, :is_known_leave, :is_unknown_leave,
+                  :scheduled_work_hours
+    def initialize(date:, is_late: false, work_hours: 0, is_sick: false, is_known_leave: false, is_unknown_leave: false, scheduled_work_hours: 0)
       @date = date
       @is_late = is_late
       @work_hours = work_hours
       @is_sick = is_sick
       @is_known_leave = is_known_leave
       @is_unknown_leave = is_unknown_leave
+      @scheduled_work_hours = scheduled_work_hours
     end
 
     def work_in?

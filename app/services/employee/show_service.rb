@@ -15,7 +15,7 @@ class Employee::ShowService < ApplicationService
 
   def extract_params
     allowed_columns = Employee::TABLE_HEADER.map(&:name)
-    allowed_fields = [:employee, :work_schedules]
+    allowed_fields = [:employee, :work_schedules, :employee_day_offs]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)

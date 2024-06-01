@@ -11,8 +11,8 @@ class Payroll::Formula::FulltimeHourPerDayCalculator < Payroll::Formula::Applica
     begin_date = employee.start_working_date
     return 0 if ((begin_date..last_date).to_a.length < 7 && attendance_summary.is_last_work)
     full_work_days = 0
-    attendance_summary.work_hours.each do |hour|
-      full_work_days += [hour,payroll_line.variable2].min.to_d / payroll_line.variable2.to_d
+    attendance_summary.details.each do |detail|
+      full_work_days += [detail.work_hours,detail.scheduled_work_hours].min.to_d / payroll_line.variable2.to_d
     end
     attendance_summary.total_full_work_days = full_work_days.round(1)
     total = payroll_line.variable1

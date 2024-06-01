@@ -1,6 +1,6 @@
 class RoleSerializer
   include JSONAPI::Serializer
-  attributes :name
+  attributes :name, :created_at, :updated_at
 
   has_many :column_authorizes, if: Proc.new { |record, params| params[:include].include?('column_authorizes') rescue false } do |record, params|
     record.column_authorizes.group_by(&:table).map do |table, columns|
