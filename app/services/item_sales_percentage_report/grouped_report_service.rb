@@ -53,7 +53,6 @@ class ItemSalesPercentageReport::GroupedReportService < ApplicationService
         index
       end
     end
-    Rails.logger.info "======#{table_headers.map(&:name)} =============== #{@group_names} ==== #{excluded_list}"
     generator.add_column_definitions(table_headers)
     generator.add_data(data)
     generator.add_metadata({
