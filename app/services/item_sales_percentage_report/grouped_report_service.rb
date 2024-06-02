@@ -59,7 +59,8 @@ class ItemSalesPercentageReport::GroupedReportService < ApplicationService
     generator.add_metadata({
       suppliers: @suppliers,
       brands: @brands,
-      item_types: @item_types
+      item_types: @item_types,
+      group_names: @group_names
     })
     generator.generate('laporan-penjualan-per-supplier')
   end

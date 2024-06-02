@@ -55,7 +55,7 @@ class ExcelGenerator
   end
 
   def add_header(workbook, worksheet)
-    worksheet.set_row(0, columns.length, @header_format)
+    worksheet.set_row(0, 16, @header_format)
     columns.each.with_index(0) do |column, index|
       worksheet.set_column(index, index, column.width)
       worksheet.write(0,index, column.humanize_name, @header_format)

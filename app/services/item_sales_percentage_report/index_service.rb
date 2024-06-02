@@ -30,9 +30,9 @@ class ItemSalesPercentageReport::IndexService < ApplicationService
 
   def find_reports(filter)
     query = ItemSalesPercentageReport.order(item_code: :asc)
-    query = query.where(brand: filter[:brands]) if filter[:brands].present?
+    query = query.where(brand_name: filter[:brands]) if filter[:brands].present?
     query = query.where(supplier_code: filter[:suppliers]) if filter[:suppliers].present?
-    query = query.where(item_type: filter[:item_types]) if filter[:item_types].present?
+    query = query.where(item_type_name: filter[:item_types]) if filter[:item_types].present?
     query = query.where(item_code: filter[:item_codes]) if filter[:item_codes].present?
     if filter[:warehouse_stock].present?
       sign_symbol, num = filter[:warehouse_stock].split('-')
