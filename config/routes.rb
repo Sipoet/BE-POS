@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   resources :item_sales_percentage_reports, only: [:index] do
     get :columns, on: :collection
     get :group_by_supplier, on: :collection
+    get :grouped_report, on: :collection
   end
 
   resources :items, param: :code, only: [:index, :show]

@@ -4,11 +4,11 @@ class ItemSalesPercentageReport < ApplicationRecord
   TABLE_HEADER = [
     datatable_column(self,:item_code, :string),
     datatable_column(self,:item_name, :string),
-    datatable_column(self,:item_type, :string),
+    datatable_column(self,:item_type_name, :string),
     datatable_column(self,:item_type_desc, :string),
     datatable_column(self,:supplier_code, :string),
     datatable_column(self,:supplier_name, :string),
-    datatable_column(self,:brand, :string),
+    datatable_column(self,:brand_name, :string),
     datatable_column(self,:recent_purchase_date, :date),
     datatable_column(self,:warehouse_stock, :integer),
     datatable_column(self,:store_stock, :integer),
@@ -19,6 +19,7 @@ class ItemSalesPercentageReport < ApplicationRecord
     datatable_column(self,:sell_price, :decimal),
     datatable_column(self,:number_of_sales, :integer),
     datatable_column(self,:sales_total, :decimal),
+    datatable_column(self,:gross_profit, :decimal),
     datatable_column(self,:percentage_sales , :percentage)
   ].freeze
 

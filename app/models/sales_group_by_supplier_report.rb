@@ -7,7 +7,10 @@ class SalesGroupBySupplierReport < ApplicationModel
     datatable_column(self, :number_of_purchase, :integer),
     datatable_column(self, :number_of_sales, :integer),
     datatable_column(self, :stock_left, :integer),
-    datatable_column(self, :sales_percentage, :percentage),
+    datatable_column(self, :purchase_total, :integer),
+    datatable_column(self, :sales_total, :integer),
+    datatable_column(self, :gross_profit, :integer),
+    datatable_column(self, :sales_percentage, :percentage)
 ].freeze
 
   attr_accessor :supplier_code,
@@ -15,6 +18,9 @@ class SalesGroupBySupplierReport < ApplicationModel
                 :item_type_name,
                 :number_of_purchase,
                 :number_of_sales,
+                :sales_total,
+                :purchase_total,
+                :gross_profit,
                 :brand_name
   def initialize(row)
     @supplier_code = row['supplier_code']
@@ -23,6 +29,9 @@ class SalesGroupBySupplierReport < ApplicationModel
     @number_of_purchase = row['number_of_purchase'].to_i
     @number_of_sales = row['number_of_sales'].to_i
     @brand_name = row['brand_name']
+    @purchase_total = row['purchase_total']
+    @sales_total = row['sales_total']
+    @gross_profit = row['gross_profit']
   end
 
   def id

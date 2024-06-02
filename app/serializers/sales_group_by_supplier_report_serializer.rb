@@ -3,7 +3,10 @@ class SalesGroupBySupplierReportSerializer
   attributes  :supplier_code,
               :supplier_name,
               :item_type_name,
-              :brand_name
+              :brand_name,
+              :sales_total,
+              :purchase_total,
+              :gross_profit
   [
     :number_of_purchase,
     :number_of_sales,
