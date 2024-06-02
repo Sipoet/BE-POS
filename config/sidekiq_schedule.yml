@@ -2,8 +2,12 @@ refresh_discount:
   cron: "0 6 * * *"
   class: "RefreshAllPromotionJob"
   queue: low
+toggle_customer_group_discount:
+  cron: "0 1 * * *"
+  class: "ToggleCustomerDiscountJob"
+  queue: low
 backup_database:
-  cron: "0 */2 * * *"
+  cron: "0 */1 * * *"
   class: "BackupDbJob"
   queue: default
 remove_expired_image:

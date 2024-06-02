@@ -15,14 +15,24 @@ class Setting < ApplicationRecord
     Cache.delete("setting-#{key_name}")
   end
 
-  def self.get(key_name, user_id: nil)
-    cache_key = ['setting',key_name,user_id].compact.join('-')
-    cache_data = Cache.get(cache_key)
-    return JSON.parse(cache_data)['data'] if cache_data.present?
-    setting =  self.find_by(key_name: key_name, user_id: user_id)
-    return nil if setting.nil?
-    Cache.set(cache_key,setting.value)
-    return JSON.parse(setting.value)['data']
+  class << self
+
+    def get(key_name, user_id: nil)
+      cache_key = ['setting',key_name,user_id].compact.join('-')
+      cache_data = Cache.get(cache_key)
+      return JSON.parse(cache_data)['data'] if cache_data.present?
+      setting =  self.find_by(key_name: key_name, user_id: user_id)
+      return nil if setting.nil?
+      Cache.set(cache_key,setting.value)
+      return JSON.parse(setting.value)['data']
+    end
+
+    def set!(key_name, value, user_id: nil)
+      setting = self.find_or_initialize_by(key_name:key_name, user_id: user_id)
+      setting.value = {data: value}.to_json
+      setting.save!
+      setting
+    end
   end
 
 end
