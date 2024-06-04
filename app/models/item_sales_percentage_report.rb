@@ -23,6 +23,10 @@ class ItemSalesPercentageReport < ApplicationRecord
     datatable_column(self,:percentage_sales , :percentage)
   ].freeze
 
+  def readonly?
+    true
+  end
+
   def id
     item_code
   end

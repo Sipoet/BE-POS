@@ -108,12 +108,12 @@ class ItemSalesPercentageReport::GroupedReportService < ApplicationService
 
   def filter_query_item_types
     return if @item_types.blank?
-    return "#{ApplicationRecord.sanitize_sql(["#{ItemSalesPercentageReport.table_name}.item_type in (?)",@item_types])}"
+    return "#{ApplicationRecord.sanitize_sql(["#{ItemSalesPercentageReport.table_name}.item_type_name in (?)",@item_types])}"
   end
 
   def filter_query_brands
     return if @brands.blank?
-    return "#{ApplicationRecord.sanitize_sql(["#{ItemSalesPercentageReport.table_name}.brand in (?)",@brands])}"
+    return "#{ApplicationRecord.sanitize_sql(["#{ItemSalesPercentageReport.table_name}.brand_name in (?)",@brands])}"
   end
 
 end

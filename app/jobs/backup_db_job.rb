@@ -32,7 +32,7 @@ class BackupDbJob < ApplicationJob
     limit_db = Setting.get('number_of_db_saved') || 50
     files.sort_by{|file| file.ctime}.each do |file|
       if file.ctime <= before_time || total_db > limit_db
-        Sidekiq.logger.info "==========DELETE #{file.path}"
+        Sidekiq.logger.debug "==========DELETE #{file.path}"
         file.close
         File.delete(file.path)
         total_db -= 1

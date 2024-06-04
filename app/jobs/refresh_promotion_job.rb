@@ -133,7 +133,6 @@ class RefreshPromotionJob < ApplicationJob
     promotion.pot3 = 0
     promotion.pot4 = 0
     promotion.tipeper = (Discount.discount_types[discount.discount_type] + 1).to_s
-    Sidekiq.logger.info "======= #{promotion.tipeper}"
     promotion.save!
     promotion
   end
