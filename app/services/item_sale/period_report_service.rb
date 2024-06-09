@@ -77,6 +77,7 @@ class ItemSale::PeriodReportService < ApplicationService
         #{Ipos::Item.table_name}.hargapokok AS buy_price,
         #{Ipos::Item.table_name}.hargajual1 AS sell_price,
         COALESCE(SUM(#{Ipos::ItemSale.table_name}.harga * #{Ipos::ItemSale.table_name}.jumlah),0) AS subtotal,
+        ROUND(SUM(#{Ipos::ItemSale.table_name}.total - (#{Ipos::Item.table_name}.hargapokok * #{Ipos::ItemSale.table_name}.jumlah) - (#{Ipos::Sale.table_name}.potnomfaktur * #{Ipos::ItemSale.table_name}.total / #{Ipos::Sale.table_name}.subtotal)),0)  AS gross_profit,
         SUM(#{Ipos::ItemSale.table_name}.jumlah) AS quantity,
         SUM(#{Ipos::ItemSale.table_name}.total) AS sales_total
       FROM #{Ipos::ItemSale.table_name}

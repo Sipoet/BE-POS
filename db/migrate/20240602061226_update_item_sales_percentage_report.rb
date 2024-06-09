@@ -28,7 +28,7 @@ class UpdateItemSalesPercentageReport < ActiveRecord::Migration[7.1]
       LEFT OUTER JOIN(
         SELECT kodeitem,
         SUM(CASE WHEN tbl_ikhd.tipe IN('KSR','JL') then tbl_ikdt.jumlah ELSE 0 END) AS number_of_sales,
-        SUM(CASE WHEN tbl_ikhd.tipe IN('KSR','JL') then tbl_ikdt.total +(tbl_ikdt.total/tbl_ikhd.subtotal*tbl_ikhd.potnomfaktur) ELSE 0 END) AS sales_total,
+        SUM(CASE WHEN tbl_ikhd.tipe IN('KSR','JL') then tbl_ikdt.total - (tbl_ikdt.total/tbl_ikhd.subtotal*tbl_ikhd.potnomfaktur) ELSE 0 END) AS sales_total,
         SUM(CASE WHEN tbl_ikhd.tipe = 'IK' then tbl_ikdt.jumlah ELSE 0 END) AS item_out
         FROM tbl_ikdt
         INNER JOIN tbl_ikhd ON tbl_ikhd.notransaksi = tbl_ikdt.notransaksi

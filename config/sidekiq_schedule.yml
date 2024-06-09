@@ -3,7 +3,7 @@ refresh_discount:
   class: "RefreshAllPromotionJob"
   queue: low
 toggle_customer_group_discount:
-  cron: "0 1 * * *"
+  cron: "20 1 * * *"
   class: "ToggleCustomerDiscountJob"
   queue: low
 backup_database:
