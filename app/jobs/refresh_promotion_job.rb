@@ -11,7 +11,7 @@ class RefreshPromotionJob < ApplicationJob
       items = items_based_discount(discount)
       check_conflict_promotion(discount, items)
       check_if_cancelled!
-      items.reject!{|item| @blacklist_item_codes.include?(item.kodeitem)}
+      items = items.where.not(kodeitem: @blacklist_item_codes)
       generate_ipos_promotion(discount, items)
       check_if_cancelled!
     end
@@ -43,12 +43,12 @@ class RefreshPromotionJob < ApplicationJob
     }.each do |key, value|
       items = items.where.not(key => value) if value.present?
     end
-    items.to_a
+    items
   end
 
   def check_conflict_promotion(discount, items)
     iddiskon = Ipos::Promotion.active_range(discount.start_time, discount.end_time).pluck(:iddiskon)
-    item_promotions = Ipos::ItemPromotion.where(kodeitem: items.pluck(:kodeitem), iddiskon: iddiskon)
+    item_promotions = Ipos::ItemPromotion.where(item: items, iddiskon: iddiskon)
     item_promotions.each do |item_promotion|
       ip_discount = item_promotion.discount
       if ip_discount.try(:day_of_week?) && discount.day_of_week? && ![ip_discount.week1 == discount.week1,
@@ -73,11 +73,14 @@ class RefreshPromotionJob < ApplicationJob
   end
 
   def generate_ipos_promotion(discount, items)
-    items.each_slice(200).with_index(1) do |paginated_items, page|
+    item_measurement_quantities = Ipos::ItemMeasurementQuantity.where(item: items)
+                                                               .where.not(kodebarcode: nil)
+                                                               .includes(:item)
+    item_measurement_quantities.each_slice(200).with_index(1) do |paginated_items, page|
       promo_name = "#{page}_#{discount.code}"
       promotion = create_promotion!(promo_name: promo_name,
                                     discount: discount)
-      create_item_promotions(items: paginated_items,
+      create_item_promotions(uom_items: paginated_items,
                             promotion: promotion,
                             discount: discount)
     end
@@ -90,13 +93,14 @@ class RefreshPromotionJob < ApplicationJob
                        .pluck(:kodeitem)
   end
 
-  def create_item_promotions(items:[],promotion:,discount:)
-    item_p_docs = items.map do |item|
+  def create_item_promotions(uom_items:[],promotion:,discount:)
+    item_p_docs = uom_items.map do |uom_item|
+      item = uom_item.item
       debug_log "item #{item.kodeitem} diskon #{discount.code}"
         {
           iddiskon: promotion.iddiskon,
           kodeitem: item.kodeitem,
-          satuan: item.satuan,
+          satuan: uom_item.satuan,
           opsidiskon: discount.percentage? ? 1 : 2,
           diskon1: discount.discount1,
           diskon2: discount.discount2,

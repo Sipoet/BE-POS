@@ -1,4 +1,4 @@
-class Ipos::ItemMeasurementQuantity
+class Ipos::ItemMeasurementQuantity < ApplicationRecord
 
   self.table_name = 'tbl_itemsatuanjml'
   self.primary_key= 'iddetail'
