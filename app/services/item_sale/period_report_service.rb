@@ -68,21 +68,21 @@ class ItemSale::PeriodReportService < ApplicationService
   def query_report
     <<~SQL
       SELECT
-        #{Ipos::ItemSale.table_name}.kodeitem AS item_code,
+        #{Ipos::SaleItem.table_name}.kodeitem AS item_code,
         #{Ipos::Item.table_name}.namaitem AS item_name,
         #{Ipos::Item.table_name}.supplier1 AS supplier_code,
         #{Ipos::Item.table_name}.merek AS brand_name,
         #{Ipos::Item.table_name}.jenis AS item_type_name,
-        #{Ipos::ItemSale.table_name}.potongan AS discount_percentage,
+        #{Ipos::SaleItem.table_name}.potongan AS discount_percentage,
         #{Ipos::Item.table_name}.hargapokok AS buy_price,
         #{Ipos::Item.table_name}.hargajual1 AS sell_price,
-        COALESCE(SUM(#{Ipos::ItemSale.table_name}.harga * #{Ipos::ItemSale.table_name}.jumlah),0) AS subtotal,
-        ROUND(SUM(#{Ipos::ItemSale.table_name}.total - (#{Ipos::Item.table_name}.hargapokok * #{Ipos::ItemSale.table_name}.jumlah) - (#{Ipos::Sale.table_name}.potnomfaktur * #{Ipos::ItemSale.table_name}.total / #{Ipos::Sale.table_name}.subtotal)),0)  AS gross_profit,
-        SUM(#{Ipos::ItemSale.table_name}.jumlah) AS quantity,
-        SUM(#{Ipos::ItemSale.table_name}.total) AS sales_total
-      FROM #{Ipos::ItemSale.table_name}
-      INNER JOIN #{Ipos::Sale.table_name} ON #{Ipos::Sale.table_name}.notransaksi  = #{Ipos::ItemSale.table_name}.notransaksi
-      INNER JOIN #{Ipos::Item.table_name} ON #{Ipos::Item.table_name}.kodeitem  = #{Ipos::ItemSale.table_name}.kodeitem
+        COALESCE(SUM(#{Ipos::SaleItem.table_name}.harga * #{Ipos::SaleItem.table_name}.jumlah),0) AS subtotal,
+        ROUND(SUM(#{Ipos::SaleItem.table_name}.total - (#{Ipos::Item.table_name}.hargapokok * #{Ipos::SaleItem.table_name}.jumlah) - (#{Ipos::Sale.table_name}.potnomfaktur * #{Ipos::SaleItem.table_name}.total / #{Ipos::Sale.table_name}.subtotal)),0)  AS gross_profit,
+        SUM(#{Ipos::SaleItem.table_name}.jumlah) AS quantity,
+        SUM(#{Ipos::SaleItem.table_name}.total) AS sales_total
+      FROM #{Ipos::SaleItem.table_name}
+      INNER JOIN #{Ipos::Sale.table_name} ON #{Ipos::Sale.table_name}.notransaksi  = #{Ipos::SaleItem.table_name}.notransaksi
+      INNER JOIN #{Ipos::Item.table_name} ON #{Ipos::Item.table_name}.kodeitem  = #{Ipos::SaleItem.table_name}.kodeitem
       WHERE
         #{Ipos::Sale.table_name}.tipe IN('KSR','JL') AND
         #{Ipos::Sale.table_name}.tanggal BETWEEN '#{@start_time}' AND '#{@end_time}'
@@ -92,14 +92,14 @@ class ItemSale::PeriodReportService < ApplicationService
         #{filter_query_items}
         #{filter_query_discount}
       GROUP BY
-        #{Ipos::ItemSale.table_name}.kodeitem,
+        #{Ipos::SaleItem.table_name}.kodeitem,
         #{Ipos::Item.table_name}.namaitem,
         #{Ipos::Item.table_name}.supplier1,
         #{Ipos::Item.table_name}.merek,
         #{Ipos::Item.table_name}.jenis,
         #{Ipos::Item.table_name}.hargapokok,
         #{Ipos::Item.table_name}.hargajual1,
-        #{Ipos::ItemSale.table_name}.potongan
+        #{Ipos::SaleItem.table_name}.potongan
       ORDER BY
         item_code ASC
     SQL

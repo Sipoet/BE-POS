@@ -17,6 +17,7 @@ class Payroll::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @payrolls.total_pages,
+      total_rows: @payrolls.total_count,
     }
   end
 

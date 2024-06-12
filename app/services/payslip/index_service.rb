@@ -18,6 +18,7 @@ class Payslip::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @payslips.total_pages,
+      total_rows: @payslips.total_count,
     }
   end
 

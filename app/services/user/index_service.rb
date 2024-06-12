@@ -18,6 +18,7 @@ class User::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @users.total_pages,
+      total_rows: @users.total_count,
     }
   end
 

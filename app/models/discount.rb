@@ -3,12 +3,12 @@ class Discount < ApplicationRecord
   has_paper_trail ignore:[:id, :created_at, :updated_at]
   TABLE_HEADER = [
     datatable_column(self,:code, :string),
-    datatable_column(self,:supplier_code, :link, path:'suppliers',attribute_key: 'supplier.kode'),
-    datatable_column(self,:item_type_name, :link, path:'item_types',attribute_key: 'item_type.jenis'),
+    datatable_column(self,:supplier_code, :link, path:'suppliers',attribute_key: 'supplier.name'),
+    datatable_column(self,:item_type_name, :link, path:'item_types',attribute_key: 'item_type.ketjenis'),
     datatable_column(self,:brand_name, :link, path:'brands',attribute_key: 'brand.merek'),
-    datatable_column(self,:item_code, :link, path:'items',attribute_key: 'item.kodeitem'),
-    datatable_column(self,:blacklist_supplier_code, :link, path:'suppliers',attribute_key: 'blacklist_supplier.kode'),
-    datatable_column(self,:blacklist_item_type_name, :link, path:'item_types',attribute_key: 'blacklist_item_type.jenis'),
+    datatable_column(self,:item_code, :link, path:'items',attribute_key: 'item.namaitem'),
+    datatable_column(self,:blacklist_supplier_code, :link, path:'suppliers',attribute_key: 'blacklist_supplier.nama'),
+    datatable_column(self,:blacklist_item_type_name, :link, path:'item_types',attribute_key: 'blacklist_item_type.ketjenis'),
     datatable_column(self,:blacklist_brand_name, :link, path:'brands',attribute_key: 'blacklist_brand.merek'),
     datatable_column(self,:calculation_type, :enum),
     datatable_column(self,:weight, :string),

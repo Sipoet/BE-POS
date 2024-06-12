@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
-  root "home#dashboard"
+
   get 'settings',to:'home#settings'
   get 'check_update/:platform',to:'home#check_update'
   get 'download_app/:platform',to:'home#download_app', as: :download_app
@@ -15,8 +15,8 @@ Rails.application.routes.draw do
     sessions: 'users/sessions'
   }
   mount Rswag::Api::Engine => 'api-docs'
-  mount Rswag::Ui::Engine => 'api-blueprint'
-
+  mount Rswag::Ui::Engine => 'api-blueprint', at: 'api-blueprint'
+  root to: redirect { '/api-blueprint' }
   resources :activity_logs, only: [:index] do
     get :by_item, on: :collection
     get :by_user, on: :collection
@@ -50,8 +50,13 @@ Rails.application.routes.draw do
     get :template_mass_upload_excel, on: :collection
   end
 
-  resources :sales, only:[] do
+  resources :sales, only:[:index,:show] do
     get :transaction_report, on: :collection
+    get :report, on: :collection
+  end
+
+  resources :purchases, only:[:index,:show] do
+    get :report, on: :collection
   end
 
   resources :item_sales, only:[] do
@@ -86,6 +91,8 @@ Rails.application.routes.draw do
   end
   resources :payrolls, only: [:index, :show, :create, :update, :destroy]
   resources :employee_leaves, only: [:index, :show, :create, :update, :destroy]
-  resources :access_authorizes, only: [:index, :show, :create, :update, :destroy]
-  resources :column_authorizes, only: [:index, :show, :create, :update, :destroy]
+  resources :cashier_sessions, only: [:index, :show, :create, :update]
+  resources :payment_methods, only: [:index, :destroy, :create, :update]
+  resources :banks, only: [:index]
+
 end

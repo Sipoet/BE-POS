@@ -1,4 +1,4 @@
-class Ipos::ItemSale < ApplicationRecord
+class Ipos::SaleItem < ApplicationRecord
   self.table_name = 'tbl_ikdt'
   self.primary_key = ['notransaksi','kodeitem']
 

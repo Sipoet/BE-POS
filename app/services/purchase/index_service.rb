@@ -1,30 +1,30 @@
-class ItemType::IndexService < ApplicationService
+class Purchase::IndexService < ApplicationService
 
   include JsonApiDeserializer
   def execute_service
     extract_params
-    @item_types = find_item_types
+    @purchases = find_purchases
     options = {
       meta: meta,
       fields: @fields,
       params:{include: @included},
       include: @included
     }
-    render_json(ItemTypeSerializer.new(@item_types,options))
+    render_json(Ipos::PurchaseSerializer.new(@purchases,options))
   end
 
   def meta
     {
       page: @page,
       limit: @limit,
-      total_pages: @item_types.total_pages,
-      total_rows: @item_types.total_count,
+      total_pages: @purchases.total_pages,
+      total_rows: @purchases.total_count,
     }
   end
 
   def extract_params
-    allowed_columns = Ipos::ItemType::TABLE_HEADER.map(&:name)
-    allowed_fields = [:item_type]
+    allowed_columns = Ipos::Purchase::TABLE_HEADER.map(&:name)
+    allowed_fields = [:purchase, :purchase_items]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
@@ -37,22 +37,22 @@ class ItemType::IndexService < ApplicationService
     @fields = result.fields
   end
 
-  def find_item_types
-    item_types = Ipos::ItemType.all.includes(@included)
+  def find_purchases
+    purchases = Ipos::Purchase.all.includes(@included)
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      item_types = item_types.where(['jenis ilike ? OR ketjenis ilike ? ']+ Array.new(2,"%#{@search_text}%"))
+      purchases = purchases.where(['notransaksi ilike ? ']+ Array.new(1,"%#{@search_text}%"))
     end
     @filters.each do |filter|
-      item_types = item_types.where(filter.to_query)
+      purchases = purchases.where(filter.to_query)
     end
     if @sort.present?
-      item_types = item_types.order(@sort)
+      purchases = purchases.order(@sort)
     else
-      item_types = item_types.order(jenis: :asc)
+      purchases = purchases.order(tanggal: :desc)
     end
-    item_types
+    purchases
   end
 
 end

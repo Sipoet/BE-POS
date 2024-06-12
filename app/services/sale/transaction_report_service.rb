@@ -26,7 +26,7 @@ class Sale::TransactionReportService < ApplicationService
       SELECT notransaksi,
       SUM(jumlah * harga) - sum(total) AS discount_total,
       SUM(jumlah * tbl_item.hargapokok) AS hpp_total
-      FROM #{Ipos::ItemSale.table_name}
+      FROM #{Ipos::SaleItem.table_name}
       INNER JOIN tbl_item on tbl_item.kodeitem = tbl_ikdt.kodeitem
       GROUP BY notransaksi
     )group_sale ON group_sale.notransaksi = #{Ipos::Sale.table_name}.notransaksi

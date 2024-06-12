@@ -2,25 +2,28 @@
 
 class ItemSalesPercentageReport::IndexService < ApplicationService
   require 'write_xlsx'
+  include JsonApiDeserializer
   PER_LIMIT = 1000.freeze
 
   def execute_service
-    filter = fetch_filter
-    reports = find_reports(filter)
-    page = @params[:page]
-    if page.present?
-      reports = reports.page(page.to_i)
-                       .per((@params[:per] || PER_LIMIT).to_i)
-    end
-    case @params[:report_type].to_s
+    extract_params
+    reports = find_reports
+    case @report_type
     when 'xlsx'
-      file_excel = generate_excel(reports, filter)
+      file_excel = generate_excel(reports)
       @controller.send_file file_excel
     when 'json'
       options = {
         meta: {
-          filter: filter
-        }
+          filter: @filter,
+          page: @page,
+          limit: @limit,
+           total_pages: reports.total_pages,
+          total_rows: reports.total_count,
+        },
+        fields: @fields,
+        params:{include: @included},
+        include: @included
       }
       render_json(ItemSalesPercentageReportSerializer.new(reports, options))
     end
@@ -28,48 +31,45 @@ class ItemSalesPercentageReport::IndexService < ApplicationService
 
   private
 
-  def find_reports(filter)
-    query = ItemSalesPercentageReport.order(item_code: :asc)
-    query = query.where(brand_name: filter[:brands]) if filter[:brands].present?
-    query = query.where(supplier_code: filter[:suppliers]) if filter[:suppliers].present?
-    query = query.where(item_type_name: filter[:item_types]) if filter[:item_types].present?
-    query = query.where(item_code: filter[:item_codes]) if filter[:item_codes].present?
-    if filter[:warehouse_stock].present?
-      sign_symbol, num = filter[:warehouse_stock].split('-')
-      query = query.where("warehouse_stock #{comparion_sign(sign_symbol)} ?",num.to_i)
-    end
-    if filter[:store_stock].present?
-      sign_symbol, num = filter[:store_stock].split('-')
-      query = query.where("store_stock #{comparion_sign(sign_symbol)} ?",num.to_i)
-    end
-    query
+  def extract_params
+    allowed_columns = ItemSalesPercentageReport::TABLE_HEADER.map(&:name)
+    allowed_fields = [:item, :item_type, :supplier, :brand]
+    result = dezerialize_table_params(params,
+      allowed_fields: allowed_fields,
+      allowed_columns: allowed_columns)
+    @page = result.page || 1
+    @limit = result.limit || 20
+    @search_text = result.search_text
+    @sort = result.sort
+    @included = result.included
+    @filters = result.filters
+    @fields = result.fields
+    @report_type = @params[:report_type].to_s
   end
 
-  def generate_excel(rows, filter)
+  def find_reports
+    reports = ItemSalesPercentageReport.all.includes(@included)
+    if @report_type == 'json'
+      reports = reports.page(@page).per(@limit)
+    end
+    @filters.each do |filter|
+      reports = reports.where(filter.to_query)
+    end
+    if @sort.present?
+      reports = reports.order(@sort)
+    else
+      reports = reports.order(item_code: :asc)
+    end
+    reports
+  end
+
+  def generate_excel(rows)
     generator = ExcelGenerator.new
-    generator.add_column_definitions(target_class::TABLE_HEADER)
+    generator.add_column_definitions(ItemSalesPercentageReport::TABLE_HEADER)
     generator.add_data(rows)
-    generator.add_metadata(filter)
+    generator.add_metadata(@filter || {})
     generator.generate('laporan-penjualan-item')
   end
 
-  def comparion_sign(symbol)
-    case symbol.to_sym
-    when :lt then '<'
-    when :gt then '>'
-    when :lte then '<='
-    when :gte then '>='
-    when :nt then '!='
-    when :eq then '='
-    else '='
-    end
-  end
 
-  def fetch_filter
-    permitted_params = @params.permit(:warehouse_stock,:store_stock,brands: [], item_codes: [], item_types: [], suppliers: [])
-    %i[warehouse_stock store_stock brands item_codes item_types suppliers].each_with_object({}) do |key, filter|
-      filter[key] = permitted_params[key] if permitted_params[key].present?
-    end
-
-  end
 end

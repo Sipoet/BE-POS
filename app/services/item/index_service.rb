@@ -18,6 +18,7 @@ class Item::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @items.total_pages,
+      total_rows: @items.total_count,
     }
   end
 

@@ -18,6 +18,7 @@ class EmployeeLeave::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @employee_leaves.total_pages,
+      total_rows: @employee_leaves.total_count,
     }
   end
 

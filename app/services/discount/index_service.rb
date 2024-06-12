@@ -18,6 +18,7 @@ class Discount::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @discounts.total_pages,
+      total_rows: @discounts.total_count,
     }
   end
 

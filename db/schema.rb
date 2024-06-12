@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_02_061226) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_08_032614) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,45 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_061226) do
     t.index ["role_id"], name: "index_access_authorizes_on_role_id"
   end
 
+  create_table "cash_in_session_details", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "cashier_session_id", null: false
+    t.datetime "start_time", null: false
+    t.datetime "end_time", null: false
+    t.decimal "begin_cash", null: false
+    t.decimal "cash_in", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "cash_out_session_details", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.datetime "date", null: false
+    t.string "name", null: false
+    t.decimal "amount", null: false
+    t.text "description"
+    t.integer "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "cashier_sessions", force: :cascade do |t|
+    t.datetime "start_time", null: false
+    t.datetime "end_time", null: false
+    t.decimal "total_cash_in", default: "0.0", null: false
+    t.decimal "total_cash_out", default: "0.0", null: false
+    t.decimal "total_debit", default: "0.0", null: false
+    t.decimal "total_credit", default: "0.0", null: false
+    t.decimal "total_qris", default: "0.0", null: false
+    t.decimal "total_emoney", default: "0.0", null: false
+    t.decimal "total_transfer", default: "0.0", null: false
+    t.decimal "total_other_in", default: "0.0", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "column_authorizes", force: :cascade do |t|
     t.string "table", null: false
     t.string "column", null: false
@@ -30,6 +69,24 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_061226) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["role_id"], name: "index_column_authorizes_on_role_id"
+  end
+
+  create_table "customer_group_discounts", force: :cascade do |t|
+    t.date "start_active_date", null: false
+    t.date "end_active_date", null: false
+    t.integer "level", null: false
+    t.string "customer_group_code", null: false
+    t.integer "period_type", default: 0, null: false
+    t.decimal "discount_percentage", null: false
+    t.integer "variable1"
+    t.integer "variable2"
+    t.integer "variable3"
+    t.integer "variable4"
+    t.integer "variable5"
+    t.integer "variable6"
+    t.integer "variable7"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "discount_brands", force: :cascade do |t|
@@ -95,6 +152,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_061226) do
     t.index ["code"], name: "index_discounts_on_code", unique: true
     t.index ["start_time", "end_time", "item_code", "supplier_code", "item_type_name", "brand_name"], name: "active_promotion_idx", order: { end_time: :desc }
     t.index ["start_time", "end_time"], name: "index_discounts_on_start_time_and_end_time", order: { end_time: :desc }
+  end
+
+  create_table "edc_settlements", force: :cascade do |t|
+    t.integer "cashier_session_id", null: false
+    t.integer "payment_method_id", null: false
+    t.string "terminal_id", null: false
+    t.string "merchant_id"
+    t.decimal "amount", null: false
+    t.decimal "diff_amount", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "employee_attendances", force: :cascade do |t|
@@ -169,6 +238,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_061226) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["date"], name: "index_holidays_on_date", unique: true
+  end
+
+  create_table "payment_methods", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "provider", null: false
+    t.integer "payment_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "payroll_lines", force: :cascade do |t|
@@ -2319,7 +2396,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_061226) do
   end
 
   add_foreign_key "access_authorizes", "roles"
+  add_foreign_key "cash_in_session_details", "cashier_sessions"
+  add_foreign_key "cash_in_session_details", "users"
   add_foreign_key "column_authorizes", "roles"
+  add_foreign_key "customer_group_discounts", "tbl_supelgrup", column: "customer_group_code", primary_key: "kgrup"
   add_foreign_key "discount_brands", "discounts"
   add_foreign_key "discount_brands", "tbl_itemmerek", column: "brand_name", primary_key: "merek"
   add_foreign_key "discount_item_types", "discounts"
@@ -2335,11 +2415,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_061226) do
   add_foreign_key "discounts", "tbl_itemmerek", column: "brand_name", primary_key: "merek"
   add_foreign_key "discounts", "tbl_supel", column: "blacklist_supplier_code", primary_key: "kode"
   add_foreign_key "discounts", "tbl_supel", column: "supplier_code", primary_key: "kode"
+  add_foreign_key "edc_settlements", "cashier_sessions"
+  add_foreign_key "edc_settlements", "payment_methods"
   add_foreign_key "employee_attendances", "employees"
   add_foreign_key "employee_day_offs", "employees"
   add_foreign_key "employee_leaves", "employees"
   add_foreign_key "employees", "payrolls"
   add_foreign_key "employees", "roles"
+  add_foreign_key "payment_methods", "tbl_bank", column: "provider", primary_key: "kodebank"
   add_foreign_key "payroll_lines", "payrolls"
   add_foreign_key "payslip_lines", "payslips"
   add_foreign_key "payslips", "employees"

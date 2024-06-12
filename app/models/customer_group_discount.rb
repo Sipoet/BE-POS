@@ -12,13 +12,13 @@ class CustomerGroupDiscount < ApplicationRecord
   validates :start_active_date, presence: true
   validates :end_active_date, presence: true
   validates :level, presence: true
-  validates :variable1, numericality: {integer: true}
-  validates :variable2, numericality: {integer: true}
-  validates :variable3, numericality: {integer: true}
-  validates :variable4, numericality: {integer: true}
-  validates :variable5, numericality: {integer: true}
-  validates :variable6, numericality: {integer: true}
-  validates :variable7, numericality: {integer: true}
+  validates :variable1, numericality: {integer: true}, allow_nil: true
+  validates :variable2, numericality: {integer: true}, allow_nil: true
+  validates :variable3, numericality: {integer: true}, allow_nil: true
+  validates :variable4, numericality: {integer: true}, allow_nil: true
+  validates :variable5, numericality: {integer: true}, allow_nil: true
+  validates :variable6, numericality: {integer: true}, allow_nil: true
+  validates :variable7, numericality: {integer: true}, allow_nil: true
   validate :end_active_date_should_valid
   validate :period_type_setting
 

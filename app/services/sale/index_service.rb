@@ -1,30 +1,31 @@
-class ItemType::IndexService < ApplicationService
+class Sale::IndexService < ApplicationService
 
   include JsonApiDeserializer
   def execute_service
     extract_params
-    @item_types = find_item_types
+    @sales = find_sales
     options = {
       meta: meta,
       fields: @fields,
       params:{include: @included},
       include: @included
     }
-    render_json(ItemTypeSerializer.new(@item_types,options))
+    render_json(Ipos::SaleSerializer.new(@sales,options))
   end
 
   def meta
     {
       page: @page,
       limit: @limit,
-      total_pages: @item_types.total_pages,
-      total_rows: @item_types.total_count,
+      total_rows: @sales.count,
+      total_pages: @sales.total_pages,
+      total_rows: @sales.total_count,
     }
   end
 
   def extract_params
-    allowed_columns = Ipos::ItemType::TABLE_HEADER.map(&:name)
-    allowed_fields = [:item_type]
+    allowed_columns = Ipos::Sale::TABLE_HEADER.map(&:name)
+    allowed_fields = [:sale, :sale_items]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
@@ -37,22 +38,22 @@ class ItemType::IndexService < ApplicationService
     @fields = result.fields
   end
 
-  def find_item_types
-    item_types = Ipos::ItemType.all.includes(@included)
+  def find_sales
+    sales = Ipos::Sale.all.includes(@included)
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      item_types = item_types.where(['jenis ilike ? OR ketjenis ilike ? ']+ Array.new(2,"%#{@search_text}%"))
+      sales = sales.where(['notransaksi ilike ? ']+ Array.new(1,"%#{@search_text}%"))
     end
     @filters.each do |filter|
-      item_types = item_types.where(filter.to_query)
+      sales = sales.where(filter.to_query)
     end
     if @sort.present?
-      item_types = item_types.order(@sort)
+      sales = sales.order(@sort)
     else
-      item_types = item_types.order(jenis: :asc)
+      sales = sales.order(tanggal: :desc)
     end
-    item_types
+    sales
   end
 
 end

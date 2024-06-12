@@ -18,6 +18,7 @@ class Role::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @roles.total_pages,
+      total_rows: @roles.total_count,
     }
   end
 

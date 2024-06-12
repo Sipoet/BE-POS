@@ -18,6 +18,7 @@ class Supplier::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @suppliers.total_pages,
+      total_rows: @suppliers.total_count,
     }
   end
 
