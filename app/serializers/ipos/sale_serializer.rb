@@ -18,8 +18,8 @@ class Ipos::SaleSerializer
               :pajak,
               :bank_code
 
-  has_many :sale_items, if: Proc.new { |record, params| params[:include].include?('sale_items') rescue false } do |sale|
-    sale.sale_items.order(day_of_week: :asc)
+  has_many :sale_items, serializer: Ipos::SaleItemSerializer, if: Proc.new { |record, params| params[:include].include?('sale_items') rescue false } do |sale|
+    sale.sale_items.order(nobaris: :asc)
   end
 
 end

@@ -18,6 +18,7 @@ class ActivityLog::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @versions.total_pages,
+      total_rows: @versions.total_count,
     }
   end
 

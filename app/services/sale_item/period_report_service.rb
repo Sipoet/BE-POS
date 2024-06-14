@@ -1,4 +1,4 @@
-class ItemSale::PeriodReportService < ApplicationService
+class SaleItem::PeriodReportService < ApplicationService
 
   def execute_service
     extract_params

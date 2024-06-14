@@ -1,30 +1,30 @@
-class Brand::IndexService < ApplicationService
+class PurchaseItem::IndexService < ApplicationService
 
   include JsonApiDeserializer
   def execute_service
     extract_params
-    @brands = find_brands
+    @purchase_items = find_purchase_items
     options = {
       meta: meta,
       fields: @fields,
       params:{include: @included},
       include: @included
     }
-    render_json(BrandSerializer.new(@brands,options))
+    render_json(Ipos::PurchaseItemSerializer.new(@purchase_items,options))
   end
 
   def meta
     {
       page: @page,
       limit: @limit,
-      total_pages: @brands.total_pages,
-      total_rows: @brands.total_count,
+      total_rows: @purchase_items.count,
+       total_pages: @purchase_items.total_pages,
     }
   end
 
   def extract_params
-    allowed_columns = Ipos::Brand::TABLE_HEADER.map(&:name)
-    allowed_fields = [:brand]
+    allowed_columns = Ipos::PurchaseItem::TABLE_HEADER.map(&:name)
+    allowed_fields = [:purchase_item]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
@@ -37,22 +37,22 @@ class Brand::IndexService < ApplicationService
     @fields = result.fields
   end
 
-  def find_brands
-    brands = Ipos::Brand.all.includes(@included)
+  def find_purchase_items
+    purchase_items = Ipos::PurchaseItem.all.includes(@included)
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      brands = brands.where(['merek ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      purchase_items = purchase_items.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
     end
     @filters.each do |filter|
-      brands = brands.where(filter.to_query)
+      purchase_items = purchase_items.where(filter.to_query)
     end
     if @sort.present?
-      brands = brands.order(@sort)
+      purchase_items = purchase_items.order(@sort)
     else
-      brands = brands.order(merek: :asc)
+      purchase_items = purchase_items.order(kodeitem: :asc)
     end
-    brands
+    purchase_items
   end
 
 end

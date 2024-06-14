@@ -50,7 +50,7 @@ Rails.application.routes.draw do
     get :template_mass_upload_excel, on: :collection
   end
 
-  resources :sales, only:[:index,:show] do
+  resources :sales, only:[:index, :show] do
     get :transaction_report, on: :collection
     get :report, on: :collection
   end
@@ -59,7 +59,17 @@ Rails.application.routes.draw do
     get :report, on: :collection
   end
 
-  resources :item_sales, only:[] do
+  resources :purchase_items, only:[:index]
+
+  resources :transfers, only:[:index, :show]
+  resources :transfer_items, only:[:index]
+
+  resources :item_sales,controller:'sale_items', only:[] do
+    get :transaction_report, on: :collection
+    get :period_report, on: :collection
+  end
+
+  resources :sale_items, only:[:index] do
     get :transaction_report, on: :collection
     get :period_report, on: :collection
   end

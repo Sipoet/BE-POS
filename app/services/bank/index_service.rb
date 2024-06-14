@@ -1,30 +1,30 @@
-class Brand::IndexService < ApplicationService
+class Bank::IndexService < ApplicationService
 
   include JsonApiDeserializer
   def execute_service
     extract_params
-    @brands = find_brands
+    @banks = find_banks
     options = {
       meta: meta,
       fields: @fields,
       params:{include: @included},
       include: @included
     }
-    render_json(BrandSerializer.new(@brands,options))
+    render_json(BankSerializer.new(@banks,options))
   end
 
   def meta
     {
       page: @page,
       limit: @limit,
-      total_pages: @brands.total_pages,
-      total_rows: @brands.total_count,
+      total_pages: @banks.total_pages,
+      total_rows: @banks.total_count,
     }
   end
 
   def extract_params
-    allowed_columns = Ipos::Brand::TABLE_HEADER.map(&:name)
-    allowed_fields = [:brand]
+    allowed_columns = Ipos::Bank::TABLE_HEADER.map(&:name)
+    allowed_fields = [:bank]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
@@ -37,22 +37,22 @@ class Brand::IndexService < ApplicationService
     @fields = result.fields
   end
 
-  def find_brands
-    brands = Ipos::Brand.all.includes(@included)
+  def find_banks
+    banks = Ipos::Bank.all.includes(@included)
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      brands = brands.where(['merek ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      banks = banks.where(['kodebank ilike ?  or namabank ilike ?']+ Array.new(2,"%#{@search_text}%"))
     end
     @filters.each do |filter|
-      brands = brands.where(filter.to_query)
+      banks = banks.where(filter.to_query)
     end
     if @sort.present?
-      brands = brands.order(@sort)
+      banks = banks.order(@sort)
     else
-      brands = brands.order(merek: :asc)
+      banks = banks.order(kodebank: :asc)
     end
-    brands
+    banks
   end
 
 end

@@ -1,0 +1,24 @@
+id:
+  activerecord:
+    models:
+      ipos/purchase_item: "Pembelian item"
+    attributes:
+      ipos/purchase_item:
+        kodeitem: "Kode Item"
+        jmlpesan: "Pesan"
+        jumlah: "Jumlah"
+        harga: "Harga"
+        sell_price: "Harga Jual"
+        satuan: "Satuan"
+        subtotal: "Subtotal"
+        potongan: "Potongan Pertama"
+        potongan2: "Potongan Kedua"
+        potongan3: "Potongan Ketiga"
+        potongan4: "Potongan Keempat"
+        pajak: "Biaya Pajak"
+        total: "Total"
+        tglexp: "Tanggal Expired"
+        kodeprod: "Kode Produksi"
+        updated_at: "Tanggal Terakhir di edit"
+        hppdasar: "HPP"
+        nobaris: "No"

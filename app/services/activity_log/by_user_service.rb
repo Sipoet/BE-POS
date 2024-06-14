@@ -23,7 +23,7 @@ class ActivityLog::ByUserService < ApplicationService
     {
       page: @page,
       limit: @limit,
-      total_pages: @versions.total_pages
+       total_pages: @versions.total_pages
     }
   end
 end

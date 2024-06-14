@@ -1,4 +1,4 @@
-class Ipos::Sale < ApplicationRecord
+class Ipos::Sale < Ipos::ItemOutHeader
   self.table_name = 'tbl_ikhd'
   self.primary_key = 'notransaksi'
 
@@ -23,7 +23,7 @@ class Ipos::Sale < ApplicationRecord
 
   ].freeze
 
-  has_many :sale_items, class_name: 'Ipos::SaleItem',foreign_key: :notransaksi, dependent: :destroy, inverse_of: :sale
+  has_many :sale_items, class_name: 'Ipos::SaleItem', foreign_key: :notransaksi, dependent: :destroy, inverse_of: :sale
   belongs_to :credit_bank, optional: true, primary_key: 'kodebank',class_name: 'Ipos::Bank',foreign_key:'byr_kk_bank'
   belongs_to :debit_bank, optional: true, primary_key: 'kodebank',class_name: 'Ipos::Bank',foreign_key:'byr_debit_bank'
 

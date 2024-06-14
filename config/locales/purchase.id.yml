@@ -1,0 +1,22 @@
+id:
+  activerecord:
+    models:
+      ipos/purchase: "Pembelian"
+    attributes:
+      ipos/purchase:
+        notransaksi: "No Transaksi"
+        tanggal: "Tanggal"
+        kantortujuan: "Lokasi"
+        totalitem: "Total Item"
+        subtotal: "Subtotal"
+        potnomfaktur: "Diskon"
+        biayalain: "Biaya Lain"
+        ppn: "Tipe Pajak"
+        pajak: "Biaya Pajak"
+        totalakhir: "Total Akhir"
+        keterangan: "Keterangan"
+        user1: "User"
+        jmltunai: "Bayar Tunai"
+        jmlkredit: "Bayar Kredit"
+        jmldeposit: "Bayar deposit"
+        notrsorder: "Nota Pesanan"

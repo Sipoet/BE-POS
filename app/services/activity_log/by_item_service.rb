@@ -29,7 +29,7 @@ class ActivityLog::ByItemService < ApplicationService
     {
       page:1,
       limit: 9_999_999,
-      total_pages: 1
+       total_pages: 1
     }
   end
 

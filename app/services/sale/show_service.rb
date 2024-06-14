@@ -1,26 +1,28 @@
+require 'cgi'
 class Sale::ShowService < ApplicationService
 
   include JsonApiDeserializer
   def execute_service
     extract_params
-    sale = Sale.find(params[:id])
-    raise RecordNotFound.new(params[:id],Sale.model_name.human) if sale.nil?
+    sale = Ipos::Sale.find(@code)
+    raise RecordNotFound.new(@code, Ipos::Sale.model_name.human) if sale.nil?
     options = {
       fields: @fields,
       params:{include: @included},
       include: @included
     }
-    render_json(SaleSerializer.new(sale,options))
+    render_json(Ipos::SaleSerializer.new(sale, options))
   end
 
   def extract_params
-    allowed_columns = Sale::TABLE_HEADER.map(&:name)
-    allowed_fields = [:sale, :sale_items]
+    allowed_columns = Ipos::Sale::TABLE_HEADER.map(&:name)
+    allowed_fields = [:sale, :sale_items,'sale_items.item']
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
     @included = result.included
     @fields = result.fields
+    @code = CGI.unescape(params[:code])
   end
 
 end

@@ -1,30 +1,30 @@
-class Brand::IndexService < ApplicationService
+class Transfer::IndexService < ApplicationService
 
   include JsonApiDeserializer
   def execute_service
     extract_params
-    @brands = find_brands
+    @transfers = find_transfers
     options = {
       meta: meta,
       fields: @fields,
       params:{include: @included},
       include: @included
     }
-    render_json(BrandSerializer.new(@brands,options))
+    render_json(Ipos::TransferSerializer.new(@transfers,options))
   end
 
   def meta
     {
       page: @page,
       limit: @limit,
-      total_pages: @brands.total_pages,
-      total_rows: @brands.total_count,
+      total_rows: @transfers.count,
+       total_pages: @transfers.total_pages,
     }
   end
 
   def extract_params
-    allowed_columns = Ipos::Brand::TABLE_HEADER.map(&:name)
-    allowed_fields = [:brand]
+    allowed_columns = Ipos::Transfer::TABLE_HEADER.map(&:name)
+    allowed_fields = [:transfer]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
@@ -37,22 +37,22 @@ class Brand::IndexService < ApplicationService
     @fields = result.fields
   end
 
-  def find_brands
-    brands = Ipos::Brand.all.includes(@included)
+  def find_transfers
+    transfers = Ipos::Transfer.all.includes(@included)
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      brands = brands.where(['merek ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      transfers = transfers.where(['notransaksi ilike ? ']+ Array.new(1,"%#{@search_text}%"))
     end
     @filters.each do |filter|
-      brands = brands.where(filter.to_query)
+      transfers = transfers.where(filter.to_query)
     end
     if @sort.present?
-      brands = brands.order(@sort)
+      transfers = transfers.order(@sort)
     else
-      brands = brands.order(merek: :asc)
+      transfers = transfers.order(tanggal: :desc)
     end
-    brands
+    transfers
   end
 
 end

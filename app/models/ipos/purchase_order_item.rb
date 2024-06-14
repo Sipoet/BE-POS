@@ -1,4 +1,4 @@
-class Ipos::ItemPurchaseOrder < ApplicationRecord
+class Ipos::PurchaseOrderItem < ApplicationRecord
   self.table_name = 'tbl_pesandt'
   self.primary_key = 'iddetail'
 

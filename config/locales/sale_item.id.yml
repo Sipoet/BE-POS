@@ -1,0 +1,25 @@
+id:
+  activerecord:
+    models:
+      ipos/sale_item: "Penjualan item"
+    attributes:
+      ipos/sale_item:
+        kodeitem: "Kode Item"
+        jumlah: "Jumlah"
+        harga: "Harga"
+        satuan: "Satuan"
+        subtotal: "Subtotal"
+        potongan: "Potongan Pertama"
+        potongan2: "Potongan Kedua"
+        potongan3: "Potongan Ketiga"
+        potongan4: "Potongan Keempat"
+        pajak: "Biaya Pajak"
+        total: "Total"
+        updated_at: "Tanggal Terakhir di update"
+        sistemhargajual: "Sistem Harga Jual"
+        tipepromo: "Tipe promo"
+        jmlgratis: "Jumlah Item Gratis"
+        itempromo: "Item Promo"
+        satuanpromo: "Satuan Promo"
+        hppdasar: "HPP"
+        nobaris: "No"

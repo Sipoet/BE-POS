@@ -1,0 +1,24 @@
+id:
+  activerecord:
+    models:
+      ipos/sale: "Penjualan"
+    attributes:
+      ipos/sale:
+        notransaksi: "No Transaksi"
+        kantortujuan: "Lokasi"
+        tanggal: "Tanggal"
+        totalitem: "Total Item"
+        subtotal: "Subtotal"
+        potnomfaktur: "Diskon"
+        biayalain: "Biaya Lain"
+        pajak: "Biaya Pajak"
+        totalakhir: "Total Akhir"
+        payment_type: "Metode Pembayaran"
+        bank_code: "Bank"
+        jmltunai: "Bayar Tunai"
+        jmldebit: "Bayar Kartu Debit"
+        jmlkk: "Bayar Kartu Kredit"
+        jmlemoney: "Bayar Kartu E-Money"
+        keterangan: "Keterangan"
+        user1: "User Kasir"
+        ppn: "Tipe Pajak"
