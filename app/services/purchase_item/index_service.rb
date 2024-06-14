@@ -17,14 +17,14 @@ class PurchaseItem::IndexService < ApplicationService
     {
       page: @page,
       limit: @limit,
-      total_rows: @purchase_items.count,
-       total_pages: @purchase_items.total_pages,
+      total_rows: @purchase_items.total_count,
+      total_pages: @purchase_items.total_pages,
     }
   end
 
   def extract_params
     allowed_columns = Ipos::PurchaseItem::TABLE_HEADER.map(&:name)
-    allowed_fields = [:purchase_item]
+    allowed_fields = [:purchase_item, :item]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)

@@ -17,14 +17,14 @@ class TransferItem::IndexService < ApplicationService
     {
       page: @page,
       limit: @limit,
-      total_rows: @transfer_items.count,
-       total_pages: @transfer_items.total_pages,
+      total_rows: @transfer_items.total_count,
+      total_pages: @transfer_items.total_pages,
     }
   end
 
   def extract_params
     allowed_columns = Ipos::TransferItem::TABLE_HEADER.map(&:name)
-    allowed_fields = [:transfer_item]
+    allowed_fields = [:transfer_item,:item]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)

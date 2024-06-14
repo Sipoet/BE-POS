@@ -1,0 +1,15 @@
+id:
+  activerecord:
+    models:
+      ipos/transfer: "Transfer Item"
+    attributes:
+      ipos/transfer:
+        notransaksi: "No Transaksi"
+        tanggal: "Tanggal"
+        kantordari: "Lokasi Dari"
+        kantortujuan: "Lokasi Tujuan"
+        totalitem: "Total Item"
+        keterangan: "Keterangan"
+        user1: "User Kasir"
+        shiftkerja: "Shift"
+        updated_at: "Tanggal Terakhir diedit"

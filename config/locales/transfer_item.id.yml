@@ -1,0 +1,18 @@
+id:
+  activerecord:
+    models:
+      ipos/transfer_item: "Detail Transfer item"
+    attributes:
+      ipos/transfer_item:
+        kodeitem: "Kode Item"
+        jmlpesan: "Pesan"
+        jumlah: "Jumlah"
+        sell_price: "Harga Jual"
+        satuan: "Satuan"
+        tglexp: "Tanggal Expired"
+        kodeprod: "Kode Produksi"
+        jmlkonversi: "Jumlah Konversi"
+        detinfo: "Info"
+        updated_at: "Tanggal Terakhir di edit"
+        cogs: "HPP"
+        nobaris: "No"
