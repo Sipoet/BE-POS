@@ -61,7 +61,7 @@ class RefreshPromotionJob < ApplicationJob
       ].any?
         next
       end
-      promotion_weight = discount.try(:weight) || 0
+      promotion_weight = ip_discount.try(:weight) || 0
       if promotion_weight >= discount.weight
         @blacklist_item_codes << item_promotion.kodeitem
       else
