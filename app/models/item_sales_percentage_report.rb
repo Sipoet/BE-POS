@@ -3,13 +3,13 @@ class ItemSalesPercentageReport < ApplicationRecord
   self.primary_key = 'item_code'
   TABLE_HEADER = [
     datatable_column(self,:item_code, :link, path:'items',attribute_key: 'item.namaitem'),
-    datatable_column(self,:item_name, :string, can_filter: false),
+    datatable_column(self,:item_name, :string),
     datatable_column(self,:item_type_name, :link, path:'item_types',attribute_key: 'item_type.ketjenis'),
-    datatable_column(self,:item_type_desc, :string, can_filter: false),
     datatable_column(self,:supplier_code, :link, path:'suppliers', attribute_key: 'supplier.nama'),
-    datatable_column(self,:supplier_name, :string, can_filter: false),
+    datatable_column(self,:supplier_name, :string),
     datatable_column(self,:brand_name, :link, path:'brands', attribute_key: 'brand.merek'),
     datatable_column(self,:recent_purchase_date, :date),
+    datatable_column(self,:stock_left, :integer),
     datatable_column(self,:warehouse_stock, :integer),
     datatable_column(self,:store_stock, :integer),
     datatable_column(self,:item_out, :integer),
@@ -34,6 +34,10 @@ class ItemSalesPercentageReport < ApplicationRecord
 
   def id
     item_code
+  end
+
+  def stock_left
+    warehouse_stock + store_stock
   end
 
   def percentage_sales

@@ -11,7 +11,10 @@ class Ipos::TransferItemSerializer
               :detinfo,
               :nobaris,
               :updated_at,
-              :notransaksi
+              :notransaksi,
+              :item_type_name,
+              :supplier_code,
+              :brand_name
 
   belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: ItemSerializer
 end

@@ -81,12 +81,12 @@ class UpdateItemSalesPercentageReport < ActiveRecord::Migration[7.1]
         stok.warehouse_stock,
         stok.store_stock,
         purchase.recent_purchase_date,
-        coalesce(purchase.avg_buy_price,beginning_stock.avg_buy_price) AS avg_buy_price,
-        ROUND(coalesce(sales.number_of_sales,0),0) AS number_of_sales,
-        coalesce(sales.sales_total,0) AS sales_total,
-        ROUND(coalesce(sales.item_out,0),0) AS item_out,
-        ROUND(coalesce(purchase.number_of_purchase,0) + coalesce(beginning_stock.number_of_purchase,0),0) AS number_of_purchase,
-        coalesce(purchase.purchase_total,0) + coalesce(beginning_stock.purchase_total,0) AS purchase_total
+        COALESCE(purchase.avg_buy_price,beginning_stock.avg_buy_price) AS avg_buy_price,
+        ROUND(COALESCE(sales.number_of_sales,0),0) AS number_of_sales,
+        COALESCE(sales.sales_total,0) AS sales_total,
+        ROUND(COALESCE(sales.item_out,0),0) AS item_out,
+        ROUND(COALESCE(purchase.number_of_purchase,0) + COALESCE(beginning_stock.number_of_purchase,0),0) AS number_of_purchase,
+        COALESCE(purchase.purchase_total,0) + COALESCE(beginning_stock.purchase_total,0) AS purchase_total
       FROM tbl_item
       INNER JOIN tbl_supel ON tbl_supel.kode = tbl_item.supplier1 AND tbl_supel.tipe = 'SU'
       INNER JOIN tbl_itemjenis ON tbl_itemjenis.jenis = tbl_item.jenis

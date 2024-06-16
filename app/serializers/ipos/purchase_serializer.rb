@@ -16,7 +16,8 @@ class Ipos::PurchaseSerializer
               :jmldeposit,
               :notrsorder,
               :ppn,
-              :pajak
+              :pajak,
+              :kodesupel
 
   has_many :purchase_items, serializer: Ipos::PurchaseItemSerializer, if: Proc.new { |record, params| params[:include].include?('purchase_items') rescue false } do |purchase|
     purchase.purchase_items.order(nobaris: :asc)

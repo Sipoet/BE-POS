@@ -2,6 +2,7 @@ class Ipos::Purchase < Ipos::ItemInHeader
 
   TABLE_HEADER = [
     datatable_column(self, :notransaksi, :string),
+    datatable_column(self, :kodesupel, :link, path: 'suppliers', attribute_key:'supplier.nama'),
     datatable_column(self, :notrsorder, :string),
     datatable_column(self, :tanggal, :datetime),
     datatable_column(self, :kantortujuan, :string),

@@ -1,6 +1,6 @@
 class Ipos::SaleItem < ApplicationRecord
   self.table_name = 'tbl_ikdt'
-  self.primary_key = ['notransaksi','kodeitem']
+  self.primary_key = 'iddetail'
 
   TABLE_HEADER=[
     datatable_column(self,:kodeitem, :link, path:'items',attribute_key: 'item.namaitem'),
@@ -14,6 +14,9 @@ class Ipos::SaleItem < ApplicationRecord
     datatable_column(self,:potongan4, :percentage),
     datatable_column(self,:pajak, :decimal),
     datatable_column(self,:total, :decimal),
+    datatable_column(self, 'item.supplier1', :link, path:'suppliers', attribute_key:'supplier.nama'),
+    datatable_column(self, 'item.merek', :link, path:'brands', attribute_key:'brand.ketmerek'),
+    datatable_column(self, 'item.jenis', :link, path:'item_types', attribute_key:'item_type.ketjenis'),
     datatable_column(self,:updated_at, :datetime),
     datatable_column(self,:sistemhargajual, :string),
     datatable_column(self,:tipepromo, :string),
@@ -33,5 +36,17 @@ class Ipos::SaleItem < ApplicationRecord
 
   def subtotal
     jumlah * harga
+  end
+
+  def item_type_name
+    item.jenis
+  end
+
+  def supplier_code
+    item.supplier1
+  end
+
+  def brand_name
+    item.merek
   end
 end
