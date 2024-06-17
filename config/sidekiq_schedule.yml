@@ -13,4 +13,4 @@ backup_database:
 remove_expired_image:
   cron: "20 3 * * *"
   class: "RemoveExpiredFileJob"
-  queue: log
+  queue: low
