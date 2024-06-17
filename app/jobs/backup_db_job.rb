@@ -1,5 +1,5 @@
 class BackupDbJob < ApplicationJob
-  sidekiq_options queue: 'default', retry: false
+  sidekiq_options queue: 'low', retry: false
 
   def perform
     config_db = Rails.configuration.database_configuration[Rails.env]

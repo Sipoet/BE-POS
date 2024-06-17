@@ -1,5 +1,5 @@
 class ToggleCustomerGroupDiscountJob < ApplicationJob
-  sidekiq_options queue: 'low'
+  sidekiq_options queue: 'default'
 
   def perform
     ApplicationRecord.transaction do

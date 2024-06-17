@@ -1,5 +1,5 @@
 class RefreshAllPromotionJob < ApplicationJob
-  sidekiq_options queue: 'low', retry: false
+  sidekiq_options queue: 'default', retry: false
 
   def perform
     dont_run_in_parallel! do
