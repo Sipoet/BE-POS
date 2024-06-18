@@ -37,7 +37,7 @@ class ItemSalesPercentageReport < ApplicationRecord
   end
 
   def stock_left
-    warehouse_stock + store_stock
+    [warehouse_stock,store_stock].compact.sum
   end
 
   def percentage_sales
