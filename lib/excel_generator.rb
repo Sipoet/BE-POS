@@ -65,10 +65,9 @@ class ExcelGenerator
 
   def decorate_row(y,row,worksheet)
     columns.each.with_index(0) do |column, x|
-      value = row.send(column.name)
-      if value.nil?
-        worksheet.write_blank(y, x)
-        return
+      value = row.try(column.name)
+      if value.blank?
+        next
       end
       case column.type
       when :integer,:float,:decimal,:big_decimal,:money

@@ -12,8 +12,9 @@ class UpdateItemSalesPercentageReport < ActiveRecord::Migration[7.1]
         tbl_supel.nama AS supplier_name,
         tbl_item.merek AS brand_name,
         ROUND(tbl_item.hargajual1,0) AS sell_price,
-        stok.warehouse_stock,
-        stok.store_stock,
+        COALESCE(stok.warehouse_stock,0) AS warehouse_stock,
+        COALESCE(stok.store_stock,0) AS store_stock,
+		    COALESCE(stok.stock_left,0) AS stock_left,
         purchase.recent_purchase_date,
         ROUND(COALESCE(purchase.avg_buy_price,beginning_stock.avg_buy_price),2) AS avg_buy_price,
         ROUND(COALESCE(sales.number_of_sales,0),0) AS number_of_sales,
@@ -55,8 +56,9 @@ class UpdateItemSalesPercentageReport < ActiveRecord::Migration[7.1]
       LEFT OUTER JOIN(
         SELECT
         kodeitem,
-        SUM(case when kantor = 'GDG' then round(stok,1) else 0 end) AS warehouse_stock,
-        SUM(case when kantor = 'TOKO' then round(stok,1) else 0 end) AS store_stock
+        ROUND(SUM(case when kantor = 'GDG' then stok else 0 end),1) AS warehouse_stock,
+        ROUND(SUM(case when kantor = 'TOKO' then stok else 0 end),1) AS store_stock,
+		    ROUND(SUM(stok),1) AS stock_left
         FROM tbl_itemstok
         GROUP BY
         kodeitem

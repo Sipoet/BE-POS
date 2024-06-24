@@ -68,7 +68,7 @@ class ItemSalesPercentageReport::IndexService < ApplicationService
     generator.add_column_definitions(ItemSalesPercentageReport::TABLE_HEADER)
     generator.add_data(rows)
     generator.add_metadata(@filter || {})
-    generator.generate('laporan-penjualan-item')
+    generator.generate('laporan-item')
   end
 
 

@@ -9,9 +9,9 @@ class ItemSalesPercentageReport < ApplicationRecord
     datatable_column(self,:supplier_name, :string),
     datatable_column(self,:brand_name, :link, path:'brands', attribute_key: 'brand.merek'),
     datatable_column(self,:recent_purchase_date, :date),
-    datatable_column(self,:stock_left, :integer),
-    datatable_column(self,:warehouse_stock, :integer),
-    datatable_column(self,:store_stock, :integer),
+    datatable_column(self,:stock_left, :decimal),
+    datatable_column(self,:warehouse_stock, :decimal),
+    datatable_column(self,:store_stock, :decimal),
     datatable_column(self,:item_out, :integer),
     datatable_column(self,:avg_buy_price, :decimal),
     datatable_column(self,:number_of_purchase, :integer),
@@ -34,10 +34,6 @@ class ItemSalesPercentageReport < ApplicationRecord
 
   def id
     item_code
-  end
-
-  def stock_left
-    [warehouse_stock,store_stock].compact.sum
   end
 
   def percentage_sales
