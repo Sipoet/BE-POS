@@ -57,7 +57,7 @@ class ApplicationService
   ALL_COLUMN = :all_column
   def permitted_column_names(record_class)
     return ALL_COLUMN if current_user.role.name == Role::SUPERADMIN
-    ColumnAuthorize.where(role_id: current_user.role_id, table: record_class.table_name)
+    ColumnAuthorize.where(role_id: current_user.role_id, table: record_class.name.underscore)
                    .pluck(:column)
   end
 
