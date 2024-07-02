@@ -7,8 +7,10 @@ class Ipos::ItemInHeader < ApplicationRecord
 
   @@list={
     'BL'=> 'Ipos::Purchase',
-    'KNY'=> 'Ipos::ConsignmentIn',
+    'KI'=> 'Ipos::ConsignmentIn',
     'IM'=> 'Ipos::ItemIn',
+    'RB'=> 'Ipos::PurchaseReturn',
+    'RKI' => 'Ipos::ConsignmentInReturn',
   }
   def self.find_sti_class(obj_type)
     @@list[obj_type].constantize

@@ -1,6 +1,4 @@
 class Ipos::Sale < Ipos::ItemOutHeader
-  self.table_name = 'tbl_ikhd'
-  self.primary_key = 'notransaksi'
 
   TABLE_HEADER = [
     datatable_column(self,:notransaksi, :string),

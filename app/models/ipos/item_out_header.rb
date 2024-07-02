@@ -7,10 +7,14 @@ class Ipos::ItemOutHeader < ApplicationRecord
 
   @@list={
     'KSR'=> 'Ipos::Sale',
+    'KSRP'=> 'Ipos::Sale',
     'JL'=> 'Ipos::Sale',
-    'IK'=> 'Ipos::ItemOut'
+    'IK'=> 'Ipos::ItemOut',
+    'RJ' => 'Ipos::SaleReturn',
   }
   def self.find_sti_class(obj_type)
     @@list[obj_type].constantize
+  rescue => e
+    raise e
   end
 end

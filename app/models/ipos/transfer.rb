@@ -17,4 +17,8 @@ class Ipos::Transfer < ApplicationRecord
   has_many :transfer_items, class_name:'Ipos::TransferItem',  foreign_key: 'notransaksi', primary_key: 'notransaksi',dependent: :destroy
 
   alias_attribute :updated_at, :dateupd
+
+  belongs_to :office, class_name: 'Ipos::Office', foreign_key: 'kodekantor', primary_key: 'kodekantor'
+  belongs_to :source_office, class_name: 'Ipos::Office', foreign_key: 'kantordari', primary_key: 'kodekantor'
+  belongs_to :destination_office, class_name: 'Ipos::Office', foreign_key: 'kantortujuan', primary_key: 'kodekantor'
 end

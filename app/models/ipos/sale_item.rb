@@ -14,22 +14,22 @@ class Ipos::SaleItem < ApplicationRecord
     datatable_column(self,:potongan4, :percentage),
     datatable_column(self,:pajak, :decimal),
     datatable_column(self,:total, :decimal),
-    datatable_column(self, 'item.supplier1', :link, path:'suppliers', attribute_key:'supplier.nama'),
-    datatable_column(self, 'item.merek', :link, path:'brands', attribute_key:'brand.ketmerek'),
-    datatable_column(self, 'item.jenis', :link, path:'item_types', attribute_key:'item_type.ketjenis'),
-    datatable_column(self,:updated_at, :datetime),
-    datatable_column(self,:sistemhargajual, :string),
-    datatable_column(self,:tipepromo, :string),
-    datatable_column(self,:jmlgratis, :float),
-    datatable_column(self,:itempromo, :string),
-    datatable_column(self,:satuanpromo, :string),
-    datatable_column(self,:hppdasar, :decimal),
-    datatable_column(self,:nobaris, :integer),
+    datatable_column(self, 'item.supplier1', :link, path: 'suppliers', attribute_key:'supplier.nama'),
+    datatable_column(self, 'item.merek', :link, path: 'brands', attribute_key:'brand.ketmerek'),
+    datatable_column(self, 'item.jenis', :link, path: 'item_types', attribute_key:'item_type.ketjenis'),
+    datatable_column(self, :updated_at, :datetime),
+    datatable_column(self, :sistemhargajual, :string),
+    datatable_column(self, :tipepromo, :string),
+    datatable_column(self, :jmlgratis, :float),
+    datatable_column(self, :itempromo, :string),
+    datatable_column(self, :satuanpromo, :string),
+    datatable_column(self, :hppdasar, :decimal),
+    datatable_column(self, :nobaris, :integer),
     datatable_column(self, :notransaksi, :string),
   ]
 
   belongs_to :item, foreign_key: :kodeitem, primary_key: :kodeitem
-  belongs_to :sale, foreign_key: :notransaksi, primary_key: :notransaksi
+  belongs_to :sale, class_name: 'Ipos::ItemOutHeader', foreign_key: :notransaksi, primary_key: :notransaksi
 
   alias_attribute :id, :iddetail
   alias_attribute :updated_at, :dateupd

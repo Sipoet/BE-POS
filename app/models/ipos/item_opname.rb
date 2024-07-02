@@ -1,5 +1,5 @@
-class Ipos::ItemOutInternal < ApplicationRecord
-  self.table_name = 'tbl_item_ik'
+class Ipos::ItemOpname < ApplicationRecord
+  self.table_name = 'tbl_itemopname'
   self.primary_key = 'iddetail'
 
   belongs_to :item, class_name: 'Ipos::Item', foreign_key: 'kodeitem', primary_key: 'kodeitem'
