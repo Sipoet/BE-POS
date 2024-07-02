@@ -26,12 +26,21 @@ class EmployeeLeave < ApplicationRecord
 
   private
   def change_day_valid
-    return if !change_day?
-    if change_date.blank?
-      errors.add(:change_date, :blank)
+    if change_day?
+      if change_date.blank?
+        errors.add(:change_date, :blank)
+      end
+      if change_shift.blank?
+        errors.add(:change_shift, :blank)
+      end
+    else
+      if change_date.present?
+        errors.add(:change_date, :present)
+      end
+      if change_shift.present?
+        errors.add(:change_shift, :present)
+      end
     end
-    if change_shift.blank?
-      errors.add(:change_shift, :blank)
-    end
+
   end
 end

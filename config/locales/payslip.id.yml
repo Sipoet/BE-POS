@@ -19,3 +19,4 @@ id:
         debt: "Hutang/Panjar"
         tax_amount: "Pajak"
         nett_salary: "Total Gaji Bersih"
+        commission: 'Komisi'

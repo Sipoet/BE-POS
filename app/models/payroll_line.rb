@@ -1,8 +1,13 @@
 class PayrollLine < ApplicationRecord
   has_paper_trail ignore: [:id, :created_at, :updated_at]
 
-
   belongs_to :payroll, inverse_of: :payroll_lines
+
+  validates :group, presence: true
+  validates :payroll_type, presence: true
+  validates :formula, presence: true
+  validates :row, presence: true
+  validates :description, presence: true
 
   enum :group,{
     earning: 0,
@@ -15,7 +20,8 @@ class PayrollLine < ApplicationRecord
     insurance: 2,
     debt: 3, #panjar
     commission: 4,
-    tax: 5
+    tax: 5,
+    other: 6,
   }
 
   enum :formula,{
@@ -27,5 +33,7 @@ class PayrollLine < ApplicationRecord
     sick_leave_cut: 5,
     hourly_daily: 6,
     fulltime_hour_per_day: 7,
+    proportional_commission: 8,
   }
 end
+14

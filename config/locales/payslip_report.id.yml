@@ -22,4 +22,5 @@ id:
         other_incentive: "Tunjangan lainnya"
         debt: "Hutang/Panjar"
         tax_amount: "Pajak"
+        commission: "Komisi"
         nett_salary: "Total Gaji Bersih"

@@ -4,7 +4,7 @@ class Role::UpdateService < ApplicationService
     role = Role.find(params[:id])
     raise RecordNotFound.new(params[:id],Role.model_name.human) if role.nil?
     if record_save?(role)
-      render_json(RoleSerializer.new(role))
+      render_json(RoleSerializer.new(role,{include: [:access_authorizes,:role_work_schedules,:column_authorizes]}))
     else
       render_error_record(role)
     end

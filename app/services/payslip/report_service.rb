@@ -61,6 +61,7 @@ class Payslip::ReportService < ApplicationService
     result.base_salary = 0
     result.debt = 0
     result.overtime_incentive = 0
+    result.commission = 0.to_d
 
     payslip_lines.each do |payslip_line|
       if payslip_line.incentive?
@@ -73,6 +74,8 @@ class Payslip::ReportService < ApplicationService
         else
           result.other_incentive += payslip_line.amount
         end
+      elsif payslip_line.commission?
+        result.commission += payslip_line.amount
       elsif payslip_line.base_salary?
         result.base_salary += payslip_line.amount
       elsif payslip_line.debt?
@@ -85,8 +88,9 @@ class Payslip::ReportService < ApplicationService
        result.work_days > 0 ? "HK#{result.work_days}" : nil,
        result.positional_incentive > 0 ? "TJ#{amount_format(result.positional_incentive)}" : nil,
        result.overtime_incentive > 0 ? "L#{amount_format(result.overtime_incentive)}" : nil,
-       result.attendance_incentive > 0 ? "KRJ#{amount_format(result.attendance_incentive)}" : nil
-  ].compact.join(',')
+       result.attendance_incentive > 0 ? "KRJ#{amount_format(result.attendance_incentive)}" : nil,
+       result.commission > 0 ? "KMS#{amount_format(result.commission)}" : nil
+    ].compact.join(',')
     result
   end
 

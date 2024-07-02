@@ -8,6 +8,8 @@ class Payslip::GeneratePayslipService < ApplicationService
                       .index_by(&:id)
 
     payslips = []
+    @commission_analyzer = CommissionAnalyzer.new(start_date: @start_date, end_date: @end_date)
+    @commission_analyzer.analyze
     ApplicationRecord.transaction do
       employees.each do |employee|
         payroll = payrolls[employee.payroll_id]
@@ -41,11 +43,13 @@ class Payslip::GeneratePayslipService < ApplicationService
     payslip.paid_time_off = payroll.paid_time_off
     recent_sum = 0
     payslip.payslip_lines.map(&:mark_for_destruction)
-    payroll.payroll_lines.each do |payroll_line|
+    payroll.payroll_lines.order(row: :asc)
+           .each do |payroll_line|
       calculator =  Payroll::Calculator.new(payroll_line: payroll_line,
                                             attendance_summary: attendance_summary,
                                             employee: employee,
-                                            recent_sum: recent_sum)
+                                            recent_sum: recent_sum,
+                                            commission_analyzer: @commission_analyzer)
       amount = calculator.calculate!
       if payroll_line.overtime_hour?
         payslip.overtime_hour = calculator.get_meta(:total_overtime)
@@ -55,6 +59,12 @@ class Payslip::GeneratePayslipService < ApplicationService
         description: payroll_line.description,
         group: payroll_line.group,
         payslip_type: payroll_line.payroll_type,
+        formula: payroll_line.formula,
+        variable1: payroll_line.variable1,
+        variable2: payroll_line.variable2,
+        variable3: payroll_line.variable3,
+        variable4: payroll_line.variable4,
+        variable5: payroll_line.variable5,
         amount: amount)
       recent_sum += amount *(payroll_line.earning? ? 1 : -1)
     end
@@ -64,6 +74,12 @@ class Payslip::GeneratePayslipService < ApplicationService
     payslip.save!
     payslip.reload
     payslip
+  end
+
+  def commission_summary
+    CommisionAnalyzer.new(start_date: @start_date,
+                          end_date: @end_date)
+                     .analyze
   end
 
   def calculate_payslip(payslip)

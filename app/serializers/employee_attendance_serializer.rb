@@ -5,6 +5,7 @@ class EmployeeAttendanceSerializer
       obj.send(key).iso8601
     end
   end
+  attributes :shift, :is_late
 
   belongs_to :employee
 end

@@ -17,6 +17,7 @@ class PayslipReport < ApplicationModel
     datatable_column(self, :positional_incentive, :decimal, width:12),
     datatable_column(self, :attendance_incentive, :decimal, width:12),
     datatable_column(self, :other_incentive, :decimal, width:12),
+    datatable_column(self, :commission, :decimal, width:12),
     datatable_column(self, :debt, :decimal, width:12),
     datatable_column(self, :tax_amount, :decimal, width:6),
     datatable_column(self, :nett_salary, :decimal, width:12),
@@ -32,7 +33,7 @@ class PayslipReport < ApplicationModel
                 :known_absence, :unknown_absence, :positional_incentive,
                 :attendance_incentive, :base_salary, :tax_amount, :nett_salary,
                 :payslip_id, :other_incentive, :bank, :bank_account,
-                :bank_register_name, :description
+                :bank_register_name, :description,:commission
 
 
   def employee
