@@ -43,8 +43,8 @@ class EmployeeAttendance::MassUploadService < ApplicationService
   end
 
   def extract_time_attendance(rows,selected_employee,range)
-    time_attendance = []
-
+    time_attendances = []
+    finder = WorkScheduleFinder.new(selected_employee.role_id)
     range.each.with_index do |date, index|
       row = rows[index]
       next if row.nil?
@@ -59,6 +59,7 @@ class EmployeeAttendance::MassUploadService < ApplicationService
       attendances.uniq!
       start_time = nil
       end_time = nil
+      day_attendances = []
       attendances.each.with_index do |datetime, index|
         if start_time.nil?
           start_time = datetime
@@ -67,7 +68,7 @@ class EmployeeAttendance::MassUploadService < ApplicationService
         end_time = datetime
         next if difference_minute(start_time,end_time) < time_offset
         next if (attendances[index + 1].present? && difference_minute(end_time, attendances[index + 1]) < time_offset)
-        time_attendance << {
+        day_attendances << {
           employee_id: selected_employee.id,
           start_time: start_time,
           end_time: end_time,
@@ -77,15 +78,27 @@ class EmployeeAttendance::MassUploadService < ApplicationService
         end_time = nil
       end
       if start_time.present? && end_time.blank?
-        time_attendance << {
+        day_attendances << {
           employee_id: selected_employee.id,
           start_time: start_time,
           end_time: start_time + 4.hour,
           date: date,
         }
       end
+      arr_range_date = day_attendances.map{|line| line[:start_time]..(line[:end_time])}
+      shift = finder.shift_based_arr_range_date(arr_range_date)
+      work_schedules = finder.find_estimate_work_schedules(arr_range_date)
+      day_attendances.each do|attendance|
+        attendance[:shift] = shift
+        work_schedule = work_schedules[0]
+        if work_schedule.present?
+          attendance[:is_late] = parse_time(attendance[:date], work_schedule.begin_work) < attendance[:start_time]
+        end
+      end
+
+      time_attendances += day_attendances
     end
-    time_attendance
+    time_attendances
   end
 
   def open_hour_offset

@@ -10,6 +10,7 @@ class Payroll::Formula::OvertimeHourCalculator < Payroll::Formula::ApplicationCa
     @total_overtime = 0
     offset = payroll_line.variable2
     attendance_summary.details.each do|detail|
+      next unless detail.allow_overtime
       min_work_hour = detail.scheduled_work_hours
       min_work_hour += (payroll_line.variable5 || 1) if detail.is_late
       if detail.work_hours >= min_work_hour + offset

@@ -11,3 +11,6 @@ id:
         end_time: 'Jam Pulang'
         start_work: 'Masuk Kerja'
         end_work: 'Pulang Kerja'
+        is_late: 'Terlambat?'
+        shift: 'Shift Kerja'
+        allow_overtime: 'Boleh Overtime?'
