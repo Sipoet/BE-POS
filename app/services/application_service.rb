@@ -66,7 +66,9 @@ class ApplicationService
     def initialize(record_id, record_type)
       @record_id = record_id
       @record_type = record_type
-      super
+      super("#{record_type} #{@record_id} tidak ditemukan")
     end
   end
+
+  class ValidationError < StandardError;end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_08_032614) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_31_141024) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,17 +47,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_032614) do
   end
 
   create_table "cashier_sessions", force: :cascade do |t|
-    t.datetime "start_time", null: false
-    t.datetime "end_time", null: false
-    t.decimal "total_cash_in", default: "0.0", null: false
-    t.decimal "total_cash_out", default: "0.0", null: false
-    t.decimal "total_debit", default: "0.0", null: false
-    t.decimal "total_credit", default: "0.0", null: false
-    t.decimal "total_qris", default: "0.0", null: false
-    t.decimal "total_emoney", default: "0.0", null: false
-    t.decimal "total_transfer", default: "0.0", null: false
-    t.decimal "total_other_in", default: "0.0", null: false
+    t.date "date", null: false
+    t.decimal "total_in", default: "0.0", null: false
+    t.decimal "total_out", default: "0.0", null: false
     t.integer "status", default: 0, null: false
+    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -156,9 +150,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_032614) do
 
   create_table "edc_settlements", force: :cascade do |t|
     t.integer "cashier_session_id", null: false
-    t.integer "payment_method_id", null: false
+    t.integer "payment_provider_id", null: false
+    t.integer "payment_type_id", null: false
     t.string "terminal_id", null: false
-    t.string "merchant_id"
+    t.string "merchant_id", null: false
     t.decimal "amount", null: false
     t.decimal "diff_amount", null: false
     t.integer "status", default: 0, null: false
@@ -173,6 +168,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_032614) do
     t.datetime "end_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "shift", default: 0, null: false
+    t.boolean "is_late", default: false, null: false
+    t.boolean "allow_overtime", default: false, null: false
     t.index ["employee_id", "start_time"], name: "index_employee_attendances_on_employee_id_and_start_time", unique: true
   end
 
@@ -193,6 +191,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_032614) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["employee_id", "change_date"], name: "emp_id_change_date_idx"
     t.index ["employee_id", "date"], name: "index_employee_leaves_on_employee_id_and_date", unique: true
   end
 
@@ -241,9 +240,33 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_032614) do
   end
 
   create_table "payment_methods", force: :cascade do |t|
+    t.integer "payment_provider_id", null: false
+    t.integer "payment_type_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "payment_provider_edcs", force: :cascade do |t|
+    t.integer "payment_provider_id", null: false
+    t.string "merchant_id", null: false
+    t.string "terminal_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "payment_providers", force: :cascade do |t|
+    t.string "code", null: false
     t.string "name", null: false
-    t.string "provider", null: false
-    t.integer "payment_type", null: false
+    t.string "swift_code"
+    t.string "currency", null: false
+    t.string "account_number", null: false
+    t.string "account_register_name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "payment_types", force: :cascade do |t|
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -281,6 +304,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_032614) do
     t.decimal "amount", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "formula"
+    t.decimal "variable1"
+    t.decimal "variable2"
+    t.decimal "variable3"
+    t.decimal "variable4"
+    t.decimal "variable5"
     t.index ["payslip_id", "payslip_type"], name: "emp_pay_line_idx"
     t.index ["payslip_id"], name: "index_payslip_lines_on_payslip_id"
   end
@@ -320,6 +349,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_032614) do
     t.integer "role_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_flexible", default: false, null: false
     t.index ["role_id", "level", "day_of_week", "shift"], name: "idx_on_role_id_level_day_of_week_shift_c9edb7ea3c"
   end
 
@@ -2416,13 +2446,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_032614) do
   add_foreign_key "discounts", "tbl_supel", column: "blacklist_supplier_code", primary_key: "kode"
   add_foreign_key "discounts", "tbl_supel", column: "supplier_code", primary_key: "kode"
   add_foreign_key "edc_settlements", "cashier_sessions"
-  add_foreign_key "edc_settlements", "payment_methods"
+  add_foreign_key "edc_settlements", "payment_providers"
+  add_foreign_key "edc_settlements", "payment_types"
   add_foreign_key "employee_attendances", "employees"
   add_foreign_key "employee_day_offs", "employees"
   add_foreign_key "employee_leaves", "employees"
   add_foreign_key "employees", "payrolls"
   add_foreign_key "employees", "roles"
-  add_foreign_key "payment_methods", "tbl_bank", column: "provider", primary_key: "kodebank"
+  add_foreign_key "payment_methods", "payment_providers"
+  add_foreign_key "payment_methods", "payment_types"
   add_foreign_key "payroll_lines", "payrolls"
   add_foreign_key "payslip_lines", "payslips"
   add_foreign_key "payslips", "employees"

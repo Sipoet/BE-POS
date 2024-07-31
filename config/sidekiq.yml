@@ -1,4 +1,5 @@
 ---
+:logfile: ./log/sidekiq.log
 :concurrency: 5
 development:
   :concurrency: 2

@@ -74,8 +74,9 @@ Rails.application.routes.draw do
     get :period_report, on: :collection
   end
 
-  resources :employee_attendances, only: [:index, :create, :destroy] do
+  resources :employee_attendances, only: [:index, :create, :destroy, :update] do
     post :mass_upload, on: :collection
+    post :mass_update_allow_overtime, on: :collection
   end
 
   resources :payslips, only:[:index, :show, :update, :destroy] do
@@ -101,7 +102,13 @@ Rails.application.routes.draw do
   end
   resources :payrolls, only: [:index, :show, :create, :update, :destroy]
   resources :employee_leaves, only: [:index, :show, :create, :update, :destroy]
-  resources :cashier_sessions, only: [:index, :show, :create, :update]
+  resources :cashier_sessions, only: [:index, :show, :create, :update] do
+    resources :edc_settlements, only: [:index]
+  end
+  resources :edc_settlements, only: [:create, :update, :destroy]
+  resources :payment_providers, only: [:create, :update, :index]
+  resources :payment_types, only: [:create, :update, :index]
+  resources :payment_provider_edcs, only: [:create, :update, :index, :destroy]
   resources :payment_methods, only: [:index, :destroy, :create, :update]
   resources :banks, only: [:index]
 
