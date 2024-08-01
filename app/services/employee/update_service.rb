@@ -21,7 +21,9 @@ class Employee::UpdateService < ApplicationService
         end
         build_schedule(employee)
         build_day_offs(employee)
-        permitted_params[:code] = permitted_params[:code].try(:downcase)
+        if permitted_params[:code].present?
+          permitted_params[:code] = permitted_params[:code].try(:downcase)
+        end
         employee.update!(permitted_params)
         render_json(EmployeeSerializer.new(employee))
       end
