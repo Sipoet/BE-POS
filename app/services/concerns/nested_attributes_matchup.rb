@@ -1,0 +1,2 @@
+class NestedAttributesMatchup
+end
