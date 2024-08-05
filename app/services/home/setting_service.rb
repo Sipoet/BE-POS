@@ -42,7 +42,13 @@ class Home::SettingService < ApplicationService
       next if ['application_record','application_model'].include?(table_name)
       table_names << table_name
     end
-    table_names += ['ipos::Supplier','ipos::Item','ipos::Brand','ipos::Item_type']
+
+    Dir["#{Rails.root}/app/models/ipos/*.rb"].each do |path|
+      table_name = path.split('/').last
+      table_name = table_name.gsub(/(\w+)\.rb/,'\1')
+      next if ['activity_log'].include?(table_name)
+      table_names << "Ipos::#{table_name.classify}"
+    end
     allowed_columns = role.column_authorizes.group_by(&:table)
     table_names.each_with_object({}) do |table_name,obj|
       klass = table_name.classify.constantize
