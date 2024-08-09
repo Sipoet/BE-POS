@@ -14,3 +14,7 @@ remove_expired_image:
   cron: "20 3 * * *"
   class: "RemoveExpiredFileJob"
   queue: low
+create_today_cashier_session:
+  cron: "10 6 * * *"
+  class: "CreateTodayCashierSessionJob"
+  queue: default
