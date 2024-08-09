@@ -46,7 +46,8 @@ class Role::CreateService < ApplicationService
     permitted_params = params.required(:data)
                               .required(:relationships)
                               .required(:role_work_schedules)
-                              .permit(data:[:type,:id, attributes:[:group_name, :begin_active_at,:end_active_at, :level, :shift, :begin_work, :end_work, :day_of_week]])
+                              .permit(data:[:type,:id, attributes:[:group_name, :begin_active_at,
+                              :end_active_at, :is_flexible, :level, :shift, :begin_work, :end_work, :day_of_week]])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
     permitted_params[:data].each do |line_params|
       actions = line_params[:attributes][:action].split(',') rescue []

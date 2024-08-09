@@ -48,7 +48,9 @@ class Role::UpdateService < ApplicationService
     permitted_params = params.required(:data)
                               .required(:relationships)
                               .required(:role_work_schedules)
-                              .permit(data:[:type, :id, attributes:[:group_name, :begin_active_at,:end_active_at, :level,:shift, :begin_work, :end_work,:day_of_week]])
+                              .permit(data:[:type, :id, attributes:[:group_name, :begin_active_at,
+                                :end_active_at, :level, :shift, :begin_work, :end_work,
+                                :is_flexible, :day_of_week]])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
     role_work_schedules = role.role_work_schedules.index_by(&:id)
     permitted_params[:data].each do |line_params|
