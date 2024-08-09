@@ -3,7 +3,7 @@ class Discount < ApplicationRecord
   has_paper_trail ignore:[:id, :created_at, :updated_at]
   TABLE_HEADER = [
     datatable_column(self,:code, :string),
-    datatable_column(self,:supplier_code, :link, path:'suppliers',attribute_key: 'supplier.name'),
+    datatable_column(self,:supplier_code, :link, path:'suppliers',attribute_key: 'supplier.nama'),
     datatable_column(self,:item_type_name, :link, path:'item_types',attribute_key: 'item_type.ketjenis'),
     datatable_column(self,:brand_name, :link, path:'brands',attribute_key: 'brand.merek'),
     datatable_column(self,:item_code, :link, path:'items',attribute_key: 'item.namaitem'),
