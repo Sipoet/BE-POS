@@ -9,9 +9,12 @@ class ApplicationJob
     else
       raise PreventRunParallelError.new(lock_key)
     end
-    yield
-    Sidekiq.logger.info("lock key #{lock_key}")
-    Cache.delete(lock_key)
+    begin
+      yield
+    ensure
+      Sidekiq.logger.info("lock key #{lock_key}")
+      Cache.delete(lock_key)
+    end
   end
 
   def cancelled?
