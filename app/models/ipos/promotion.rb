@@ -11,6 +11,6 @@ class Ipos::Promotion < ApplicationRecord
   scope :active_range, ->(start_time,end_time){where(tgldari: ..end_time,
                                                      tglsampai: start_time..,
                                                      stsact: true)}
-
+  belongs_to :discount, optional: true
   has_many :item_promotions, class_name: 'Ipos::ItemPromotion', foreign_key: 'iddiskon', dependent: :destroy
 end

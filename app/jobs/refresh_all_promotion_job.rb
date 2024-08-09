@@ -4,9 +4,9 @@ class RefreshAllPromotionJob < ApplicationJob
   def perform
     dont_run_in_parallel! do
       ApplicationRecord.transaction do
-        Discount.all.pluck(:id).each do |id|
+        Discount.all.order(weight: :asc).each do |discount|
           check_if_cancelled!
-          RefreshPromotionJob.new.perform(id)
+          Discount::RefreshPromotion.new(discount).refresh!
         end
       end
     end

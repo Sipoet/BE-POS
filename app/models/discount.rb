@@ -56,6 +56,7 @@ class Discount < ApplicationRecord
   has_many :discount_suppliers, dependent: :destroy
   has_many :discount_brands, dependent: :destroy
   has_many :discount_item_types, dependent: :destroy
+  has_many :promotions, class_name: 'Ipos::Promotion', dependent: :destroy
   accepts_nested_attributes_for :discount_items, :discount_suppliers,:discount_brands,:discount_item_types, allow_destroy: true
 
   belongs_to :item, optional: true, foreign_key: :item_code, primary_key: :kodeitem, class_name:'Ipos::Item'
@@ -87,9 +88,7 @@ class Discount < ApplicationRecord
   end
 
   def delete_promotion
-    Ipos::Promotion
-      .where('iddiskon ilike ?', "%_#{code}%")
-      .destroy_all
+    promotions.destroy_all
   end
 
   private

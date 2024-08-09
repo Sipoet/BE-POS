@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_31_141024) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_09_041253) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -1307,6 +1307,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_31_141024) do
     t.boolean "w7", default: false
     t.decimal "prioritas", precision: 10, default: "0"
     t.boolean "stsvcr", default: false
+    t.integer "discount_id"
   end
 
   create_table "tbl_itemdispdt", id: false, force: :cascade do |t|
@@ -2613,6 +2614,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_31_141024) do
   add_foreign_key "tbl_item_sa", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_item_sa_item", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tbl_item_sa", "tbl_itemsatuan", column: "satuan", primary_key: "satuan", name: "tbl_item_sa_satuan", on_update: :cascade
   add_foreign_key "tbl_item_sa", "tbl_kantor", column: "kodekantor", primary_key: "kodekantor", name: "tbl_item_sa_kantor", on_update: :cascade
+  add_foreign_key "tbl_itemdisp", "discounts"
   add_foreign_key "tbl_itemdisp", "tbl_itemjenis", column: "jenis", primary_key: "jenis", name: "tbl_itemdisp_jenis_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tbl_itemdisp", "tbl_itemmerek", column: "merek", primary_key: "merek", name: "tbl_itemdisp_merek_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tbl_itemdispdt", "tbl_item", column: "kodeitem", primary_key: "kodeitem", name: "tbl_itemdispdt_kodeitem_fkey", on_update: :cascade, on_delete: :cascade
