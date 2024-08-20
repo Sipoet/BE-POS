@@ -18,7 +18,6 @@ class EdcSettlement::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_rows: @edc_settlements.count,
-       total_pages: @edc_settlements.total_pages,
     }
   end
 
@@ -46,6 +45,9 @@ class EdcSettlement::IndexService < ApplicationService
     end
     @filters.each do |filter|
       edc_settlements = edc_settlements.where(filter.to_query)
+    end
+    if params[:cashier_session_id].present?
+      edc_settlements = edc_settlements.where(cashier_session_id: params[:cashier_session_id])
     end
     if @sort.present?
       edc_settlements = edc_settlements.order(@sort)

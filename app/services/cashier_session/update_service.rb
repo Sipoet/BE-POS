@@ -69,10 +69,12 @@ class CashierSession::UpdateService < ApplicationService
   def update_edc_settlement(cashier_session)
     permitted_params = params.required(:data)
                               .required(:relationships)
-                              .required(:edc_settlements)
-                              .permit(data:[:type,:id, attributes:[:terminal_id,:payment_method_id,:merchant_id,:amount, :diff_amount]])
+    return if permitted_params[:edc_settlements].blank?
+    permitted_params = permitted_params.required(:edc_settlements)
+                              .permit(data:[:type,:id, attributes:[:terminal_id,:payment_provider_id,:payment_type_id,:merchant_id,:amount]])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
     edit_attributes(permitted_params[:data], cashier_session.edc_settlements)
+    cashier_session.edc_settlements.each{|edc_settlement|edc_settlement.diff_amount =0}
   end
 
 end
