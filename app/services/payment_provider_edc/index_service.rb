@@ -42,7 +42,7 @@ class PaymentProviderEdc::IndexService < ApplicationService
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      payment_provider_edcs = payment_provider_edcs.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      payment_provider_edcs = payment_provider_edcs.where(['terminal_id ilike ? OR merchant_id ilike ?']+ Array.new(2,"%#{@search_text}%"))
     end
     @filters.each do |filter|
       payment_provider_edcs = payment_provider_edcs.where(filter.to_query)

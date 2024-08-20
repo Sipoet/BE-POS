@@ -19,7 +19,7 @@ class CashierSession::ShowService < ApplicationService
 
   def extract_params
     allowed_columns = CashierSession::TABLE_HEADER.map(&:name)
-    allowed_fields = [:cashier_session]
+    allowed_fields = [:cashier_session,:edc_settlements]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)

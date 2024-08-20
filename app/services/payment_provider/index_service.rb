@@ -24,7 +24,7 @@ class PaymentProvider::IndexService < ApplicationService
 
   def extract_params
     allowed_columns = PaymentProvider::TABLE_HEADER.map(&:name)
-    allowed_fields = [:payment_provider]
+    allowed_fields = [:payment_provider,:payment_provider_edcs]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)

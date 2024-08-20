@@ -1,15 +1,22 @@
 class PaymentProvider < ApplicationRecord
   TABLE_HEADER = [
-    datatable_column(self,:code, :string),
     datatable_column(self,:name, :string),
+    datatable_column(self,:bank_or_provider, :string),
+    datatable_column(self,:status, :enum),
     datatable_column(self,:currency, :string),
     datatable_column(self,:account_number, :string),
     datatable_column(self,:account_register_name, :string),
+    datatable_column(self,:swift_code, :string),
     datatable_column(self,:created_at, :datetime),
     datatable_column(self,:updated_at, :datetime),
   ]
 
-  validates :code, presence: true
+  enum :status, {
+    inactive: 0,
+    active: 1
+  }
+
+  validates :bank_or_provider, presence: true
   validates :name, presence: true
   validates :currency, presence: true
   validates :account_number, presence: true

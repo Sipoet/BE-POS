@@ -4,6 +4,7 @@ class Ipos::SaleItem < ApplicationRecord
 
   TABLE_HEADER=[
     datatable_column(self,:kodeitem, :link, path:'items',attribute_key: 'item.namaitem'),
+    datatable_column(self,'item.namaitem', :string, can_filter: false),
     datatable_column(self,:jumlah, :decimal),
     datatable_column(self,:harga, :decimal),
     datatable_column(self,:satuan, :string),
@@ -48,5 +49,9 @@ class Ipos::SaleItem < ApplicationRecord
 
   def brand_name
     item.merek
+  end
+
+  def item_name
+    item.namaitem
   end
 end

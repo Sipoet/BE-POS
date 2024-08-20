@@ -4,7 +4,12 @@ class EdcSettlement::UpdateService < ApplicationService
     edc_settlement = EdcSettlement.find(params[:id])
     raise RecordNotFound.new(params[:id],EdcSettlement.model_name.human) if edc_settlement.nil?
     if record_save?(edc_settlement)
-      render_json(EdcSettlementSerializer.new(edc_settlement,{fields: @fields}))
+      options = {
+        fields: @fields,
+        include: [:payment_provider, :payment_type, :cashier_session],
+        params:{include: [:payment_provider, :payment_type, :cashier_session]}
+      }
+      render_json(EdcSettlementSerializer.new(edc_settlement,options))
     else
       render_error_record(edc_settlement)
     end
@@ -23,7 +28,7 @@ class EdcSettlement::UpdateService < ApplicationService
   end
 
   def update_attribute(edc_settlement)
-    allowed_columns = EdcSettlement::TABLE_HEADER.map(&:name)
+    allowed_columns = EdcSettlement::TABLE_HEADER.map(&:name) +[:payment_provider, :payment_type, :cashier_session]
     @fields = {edc_settlement: allowed_columns}
     permitted_params = params.required(:data)
                               .required(:attributes)

@@ -1,10 +1,15 @@
 class PaymentProvider::UpdateService < ApplicationService
-
+  include NestedAttributesMatchup
   def execute_service
     payment_provider = PaymentProvider.find(params[:id])
     raise RecordNotFound.new(params[:id],PaymentProvider.model_name.human) if payment_provider.nil?
     if record_save?(payment_provider)
-      render_json(PaymentProviderSerializer.new(payment_provider,{fields: @fields}))
+      options = {
+        fields: @fields,
+        include: ['payment_provider_edcs'],
+        params:{include: ['payment_provider_edcs']}
+      }
+      render_json(PaymentProviderSerializer.new(payment_provider, options))
     else
       render_error_record(payment_provider)
     end
@@ -12,7 +17,8 @@ class PaymentProvider::UpdateService < ApplicationService
 
   def record_save?(payment_provider)
     ApplicationRecord.transaction do
-      update_attribute(payment_provider)
+      edit_attribute(payment_provider)
+      edit_payment_provider_edcs(payment_provider)
       payment_provider.save!
     end
     return true
@@ -22,8 +28,16 @@ class PaymentProvider::UpdateService < ApplicationService
     return false
   end
 
-  def update_attribute(payment_provider)
-    allowed_columns = PaymentProvider::TABLE_HEADER.map(&:name)
+  def edit_payment_provider_edcs(payment_provider)
+    permitted_params = params.required(:data)
+                              .required(:relationships)
+                              .required(:payment_provider_edcs)
+                              .permit(data:[:type, :id, attributes: [:merchant_id, :terminal_id]])
+    edit_attributes(permitted_params[:data], payment_provider.payment_provider_edcs)
+  end
+
+  def edit_attribute(payment_provider)
+    allowed_columns = PaymentProvider::TABLE_HEADER.map(&:name) + [:payment_provider_edcs]
     @fields = {payment_provider: allowed_columns}
     permitted_params = params.required(:data)
                               .required(:attributes)

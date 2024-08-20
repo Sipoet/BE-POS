@@ -103,10 +103,12 @@ Rails.application.routes.draw do
   resources :payrolls, only: [:index, :show, :create, :update, :destroy]
   resources :employee_leaves, only: [:index, :show, :create, :update, :destroy]
   resources :cashier_sessions, only: [:index, :show, :create, :update] do
-    resources :edc_settlements, only: [:index]
+    resources :edc_settlements, only: [:index] do
+      get :check_edc, on: :collection
+    end
   end
   resources :edc_settlements, only: [:create, :update, :destroy]
-  resources :payment_providers, only: [:create, :update, :index]
+  resources :payment_providers, only: [:index, :show,:create, :update, :destroy]
   resources :payment_types, only: [:create, :update, :index]
   resources :payment_provider_edcs, only: [:create, :update, :index, :destroy]
   resources :payment_methods, only: [:index, :destroy, :create, :update]

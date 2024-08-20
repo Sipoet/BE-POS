@@ -24,7 +24,7 @@ class EdcSettlement::IndexService < ApplicationService
 
   def extract_params
     allowed_columns = EdcSettlement::TABLE_HEADER.map(&:name)
-    allowed_fields = [:edc_settlement]
+    allowed_fields = [:edc_settlement,:payment_provider,:payment_type,:cashier_session]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)

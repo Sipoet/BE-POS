@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_09_041253) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_19_134806) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -159,6 +159,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_09_041253) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["cashier_session_id", "payment_provider_id", "payment_type_id", "terminal_id"], name: "idx_on_cashier_session_id_payment_provider_id_payme_f40041c46a", unique: true
   end
 
   create_table "employee_attendances", force: :cascade do |t|
@@ -255,7 +256,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_09_041253) do
   end
 
   create_table "payment_providers", force: :cascade do |t|
-    t.string "code", null: false
+    t.string "bank_or_provider", null: false
     t.string "name", null: false
     t.string "swift_code"
     t.string "currency", null: false
@@ -263,6 +264,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_09_041253) do
     t.string "account_register_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0, null: false
   end
 
   create_table "payment_types", force: :cascade do |t|
