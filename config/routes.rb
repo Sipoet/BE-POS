@@ -113,5 +113,6 @@ Rails.application.routes.draw do
   resources :payment_provider_edcs, only: [:create, :update, :index, :destroy]
   resources :payment_methods, only: [:index, :destroy, :create, :update]
   resources :banks, only: [:index]
-
+  resources :customer_groups, only:[:index]
+  resources :customer_group_discounts, only:[:index,:create,:update,:destroy]
 end
