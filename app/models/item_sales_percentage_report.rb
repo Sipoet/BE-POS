@@ -28,12 +28,10 @@ class ItemSalesPercentageReport < ApplicationRecord
   belongs_to :brand, optional: true, foreign_key: :brand_name, primary_key: :merek, class_name:'Ipos::Brand'
   belongs_to :supplier, foreign_key: :supplier_code, primary_key: :kode, class_name:'Ipos::Supplier'
 
+  alias_attribute :id, :item_code
+
   def readonly?
     true
-  end
-
-  def id
-    item_code
   end
 
   def percentage_sales
