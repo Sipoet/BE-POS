@@ -27,8 +27,10 @@ class Payroll::Formula::ProportionalCommissionCalculator < Payroll::Formula::App
       next if total_people == 0
       total = result.send(calculated_key)
       commission_per_day = percentage * total / (100.0 * total_people)
+      Rails.logger.debug"====commission_per_day #{commission_per_day}"
       total_commission += commission_per_day.round(-2)
     end
+    Rails.logger.debug"====total_commission #{total_commission}"
     total_commission
   end
 
