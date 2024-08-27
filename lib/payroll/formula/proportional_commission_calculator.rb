@@ -17,17 +17,15 @@ class Payroll::Formula::ProportionalCommissionCalculator < Payroll::Formula::App
       next if detail.work_hours <= 0
       date = detail.date
       result = commission_analyzer.result_of(date)
-      total_people = if logic_shared_type == 2
-        result.total_people_per_shift[detail.shift] || 0
-      elsif logic_shared_type == 1
-        result.total_people
-      else
-        result.total_people
+      if logic_shared_type ==2
+        shift = detail.shift>2 ? 2 : detail.shift
+        result = result.result_per_shift[shift]
       end
+      total_people = logic_shared_type ==3 ? 1: result.total_people
       next if total_people == 0
       total = result.send(calculated_key)
       commission_per_day = percentage * total / (100.0 * total_people)
-      Rails.logger.debug"====commission_per_day #{commission_per_day}"
+      Rails.logger.debug"====date#{date} total #{total} total_people #{total_people}. commission_per_day #{commission_per_day}"
       total_commission += commission_per_day.round(-2)
     end
     Rails.logger.debug"====total_commission #{total_commission}"

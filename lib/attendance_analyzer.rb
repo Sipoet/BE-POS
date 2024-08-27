@@ -223,7 +223,7 @@ class AttendanceAnalyzer
   class ResultDetail
     attr_accessor :date, :is_worked, :is_late, :work_hours,
                   :is_sick, :is_known_leave, :is_unknown_leave,
-                  :scheduled_work_hours, :allow_overtime
+                  :scheduled_work_hours, :allow_overtime, :shift
     def initialize(date:, is_late:, work_hours:,allow_overtime:, is_sick:, is_known_leave: , is_unknown_leave:, scheduled_work_hours:, shift:)
       @date = date
       @is_late = is_late
@@ -233,6 +233,7 @@ class AttendanceAnalyzer
       @is_unknown_leave = is_unknown_leave
       @scheduled_work_hours = scheduled_work_hours
       @allow_overtime = allow_overtime
+      @shift = shift
     end
 
     def work_in?
