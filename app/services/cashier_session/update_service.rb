@@ -38,12 +38,12 @@ class CashierSession::UpdateService < ApplicationService
   end
 
   def calculate_summary(cashier_session)
-    cashier_session.total_in = Ipos::Sale.where('tanggal BETWEEN ? AND ?', cashier_session.start_time, cashier_session.end_time)
-                                          .where(tipe: ['KSR','JL'])
-                                          .sum(:totalakhir)
-    codes = Ipos::CashDrawer.where(wkt_mulai: ..(cashier_session.end_time),wkt_akhir: cashier_session.start_time..)
-                            .pluck(:notransaksi)
-    cashier_session.total_out = Ipos::CashOut.where(notransaksi: codes).sum(:kas_keluar)
+    # cashier_session.total_in = Ipos::Sale.where('tanggal BETWEEN ? AND ?', cashier_session.start_time, cashier_session.end_time)
+    #                                       .where(tipe: ['KSR','JL'])
+    #                                       .sum(:totalakhir)
+    # codes = Ipos::CashDrawer.where(wkt_mulai: ..(cashier_session.end_time),wkt_akhir: cashier_session.start_time..)
+    #                         .pluck(:notransaksi)
+    # cashier_session.total_out = Ipos::CashOut.where(notransaksi: codes).sum(:kas_keluar)
   end
 
   def update_cash_in_session_details(cashier_session)
@@ -51,8 +51,9 @@ class CashierSession::UpdateService < ApplicationService
                               .required(:relationships)
 
     return if permitted_params[:cash_in_session_details].blank?
+    allowed_columns = CashInSessionDetail::TABLE_HEADER.map(&:name)
     permitted_params = permitted_params.required(:cash_in_session_details)
-                              .permit(data:[:type,:id, attributes:[:user_id,:start_time,:end_time,:begin_cash,:cash_in]])
+                              .permit(data:[:type,:id, attributes:allowed_columns])
     edit_attributes(permitted_params[:data], cashier_session.cash_in_session_details)
   end
 
@@ -60,8 +61,9 @@ class CashierSession::UpdateService < ApplicationService
     permitted_params = params.required(:data)
                               .required(:relationships)
     return if permitted_params[:cash_out_session_details].blank?
+    allowed_columns = CashOutSessionDetail::TABLE_HEADER.map(&:name)
     permitted_params = permitted_params.required(:cash_out_session_details)
-                              .permit(data:[:type,:id, attributes:[:date,:user_id,:name,:amount,:description]])
+                              .permit(data:[:type,:id, attributes: allowed_columns])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
     edit_attributes(permitted_params[:data], cashier_session.cash_out_session_details)
   end
@@ -70,8 +72,9 @@ class CashierSession::UpdateService < ApplicationService
     permitted_params = params.required(:data)
                               .required(:relationships)
     return if permitted_params[:edc_settlements].blank?
+    allowed_columns = EdcSettlement::TABLE_HEADER.map(&:name)
     permitted_params = permitted_params.required(:edc_settlements)
-                              .permit(data:[:type,:id, attributes:[:terminal_id,:payment_provider_id,:payment_type_id,:merchant_id,:amount]])
+                              .permit(data:[:type,:id, attributes: allowed_columns])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
     edit_attributes(permitted_params[:data], cashier_session.edc_settlements)
     cashier_session.edc_settlements.each{|edc_settlement|edc_settlement.diff_amount =0}

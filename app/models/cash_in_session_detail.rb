@@ -1,6 +1,7 @@
 class CashInSessionDetail < ApplicationRecord
 
   TABLE_HEADER = [
+    datatable_column(self,:user_id, :link,path: 'users', attribute_key:'users.code'),
     datatable_column(self,:start_time, :datetime),
     datatable_column(self,:end_time, :datetime),
     datatable_column(self,:status, :decimal),

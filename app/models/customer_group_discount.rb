@@ -1,6 +1,6 @@
 class CustomerGroupDiscount < ApplicationRecord
   TABLE_HEADER = [
-    datatable_column(self,:customer_group_code, :link, attribute_key:'customer_groups.grup'),
+    datatable_column(self,:customer_group_code, :link,path:'customer_group_discounts', attribute_key:'customer_groups.grup'),
     datatable_column(self,:period_type, :string),
     datatable_column(self,:discount_percentage, :decimal),
     datatable_column(self,:start_active_date, :date),
