@@ -78,10 +78,18 @@ class EmployeeAttendance::MassUploadService < ApplicationService
         end_time = nil
       end
       if start_time.present? && end_time.blank?
+        time_str = Setting.get("scheduled_store_end_time") || '22:00'
+        scheduled_store_end_time = DateTime.parse("#{start_time.to_date.iso8601}T#{time_str}")
+        end_time = start_time
+        if start_time >= scheduled_store_end_time
+          start_time -= 4.hour
+        else
+          end_time += 4.hour
+        end
         day_attendances << {
           employee_id: selected_employee.id,
           start_time: start_time,
-          end_time: start_time + 4.hour,
+          end_time: end_time,
           date: date,
         }
       end
