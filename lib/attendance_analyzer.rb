@@ -104,6 +104,7 @@ class AttendanceAnalyzer
   def add_leave(result, date)
     employee_leave = @employee_leaves[date]
     if employee_leave.blank?
+      Rails.logger.debug"===#{@employee.name} ALPHA tgl #{date}"
       result.add_detail(date: date, is_unknown_leave: true)
     elsif employee_leave.sick_leave?
       result.add_detail(date: date, is_sick: true)
