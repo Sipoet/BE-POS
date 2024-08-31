@@ -4,7 +4,7 @@ class Ipos::Sale < Ipos::ItemOutHeader
     datatable_column(self,:notransaksi, :string),
     datatable_column(self,:tanggal, :datetime),
     datatable_column(self,:totalitem, :decimal),
-    datatable_column(self,:subtotal, :decimal),
+    datatable_column(self,:subtotal, :money),
     datatable_column(self,:potnomfaktur, :decimal),
     datatable_column(self,:biayalain, :decimal),
     datatable_column(self,:pajak, :decimal),

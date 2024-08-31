@@ -7,9 +7,9 @@ class SalesGroupBySupplierReport < ApplicationModel
     datatable_column(self, :number_of_purchase, :integer),
     datatable_column(self, :number_of_sales, :integer),
     datatable_column(self, :stock_left, :integer),
-    datatable_column(self, :purchase_total, :integer),
-    datatable_column(self, :sales_total, :integer),
-    datatable_column(self, :gross_profit, :integer),
+    datatable_column(self, :purchase_total, :money),
+    datatable_column(self, :sales_total, :money),
+    datatable_column(self, :gross_profit, :money),
     datatable_column(self, :sales_percentage, :percentage)
 ].freeze
 

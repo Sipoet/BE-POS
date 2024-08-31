@@ -15,7 +15,7 @@ class Payslip < ApplicationRecord
     datatable_column(self,:unknown_absence, :integer),
     datatable_column(self,:paid_time_off, :integer),
     datatable_column(self,:gross_salary, :decimal),
-    datatable_column(self,:tax_amount, :decimal),
+    datatable_column(self,:tax_amount, :money),
     datatable_column(self,:nett_salary, :decimal),
     datatable_column(self,:created_at, :datetime),
     datatable_column(self,:updated_at, :datetime),

@@ -6,7 +6,7 @@ class Ipos::TransferItem < ApplicationRecord
     datatable_column(self,:kodeitem, :link, path: 'items',attribute_key: 'item.namaitem'),
     datatable_column(self,:jumlah, :decimal),
     datatable_column(self,:cogs, :decimal),
-    datatable_column(self,:sell_price, :decimal),
+    datatable_column(self,:sell_price, :money),
     datatable_column(self,:satuan, :string),
     datatable_column(self,:tglexp, :datetime),
     datatable_column(self,:kodeprod, :string),

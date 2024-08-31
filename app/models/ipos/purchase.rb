@@ -7,7 +7,7 @@ class Ipos::Purchase < Ipos::ItemInHeader
     datatable_column(self, :tanggal, :datetime),
     datatable_column(self, :kantortujuan, :string),
     datatable_column(self, :totalitem, :decimal),
-    datatable_column(self, :subtotal, :decimal),
+    datatable_column(self, :subtotal, :money),
     datatable_column(self, :potnomfaktur, :decimal),
     datatable_column(self, :biayalain, :decimal),
     datatable_column(self, :ppn, :string),

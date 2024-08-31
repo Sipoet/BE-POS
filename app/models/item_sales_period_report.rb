@@ -7,12 +7,12 @@ class ItemSalesPeriodReport < ApplicationModel
     datatable_column(self,:item_type_name, :string),
     datatable_column(self,:brand_name, :string),
     datatable_column(self,:discount_percentage, :decimal),
-    datatable_column(self,:buy_price, :decimal),
-    datatable_column(self,:sell_price, :decimal),
+    datatable_column(self,:buy_price, :money),
+    datatable_column(self,:sell_price, :money),
     datatable_column(self,:quantity, :integer),
-    datatable_column(self,:subtotal, :decimal),
-    datatable_column(self,:discount_total, :decimal),
-    datatable_column(self,:sales_total, :decimal)
+    datatable_column(self,:subtotal, :money),
+    datatable_column(self,:discount_total, :money),
+    datatable_column(self,:sales_total, :money)
   ].freeze
 
   attr_accessor :item_code,

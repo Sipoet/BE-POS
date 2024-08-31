@@ -4,7 +4,7 @@ class CashOutSessionDetail < ApplicationRecord
     datatable_column(self,:user_id, :link,path: 'users', attribute_key:'users.code'),
     datatable_column(self,:name, :string),
     datatable_column(self,:status, :enum),
-    datatable_column(self,:amount, :decimal),
+    datatable_column(self,:amount, :money),
     datatable_column(self,:description, :string),
     datatable_column(self,:created_at, :datetime),
     datatable_column(self,:updated_at, :datetime),

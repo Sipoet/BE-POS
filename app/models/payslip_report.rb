@@ -19,7 +19,7 @@ class PayslipReport < ApplicationModel
     datatable_column(self, :other_incentive, :decimal, width:12),
     datatable_column(self, :commission, :decimal, width:12),
     datatable_column(self, :debt, :decimal, width:12),
-    datatable_column(self, :tax_amount, :decimal, width:6),
+    datatable_column(self, :tax_amount, :money, width:6),
     datatable_column(self, :nett_salary, :decimal, width:12),
     datatable_column(self,:description, :string, width:17),
     datatable_column(self,:bank, :string, width:6),
