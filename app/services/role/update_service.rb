@@ -18,6 +18,7 @@ class Role::UpdateService < ApplicationService
       update_access_authorizes(role)
       update_column_authorizes(role)
       update_attribute(role)
+      delete_cache(role)
       role.save!
     end
     return true
@@ -25,6 +26,10 @@ class Role::UpdateService < ApplicationService
     Rails.logger.error e.message
     Rails.logger.error e.backtrace
     return false
+  end
+
+  def delete_cache(role)
+    Cache.delete_namespace("role-#{role.id}")
   end
 
   def update_access_authorizes(role)

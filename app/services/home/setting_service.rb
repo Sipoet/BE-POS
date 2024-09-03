@@ -24,13 +24,13 @@ class Home::SettingService < ApplicationService
       controller_name = controller_name.gsub(/(\w+)_controller\.rb/,'\1')
       next if ['application','assets'].include?(controller_name)
       controller_names << controller_name
-
     end
+    controller_names.uniq!
     Rails.application.routes.routes.group_by{|route| route.defaults[:controller]}
     .each_with_object({}) do |(controller,routes),obj|
       next if controller.blank?
       next unless controller_names.include?(controller)
-      obj[controller.singularize.camelize(:lower)] = routes.map{|route| route.defaults[:action].camelize(:lower)}
+      obj[controller.singularize.camelize(:lower)] = routes.map{|route| route.defaults[:action].camelize(:lower)}.uniq
     end
   end
 

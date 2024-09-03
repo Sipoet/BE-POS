@@ -10,7 +10,9 @@ module UserAuthorizer
 
     def has_authorize?(controller_name, action)
       access = role_access
+      Rails.logger.debug "=====check authorize: #{controller_name} #{action}"
       return false if access[controller_name].blank?
+      Rails.logger.debug "=====list authorize on #{controller_name} #{access[controller_name]}"
       access[controller_name].include?(action)
     end
 
