@@ -20,7 +20,7 @@ class ItemSalesPercentageReport < ApplicationRecord
     datatable_column(self,:purchase_total, :money),
     datatable_column(self,:sales_total, :money),
     datatable_column(self,:gross_profit, :money),
-    datatable_column(self,:percentage_sales , :percentage, can_filter: false)
+    datatable_column(self,:percentage_sales, :percentage)
   ].freeze
 
   belongs_to :item, foreign_key: :item_code, primary_key: :kodeitem, class_name:'Ipos::Item'
@@ -34,9 +34,4 @@ class ItemSalesPercentageReport < ApplicationRecord
     true
   end
 
-  def percentage_sales
-    return 0.0 if number_of_purchase == 0
-    return (number_of_sales.to_f / number_of_purchase.to_f * 100).round(2)
-
-  end
 end

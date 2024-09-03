@@ -1,9 +1,9 @@
 refresh_discount:
-  cron: "6 16 * * *"
+  cron: "5 0 * * *"
   class: "RefreshAllPromotionJob"
   queue: default
 toggle_customer_group_discount:
-  cron: "5 16 * * *"
+  cron: "5 0 * * *"
   class: "ToggleCustomerGroupDiscountJob"
   queue: default
 backup_database:
@@ -11,10 +11,10 @@ backup_database:
   class: "BackupDbJob"
   queue: low
 remove_expired_image:
-  cron: "8 16 * * *"
+  cron: "5 0 * * *"
   class: "RemoveExpiredFileJob"
   queue: low
 create_today_cashier_session:
-  cron: "9 16 * * *"
+  cron: "5 0 * * *"
   class: "CreateTodayCashierSessionJob"
   queue: default

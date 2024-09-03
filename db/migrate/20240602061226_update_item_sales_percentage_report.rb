@@ -22,7 +22,8 @@ class UpdateItemSalesPercentageReport < ActiveRecord::Migration[7.1]
         ROUND(COALESCE(sales.sales_total,0) - (COALESCE(purchase.avg_buy_price,beginning_stock.avg_buy_price) * COALESCE(sales.number_of_sales,0)),0) AS gross_profit,
         ROUND(COALESCE(sales.item_out,0),0) AS item_out,
         ROUND(COALESCE(purchase.number_of_purchase,0) + COALESCE(beginning_stock.number_of_purchase,0),0) AS number_of_purchase,
-        COALESCE(purchase.purchase_total,0) + COALESCE(beginning_stock.purchase_total,0) AS purchase_total
+        COALESCE(purchase.purchase_total,0) + COALESCE(beginning_stock.purchase_total,0) AS purchase_total,
+        ROUND(COALESCE(sales.number_of_sales,0) * 100/COALESCE(NULLIF(COALESCE(purchase.number_of_purchase,0) + COALESCE(beginning_stock.number_of_purchase,0),0 ),1),2) AS percentage_sales
       FROM tbl_item
       INNER JOIN tbl_supel ON tbl_supel.kode = tbl_item.supplier1 AND tbl_supel.tipe = 'SU'
       INNER JOIN tbl_itemjenis ON tbl_itemjenis.jenis = tbl_item.jenis
@@ -39,7 +40,7 @@ class UpdateItemSalesPercentageReport < ActiveRecord::Migration[7.1]
         SELECT kodeitem,
         MAX(tbl_imhd.tanggal) as recent_purchase_date,
         SUM(tbl_imdt.jumlah) AS number_of_purchase,
-        AVG(tbl_imdt.harga) AS avg_buy_price,
+        AVG((tbl_imdt.total / COALESCE(NULLIF(tbl_imdt.jumlah, 0), 1)) - (tbl_imdt.total * tbl_imhd.potnomfaktur / COALESCE(NULLIF(tbl_imhd.subtotal, 0), 1))) AS avg_buy_price,
         SUM(tbl_imdt.total) AS purchase_total
         FROM tbl_imdt
         INNER JOIN tbl_imhd on tbl_imhd.notransaksi = tbl_imdt.notransaksi

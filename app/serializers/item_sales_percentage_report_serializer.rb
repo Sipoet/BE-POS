@@ -1,7 +1,7 @@
 class ItemSalesPercentageReportSerializer
   include JSONAPI::Serializer
   attributes :item_code, :item_name, :item_type_name, :supplier_code,
-             :supplier_name, :brand_name, :percentage_sales, :item_type_desc,
+             :supplier_name, :brand_name, :item_type_desc,
              :gross_profit,:stock_left
   attribute :brand do |obj|
     obj.brand_name
@@ -11,7 +11,7 @@ class ItemSalesPercentageReportSerializer
     obj.item_type_name
   end
 
-  %i{avg_buy_price sales_total purchase_total sell_price}.each do |key|
+  %i{avg_buy_price sales_total purchase_total sell_price percentage_sales}.each do |key|
     attribute key do |object|
       object.send(key).to_f.round(2)
     end
