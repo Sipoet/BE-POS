@@ -11,10 +11,12 @@ class CashierSession::CreateService < ApplicationService
 
   def record_save?(cashier_session)
     ApplicationRecord.transaction do
-      build_cash_in_session_details(cashier_session)
-      build_cash_out_session_details(cashier_session)
-      build_edc_settlement(cashier_session)
-      update_attribute(cashier_session)
+      if params[:data][:relationships].present?
+        build_cash_in_session_details(cashier_session)
+        build_cash_out_session_details(cashier_session)
+        build_edc_settlement(cashier_session)
+      end
+      add_attribute(cashier_session)
       calculate_summary(cashier_session)
       cashier_session.save!
     end
@@ -27,7 +29,7 @@ class CashierSession::CreateService < ApplicationService
 
   private
 
-  def update_attribute(cashier_session)
+  def add_attribute(cashier_session)
     allowed_columns = CashierSession::TABLE_HEADER.map(&:name)
     @fields = {cashier_session: allowed_columns}
     permitted_params = params.required(:data)
