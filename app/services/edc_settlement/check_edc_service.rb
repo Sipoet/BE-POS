@@ -60,10 +60,6 @@ class EdcSettlement::CheckEdcService < ApplicationService
       end
     end
 
-    def id
-      payment_type_id
-    end
-
     def status
       if total_in_input == total_in_system
         'same'
