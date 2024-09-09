@@ -64,7 +64,7 @@ class EdcSettlement::CheckEdcService < ApplicationService
       if total_in_input == total_in_system
         'same'
       elsif total_in_input > total_in_system
-        'greated'
+        'greater'
       else
         'lesser'
       end
