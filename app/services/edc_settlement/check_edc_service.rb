@@ -27,8 +27,8 @@ class EdcSettlement::CheckEdcService < ApplicationService
   end
 
   def grouped_system_amount(date)
-    start_time = DateTime.parse("#{Date.today}T07:00:00Z")
-    end_time = DateTime.parse("#{Date.tomorrow}T06:59:59Z")
+    start_time = DateTime.parse("#{date.iso8601}T07:00:00Z")
+    end_time = DateTime.parse("#{date.tomorrow.iso8601}T06:59:59Z")
     sales_transaction_report = summary_sales_transaction(start_time:start_time,end_time: end_time)
     PaymentType.all.each_with_object({}) do |payment_type,obj|
       amount = case payment_type.name
