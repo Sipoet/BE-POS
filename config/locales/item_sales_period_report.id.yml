@@ -16,3 +16,4 @@ id:
         subtotal: 'Subtotal'
         discount_total: 'Total Diskon'
         sales_total: 'Total'
+        is_consignment: "Konsinyasi?"

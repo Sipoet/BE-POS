@@ -11,6 +11,7 @@ class ItemSalesPeriodReportSerializer
               :quantity,
               :subtotal,
               :discount_total,
-              :sales_total
+              :sales_total,
+              :is_consignment
 
 end

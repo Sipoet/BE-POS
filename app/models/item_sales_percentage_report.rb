@@ -9,6 +9,7 @@ class ItemSalesPercentageReport < ApplicationRecord
     datatable_column(self,:supplier_name, :string),
     datatable_column(self,:brand_name, :link, path:'brands', attribute_key: 'brand.merek'),
     datatable_column(self,:recent_purchase_date, :date),
+    datatable_column(self,:is_consignment, :boolean),
     datatable_column(self,:stock_left, :decimal),
     datatable_column(self,:warehouse_stock, :decimal),
     datatable_column(self,:store_stock, :decimal),

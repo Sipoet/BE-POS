@@ -71,6 +71,7 @@ class SaleItem::PeriodReportService < ApplicationService
         #{Ipos::SaleItem.table_name}.kodeitem AS item_code,
         #{Ipos::Item.table_name}.namaitem AS item_name,
         #{Ipos::Item.table_name}.supplier1 AS supplier_code,
+        #{Ipos::Item.table_name}.konsinyasi ='Y' AS is_consignment,
         #{Ipos::Item.table_name}.merek AS brand_name,
         #{Ipos::Item.table_name}.jenis AS item_type_name,
         #{Ipos::SaleItem.table_name}.potongan AS discount_percentage,
@@ -91,8 +92,10 @@ class SaleItem::PeriodReportService < ApplicationService
         #{filter_query_brands}
         #{filter_query_items}
         #{filter_query_discount}
+        #{filter_consignment}
       GROUP BY
         #{Ipos::SaleItem.table_name}.kodeitem,
+        #{Ipos::Item.table_name}.konsinyasi,
         #{Ipos::Item.table_name}.namaitem,
         #{Ipos::Item.table_name}.supplier1,
         #{Ipos::Item.table_name}.merek,
@@ -130,12 +133,18 @@ class SaleItem::PeriodReportService < ApplicationService
     return "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Sale.table_name}.kode ilike '%?%'",@discount_code])}"
   end
 
+  def filter_consignment
+    return if @is_consignment.nil?
+    value = @is_consignment.try(:downcase) == 'true' ? 'Y' : 'N'
+    return "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.konsinyasi = ?",value])}"
+  end
+
   def decorate_result(query)
     query.to_a.map{ |row| ItemSalesPeriodReport.new(row)}
   end
 
   def extract_params
-    permitted_params = @params.permit(:start_time,:end_time,:discount_code,:report_type,suppliers:[],brands:[],item_types:[],items:[])
+    permitted_params = @params.permit(:start_time,:end_time,:discount_code,:report_type,:is_consignment,suppliers:[],brands:[],item_types:[],items:[])
     @start_time = permitted_params.fetch(:start_time,Time.now.utc.beginning_of_day).try(:to_time)
     @end_time = permitted_params.fetch(:end_time,Time.now.utc.end_of_day).try(:to_time)
     @discount_code = permitted_params[:discount_code]
@@ -144,5 +153,6 @@ class SaleItem::PeriodReportService < ApplicationService
     @items = *permitted_params[:items]
     @item_types = *permitted_params[:item_types]
     @report_type = permitted_params[:report_type]
+    @is_consignment = permitted_params[:is_consignment]
   end
 end

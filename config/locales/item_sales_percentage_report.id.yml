@@ -25,3 +25,4 @@ id:
         recent_purchase_date: "Tanggal Akhir Beli"
         item_out: "Jumlah Item Keluar"
         stock_left: "Stok Sekarang"
+        is_consignment: "Konsinyasi?"

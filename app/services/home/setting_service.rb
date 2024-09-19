@@ -30,7 +30,8 @@ class Home::SettingService < ApplicationService
     .each_with_object({}) do |(controller,routes),obj|
       next if controller.blank?
       next unless controller_names.include?(controller)
-      obj[controller.singularize.camelize(:lower)] = routes.map{|route| route.defaults[:action].camelize(:lower)}.uniq
+      obj[controller.singularize.camelize(:lower)] = routes.map{|route| route.defaults[:action].strip.camelize(:lower)}
+                                                           .uniq
     end
   end
 

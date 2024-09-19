@@ -6,6 +6,7 @@ class ItemSalesPeriodReport < ApplicationModel
     datatable_column(self,:supplier_code, :string),
     datatable_column(self,:item_type_name, :string),
     datatable_column(self,:brand_name, :string),
+    datatable_column(self,:is_consignment, :boolean),
     datatable_column(self,:discount_percentage, :decimal),
     datatable_column(self,:buy_price, :money),
     datatable_column(self,:sell_price, :money),
@@ -25,6 +26,7 @@ class ItemSalesPeriodReport < ApplicationModel
                 :quantity,
                 :sales_total,
                 :discount_percentage,
+                :is_consignment,
                 :subtotal
   def initialize(row)
     @item_code = row['item_code']
@@ -38,6 +40,7 @@ class ItemSalesPeriodReport < ApplicationModel
     @subtotal = row['subtotal'].to_f
     @buy_price = row['buy_price'].to_f
     @sell_price = row['sell_price'].to_f
+    @is_consignment = row['is_consignment']
   end
 
   def id
