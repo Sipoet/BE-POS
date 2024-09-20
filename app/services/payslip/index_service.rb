@@ -24,7 +24,7 @@ class Payslip::IndexService < ApplicationService
 
   def extract_params
     allowed_columns = Payslip::TABLE_HEADER.map(&:name) - ['employee_name']
-    allowed_fields = ['payslip','payroll','employee']
+    allowed_fields = ['payslip','payroll','employee','payslip_lines.payroll_type']
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)

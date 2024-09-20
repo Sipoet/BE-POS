@@ -10,7 +10,7 @@ class Payslip::ShowService < ApplicationService
   private
   def extract_params
     allowed_columns = Payslip::TABLE_HEADER.map(&:name)
-    allowed_fields = [:payslip_line]
+    allowed_fields = ['payslip','payroll','employee','payslip_lines', payslip_lines: [:payroll_type]]
     permitted_params = params.permit(:include,fields: allowed_fields, )
     if permitted_params[:fields].present?
       @fields = allowed_fields.each_with_object({}) do |key, fields|

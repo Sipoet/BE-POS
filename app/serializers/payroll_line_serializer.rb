@@ -1,6 +1,6 @@
 class PayrollLineSerializer
   include JSONAPI::Serializer
-  attributes :row, :group, :payroll_type, :formula,
+  attributes :row, :group, :formula, :payroll_type_id,
               :description, :variable1, :variable2,
               :variable3, :variable4, :variable5
 
