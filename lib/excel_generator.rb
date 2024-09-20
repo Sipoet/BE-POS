@@ -5,6 +5,15 @@ class ExcelGenerator
   def initialize
     @columns = []
     @rows = []
+    @row_data_type = :instance_variable
+  end
+
+  def set_row_data_type_hash!
+    @row_data_type = :hash
+  end
+
+  def set_row_data_type_instance_variable!
+    @row_data_type = :instance_variable
   end
 
   def add_column_definitions(column_definitions)
@@ -27,6 +36,11 @@ class ExcelGenerator
 
   def generate(filename = 'data.xlsx')
     raise 'column definitions is empty' if columns.empty?
+    @val_func = if @row_data_type == :instance_variable
+        ->(row,name){row.try(name)}
+    elsif @row_data_type == :hash
+      ->(row,name){row[name]}
+    end
     tempfile = Tempfile.new([filename.split('.xlsx')[0],'.xlsx'])
     workbook = WriteXLSX.new(tempfile.path)
     add_format(workbook)
@@ -41,7 +55,7 @@ class ExcelGenerator
   def add_format(workbook)
     @header_format = workbook.add_format(bold: true, size: 12)
     @num_format = workbook.add_format(size: 12, num_format: '#,##0.0')
-    @money_format = workbook.add_format(size: 12, num_format: 'Rp.#,##0.0')
+    @money_format = workbook.add_format(size: 12, num_format: 'Rp#,##0.0')
     @general_format = workbook.add_format(size: 12)
     @date_format = workbook.add_format(size: 12, num_format: 'dd/mm/yyyy')
     @datetime_format = workbook.add_format(size: 12, num_format: 'dd/mm/yyyy hh:mm')
@@ -66,7 +80,7 @@ class ExcelGenerator
 
   def decorate_row(y,row,worksheet)
     columns.each.with_index(0) do |column, x|
-      value = row.try(column.name)
+      value = @val_func.call(row, column.name)
       if value.blank?
         next
       end
