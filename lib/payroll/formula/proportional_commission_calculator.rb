@@ -68,5 +68,12 @@ class Payroll::Formula::ProportionalCommissionCalculator < Payroll::Formula::App
     EmployeeAttendance.where(shift: 1,date: date,).distinct(&:employee_id).count
   end
 
+  def self.main_amount(payroll_line)
+    commission_total_type = payroll_line.variable1.to_i
+    Setting.get("percentage_commission_type#{commission_total_type}") || 0
+  end
 
+  def self.full_amount(payroll_line)
+    0
+  end
 end

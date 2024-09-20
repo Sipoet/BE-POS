@@ -8,20 +8,11 @@ class PayrollLine < ApplicationRecord
   validates :formula, presence: true
   validates :row, presence: true
   validates :description, presence: true
+  belongs_to :payroll_type
 
   enum :group,{
     earning: 0,
     deduction: 1
-  }
-
-  enum :payroll_type, {
-    base_salary: 0, #gaji pokok
-    incentive: 1, #tunjangan
-    insurance: 2,
-    debt: 3, #panjar
-    commission: 4,
-    tax: 5,
-    other: 6,
   }
 
   enum :formula,{
@@ -35,5 +26,6 @@ class PayrollLine < ApplicationRecord
     fulltime_hour_per_day: 7,
     proportional_commission: 8,
   }
+
+  belongs_to :payroll_type, optional: true
 end
-14

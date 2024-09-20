@@ -16,4 +16,13 @@ class Payroll::Formula::AnnualLeaveCutCalculator < Payroll::Formula::Application
     return 0
   end
 
+
+  def self.main_amount(payroll_line)
+    payroll_line.variable1
+  end
+
+  def self.full_amount(payroll_line)
+    payroll_line.variable1
+  end
+
 end

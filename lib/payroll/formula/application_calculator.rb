@@ -15,6 +15,14 @@ class Payroll::Formula::ApplicationCalculator
     raise 'should init on child class'
   end
 
+  def self.main_amount(payroll_line)
+    raise 'should init on child class'
+  end
+
+  def self.full_amount(payroll_line)
+    raise 'should init on child class'
+  end
+
   def meta
     {
       total_overtime: @total_overtime

@@ -30,4 +30,12 @@ class Payroll::Formula::OvertimeHourCalculator < Payroll::Formula::ApplicationCa
       total_overtime: @total_overtime
     }
   end
+
+  def self.main_amount(payroll_line)
+    payroll_line.variable1
+  end
+
+  def self.full_amount(payroll_line)
+    0
+  end
 end

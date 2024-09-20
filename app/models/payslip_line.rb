@@ -30,4 +30,5 @@ class PayslipLine < ApplicationRecord
   validates :group, presence: true
 
   belongs_to :payslip, inverse_of: :payslip_lines
+  belongs_to :payroll_type, optional: true
 end

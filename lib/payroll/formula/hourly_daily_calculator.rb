@@ -20,4 +20,11 @@ class Payroll::Formula::HourlyDailyCalculator < Payroll::Formula::ApplicationCal
     ((attendance_summary.total_full_work_days.to_d / attendance_summary.total_day.to_d) * payroll_line.variable1.to_d).round(-2)
   end
 
+  def self.main_amount(payroll_line)
+    payroll_line.variable1
+  end
+
+  def self.full_amount(payroll_line)
+    payroll_line.variable1
+  end
 end

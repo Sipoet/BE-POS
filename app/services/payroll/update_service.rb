@@ -27,7 +27,7 @@ class Payroll::UpdateService < ApplicationService
     permitted_params = params.required(:data)
                               .required(:relationships)
                               .required(:payroll_lines)
-                              .permit(data:[:type,:id, attributes:[:row,:group,:payroll_type,:formula,
+                              .permit(data:[:type,:id, attributes:[:row,:group,:payroll_type_id,:formula,
                                       :description, :variable1, :variable2,
                                       :variable3, :variable4, :variable5]])
     return if (permitted_params.blank? || permitted_params[:data].blank?)

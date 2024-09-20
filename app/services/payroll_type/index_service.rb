@@ -1,29 +1,30 @@
-class Payroll::IndexService < ApplicationService
+class PayrollType::IndexService < ApplicationService
+
   include JsonApiDeserializer
   def execute_service
     extract_params
-    @payrolls = find_payrolls
+    @payroll_types = find_payroll_types
     options = {
       meta: meta,
       fields: @fields,
       params:{include: @included},
       include: @included
     }
-    render_json(PayrollSerializer.new(@payrolls,options))
+    render_json(PayrollTypeSerializer.new(@payroll_types,options))
   end
 
   def meta
     {
       page: @page,
       limit: @limit,
-      total_pages: @payrolls.total_pages,
-      total_rows: @payrolls.total_count,
+      total_rows: @payroll_types.count,
+       total_pages: @payroll_types.total_pages,
     }
   end
 
   def extract_params
-    allowed_columns = Payroll::TABLE_HEADER.map(&:name)
-    allowed_fields = [:payroll, :payroll_lines, payroll_lines:[:payroll_type]]
+    allowed_columns = PayrollType::TABLE_HEADER.map(&:name)
+    allowed_fields = [:payroll_type]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       allowed_columns: allowed_columns)
@@ -33,25 +34,25 @@ class Payroll::IndexService < ApplicationService
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @field = result.fields
+    @fields = result.fields
   end
 
-  def find_payrolls
-    payrolls = Payroll.all.includes(@included)
+  def find_payroll_types
+    payroll_types = PayrollType.all.includes(@included)
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      payrolls = payrolls.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      payroll_types = payroll_types.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
     end
     @filters.each do |filter|
-      payrolls = payrolls.where(filter.to_query)
+      payroll_types = payroll_types.where(filter.to_query)
     end
     if @sort.present?
-      payrolls = payrolls.order(@sort)
+      payroll_types = payroll_types.order(@sort)
     else
-      payrolls = payrolls.order(name: :asc)
+      payroll_types = payroll_types.order(id: :asc)
     end
-    payrolls
+    payroll_types
   end
 
 end

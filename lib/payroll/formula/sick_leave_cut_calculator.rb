@@ -16,4 +16,11 @@ class Payroll::Formula::SickLeaveCutCalculator < Payroll::Formula::ApplicationCa
     return 0
   end
 
+  def self.main_amount(payroll_line)
+    payroll_line.variable1
+  end
+
+  def self.full_amount(payroll_line)
+    payroll_line.variable1
+  end
 end

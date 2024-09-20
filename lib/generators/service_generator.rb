@@ -76,12 +76,13 @@ class ServiceGenerator < Rails::Generators::NamedBase
         @search_text = result.search_text
         @sort = result.sort
         @included = result.included
+        @query_included = result.query_included
         @filters = result.filters
         @fields = result.fields
       end
 
       def find_#{plural_name}
-        #{plural_name} = #{klass_name}.all.includes(@included)
+        #{plural_name} = #{klass_name}.all.includes(@query_included)
           .page(@page)
           .per(@limit)
         if @search_text.present?

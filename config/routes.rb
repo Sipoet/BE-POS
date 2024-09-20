@@ -100,7 +100,9 @@ Rails.application.routes.draw do
     get :table_names, on: :collection
     get :column_names, on: :collection
   end
-  resources :payrolls, only: [:index, :show, :create, :update, :destroy]
+  resources :payrolls, only: [:index, :show, :create, :update, :destroy] do
+    get :report, on: :collection
+  end
   resources :employee_leaves, only: [:index, :show, :create, :update, :destroy]
   resources :cashier_sessions, only: [:index, :show, :create, :update] do
     resources :edc_settlements, only: [:index] do
@@ -115,4 +117,5 @@ Rails.application.routes.draw do
   resources :banks, only: [:index]
   resources :customer_groups, only:[:index]
   resources :customer_group_discounts, only:[:index,:create,:update,:destroy]
+  resources :payroll_types, only:[:index,:create,:update,:destroy]
 end

@@ -25,4 +25,11 @@ class Payroll::Formula::FulltimeScheduleCalculator < Payroll::Formula::Applicati
     value > 0 ? value : 0
   end
 
+  def self.main_amount(payroll_line)
+    payroll_line.variable1
+  end
+
+  def self.full_amount(payroll_line)
+    payroll_line.variable1
+  end
 end

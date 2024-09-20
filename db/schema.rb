@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_19_134806) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_15_081147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -277,7 +277,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_134806) do
     t.integer "payroll_id", null: false
     t.integer "row", null: false
     t.integer "group", null: false
-    t.integer "payroll_type"
     t.integer "formula", null: false
     t.string "description", null: false
     t.decimal "variable1"
@@ -287,7 +286,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_134806) do
     t.decimal "variable5"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "payroll_type_id"
     t.index ["payroll_id"], name: "index_payroll_lines_on_payroll_id"
+  end
+
+  create_table "payroll_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "payrolls", force: :cascade do |t|
@@ -312,6 +318,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_134806) do
     t.decimal "variable3"
     t.decimal "variable4"
     t.decimal "variable5"
+    t.integer "payroll_type_id"
     t.index ["payslip_id", "payslip_type"], name: "emp_pay_line_idx"
     t.index ["payslip_id"], name: "index_payslip_lines_on_payslip_id"
   end
@@ -2458,7 +2465,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_134806) do
   add_foreign_key "employees", "roles"
   add_foreign_key "payment_methods", "payment_providers"
   add_foreign_key "payment_methods", "payment_types"
+  add_foreign_key "payroll_lines", "payroll_types"
   add_foreign_key "payroll_lines", "payrolls"
+  add_foreign_key "payslip_lines", "payroll_types"
   add_foreign_key "payslip_lines", "payslips"
   add_foreign_key "payslips", "employees"
   add_foreign_key "payslips", "payrolls"

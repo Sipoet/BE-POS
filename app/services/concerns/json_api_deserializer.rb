@@ -25,6 +25,7 @@ module JsonApiDeserializer
       result.page, result.limit = deserialize_pagination
       result.fields = deserialize_field
       result.included = deserialize_included & @allowed_fields
+      result.query_included = deserialize_query_included
       result
     end
 
@@ -36,7 +37,8 @@ module JsonApiDeserializer
 
     class Result
       attr_accessor :filters, :sort, :page, :limit,
-                    :fields, :included, :search_text
+                    :fields, :included, :search_text,
+                    :query_included
     end
 
     def deserialize_filters
@@ -61,6 +63,33 @@ module JsonApiDeserializer
     def deserialize_included
       return [] if @params[:include].blank?
       @params[:include].split(',')
+
+    end
+
+    def deserialize_query_included
+      return [] if @params[:include].blank?
+      included = @params[:include].split(',')
+      included.each.with_index do |key,index|
+        next unless key.include?('.')
+        values = key.split('.')
+        included[index] = included_nested_key(included[index],values[0],values[1..-1])
+      end
+      included
+    end
+
+    def included_nested_key(parent,key,values)
+      if !parent.is_a?(Hash)
+        parent = {}
+      end
+      if parent[key].nil?
+        parent[key] = []
+      end
+      if values[2].present?
+        parent[key] << included_nested_key(parent[key],values[1],values[2..-1])
+      else
+        parent[key] << values[1]
+      end
+      parent
     end
 
     def deserialize_field

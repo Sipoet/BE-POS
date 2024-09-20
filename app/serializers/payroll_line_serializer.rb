@@ -3,4 +3,6 @@ class PayrollLineSerializer
   attributes :row, :group, :payroll_type, :formula,
               :description, :variable1, :variable2,
               :variable3, :variable4, :variable5
+
+  belongs_to :payroll_type
 end
