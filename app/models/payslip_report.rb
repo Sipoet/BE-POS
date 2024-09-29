@@ -1,39 +1,11 @@
 class PayslipReport < ApplicationModel
 
-  TABLE_HEADER = [
-    datatable_column(self, :employee_name, :link,path:'employees',attribute_key: 'employee_name', sort_key:'employee_name'),
-    datatable_column(self, :employee_start_working_date, :date, width:14),
-    datatable_column(self, :start_date, :date, width:14),
-    datatable_column(self, :end_date, :date, width:15),
-    datatable_column(self, :work_days, :decimal, width:10),
-    datatable_column(self, :total_day, :integer, width:10),
-    datatable_column(self, :overtime_hour, :integer, width:10),
-    datatable_column(self, :late, :integer, width:5),
-    datatable_column(self, :sick_leave, :integer, width:5),
-    datatable_column(self, :known_absence, :integer, width:4),
-    datatable_column(self, :unknown_absence, :integer, width:5),
-    datatable_column(self, :base_salary, :decimal, width:12),
-    datatable_column(self, :overtime_incentive, :decimal, width:12),
-    datatable_column(self, :positional_incentive, :decimal, width:12),
-    datatable_column(self, :attendance_incentive, :decimal, width:12),
-    datatable_column(self, :other_incentive, :decimal, width:12),
-    datatable_column(self, :commission, :decimal, width:12),
-    datatable_column(self, :debt, :decimal, width:12),
-    datatable_column(self, :tax_amount, :money, width:6),
-    datatable_column(self, :nett_salary, :decimal, width:12),
-    datatable_column(self,:description, :string, width:17),
-    datatable_column(self,:bank, :string, width:6),
-    datatable_column(self,:bank_account, :string, width:20),
-    datatable_column(self,:bank_register_name, :string, width:35),
-  ]
-
   attr_accessor :start_date, :end_date, :employee_id, :employee_name,
-                :employee_start_working_date, :debt,:late,:overtime_incentive,
+                :employee_start_working_date, :debt,:late,
                 :total_day, :work_days, :sick_leave, :overtime_hour,
-                :known_absence, :unknown_absence, :positional_incentive,
-                :attendance_incentive, :base_salary, :tax_amount, :nett_salary,
-                :payslip_id, :other_incentive, :bank, :bank_account,
-                :bank_register_name, :description,:commission
+                :known_absence, :unknown_absence, :nett_salary,
+                :payslip_id, :bank, :bank_account,
+                :bank_register_name, :description, :payroll_type_amounts
 
 
   def employee
@@ -46,5 +18,11 @@ class PayslipReport < ApplicationModel
 
   def id
     payslip_id
+  end
+
+  def [](key)
+    key = key.to_s
+    return self.try(key) if self.respond_to?(key)
+    @payroll_type_amounts[key]
   end
 end

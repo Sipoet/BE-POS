@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_15_081147) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_29_101001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -294,6 +294,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_15_081147) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "initial"
+    t.boolean "is_show_on_payslip_desc", default: false, null: false
+    t.integer "order", default: 1, null: false
   end
 
   create_table "payrolls", force: :cascade do |t|
@@ -307,7 +310,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_15_081147) do
   create_table "payslip_lines", force: :cascade do |t|
     t.integer "payslip_id", null: false
     t.integer "group", null: false
-    t.integer "payslip_type", null: false
     t.string "description", null: false
     t.decimal "amount", null: false
     t.datetime "created_at", null: false
@@ -319,7 +321,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_15_081147) do
     t.decimal "variable4"
     t.decimal "variable5"
     t.integer "payroll_type_id"
-    t.index ["payslip_id", "payslip_type"], name: "emp_pay_line_idx"
     t.index ["payslip_id"], name: "index_payslip_lines_on_payslip_id"
   end
 

@@ -21,16 +21,117 @@ class Payslip::ReportService < ApplicationService
   private
 
   def json_response(results)
-    render_json(PayslipReportSerializer.new(results, include: @included, params:{include:@included}))
+    meta= {
+      table_columns: table_columns
+    }
+    render_json(PayslipReportSerializer.new(results, include: @included,meta: meta, params:{include:@included, payroll_types: @payroll_types}))
   end
 
   def excel_response(results)
     generator = ExcelGenerator.new
-    generator.add_column_definitions(PayslipReport::TABLE_HEADER)
+    generator.set_row_data_type_hash!
+    generator.add_column_definitions(table_columns)
     generator.add_data(results)
     generator.add_metadata({start_date: @start_date,end_date: @end_date, employee_ids: @employee_ids.try(:join,',')})
     file_excel = generator.generate("laporan-slip-gaji-#{@start_date.strftime('%d%b%y')}-#{@end_date.strftime('%d%b%y')}-")
     @controller.send_file file_excel
+  end
+
+  def table_columns
+    result = [
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:employee_name),
+        name: :employee_name,
+        type: :link,
+        path: 'employees',
+        attribute_key: 'employee_name',
+        sort_key: 'employee_name'),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:employee_start_working_date),
+        name: :employee_start_working_date,
+        type: :date,
+         width:14),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:start_date),
+        name: :start_date,
+        type: :date,
+         width:14),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:end_date),
+        name: :end_date,
+        type: :date,
+         width:15),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:work_days),
+        name: :work_days,
+        type: :decimal,
+         width:10),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:total_day),
+        name: :total_day,
+        type: :integer,
+         width:10),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:overtime_hour),
+        name: :overtime_hour,
+        type: :integer,
+         width:10),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:late),
+        name: :late,
+        type: :integer,
+         width:5),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:sick_leave),
+        name: :sick_leave,
+        type: :integer,
+         width:5),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:known_absence),
+        name: :known_absence,
+        type: :integer,
+         width:4),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:unknown_absence),
+        name: :unknown_absence,
+        type: :integer,
+         width:5),
+  ]
+  result += @payroll_types.map do |payroll_type|
+    Datatable::TableColumn.new(
+        humanize_name: payroll_type.name,
+        name: payroll_type.id.to_s,
+        type: :decimal,
+        width:12)
+  end
+  result += [
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:nett_salary),
+        name: :nett_salary,
+        type: :decimal,
+        width:12),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:description),
+        name: :description,
+        type: :string,
+        width:17),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:bank),
+        name: :bank,
+        type: :string,
+        width:6),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:bank_account),
+        name: :bank_account,
+        type: :string,
+        width:20),
+      Datatable::TableColumn.new(
+        humanize_name: PayslipReport.human_attribute_name(:bank_register_name),
+        name: :bank_register_name,
+        type: :string,
+        width:35),
+    ]
+    result
   end
 
   def decorate_payslip(payslip)
@@ -47,7 +148,7 @@ class Payslip::ReportService < ApplicationService
       result.bank_account = employee.bank_account
       result.bank_register_name = employee.bank_register_name
     end
-    payslip_lines = payslip.payslip_lines
+    payslip_lines = payslip.payslip_lines.group_by(&:payroll_type_id)
     result.total_day = payslip.total_day
     result.work_days = payslip.work_days
     result.sick_leave = payslip.sick_leave
@@ -55,42 +156,23 @@ class Payslip::ReportService < ApplicationService
     result.known_absence = payslip.known_absence
     result.unknown_absence = payslip.unknown_absence
     result.late = payslip.late
-    result.positional_incentive = 0
-    result.attendance_incentive = 0
-    result.other_incentive = 0
-    result.base_salary = 0
-    result.debt = 0
-    result.overtime_incentive = 0
-    result.commission = 0.to_d
-
-    payslip_lines.each do |payslip_line|
-      if payslip_line.incentive?
-        if payslip_line.description.downcase.include?('jabatan')
-          result.positional_incentive += payslip_line.amount
-        elsif payslip_line.description.downcase.include?('kerajinan')
-          result.attendance_incentive += payslip_line.amount
-        elsif payslip_line.description.downcase.include?('overtime') || payslip_line.description.downcase.include?('lembur')
-          result.overtime_incentive += payslip_line.amount
-        else
-          result.other_incentive += payslip_line.amount
-        end
-      elsif payslip_line.commission?
-        result.commission += payslip_line.amount
-      elsif payslip_line.base_salary?
-        result.base_salary += payslip_line.amount
-      elsif payslip_line.debt?
-        result.debt += payslip_line.amount
+    result.payroll_type_amounts = {}
+    description_arr = []
+    description_arr << "HK#{result.work_days}" if result.work_days > 0
+    @payroll_types.each do |payroll_type|
+      selecteds = payslip_lines[payroll_type.id]
+      amount = if selecteds.nil?
+        0
+      else
+        selecteds.sum(&:amount)
+      end
+      result.payroll_type_amounts[payroll_type.id.to_s] = amount
+      if amount > 0 && payroll_type.is_show_on_payslip_desc
+        description_arr << "#{payroll_type.initial}#{amount_format(amount)}"
       end
     end
-    result.tax_amount = payslip.tax_amount
     result.nett_salary = payslip.nett_salary
-    result.description = [
-       result.work_days > 0 ? "HK#{result.work_days}" : nil,
-       result.positional_incentive > 0 ? "TJ#{amount_format(result.positional_incentive)}" : nil,
-       result.overtime_incentive > 0 ? "L#{amount_format(result.overtime_incentive)}" : nil,
-       result.attendance_incentive > 0 ? "KRJ#{amount_format(result.attendance_incentive)}" : nil,
-       result.commission > 0 ? "KMS#{amount_format(result.commission)}" : nil
-    ].compact.join(',')
+    result.description = description_arr.join(',')
     result
   end
 
@@ -109,6 +191,7 @@ class Payslip::ReportService < ApplicationService
   end
 
   def extract_params
+    @payroll_types = PayrollType.all.order(order: :asc) || []
     permitted_params = params.required(:filter)
                              .permit(:start_date,:end_date,:employee_ids)
     @start_date = permitted_params[:start_date].try(:to_date)
