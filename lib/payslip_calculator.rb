@@ -22,9 +22,7 @@ class PayslipCalculator
     result.gross_salary = payslip_lines.sum(0.0) do |line|
       line.earning? ? line.amount : 0
     end
-    result.tax_amount = payslip_lines.sum(0.0) do |line|
-      line.tax? ? line.amount : 0
-    end
+    result.tax_amount = 0
     result.nett_salary = payslip_lines.sum(0.0) do |line|
       line.earning? ? line.amount : (-1 * line.amount)
     end
