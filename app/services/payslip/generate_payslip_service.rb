@@ -58,7 +58,7 @@ class Payslip::GeneratePayslipService < ApplicationService
       payslip.payslip_lines.build(
         description: payroll_line.description,
         group: payroll_line.group,
-        payslip_type: payroll_line.payroll_type,
+        payroll_type: payroll_line.payroll_type,
         formula: payroll_line.formula,
         variable1: payroll_line.variable1,
         variable2: payroll_line.variable2,
