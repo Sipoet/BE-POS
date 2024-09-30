@@ -52,10 +52,12 @@ class EmployeeAttendance::MassUploadService < ApplicationService
                        .map{|hour| parse_time(date,hour)}
 
       if rows[index + 1].present?
-        last_hour = rows[index + 1].split("\r\n")[0]
-        attendances << parse_time(date.tomorrow, last_hour) if parse_time(date.tomorrow, last_hour) < parse_time(date.tomorrow, '07:00')
+        next_attendances = rows[index + 1].split("\r\n")
+        next_attendances.each do |hour|
+          attendances << parse_time(date.tomorrow, hour)
+        end
       end
-      attendances.shift if attendances.first < parse_time(date, open_hour_offset)
+      attendances.select!{|datetime| datetime.between?(parse_time(date, open_hour_offset), parse_time(date.tomorrow, open_hour_offset))}
       attendances.uniq!
       start_time = nil
       end_time = nil
@@ -79,7 +81,7 @@ class EmployeeAttendance::MassUploadService < ApplicationService
       end
       if start_time.present? && end_time.blank?
         time_str = Setting.get("scheduled_store_end_time") || '22:00'
-        scheduled_store_end_time = DateTime.parse("#{start_time.to_date.iso8601}T#{time_str}")
+        scheduled_store_end_time = Time.zone.parse("#{date.iso8601} #{time_str}")
         end_time = start_time
         if start_time >= scheduled_store_end_time
           start_time -= 4.hour
@@ -124,7 +126,7 @@ class EmployeeAttendance::MassUploadService < ApplicationService
   end
 
   def parse_time(date, hour)
-    Time.parse("#{date.iso8601} #{hour}")
+    Time.zone.parse("#{date.iso8601} #{hour}")
   end
 
   def difference_minute(time_a,time_b)

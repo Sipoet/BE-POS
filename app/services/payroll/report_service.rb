@@ -66,7 +66,7 @@ class Payroll::ReportService < ApplicationService
     group_salary_details = find_salary_details(employees,payroll_types)
     employees.map do |employee|
       salary_details = group_salary_details[employee.payroll_id]
-      salary_total =
+      salary_total = salary_details.sum(&:full_amount)
       PayrollReport.new(salary_details: salary_details,
                         employee_name: employee.name,
                         employee_id: employee.id,
@@ -82,26 +82,30 @@ class Payroll::ReportService < ApplicationService
              payroll_type: payroll_types)
       .group_by(&:payroll_id)
       .each_with_object({}) do |(payroll_id,payroll_lines),obj|
-
-        obj[payroll_id] = payroll_lines.map do |payroll_line|
-          payroll_type = group_payroll_type[payroll_line.payroll_type_id]
-          convert_to_report_detail(payroll_type,payroll_line)
+        obj[payroll_id] = []
+         payroll_lines.group_by(&:payroll_type_id).each do |payroll_type_id, payroll_lines|
+          payroll_type = group_payroll_type[payroll_type_id]
+          obj[payroll_id] << convert_to_report_detail(payroll_type,payroll_lines)
         end
       end
   end
 
-  def convert_to_report_detail(payroll_type,payroll_line)
-    formula_calculator_class= Payroll::Calculator.calculator_class(payroll_line)
-    payroll_line = payroll_line_from_date(payroll_line)
-    main_amount = formula_calculator_class.main_amount(payroll_line)
-    full_amount = formula_calculator_class.full_amount(payroll_line)
-    full_amount = full_amount * -1 if payroll_line.deduction?
+  def convert_to_report_detail(payroll_type,payroll_lines)
+    main_amount = 0
+    full_amount = 0
+    payroll_lines.each do |payroll_line|
+      formula_calculator_class= Payroll::Calculator.calculator_class(payroll_line)
+      payroll_line = payroll_line_from_date(payroll_line)
+      main_amount += formula_calculator_class.main_amount(payroll_line)
+      amount = formula_calculator_class.full_amount(payroll_line)
+      full_amount += (payroll_line.earning? ? amount : amount * -1)
+    end
     PayrollReportDetail.new(
       payroll_type_name: payroll_type.name,
       payroll_type_id: payroll_type.id,
       main_amount: main_amount,
       full_amount: full_amount,
-      is_earning: payroll_line.earning?
+      is_earning: full_amount >= 0
     )
   end
 
