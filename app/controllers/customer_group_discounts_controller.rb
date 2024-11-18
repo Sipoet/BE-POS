@@ -17,4 +17,9 @@ class CustomerGroupDiscountsController < ApplicationController
   def destroy
     run_service_default
   end
+
+  def toggle_discount
+    ToggleCustomerGroupDiscountJob.perform_async
+    head :no_content
+  end
 end

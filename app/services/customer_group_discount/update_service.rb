@@ -9,6 +9,7 @@ class CustomerGroupDiscount::UpdateService < ApplicationService
         include: ['customer_group'],
         params:{include:['customer_group']}
       }
+      ToggleCustomerGroupDiscountJob.perform_async
       render_json(CustomerGroupDiscountSerializer.new(customer_group_discount,options))
     else
       render_error_record(customer_group_discount)

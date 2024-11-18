@@ -116,6 +116,8 @@ Rails.application.routes.draw do
   resources :payment_methods, only: [:index, :destroy, :create, :update]
   resources :banks, only: [:index]
   resources :customer_groups, only:[:index]
-  resources :customer_group_discounts, only:[:index,:create,:update,:destroy]
+  resources :customer_group_discounts, only:[:index,:create,:update,:destroy] do
+    post :toggle_discount, on: :collection
+  end
   resources :payroll_types, only:[:index,:create,:update,:destroy]
 end
