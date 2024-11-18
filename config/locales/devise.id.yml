@@ -39,7 +39,7 @@ id:
       inactive: Akun anda belum diaktifkan.
       invalid: "%{authentication_keys} atau password tidak valid."
       last_attempt: Kesempatan terakhir sebelum akun Anda dikunci.
-      locked: Akun anda terkunci. tunggu 1 menit untuk mengulang kembali.
+      locked: Akun anda terkunci. tunggu 2 menit untuk mengulang kembali.
       not_found_in_database: "%{authentication_keys} atau password tidak valid."
       timeout: Sesi anda telah kadaluarsa, silahkan masuk lagi untuk melanjutkan.
       unauthenticated: Anda harus mendaftar atau masuk sebelum melanjutkan.

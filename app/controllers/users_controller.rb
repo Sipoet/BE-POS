@@ -19,11 +19,14 @@ class UsersController < ApplicationController
   end
 
   def update
-
     run_service_default
   end
 
   def destroy
+    run_service_default
+  end
+
+  def unlock_access
     run_service_default
   end
 

@@ -22,7 +22,9 @@ Rails.application.routes.draw do
     get :by_user, on: :collection
   end
 
-  resources :users, param: :username, only: [:index, :show, :destroy, :update, :create]
+  resources :users, param: :username, only: [:index, :show, :destroy, :update, :create] do
+    post :unlock_access, on: :member
+  end
   resources :background_jobs, only:[:index, :show, :destroy] do
     post :retry, on: :member
   end
