@@ -1,5 +1,9 @@
 id:
   activerecord:
+    attributes:
+      applicationrecord:
+        created_at: 'Tanggal Dibuat'
+        updated_at: 'Tanggal Diperbaharui'
     errors:
       messages:
         record_invalid: 'Validasi gagal: %{errors}'
