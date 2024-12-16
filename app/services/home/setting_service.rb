@@ -56,6 +56,9 @@ class Home::SettingService < ApplicationService
       table_key = table_name.camelize(:lower)
       if role.name == Role::SUPERADMIN
         obj[table_key] = Datatable::DefinitionExtractor.new(klass).column_definitions
+        if table_key == 'itemReport'
+          obj['itemSalesPercentageReport'] = obj[table_key]
+        end
         next
       end
       columns = allowed_columns[table_name]
@@ -63,6 +66,9 @@ class Home::SettingService < ApplicationService
       table_headers = Datatable::DefinitionExtractor.new(klass).column_names
       obj[table_key] = columns.map {|authorize| table_headers[authorize.column.to_sym] }
                               .compact
+      if table_key == 'itemReport'
+        obj['itemSalesPercentageReport'] = obj[table_key]
+      end
     end
   end
 
