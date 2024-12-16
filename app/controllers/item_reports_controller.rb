@@ -1,4 +1,4 @@
-class ItemSalesPercentageReportsController < ApplicationController
+class ItemReportsController < ApplicationController
   before_action :authorize_user!
 
   def index
@@ -14,6 +14,6 @@ class ItemSalesPercentageReportsController < ApplicationController
   end
 
   def columns
-    run_service(ItemSalesPercentageReport::ColumnsService)
+    run_service(ItemReport::ColumnsService)
   end
 end

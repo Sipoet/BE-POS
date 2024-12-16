@@ -1,4 +1,4 @@
-class ItemSalesPercentageReportSerializer
+class ItemReportSerializer
   include JSONAPI::Serializer
   attributes :item_code, :item_name, :item_type_name, :supplier_code,
              :supplier_name, :brand_name, :item_type_desc,
@@ -17,7 +17,7 @@ class ItemSalesPercentageReportSerializer
     end
   end
 
-  %i{number_of_sales number_of_purchase warehouse_stock store_stock item_out}.each do |key|
+  %i{number_of_sales number_of_purchase qty_return warehouse_stock store_stock item_out}.each do |key|
     attribute key do |object|
       object.send(key).to_i
     end

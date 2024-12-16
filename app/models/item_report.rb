@@ -1,4 +1,4 @@
-class ItemSalesPercentageReport < ApplicationRecord
+class ItemReport < ApplicationRecord
   self.table_name = 'item_sales_percentage_reports'
   self.primary_key = 'item_code'
   TABLE_HEADER = [
@@ -16,6 +16,7 @@ class ItemSalesPercentageReport < ApplicationRecord
     datatable_column(self,:item_out, :integer),
     datatable_column(self,:number_of_purchase, :integer),
     datatable_column(self,:number_of_sales, :integer),
+    datatable_column(self,:qty_return, :integer),
     datatable_column(self,:avg_buy_price, :money),
     datatable_column(self,:sell_price, :money),
     datatable_column(self,:purchase_total, :money),

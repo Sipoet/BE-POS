@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "ItemSalesPercentageReports", type: :request do
+RSpec.describe "ItemReports", type: :request do
 
   before :each do
     login!

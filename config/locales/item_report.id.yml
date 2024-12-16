@@ -1,9 +1,9 @@
 id:
   activerecord:
     models:
-      item_sales_percentage_report: "Laporan Penjualan"
+      item_report: "Laporan Penjualan"
     attributes:
-      item_sales_percentage_report:
+      item_report:
         item_code: 'Kode Item'
         item_name: 'Nama Item'
         item_type: 'Jenis/Departemen'
@@ -26,3 +26,4 @@ id:
         item_out: "Jumlah Item Keluar"
         stock_left: "Stok Sekarang"
         is_consignment: "Konsinyasi?"
+        qty_return: "Jumlah Retur Jual"

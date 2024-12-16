@@ -19,6 +19,7 @@ class UpdateItemSalesPercentageReport < ActiveRecord::Migration[7.1]
         purchase.recent_purchase_date,
         ROUND(COALESCE(purchase.avg_buy_price,beginning_stock.avg_buy_price),2) AS avg_buy_price,
         ROUND(COALESCE(sales.number_of_sales,0),0) AS number_of_sales,
+        ROUND(COALESCE(sales.qty_return,0),0) AS qty_return,
         ROUND(COALESCE(sales.sales_total,0),0) AS sales_total,
         ROUND(COALESCE(sales.sales_total,0) - (COALESCE(purchase.avg_buy_price,beginning_stock.avg_buy_price) * COALESCE(sales.number_of_sales,0)),0) AS gross_profit,
         ROUND(COALESCE(sales.item_out,0),0) AS item_out,
@@ -30,9 +31,10 @@ class UpdateItemSalesPercentageReport < ActiveRecord::Migration[7.1]
       INNER JOIN tbl_itemjenis ON tbl_itemjenis.jenis = tbl_item.jenis
       LEFT OUTER JOIN(
         SELECT kodeitem,
-        SUM(CASE WHEN tbl_ikhd.tipe IN('KSR','JL') then tbl_ikdt.jumlah ELSE 0 END) AS number_of_sales,
+        SUM(CASE WHEN tbl_ikhd.tipe IN('KSR','JL') then tbl_ikdt.jumlah WHEN tbl_ikhd.tipe ='RJ' then tbl_ikdt.jumlah * -1  ELSE 0 END) AS number_of_sales,
         SUM(CASE WHEN tbl_ikhd.tipe IN('KSR','JL') then tbl_ikdt.total - (tbl_ikdt.total/tbl_ikhd.subtotal*tbl_ikhd.potnomfaktur) ELSE 0 END) AS sales_total,
-        SUM(CASE WHEN tbl_ikhd.tipe = 'IK' then tbl_ikdt.jumlah ELSE 0 END) AS item_out
+        SUM(CASE WHEN tbl_ikhd.tipe = 'IK' then tbl_ikdt.jumlah ELSE 0 END) AS item_out,
+        SUM(CASE WHEN tbl_ikhd.tipe = 'RJ' then tbl_ikdt.jumlah ELSE 0 END) AS qty_return
         FROM tbl_ikdt
         INNER JOIN tbl_ikhd ON tbl_ikhd.notransaksi = tbl_ikdt.notransaksi
         GROUP BY kodeitem
