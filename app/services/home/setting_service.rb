@@ -53,17 +53,16 @@ class Home::SettingService < ApplicationService
     allowed_columns = role.column_authorizes.group_by(&:table)
     table_names.each_with_object({}) do |table_name,obj|
       klass = table_name.classify.constantize
+      table_key = table_name.camelize(:lower)
       if role.name == Role::SUPERADMIN
-        obj[table_name.camelize(:lower)] = klass::TABLE_HEADER
-      else
-        columns = allowed_columns[table_name]
-        next if columns.blank?
-        table_headers = klass::TABLE_HEADER.index_by(&:name)
-        obj[table_name.camelize(:lower)] = columns.map do |authorize|
-          table_headers[authorize.column.to_sym]
-        end.compact
+        obj[table_key] = Datatable::DefinitionExtractor.new(klass).column_definitions
+        next
       end
-
+      columns = allowed_columns[table_name]
+      next if columns.blank?
+      table_headers = Datatable::DefinitionExtractor.new(klass).column_names
+      obj[table_key] = columns.map {|authorize| table_headers[authorize.column.to_sym] }
+                              .compact
     end
   end
 

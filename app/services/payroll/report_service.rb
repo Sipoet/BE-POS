@@ -34,24 +34,36 @@ class Payroll::ReportService < ApplicationService
   def generate_table_columns(payroll_types)
     columns = [
       Datatable::TableColumn.new(
-        humanize_name: Employee.human_attribute_name(:name),
-        type: :string,
-        name: :employee_name,
-        width: 25,
-        attribute_key: 'employees.name',
-        path: 'employees'),
+        :employee_name,
+        {
+          humanize_name: Employee.human_attribute_name(:name),
+          type: :string,
+          name: :employee_name,
+          width: 25,
+          attribute_key: 'employees.name',
+          path: 'employees'
+        }
+        ),
       Datatable::TableColumn.new(
-        humanize_name: PayrollReport.human_attribute_name(:salary_total),
-        type: :decimal,
-        name: :salary_total,
-        width: 25)
+        :salary_total,
+        {
+          humanize_name: PayrollReport.human_attribute_name(:salary_total),
+          type: :decimal,
+          name: :salary_total,
+          width: 25
+        }
+        )
     ]
     columns += payroll_types.map do |payroll_type|
       Datatable::TableColumn.new(
-        humanize_name: payroll_type.name,
-        type: :decimal,
-        name: payroll_type.id.to_s,
-        width: 25)
+        payroll_type.id.to_s,
+        {
+          humanize_name: payroll_type.name,
+          type: :decimal,
+          name: payroll_type.id.to_s,
+          width: 25
+        }
+        )
     end
     columns
   end

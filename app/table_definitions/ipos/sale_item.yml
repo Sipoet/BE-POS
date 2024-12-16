@@ -1,0 +1,66 @@
+table_name: 'tbl_ikdt'
+columns:
+  kodeitem:
+    type: link
+    path: 'items'
+    attribute_key: 'item.namaitem'
+  item_name:
+    type: string
+    filter_key: 'tbl_item.namaitem'
+    can_sort: false
+  notransaksi:
+    type: string
+  jumlah:
+    type: decimal
+  harga:
+    type: decimal
+  satuan:
+    type: string
+  subtotal:
+    type: money
+  potongan:
+    type: decimal
+  potongan2:
+    type: percentage
+  potongan3:
+    type: percentage
+  potongan4:
+    type: percentage
+  pajak:
+    type: decimal
+  total:
+    type: money
+  supplier_code:
+    type: link
+    path: 'suppliers'
+    filter_key: 'tbl_item.supplier1'
+    sort_key: 'tbl_item.supplier1'
+    attribute_key: 'supplier.nama'
+  brand_name:
+    type: link
+    path: 'brands'
+    filter_key: 'tbl_item.merek'
+    attribute_key: 'brand.ketmerek'
+  item_type_name:
+    type: link
+    path: 'item_types'
+    filter_key: 'tbl_item.jenis'
+    attribute_key: 'item_type.ketjenis'
+  updated_at:
+    type: datetime
+  sistemhargajual:
+    type: string
+  tipepromo:
+    type: string
+  jmlgratis:
+    type: float
+  itempromo:
+    type: string
+  satuanpromo:
+    type: string
+  hppdasar:
+    type: decimal
+  nobaris:
+    type: integer
+  transaction_date:
+    type: datetime

@@ -1,4 +1,4 @@
-class ItemSalesPercentageReport::ColumnsService < ApplicationService
+class ItemReport::ColumnsService < ApplicationService
 
   def execute_service
     headers = target_class::TABLE_HEADER

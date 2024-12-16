@@ -9,7 +9,7 @@ class Payroll::ShowService < ApplicationService
 
   private
   def extract_params
-    allowed_columns = Payroll::TABLE_HEADER.map(&:name)
+    @table_definitions = Datatable::DefinitionExtractor.new(Payroll)
     allowed_fields = [:payroll_lines,payroll_line:[:payroll_type]]
     permitted_params = params.permit(:include,fields: allowed_fields, )
     if permitted_params[:fields].present?

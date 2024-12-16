@@ -20,7 +20,8 @@ class Ipos::PurchaseItemSerializer
             :hppdasar,
             :item_type_name,
             :supplier_code,
-            :brand_name
+            :brand_name,
+            :notransaksi
 
   belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: ItemSerializer
 end

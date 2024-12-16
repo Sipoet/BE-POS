@@ -2,26 +2,25 @@ module JsonApiDeserializer
   extend ActiveSupport::Concern
   class TableIndex
 
-    def initialize(params, allowed_fields, allowed_columns)
+    def initialize(params, allowed_fields, table_definitions)
+      allowed_columns = table_definitions.column_names
       @params = params.permit(
         :search_text,:include,:sort,
         fields: allowed_fields,
         filter: allowed_columns.map{|column| {column => filter_operators}},
         page:[:page,:limit])
-      @allowed_columns = allowed_columns.map(&:to_s)
+      @table_definitions = table_definitions
+      @allowed_columns = allowed_columns.index_by(&:to_sym)
       @allowed_fields = allowed_fields.map(&:to_s)
       @param_filter = allowed_columns.present? ? @params[:filter] : params[:filter]
     end
 
     def deserialize
+      column_hash = @table_definitions.column_definitions.index_by(&:name)
       result = Result.new
       result.search_text = @params[:search_text].to_s
-      result.filters = deserialize_filters
-      result.sort = deserialize_sort
-      if @allowed_columns.present? & result.sort.present?
-        not_allowed_column = result.sort.keys.map(&:to_s) - @allowed_columns
-        not_allowed_column.each{|key| result.sort.delete(key.to_sym)}
-      end
+      result.filters = deserialize_filters(column_hash)
+      result.sort = deserialize_sort(column_hash)
       result.page, result.limit = deserialize_pagination
       result.fields = deserialize_field
       result.included = deserialize_included & @allowed_fields
@@ -41,14 +40,15 @@ module JsonApiDeserializer
                     :query_included
     end
 
-    def deserialize_filters
+    def deserialize_filters(column_hash)
       filter = []
       return filter if @param_filter.blank?
       @param_filter.to_h.each do |key,param_value|
+        next unless column_hash[key.to_sym].can_filter
         if param_value.is_a?(Hash)
           param_value.each do |operator, value|
             filter << Filter.new(
-              key,
+              column_hash[key.to_sym].filter_key,
               operator.to_sym,
               value
             )
@@ -111,15 +111,24 @@ module JsonApiDeserializer
       [page, limit]
     end
 
-    def deserialize_sort
+    def deserialize_sort(column_hash)
       return nil if @params[:sort].blank?
       sorts = @params[:sort].split(',')
       sorts.each_with_object({}) do |value,obj|
-        if value[0] =='-'
-          obj[value[1..-1]] = :desc
+        column_name,sort_value = nil
+        if value[0]== '-'
+          column_name = value[1..-1].to_sym
+          sort_value = :desc
         else
-          obj[value] = :asc
+          column_name = value.to_sym
+          sort_value = :asc
         end
+        Rails.logger.debug column_name
+        Rails.logger.debug column_hash
+        next unless column_hash[column_name].can_sort
+        next if @allowed_columns[column_name].blank?
+        sort_key = column_hash[column_name].sort_key
+        obj[sort_key] = sort_value
       end
     end
 
@@ -163,8 +172,8 @@ module JsonApiDeserializer
 
   included do
 
-    def dezerialize_table_params(params, allowed_fields:[], allowed_columns:[])
-      TableIndex.new(params, allowed_fields, allowed_columns)
+    def dezerialize_table_params(params, allowed_fields:[], table_definitions:[])
+      TableIndex.new(params, allowed_fields, table_definitions)
                 .deserialize
     end
   end

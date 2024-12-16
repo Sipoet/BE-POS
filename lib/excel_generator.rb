@@ -18,7 +18,7 @@ class ExcelGenerator
 
   def add_column_definitions(column_definitions)
     raise 'column definitions is empty' if column_definitions.empty?
-    raise 'not table column' if !column_definitions.first.is_a?(Datatable::TableColumn)
+    # raise 'not table column' if !column_definitions.first.is_a?(Datatable::TableColumn)
     @columns = column_definitions
   end
 
@@ -72,7 +72,7 @@ class ExcelGenerator
   def add_header(workbook, worksheet)
     worksheet.set_row(0, 16, @header_format)
     columns.each.with_index(0) do |column, index|
-      worksheet.set_column(index, index, column.width)
+      worksheet.set_column(index, index, column.excel_width)
       worksheet.write(0,index, column.humanize_name, @header_format)
     end
   end

@@ -14,11 +14,11 @@ class EmployeeLeave::ShowService < ApplicationService
   end
 
   def extract_params
-    allowed_columns = EmployeeLeave::TABLE_HEADER.map(&:name)
+    @table_definitions = Datatable::DefinitionExtractor.new(EmployeeLeave)
     allowed_fields = [:employee_leave]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
-      allowed_columns: allowed_columns)
+      table_definitions: @table_definitions)
     @included = result.included
     @field = result.fields
   end

@@ -15,11 +15,11 @@ class Sale::ShowService < ApplicationService
   end
 
   def extract_params
-    allowed_columns = Ipos::Sale::TABLE_HEADER.map(&:name)
+    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Sale)
     allowed_fields = [:sale, :sale_items,'sale_items.item']
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
-      allowed_columns: allowed_columns)
+      table_definitions: @table_definitions)
     @included = result.included
     @fields = result.fields
     @code = CGI.unescape(params[:code])

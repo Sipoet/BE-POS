@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ItemSalesPercentageReport::IndexService < ApplicationService
+class ItemReport::IndexService < ApplicationService
   require 'write_xlsx'
   include JsonApiDeserializer
   PER_LIMIT = 1000.freeze
@@ -25,18 +25,18 @@ class ItemSalesPercentageReport::IndexService < ApplicationService
         params:{include: @included},
         include: @included
       }
-      render_json(ItemSalesPercentageReportSerializer.new(reports, options))
+      render_json(ItemReportSerializer.new(reports, options))
     end
   end
 
   private
 
   def extract_params
-    allowed_columns = ItemSalesPercentageReport::TABLE_HEADER.map(&:name)
+    @table_definitions = Datatable::DefinitionExtractor.new(ItemReport)
     allowed_fields = [:item, :item_type, :supplier, :brand]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
-      allowed_columns: allowed_columns)
+      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -48,7 +48,7 @@ class ItemSalesPercentageReport::IndexService < ApplicationService
   end
 
   def find_reports
-    reports = ItemSalesPercentageReport.all.includes(@included)
+    reports = ItemReport.all.includes(@included)
     if @report_type == 'json'
       reports = reports.page(@page).per(@limit)
     end
@@ -65,7 +65,7 @@ class ItemSalesPercentageReport::IndexService < ApplicationService
 
   def generate_excel(rows)
     generator = ExcelGenerator.new
-    generator.add_column_definitions(ItemSalesPercentageReport::TABLE_HEADER)
+    generator.add_column_definitions(ItemReport::TABLE_HEADER)
     generator.add_data(rows)
     generator.add_metadata(@filter || {})
     generator.generate('laporan-item')

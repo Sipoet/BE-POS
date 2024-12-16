@@ -23,11 +23,11 @@ class EmployeeLeave::IndexService < ApplicationService
   end
 
   def extract_params
-    allowed_columns = EmployeeLeave::TABLE_HEADER.map(&:name)
+    @table_definitions = Datatable::DefinitionExtractor.new(EmployeeLeave)
     allowed_fields = [:employee_leave, :employee]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
-      allowed_columns: allowed_columns)
+      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text

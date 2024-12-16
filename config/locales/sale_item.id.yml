@@ -5,6 +5,7 @@ id:
     attributes:
       ipos/sale_item:
         kodeitem: "Kode Item"
+        item_name: "Nama Item"
         jumlah: "Jumlah"
         harga: "Harga"
         satuan: "Satuan"
@@ -24,3 +25,7 @@ id:
         hppdasar: "HPP"
         nobaris: "No"
         supplier1: 'Supplier'
+        supplier_code: 'Kode Supplier'
+        brand_name: 'Merek'
+        item_type_name: 'Jenis/Departemen'
+        transaction_date: 'Tanggal'

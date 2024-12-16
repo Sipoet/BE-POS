@@ -15,11 +15,11 @@ class PaymentProvider::ShowService < ApplicationService
   end
 
   def extract_params
-    allowed_columns = PaymentProvider::TABLE_HEADER.map(&:name)
+    @table_definitions = Datatable::DefinitionExtractor.new(PaymentProvider)
     allowed_fields = [:payment_provider, :payment_provider_edcs]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
-      allowed_columns: allowed_columns)
+      table_definitions: @table_definitions)
     @included = result.included
     @fields = result.fields
   end

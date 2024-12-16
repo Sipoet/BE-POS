@@ -23,11 +23,11 @@ class Payslip::IndexService < ApplicationService
   end
 
   def extract_params
-    allowed_columns = Payslip::TABLE_HEADER.map(&:name) - ['employee_name']
+    @table_definitions = Datatable::DefinitionExtractor.new(Payslip) - ['employee_name']
     allowed_fields = ['payslip','payroll','employee','payslip_lines.payroll_type']
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
-      allowed_columns: allowed_columns)
+      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text

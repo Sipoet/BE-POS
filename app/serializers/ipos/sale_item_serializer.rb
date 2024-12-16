@@ -22,7 +22,11 @@ class Ipos::SaleItemSerializer
               :item_type_name,
               :supplier_code,
               :brand_name,
-              :item_name
+              :item_name,
+              :notransaksi,
+              :transaction_date
+
 
   belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: ItemSerializer
+  belongs_to :sale, if: Proc.new { |record, params| false}
 end
