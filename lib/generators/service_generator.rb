@@ -66,7 +66,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
       end
 
       def extract_params
-        @allowed_columns = Datatable::DefinitionExtractor.new(#{klass_name})
+        @table_definitions = Datatable::DefinitionExtractor.new(#{klass_name})
         allowed_fields = [:#{model_name}]
         result = dezerialize_table_params(params,
           allowed_fields: allowed_fields,

@@ -21,7 +21,6 @@ class Datatable::DefinitionExtractor
   private
 
   def convert_to_column_definitions(raw_yml)
-    Rails.logger.info raw_yml
     result = {}
     raw_yml[:columns].map do |key, options|
       options[:humanize_name] = @model_class.human_attribute_name(key)

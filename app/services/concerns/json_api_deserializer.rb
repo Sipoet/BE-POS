@@ -44,7 +44,7 @@ module JsonApiDeserializer
       filter = []
       return filter if @param_filter.blank?
       @param_filter.to_h.each do |key,param_value|
-        next unless column_hash[key.to_sym].can_filter
+        next unless column_hash[key.to_sym].try(:can_filter)
         if param_value.is_a?(Hash)
           param_value.each do |operator, value|
             filter << Filter.new(
@@ -123,9 +123,7 @@ module JsonApiDeserializer
           column_name = value.to_sym
           sort_value = :asc
         end
-        Rails.logger.debug column_name
-        Rails.logger.debug column_hash
-        next unless column_hash[column_name].can_sort
+        next unless column_hash[column_name].try(:can_sort)
         next if @allowed_columns[column_name].blank?
         sort_key = column_hash[column_name].sort_key
         obj[sort_key] = sort_value
