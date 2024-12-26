@@ -23,7 +23,7 @@ class Payslip::IndexService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(Payslip) - ['employee_name']
+    @table_definitions = Datatable::DefinitionExtractor.new(Payslip)
     allowed_fields = ['payslip','payroll','employee','payslip_lines.payroll_type']
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,

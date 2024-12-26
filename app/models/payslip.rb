@@ -1,25 +1,6 @@
 class Payslip < ApplicationRecord
   has_paper_trail ignore: [:id, :created_at, :updated_at]
 
-  TABLE_HEADER = [
-    datatable_column(self,:employee_id, :link,path:'employees',attribute_key: 'employee.name', sort_key:'employees.name'),
-    datatable_column(self,:payroll_id, :link,path:'payrolls',attribute_key: 'payroll.name', sort_key:'payrolls.name'),
-    datatable_column(self,:status, :enum),
-    datatable_column(self,:start_date, :date),
-    datatable_column(self,:end_date, :date),
-    datatable_column(self,:work_days, :decimal),
-    datatable_column(self,:overtime_hour, :integer),
-    datatable_column(self,:late, :integer),
-    datatable_column(self,:sick_leave, :integer),
-    datatable_column(self,:known_absence, :integer),
-    datatable_column(self,:unknown_absence, :integer),
-    datatable_column(self,:paid_time_off, :integer),
-    datatable_column(self,:gross_salary, :decimal),
-    datatable_column(self,:tax_amount, :money),
-    datatable_column(self,:nett_salary, :decimal),
-    datatable_column(self,:created_at, :datetime),
-    datatable_column(self,:updated_at, :datetime),
-  ];
   enum :status, {
     draft: 0,
     confirmed: 1,

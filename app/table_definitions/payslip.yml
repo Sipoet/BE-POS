@@ -1,0 +1,44 @@
+table_name: 'payslips'
+columns:
+  employee_name:
+    type: link
+    path: 'employees'
+    filter_key: 'employee_id'
+    attribute_key: 'employee.name'
+    sort_key: 'employees.name'
+  payroll:
+    type: link
+    path: 'payrolls'
+    filter_key: 'payroll_id'
+    attribute_key: 'payroll.name'
+    sort_key: 'payrolls.name'
+  status:
+    type: enum
+  start_date:
+    type: date
+  end_date:
+    type: date
+  work_days:
+    type: decimal
+  overtime_hour:
+    type: integer
+  late:
+    type: integer
+  sick_leave:
+    type: integer
+  known_absence:
+    type: integer
+  unknown_absence:
+    type: integer
+  paid_time_off:
+    type: integer
+  gross_salary:
+    type: decimal
+  tax_amount:
+    type: money
+  nett_salary:
+    type: decimal
+  created_at:
+    type: datetime
+  updated_at:
+    type: datetime

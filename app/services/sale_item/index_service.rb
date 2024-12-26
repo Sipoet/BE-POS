@@ -44,7 +44,7 @@ class SaleItem::IndexService < ApplicationService
       allowed_fields: allowed_fields,
       table_definitions: @table_definitions)
     @page = result.page || 1
-    @limit = result.limit || 1_000
+    @limit = result.limit || 5_000
     @search_text = result.search_text
     @sort = result.sort
     @included = result.included
