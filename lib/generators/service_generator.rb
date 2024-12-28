@@ -164,11 +164,11 @@ class ServiceGenerator < Rails::Generators::NamedBase
       end
 
       def update_attribute(#{model_name})
-        allowed_columns = #{klass_name}::TABLE_HEADER.map(&:name)
-        @fields = {#{model_name}: allowed_columns}
+        @table_definitions = Datatable::DefinitionExtractor.new(#{klass_name})
+        @fields = {#{model_name}: @table_definitions.allowed_columns}
         permitted_params = params.required(:data)
                                   .required(:attributes)
-                                  .permit(allowed_columns)
+                                  .permit(@table_definitions.allowed_columns)
         #{model_name}.attributes = permitted_params
       end
     end
@@ -204,11 +204,11 @@ class ServiceGenerator < Rails::Generators::NamedBase
       end
 
       def update_attribute(#{model_name})
-        allowed_columns = #{klass_name}::TABLE_HEADER.map(&:name)
-        @fields = {#{model_name}: allowed_columns}
+        @table_definitions = Datatable::DefinitionExtractor.new(#{klass_name})
+        @fields = {#{model_name}: @table_definitions.allowed_columns}
         permitted_params = params.required(:data)
                                   .required(:attributes)
-                                  .permit(allowed_columns)
+                                  .permit(@table_definitions.allowed_columns)
         #{model_name}.attributes = permitted_params
       end
     end

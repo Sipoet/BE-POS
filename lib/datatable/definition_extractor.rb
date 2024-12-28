@@ -18,6 +18,10 @@ class Datatable::DefinitionExtractor
     @column_definitions.keys
   end
 
+  def allowed_columns
+    @column_definitions.keys - [:created_at,:updated_at]
+  end
+
   private
 
   def convert_to_column_definitions(raw_yml)

@@ -1,0 +1,68 @@
+table_name: 'discounts'
+columns:
+  code:
+    type: string
+  supplier_code:
+    type: link
+    path: 'suppliers'
+    attribute_key: 'supplier.nama'
+  item_type_name:
+    type: link
+    path: 'item_types'
+    attribute_key: 'item_type.ketjenis'
+  brand_name:
+    type: link
+    path: 'brands'
+    attribute_key: 'brand.merek'
+  item_code:
+    type: link
+    path: 'items'
+    attribute_key: 'item.namaitem'
+  blacklist_supplier_code:
+    type: link
+    path: 'suppliers'
+    attribute_key: 'blacklist_supplier.nama'
+  blacklist_item_type_name:
+    type: link
+    path: 'item_types'
+    attribute_key: 'blacklist_item_type.ketjenis'
+  blacklist_brand_name:
+    type: link
+    path: 'brands'
+    attribute_key: 'blacklist_brand.merek'
+  calculation_type:
+    type: enum
+  weight:
+    type: string
+  discount1:
+    type: percentage
+  discount2:
+    type: percentage
+  discount3:
+    type: percentage
+  discount4:
+    type: percentage
+  discount_type:
+    type: enum
+  start_time:
+    type: datetime
+  end_time:
+    type: datetime
+  week1:
+    type: boolean
+  week2:
+    type: boolean
+  week3:
+    type: boolean
+  week4:
+    type: boolean
+  week5:
+    type: boolean
+  week6:
+    type: boolean
+  week7:
+    type: boolean
+  created_at:
+    type: datetime
+  updated_at:
+    type: datetime
