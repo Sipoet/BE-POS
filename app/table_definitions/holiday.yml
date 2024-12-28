@@ -1,0 +1,11 @@
+table_name: 'holidays'
+columns:
+  date:
+    type: date
+  description:
+    type: string
+    can_sort: false
+  created_at:
+    type: datetime
+  updated_at:
+    type: datetime

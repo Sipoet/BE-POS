@@ -128,4 +128,5 @@ Rails.application.routes.draw do
     post :toggle_discount, on: :collection
   end
   resources :payroll_types, only:[:index,:create,:update,:destroy]
+  resources :holidays, only:[:index,:create,:update,:destroy]
 end
