@@ -1,11 +1,11 @@
 ---
-:table_name: employees
-:columns:
+table_name: employees
+columns:
   code:
     name: code
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: code
     attribute_key: code
     can_filter: true
@@ -15,7 +15,7 @@
     name: name
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: name
     attribute_key: name
     can_filter: true
@@ -25,7 +25,7 @@
     name: status
     type: enum
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: status
     attribute_key: status
     can_filter: true
@@ -35,7 +35,7 @@
     name: role_id
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: roles
     sort_key: roles.name
     attribute_key: role.name
@@ -46,7 +46,7 @@
     name: payroll_id
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: payrolls
     sort_key: payrolls.name
     attribute_key: payroll.name
@@ -57,7 +57,7 @@
     name: shift
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: shift
     attribute_key: shift
     can_filter: true
@@ -67,7 +67,7 @@
     name: start_working_date
     type: date
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: start_working_date
     attribute_key: start_working_date
     can_filter: true
@@ -77,7 +77,7 @@
     name: end_working_date
     type: date
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: end_working_date
     attribute_key: end_working_date
     can_filter: true
@@ -87,7 +87,7 @@
     name: id_number
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: id_number
     attribute_key: id_number
     can_filter: true
@@ -97,7 +97,7 @@
     name: contact_number
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: contact_number
     attribute_key: contact_number
     can_filter: true
@@ -107,7 +107,7 @@
     name: address
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: address
     attribute_key: address
     can_filter: true
@@ -117,7 +117,7 @@
     name: bank
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: bank
     attribute_key: bank
     can_filter: true
@@ -127,7 +127,7 @@
     name: bank_account
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: bank_account
     attribute_key: bank_account
     can_filter: true
@@ -137,7 +137,7 @@
     name: bank_register_name
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: bank_register_name
     attribute_key: bank_register_name
     can_filter: true
@@ -147,7 +147,7 @@
     name: marital_status
     type: enum
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: marital_status
     attribute_key: marital_status
     can_filter: true
@@ -157,7 +157,7 @@
     name: tax_number
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: tax_number
     attribute_key: tax_number
     can_filter: true
@@ -167,7 +167,7 @@
     name: description
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: description
     attribute_key: description
     can_filter: true
@@ -177,7 +177,7 @@
     name: debt
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: debt
     attribute_key: debt
     can_filter: true
@@ -187,7 +187,7 @@
     name: image_code
     type: image
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: image_code
     attribute_key: image_code
     can_filter: true
@@ -197,7 +197,7 @@
     name: created_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: created_at
     attribute_key: created_at
     can_filter: true
@@ -207,7 +207,7 @@
     name: updated_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: updated_at
     attribute_key: updated_at
     can_filter: true

@@ -63,8 +63,8 @@ class Home::SettingService < ApplicationService
       end
       columns = allowed_columns[table_name]
       next if columns.blank?
-      table_headers = Datatable::DefinitionExtractor.new(klass).column_names
-      obj[table_key] = columns.map {|authorize| table_headers[authorize.column.to_sym] }
+      table_def = Datatable::DefinitionExtractor.new(klass)
+      obj[table_key] = columns.map {|authorize| table_def.column_of(authorize.column) }
                               .compact
       if table_key == 'itemReport'
         obj['itemSalesPercentageReport'] = obj[table_key]

@@ -1,11 +1,11 @@
 ---
-:table_name: tbl_bank
-:columns:
+table_name: tbl_bank
+columns:
   kodebank:
     name: kodebank
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kodebank
     attribute_key: kodebank
     can_filter: true
@@ -15,7 +15,7 @@
     name: namabank
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: namabank
     attribute_key: namabank
     can_filter: true

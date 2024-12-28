@@ -1,11 +1,11 @@
 ---
-:table_name: payment_provider_edcs
-:columns:
+table_name: payment_provider_edcs
+columns:
   payment_provider_id:
     name: payment_provider_id
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: payment_provider_id
     attribute_key: payment_provider_id
     can_filter: true
@@ -15,7 +15,7 @@
     name: terminal_id
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: terminal_id
     attribute_key: terminal_id
     can_filter: true
@@ -25,7 +25,7 @@
     name: merchant_id
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: merchant_id
     attribute_key: merchant_id
     can_filter: true

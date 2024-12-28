@@ -1,11 +1,11 @@
 ---
-:table_name: item_sales_percentage_reports
-:columns:
+table_name: item_sales_percentage_reports
+columns:
   item_code:
     name: item_code
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: items
     sort_key: item_code
     attribute_key: item.namaitem
@@ -16,7 +16,7 @@
     name: item_name
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: item_name
     attribute_key: item_name
     can_filter: true
@@ -26,7 +26,7 @@
     name: item_type_name
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: item_types
     sort_key: item_type_name
     attribute_key: item_type.ketjenis
@@ -37,7 +37,7 @@
     name: supplier_code
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: suppliers
     sort_key: supplier_code
     attribute_key: supplier.nama
@@ -48,7 +48,7 @@
     name: supplier_name
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: supplier_name
     attribute_key: supplier_name
     can_filter: true
@@ -58,7 +58,7 @@
     name: brand_name
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: brands
     sort_key: brand_name
     attribute_key: brand.merek
@@ -69,7 +69,7 @@
     name: recent_purchase_date
     type: date
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: recent_purchase_date
     attribute_key: recent_purchase_date
     can_filter: true
@@ -79,7 +79,7 @@
     name: is_consignment
     type: boolean
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: is_consignment
     attribute_key: is_consignment
     can_filter: true
@@ -89,7 +89,7 @@
     name: stock_left
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: stock_left
     attribute_key: stock_left
     can_filter: true
@@ -99,7 +99,7 @@
     name: warehouse_stock
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: warehouse_stock
     attribute_key: warehouse_stock
     can_filter: true
@@ -109,7 +109,7 @@
     name: store_stock
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: store_stock
     attribute_key: store_stock
     can_filter: true
@@ -119,7 +119,7 @@
     name: item_out
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: item_out
     attribute_key: item_out
     can_filter: true
@@ -129,7 +129,7 @@
     name: number_of_purchase
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: number_of_purchase
     attribute_key: number_of_purchase
     can_filter: true
@@ -139,7 +139,7 @@
     name: number_of_sales
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: number_of_sales
     attribute_key: number_of_sales
     can_filter: true
@@ -149,7 +149,7 @@
     name: qty_return
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: qty_return
     attribute_key: qty_return
     can_filter: true
@@ -159,7 +159,7 @@
     name: avg_buy_price
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: avg_buy_price
     attribute_key: avg_buy_price
     can_filter: true
@@ -169,7 +169,7 @@
     name: sell_price
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: sell_price
     attribute_key: sell_price
     can_filter: true
@@ -179,7 +179,7 @@
     name: purchase_total
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: purchase_total
     attribute_key: purchase_total
     can_filter: true
@@ -189,7 +189,7 @@
     name: sales_total
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: sales_total
     attribute_key: sales_total
     can_filter: true
@@ -199,7 +199,7 @@
     name: gross_profit
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: gross_profit
     attribute_key: gross_profit
     can_filter: true
@@ -209,7 +209,7 @@
     name: percentage_sales
     type: percentage
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: percentage_sales
     attribute_key: percentage_sales
     can_filter: true

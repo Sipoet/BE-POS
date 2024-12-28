@@ -1,11 +1,11 @@
 ---
-:table_name: tbl_supel
-:columns:
+table_name: tbl_supel
+columns:
   kode:
     name: kode
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kode
     attribute_key: kode
     can_filter: true
@@ -15,7 +15,7 @@
     name: nama
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: nama
     attribute_key: nama
     can_filter: true
@@ -25,7 +25,7 @@
     name: alamat
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: alamat
     attribute_key: alamat
     can_filter: true
@@ -35,7 +35,7 @@
     name: kontak
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kontak
     attribute_key: kontak
     can_filter: true
@@ -45,7 +45,7 @@
     name: email
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: email
     attribute_key: email
     can_filter: true
@@ -55,7 +55,7 @@
     name: bank
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: bank
     attribute_key: bank
     can_filter: true
@@ -65,7 +65,7 @@
     name: norek
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: norek
     attribute_key: norek
     can_filter: true
@@ -75,7 +75,7 @@
     name: atasnama
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: atasnama
     attribute_key: atasnama
     can_filter: true
@@ -85,7 +85,7 @@
     name: keterangan
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: keterangan
     attribute_key: keterangan
     can_filter: true

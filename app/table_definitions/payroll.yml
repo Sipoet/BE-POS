@@ -1,11 +1,11 @@
 ---
-:table_name: payrolls
-:columns:
+table_name: payrolls
+columns:
   name:
     name: name
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: name
     attribute_key: name
     can_filter: true
@@ -15,7 +15,7 @@
     name: paid_time_off
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: paid_time_off
     attribute_key: paid_time_off
     can_filter: true
@@ -25,7 +25,7 @@
     name: description
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: description
     attribute_key: description
     can_filter: true
@@ -35,7 +35,7 @@
     name: created_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: created_at
     attribute_key: created_at
     can_filter: true
@@ -45,7 +45,7 @@
     name: updated_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: updated_at
     attribute_key: updated_at
     can_filter: true

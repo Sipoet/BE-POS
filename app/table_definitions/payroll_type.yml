@@ -1,11 +1,11 @@
 ---
-:table_name: payroll_types
-:columns:
+table_name: payroll_types
+columns:
   name:
     name: name
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: name
     attribute_key: name
     can_filter: true
@@ -15,7 +15,7 @@
     name: initial
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: initial
     attribute_key: initial
     can_filter: true
@@ -25,7 +25,7 @@
     name: order
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: order
     attribute_key: order
     can_filter: true
@@ -35,7 +35,7 @@
     name: is_show_on_payslip_desc
     type: boolean
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: is_show_on_payslip_desc
     attribute_key: is_show_on_payslip_desc
     can_filter: true
@@ -45,7 +45,7 @@
     name: created_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: created_at
     attribute_key: created_at
     can_filter: true
@@ -55,7 +55,7 @@
     name: updated_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: updated_at
     attribute_key: updated_at
     can_filter: true

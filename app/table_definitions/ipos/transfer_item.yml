@@ -1,11 +1,11 @@
 ---
-:table_name: tbl_itrdt
-:columns:
+table_name: tbl_itrdt
+columns:
   kodeitem:
     name: kodeitem
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: items
     sort_key: kodeitem
     attribute_key: item.namaitem
@@ -16,7 +16,7 @@
     name: jumlah
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: jumlah
     attribute_key: jumlah
     can_filter: true
@@ -26,7 +26,7 @@
     name: cogs
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: cogs
     attribute_key: cogs
     can_filter: true
@@ -36,7 +36,7 @@
     name: sell_price
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: sell_price
     attribute_key: sell_price
     can_filter: true
@@ -46,7 +46,7 @@
     name: satuan
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: satuan
     attribute_key: satuan
     can_filter: true
@@ -56,7 +56,7 @@
     name: tglexp
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: tglexp
     attribute_key: tglexp
     can_filter: true
@@ -66,7 +66,7 @@
     name: kodeprod
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kodeprod
     attribute_key: kodeprod
     can_filter: true
@@ -76,7 +76,7 @@
     name: jmlkonversi
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: jmlkonversi
     attribute_key: jmlkonversi
     can_filter: true
@@ -86,7 +86,7 @@
     name: detinfo
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: detinfo
     attribute_key: detinfo
     can_filter: true
@@ -96,7 +96,7 @@
     name: nobaris
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: nobaris
     attribute_key: nobaris
     can_filter: true
@@ -106,7 +106,7 @@
     name: item.supplier1
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: suppliers
     sort_key: item.supplier1
     attribute_key: supplier.kode
@@ -117,7 +117,7 @@
     name: item.merek
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: brands
     sort_key: item.merek
     attribute_key: brand.merek
@@ -128,7 +128,7 @@
     name: item.jenis
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: item_types
     sort_key: item.jenis
     attribute_key: item_type.jenis
@@ -139,7 +139,7 @@
     name: updated_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: updated_at
     attribute_key: updated_at
     can_filter: true
@@ -149,7 +149,7 @@
     name: notransaksi
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: notransaksi
     attribute_key: notransaksi
     can_filter: true

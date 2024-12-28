@@ -1,11 +1,11 @@
 ---
-:table_name: tbl_itemmerek
-:columns:
+table_name: tbl_itemmerek
+columns:
   merek:
     name: merek
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: merek
     attribute_key: merek
     can_filter: true
@@ -15,7 +15,7 @@
     name: ketmerek
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: ketmerek
     attribute_key: ketmerek
     can_filter: true

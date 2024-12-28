@@ -27,8 +27,8 @@ class User::CreateService < ApplicationService
   end
 
   def update_attribute(user)
-    allowed_columns = User::TABLE_HEADER.map(&:name) + [:role]
-    @fields = {user: allowed_columns}
+    allowed_columns = [:role_id,:username,:password,:password_confirmation,:email]
+    @fields = {user: [:role,:username,:email]}
     permitted_params = params.required(:data)
                               .required(:attributes)
                               .permit(allowed_columns)

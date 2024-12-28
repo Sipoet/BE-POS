@@ -1,8 +1,8 @@
 class User::UpdateService < ApplicationService
 
   def execute_service
-    user = User.find(params[:id])
-    raise RecordNotFound.new(params[:id],User.model_name.human) if user.nil?
+    user = User.find_by(username: params[:username])
+    raise RecordNotFound.new(params[:username],User.model_name.human) if user.nil?
     if record_save?(user)
       options = {
         fields: @fields,
@@ -28,8 +28,8 @@ class User::UpdateService < ApplicationService
   end
 
   def edit_attribute(user)
-    allowed_columns = User::TABLE_HEADER.map(&:name) + [:role]
-    @fields = {user: allowed_columns}
+    allowed_columns = [:role_id,:username,:password,:password_confirmation,:email]
+    @fields = {user: [:role,:username,:email]}
     permitted_params = params.required(:data)
                               .required(:attributes)
                               .permit(allowed_columns)

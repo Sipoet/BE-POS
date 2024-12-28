@@ -1,11 +1,11 @@
 ---
-:table_name: tbl_item
-:columns:
+table_name: tbl_item
+columns:
   kodeitem:
     name: kodeitem
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kodeitem
     attribute_key: kodeitem
     can_filter: true
@@ -15,7 +15,7 @@
     name: namaitem
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: namaitem
     attribute_key: namaitem
     can_filter: true
@@ -25,7 +25,7 @@
     name: supplier1
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: suppliers
     sort_key: supplier1
     attribute_key: supplier.kode
@@ -36,7 +36,7 @@
     name: jenis
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: item_types
     sort_key: jenis
     attribute_key: item_type.jenis
@@ -47,7 +47,7 @@
     name: merek
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: brands
     sort_key: merek
     attribute_key: brand.merek
@@ -58,7 +58,7 @@
     name: satuan
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: satuan
     attribute_key: satuan
     can_filter: true
@@ -68,7 +68,7 @@
     name: hargapokok
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: hargapokok
     attribute_key: hargapokok
     can_filter: true
@@ -78,7 +78,7 @@
     name: hargajual1
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: hargajual1
     attribute_key: hargajual1
     can_filter: true

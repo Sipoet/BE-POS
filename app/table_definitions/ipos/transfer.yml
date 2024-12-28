@@ -1,11 +1,11 @@
 ---
-:table_name: tbl_itrhd
-:columns:
+table_name: tbl_itrhd
+columns:
   notransaksi:
     name: notransaksi
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: notransaksi
     attribute_key: notransaksi
     can_filter: true
@@ -15,7 +15,7 @@
     name: tanggal
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: tanggal
     attribute_key: tanggal
     can_filter: true
@@ -25,7 +25,7 @@
     name: kantordari
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kantordari
     attribute_key: kantordari
     can_filter: true
@@ -35,7 +35,7 @@
     name: kantortujuan
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kantortujuan
     attribute_key: kantortujuan
     can_filter: true
@@ -45,7 +45,7 @@
     name: keterangan
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: keterangan
     attribute_key: keterangan
     can_filter: true
@@ -55,7 +55,7 @@
     name: totalitem
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: totalitem
     attribute_key: totalitem
     can_filter: true
@@ -65,7 +65,7 @@
     name: user1
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: user1
     attribute_key: user1
     can_filter: true
@@ -75,7 +75,7 @@
     name: shiftkerja
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: shiftkerja
     attribute_key: shiftkerja
     can_filter: true
@@ -85,7 +85,7 @@
     name: updated_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: updated_at
     attribute_key: updated_at
     can_filter: true

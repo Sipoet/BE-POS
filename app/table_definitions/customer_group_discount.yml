@@ -1,11 +1,11 @@
 ---
-:table_name: customer_group_discounts
-:columns:
+table_name: customer_group_discounts
+columns:
   customer_group_code:
     name: customer_group_code
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: customer_group_discounts
     sort_key: customer_group_code
     attribute_key: customer_groups.grup
@@ -16,7 +16,7 @@
     name: period_type
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: period_type
     attribute_key: period_type
     can_filter: true
@@ -26,7 +26,7 @@
     name: discount_percentage
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: discount_percentage
     attribute_key: discount_percentage
     can_filter: true
@@ -36,7 +36,7 @@
     name: start_active_date
     type: date
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: start_active_date
     attribute_key: start_active_date
     can_filter: true
@@ -46,7 +46,7 @@
     name: end_active_date
     type: date
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: end_active_date
     attribute_key: end_active_date
     can_filter: true
@@ -56,7 +56,7 @@
     name: level
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: level
     attribute_key: level
     can_filter: true
@@ -66,7 +66,7 @@
     name: variable1
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: variable1
     attribute_key: variable1
     can_filter: true
@@ -76,7 +76,7 @@
     name: variable2
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: variable2
     attribute_key: variable2
     can_filter: true
@@ -86,7 +86,7 @@
     name: variable3
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: variable3
     attribute_key: variable3
     can_filter: true
@@ -96,7 +96,7 @@
     name: variable4
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: variable4
     attribute_key: variable4
     can_filter: true
@@ -106,7 +106,7 @@
     name: variable5
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: variable5
     attribute_key: variable5
     can_filter: true
@@ -116,7 +116,7 @@
     name: variable6
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: variable6
     attribute_key: variable6
     can_filter: true
@@ -126,7 +126,7 @@
     name: variable7
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: variable7
     attribute_key: variable7
     can_filter: true
@@ -136,7 +136,7 @@
     name: created_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: created_at
     attribute_key: created_at
     can_filter: true
@@ -146,7 +146,7 @@
     name: updated_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: updated_at
     attribute_key: updated_at
     can_filter: true

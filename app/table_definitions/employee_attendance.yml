@@ -1,11 +1,11 @@
 ---
-:table_name: employee_attendances
-:columns:
+table_name: employee_attendances
+columns:
   employee_id:
     name: employee_id
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: employees
     sort_key: employee_id
     attribute_key: employee.name
@@ -16,7 +16,7 @@
     name: date
     type: date
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: date
     attribute_key: date
     can_filter: true
@@ -26,7 +26,7 @@
     name: start_time
     type: time
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: start_time
     attribute_key: start_work
     can_filter: true
@@ -36,7 +36,7 @@
     name: end_time
     type: time
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: end_time
     attribute_key: end_work
     can_filter: true
@@ -46,7 +46,7 @@
     name: shift
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: shift
     attribute_key: shift
     can_filter: true
@@ -56,7 +56,7 @@
     name: is_late
     type: boolean
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: is_late
     attribute_key: is_late
     can_filter: true
@@ -66,7 +66,7 @@
     name: allow_overtime
     type: boolean
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: allow_overtime
     attribute_key: allow_overtime
     can_filter: true
@@ -76,7 +76,7 @@
     name: created_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: created_at
     attribute_key: created_at
     can_filter: true
@@ -86,7 +86,7 @@
     name: updated_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: updated_at
     attribute_key: updated_at
     can_filter: true

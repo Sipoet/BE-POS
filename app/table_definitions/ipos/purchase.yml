@@ -1,11 +1,11 @@
 ---
-:table_name: tbl_imhd
-:columns:
+table_name: tbl_imhd
+columns:
   notransaksi:
     name: notransaksi
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: notransaksi
     attribute_key: notransaksi
     can_filter: true
@@ -15,7 +15,7 @@
     name: kodesupel
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: suppliers
     sort_key: kodesupel
     attribute_key: supplier.nama
@@ -26,7 +26,7 @@
     name: notrsorder
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: notrsorder
     attribute_key: notrsorder
     can_filter: true
@@ -36,7 +36,7 @@
     name: tanggal
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: tanggal
     attribute_key: tanggal
     can_filter: true
@@ -46,7 +46,7 @@
     name: kantortujuan
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kantortujuan
     attribute_key: kantortujuan
     can_filter: true
@@ -56,7 +56,7 @@
     name: totalitem
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: totalitem
     attribute_key: totalitem
     can_filter: true
@@ -66,7 +66,7 @@
     name: subtotal
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: subtotal
     attribute_key: subtotal
     can_filter: true
@@ -76,7 +76,7 @@
     name: potnomfaktur
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: potnomfaktur
     attribute_key: potnomfaktur
     can_filter: true
@@ -86,7 +86,7 @@
     name: biayalain
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: biayalain
     attribute_key: biayalain
     can_filter: true
@@ -96,7 +96,7 @@
     name: ppn
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: ppn
     attribute_key: ppn
     can_filter: true
@@ -106,7 +106,7 @@
     name: pajak
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: pajak
     attribute_key: pajak
     can_filter: true
@@ -116,7 +116,7 @@
     name: totalakhir
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: totalakhir
     attribute_key: totalakhir
     can_filter: true
@@ -126,7 +126,7 @@
     name: keterangan
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: keterangan
     attribute_key: keterangan
     can_filter: true
@@ -136,7 +136,7 @@
     name: user1
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: user1
     attribute_key: user1
     can_filter: true
@@ -146,7 +146,7 @@
     name: jmltunai
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: jmltunai
     attribute_key: jmltunai
     can_filter: true
@@ -156,7 +156,7 @@
     name: jmlkredit
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: jmlkredit
     attribute_key: jmlkredit
     can_filter: true
@@ -166,7 +166,7 @@
     name: jmldeposit
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: jmldeposit
     attribute_key: jmldeposit
     can_filter: true

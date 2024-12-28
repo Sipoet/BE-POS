@@ -1,11 +1,11 @@
 ---
-:table_name: 
-:columns:
+table_name:
+columns:
   item_type:
     name: item_type
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: item_type
     attribute_key: item_type
     can_filter: false
@@ -14,7 +14,7 @@
     name: item_id
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: item_id
     attribute_key: item_id
     can_filter: false
@@ -23,7 +23,7 @@
     name: event
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: event
     attribute_key: event
     can_filter: false
@@ -32,7 +32,7 @@
     name: actor
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: actor
     attribute_key: actor
     can_filter: false
@@ -41,7 +41,7 @@
     name: description
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: description
     attribute_key: description
     can_filter: false
@@ -50,7 +50,7 @@
     name: created_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: created_at
     attribute_key: created_at
     can_filter: false

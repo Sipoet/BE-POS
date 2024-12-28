@@ -1,11 +1,11 @@
 ---
-:table_name: edc_settlements
-:columns:
+table_name: edc_settlements
+columns:
   cashier_session_id:
     name: cashier_session_id
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: cashier_session_id
     attribute_key: cashier_session_id
     can_filter: true
@@ -15,7 +15,7 @@
     name: payment_provider_id
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: payment_providers
     sort_key: payment_provider_id
     attribute_key: payment_provider.code
@@ -26,7 +26,7 @@
     name: payment_type_id
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: payment_types
     sort_key: payment_type_id
     attribute_key: payment_type.name
@@ -37,7 +37,7 @@
     name: status
     type: enum
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: status
     attribute_key: status
     can_filter: true
@@ -47,7 +47,7 @@
     name: amount
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: amount
     attribute_key: amount
     can_filter: true
@@ -57,7 +57,7 @@
     name: diff_amount
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: diff_amount
     attribute_key: diff_amount
     can_filter: true
@@ -67,7 +67,7 @@
     name: merchant_id
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: merchant_id
     attribute_key: merchant_id
     can_filter: true
@@ -77,7 +77,7 @@
     name: terminal_id
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: terminal_id
     attribute_key: terminal_id
     can_filter: true
@@ -87,7 +87,7 @@
     name: created_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: created_at
     attribute_key: created_at
     can_filter: true
@@ -97,7 +97,7 @@
     name: updated_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: updated_at
     attribute_key: updated_at
     can_filter: true

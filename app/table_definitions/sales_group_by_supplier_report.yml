@@ -1,11 +1,11 @@
 ---
-:table_name: 
-:columns:
+table_name:
+columns:
   supplier_name:
     name: supplier_name
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: supplier_name
     attribute_key: supplier_name
     can_filter: false
@@ -14,7 +14,7 @@
     name: item_type_name
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: item_type_name
     attribute_key: item_type_name
     can_filter: false
@@ -23,7 +23,7 @@
     name: brand_name
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: brand_name
     attribute_key: brand_name
     can_filter: false
@@ -32,7 +32,7 @@
     name: number_of_purchase
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: number_of_purchase
     attribute_key: number_of_purchase
     can_filter: false
@@ -41,7 +41,7 @@
     name: number_of_sales
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: number_of_sales
     attribute_key: number_of_sales
     can_filter: false
@@ -50,7 +50,7 @@
     name: stock_left
     type: integer
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: stock_left
     attribute_key: stock_left
     can_filter: false
@@ -59,7 +59,7 @@
     name: purchase_total
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: purchase_total
     attribute_key: purchase_total
     can_filter: false
@@ -68,7 +68,7 @@
     name: sales_total
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: sales_total
     attribute_key: sales_total
     can_filter: false
@@ -77,7 +77,7 @@
     name: gross_profit
     type: money
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: gross_profit
     attribute_key: gross_profit
     can_filter: false
@@ -86,7 +86,7 @@
     name: sales_percentage
     type: percentage
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: sales_percentage
     attribute_key: sales_percentage
     can_filter: false

@@ -1,11 +1,11 @@
 ---
-:table_name: tbl_kaslaci
-:columns:
+table_name: tbl_kaslaci
+columns:
   nama_user:
     name: nama_user
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: nama_user
     attribute_key: nama_user
     can_filter: true
@@ -15,7 +15,7 @@
     name: shift
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: shift
     attribute_key: shift
     can_filter: true
@@ -25,7 +25,7 @@
     name: kas_awal
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kas_awal
     attribute_key: kas_awal
     can_filter: true
@@ -35,7 +35,7 @@
     name: kas_masuk
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kas_masuk
     attribute_key: kas_masuk
     can_filter: true
@@ -45,7 +45,7 @@
     name: kas_akhir
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kas_akhir
     attribute_key: kas_akhir
     can_filter: true
@@ -55,7 +55,7 @@
     name: kas_keluar
     type: decimal
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: kas_keluar
     attribute_key: kas_keluar
     can_filter: true
@@ -65,7 +65,7 @@
     name: wkt_mulai
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: wkt_mulai
     attribute_key: wkt_mulai
     can_filter: true
@@ -75,7 +75,7 @@
     name: wkt_akhir
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: wkt_akhir
     attribute_key: wkt_akhir
     can_filter: true
@@ -85,7 +85,7 @@
     name: login_flag
     type: boolean
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: login_flag
     attribute_key: login_flag
     can_filter: true
@@ -95,7 +95,7 @@
     name: nama_komputer
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: nama_komputer
     attribute_key: nama_komputer
     can_filter: true
@@ -105,7 +105,7 @@
     name: notransaksi
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: notransaksi
     attribute_key: notransaksi
     can_filter: true

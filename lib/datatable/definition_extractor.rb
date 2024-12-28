@@ -6,7 +6,7 @@ class Datatable::DefinitionExtractor
       raw_yml = read_definition(model_class)
       @column_definitions = convert_to_column_definitions(raw_yml)
     rescue
-      @column_definitions = model_class::TABLE_HEADER.index_by(&:name)
+      @column_definitions = {}
     end
   end
 
@@ -16,6 +16,10 @@ class Datatable::DefinitionExtractor
 
   def column_names
     @column_definitions.keys
+  end
+
+  def column_of(key)
+    @column_definitions[key.to_sym]
   end
 
   def allowed_columns
@@ -30,7 +34,6 @@ class Datatable::DefinitionExtractor
       options[:humanize_name] = @model_class.human_attribute_name(key)
       result[key] = Datatable::TableColumn.new(key, options)
     end
-
     result
   end
 

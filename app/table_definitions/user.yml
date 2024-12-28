@@ -1,11 +1,11 @@
 ---
-:table_name: users
-:columns:
+table_name: users
+columns:
   username:
     name: username
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: username
     attribute_key: username
     can_filter: true
@@ -15,7 +15,7 @@
     name: email
     type: string
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: email
     attribute_key: email
     can_filter: true
@@ -25,7 +25,7 @@
     name: role_id
     type: link
     excel_width: 25
-    client_width: 100
+    client_width: 200
     path: roles
     sort_key: roles.name
     attribute_key: role.name
@@ -36,7 +36,7 @@
     name: created_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: created_at
     attribute_key: created_at
     can_filter: true
@@ -46,7 +46,7 @@
     name: updated_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: updated_at
     attribute_key: updated_at
     can_filter: true
@@ -56,7 +56,7 @@
     name: current_sign_in_at
     type: datetime
     excel_width: 25
-    client_width: 100
+    client_width: 200
     sort_key: current_sign_in_at
     attribute_key: current_sign_in_at
     can_filter: true
