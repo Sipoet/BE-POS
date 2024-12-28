@@ -1,0 +1,113 @@
+---
+:table_name: tbl_kaslaci
+:columns:
+  nama_user:
+    name: nama_user
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: nama_user
+    attribute_key: nama_user
+    can_filter: true
+    filter_key: nama_user
+    can_sort: true
+  shift:
+    name: shift
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: shift
+    attribute_key: shift
+    can_filter: true
+    filter_key: shift
+    can_sort: true
+  kas_awal:
+    name: kas_awal
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: kas_awal
+    attribute_key: kas_awal
+    can_filter: true
+    filter_key: kas_awal
+    can_sort: true
+  kas_masuk:
+    name: kas_masuk
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: kas_masuk
+    attribute_key: kas_masuk
+    can_filter: true
+    filter_key: kas_masuk
+    can_sort: true
+  kas_akhir:
+    name: kas_akhir
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: kas_akhir
+    attribute_key: kas_akhir
+    can_filter: true
+    filter_key: kas_akhir
+    can_sort: true
+  kas_keluar:
+    name: kas_keluar
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: kas_keluar
+    attribute_key: kas_keluar
+    can_filter: true
+    filter_key: kas_keluar
+    can_sort: true
+  wkt_mulai:
+    name: wkt_mulai
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: wkt_mulai
+    attribute_key: wkt_mulai
+    can_filter: true
+    filter_key: wkt_mulai
+    can_sort: true
+  wkt_akhir:
+    name: wkt_akhir
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: wkt_akhir
+    attribute_key: wkt_akhir
+    can_filter: true
+    filter_key: wkt_akhir
+    can_sort: true
+  login_flag:
+    name: login_flag
+    type: boolean
+    excel_width: 25
+    client_width: 100
+    sort_key: login_flag
+    attribute_key: login_flag
+    can_filter: true
+    filter_key: login_flag
+    can_sort: true
+  nama_komputer:
+    name: nama_komputer
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: nama_komputer
+    attribute_key: nama_komputer
+    can_filter: true
+    filter_key: nama_komputer
+    can_sort: true
+  notransaksi:
+    name: notransaksi
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: notransaksi
+    attribute_key: notransaksi
+    can_filter: true
+    filter_key: notransaksi
+    can_sort: true

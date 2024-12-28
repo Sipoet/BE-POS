@@ -1,0 +1,94 @@
+---
+:table_name: cash_in_session_details
+:columns:
+  user_id:
+    name: user_id
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: users
+    sort_key: user_id
+    attribute_key: users.code
+    can_filter: true
+    filter_key: user_id
+    can_sort: true
+  start_time:
+    name: start_time
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: start_time
+    attribute_key: start_time
+    can_filter: true
+    filter_key: start_time
+    can_sort: true
+  end_time:
+    name: end_time
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: end_time
+    attribute_key: end_time
+    can_filter: true
+    filter_key: end_time
+    can_sort: true
+  status:
+    name: status
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: status
+    attribute_key: status
+    can_filter: true
+    filter_key: status
+    can_sort: true
+  begin_cash:
+    name: begin_cash
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: begin_cash
+    attribute_key: begin_cash
+    can_filter: true
+    filter_key: begin_cash
+    can_sort: true
+  cash_in:
+    name: cash_in
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: cash_in
+    attribute_key: cash_in
+    can_filter: true
+    filter_key: cash_in
+    can_sort: true
+  end_cash:
+    name: end_cash
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: end_cash
+    attribute_key: end_cash
+    can_filter: true
+    filter_key: end_cash
+    can_sort: true
+  created_at:
+    name: created_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: created_at
+    attribute_key: created_at
+    can_filter: true
+    filter_key: created_at
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true

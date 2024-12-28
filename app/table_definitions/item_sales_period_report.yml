@@ -1,0 +1,120 @@
+---
+:table_name: 
+:columns:
+  item_code:
+    name: item_code
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: item_code
+    attribute_key: item_code
+    can_filter: false
+    can_sort: true
+  item_name:
+    name: item_name
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: item_name
+    attribute_key: item_name
+    can_filter: false
+    can_sort: true
+  supplier_code:
+    name: supplier_code
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: supplier_code
+    attribute_key: supplier_code
+    can_filter: false
+    can_sort: true
+  item_type_name:
+    name: item_type_name
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: item_type_name
+    attribute_key: item_type_name
+    can_filter: false
+    can_sort: true
+  brand_name:
+    name: brand_name
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: brand_name
+    attribute_key: brand_name
+    can_filter: false
+    can_sort: true
+  is_consignment:
+    name: is_consignment
+    type: boolean
+    excel_width: 25
+    client_width: 100
+    sort_key: is_consignment
+    attribute_key: is_consignment
+    can_filter: false
+    can_sort: true
+  discount_percentage:
+    name: discount_percentage
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: discount_percentage
+    attribute_key: discount_percentage
+    can_filter: false
+    can_sort: true
+  buy_price:
+    name: buy_price
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: buy_price
+    attribute_key: buy_price
+    can_filter: false
+    can_sort: true
+  sell_price:
+    name: sell_price
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: sell_price
+    attribute_key: sell_price
+    can_filter: false
+    can_sort: true
+  quantity:
+    name: quantity
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: quantity
+    attribute_key: quantity
+    can_filter: false
+    can_sort: true
+  subtotal:
+    name: subtotal
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: subtotal
+    attribute_key: subtotal
+    can_filter: false
+    can_sort: true
+  discount_total:
+    name: discount_total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: discount_total
+    attribute_key: discount_total
+    can_filter: false
+    can_sort: true
+  sales_total:
+    name: sales_total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: sales_total
+    attribute_key: sales_total
+    can_filter: false
+    can_sort: true

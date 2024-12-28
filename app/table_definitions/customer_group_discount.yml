@@ -1,0 +1,154 @@
+---
+:table_name: customer_group_discounts
+:columns:
+  customer_group_code:
+    name: customer_group_code
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: customer_group_discounts
+    sort_key: customer_group_code
+    attribute_key: customer_groups.grup
+    can_filter: true
+    filter_key: customer_group_code
+    can_sort: true
+  period_type:
+    name: period_type
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: period_type
+    attribute_key: period_type
+    can_filter: true
+    filter_key: period_type
+    can_sort: true
+  discount_percentage:
+    name: discount_percentage
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: discount_percentage
+    attribute_key: discount_percentage
+    can_filter: true
+    filter_key: discount_percentage
+    can_sort: true
+  start_active_date:
+    name: start_active_date
+    type: date
+    excel_width: 25
+    client_width: 100
+    sort_key: start_active_date
+    attribute_key: start_active_date
+    can_filter: true
+    filter_key: start_active_date
+    can_sort: true
+  end_active_date:
+    name: end_active_date
+    type: date
+    excel_width: 25
+    client_width: 100
+    sort_key: end_active_date
+    attribute_key: end_active_date
+    can_filter: true
+    filter_key: end_active_date
+    can_sort: true
+  level:
+    name: level
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: level
+    attribute_key: level
+    can_filter: true
+    filter_key: level
+    can_sort: true
+  variable1:
+    name: variable1
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: variable1
+    attribute_key: variable1
+    can_filter: true
+    filter_key: variable1
+    can_sort: true
+  variable2:
+    name: variable2
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: variable2
+    attribute_key: variable2
+    can_filter: true
+    filter_key: variable2
+    can_sort: true
+  variable3:
+    name: variable3
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: variable3
+    attribute_key: variable3
+    can_filter: true
+    filter_key: variable3
+    can_sort: true
+  variable4:
+    name: variable4
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: variable4
+    attribute_key: variable4
+    can_filter: true
+    filter_key: variable4
+    can_sort: true
+  variable5:
+    name: variable5
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: variable5
+    attribute_key: variable5
+    can_filter: true
+    filter_key: variable5
+    can_sort: true
+  variable6:
+    name: variable6
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: variable6
+    attribute_key: variable6
+    can_filter: true
+    filter_key: variable6
+    can_sort: true
+  variable7:
+    name: variable7
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: variable7
+    attribute_key: variable7
+    can_filter: true
+    filter_key: variable7
+    can_sort: true
+  created_at:
+    name: created_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: created_at
+    attribute_key: created_at
+    can_filter: true
+    filter_key: created_at
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true

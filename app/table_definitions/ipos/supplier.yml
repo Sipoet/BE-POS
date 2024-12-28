@@ -1,0 +1,93 @@
+---
+:table_name: tbl_supel
+:columns:
+  kode:
+    name: kode
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: kode
+    attribute_key: kode
+    can_filter: true
+    filter_key: kode
+    can_sort: true
+  nama:
+    name: nama
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: nama
+    attribute_key: nama
+    can_filter: true
+    filter_key: nama
+    can_sort: true
+  alamat:
+    name: alamat
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: alamat
+    attribute_key: alamat
+    can_filter: true
+    filter_key: alamat
+    can_sort: true
+  kontak:
+    name: kontak
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: kontak
+    attribute_key: kontak
+    can_filter: true
+    filter_key: kontak
+    can_sort: true
+  email:
+    name: email
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: email
+    attribute_key: email
+    can_filter: true
+    filter_key: email
+    can_sort: true
+  bank:
+    name: bank
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: bank
+    attribute_key: bank
+    can_filter: true
+    filter_key: bank
+    can_sort: true
+  norek:
+    name: norek
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: norek
+    attribute_key: norek
+    can_filter: true
+    filter_key: norek
+    can_sort: true
+  atasnama:
+    name: atasnama
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: atasnama
+    attribute_key: atasnama
+    can_filter: true
+    filter_key: atasnama
+    can_sort: true
+  keterangan:
+    name: keterangan
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: keterangan
+    attribute_key: keterangan
+    can_filter: true
+    filter_key: keterangan
+    can_sort: true

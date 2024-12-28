@@ -1,0 +1,53 @@
+---
+:table_name: cashier_sessions
+:columns:
+  date:
+    name: date
+    type: date
+    excel_width: 25
+    client_width: 100
+    sort_key: date
+    attribute_key: date
+    can_filter: true
+    filter_key: date
+    can_sort: true
+  total_in:
+    name: total_in
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: total_in
+    attribute_key: total_in
+    can_filter: true
+    filter_key: total_in
+    can_sort: true
+  total_out:
+    name: total_out
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: total_out
+    attribute_key: total_out
+    can_filter: true
+    filter_key: total_out
+    can_sort: true
+  created_at:
+    name: created_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: created_at
+    attribute_key: created_at
+    can_filter: true
+    filter_key: created_at
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true

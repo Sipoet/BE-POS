@@ -1,0 +1,53 @@
+---
+:table_name: tbl_supelgrup
+:columns:
+  kgrup:
+    name: kgrup
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: kgrup
+    attribute_key: kgrup
+    can_filter: true
+    filter_key: kgrup
+    can_sort: true
+  grup:
+    name: grup
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: grup
+    attribute_key: grup
+    can_filter: true
+    filter_key: grup
+    can_sort: true
+  potongan:
+    name: potongan
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: potongan
+    attribute_key: potongan
+    can_filter: true
+    filter_key: potongan
+    can_sort: true
+  levelharga:
+    name: levelharga
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: levelharga
+    attribute_key: levelharga
+    can_filter: true
+    filter_key: levelharga
+    can_sort: true
+  kelipatanpoin:
+    name: kelipatanpoin
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: kelipatanpoin
+    attribute_key: kelipatanpoin
+    can_filter: true
+    filter_key: kelipatanpoin
+    can_sort: true

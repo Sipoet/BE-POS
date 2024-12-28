@@ -1,0 +1,84 @@
+---
+:table_name: employee_leaves
+:columns:
+  employee_id:
+    name: employee_id
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: employees
+    sort_key: employee_id
+    attribute_key: employee.name
+    can_filter: true
+    filter_key: employee_id
+    can_sort: true
+  date:
+    name: date
+    type: date
+    excel_width: 25
+    client_width: 100
+    sort_key: date
+    attribute_key: date
+    can_filter: true
+    filter_key: date
+    can_sort: true
+  leave_type:
+    name: leave_type
+    type: enum
+    excel_width: 25
+    client_width: 100
+    sort_key: leave_type
+    attribute_key: leave_type
+    can_filter: true
+    filter_key: leave_type
+    can_sort: true
+  change_date:
+    name: change_date
+    type: date
+    excel_width: 25
+    client_width: 100
+    sort_key: change_date
+    attribute_key: change_date
+    can_filter: true
+    filter_key: change_date
+    can_sort: true
+  change_shift:
+    name: change_shift
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: change_shift
+    attribute_key: change_shift
+    can_filter: true
+    filter_key: change_shift
+    can_sort: true
+  description:
+    name: description
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: description
+    attribute_key: description
+    can_filter: true
+    filter_key: description
+    can_sort: true
+  created_at:
+    name: created_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: created_at
+    attribute_key: created_at
+    can_filter: true
+    filter_key: created_at
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true

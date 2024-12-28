@@ -1,0 +1,157 @@
+---
+:table_name: tbl_itrdt
+:columns:
+  kodeitem:
+    name: kodeitem
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: items
+    sort_key: kodeitem
+    attribute_key: item.namaitem
+    can_filter: true
+    filter_key: kodeitem
+    can_sort: true
+  jumlah:
+    name: jumlah
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: jumlah
+    attribute_key: jumlah
+    can_filter: true
+    filter_key: jumlah
+    can_sort: true
+  cogs:
+    name: cogs
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: cogs
+    attribute_key: cogs
+    can_filter: true
+    filter_key: cogs
+    can_sort: true
+  sell_price:
+    name: sell_price
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: sell_price
+    attribute_key: sell_price
+    can_filter: true
+    filter_key: sell_price
+    can_sort: true
+  satuan:
+    name: satuan
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: satuan
+    attribute_key: satuan
+    can_filter: true
+    filter_key: satuan
+    can_sort: true
+  tglexp:
+    name: tglexp
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: tglexp
+    attribute_key: tglexp
+    can_filter: true
+    filter_key: tglexp
+    can_sort: true
+  kodeprod:
+    name: kodeprod
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: kodeprod
+    attribute_key: kodeprod
+    can_filter: true
+    filter_key: kodeprod
+    can_sort: true
+  jmlkonversi:
+    name: jmlkonversi
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: jmlkonversi
+    attribute_key: jmlkonversi
+    can_filter: true
+    filter_key: jmlkonversi
+    can_sort: true
+  detinfo:
+    name: detinfo
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: detinfo
+    attribute_key: detinfo
+    can_filter: true
+    filter_key: detinfo
+    can_sort: true
+  nobaris:
+    name: nobaris
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: nobaris
+    attribute_key: nobaris
+    can_filter: true
+    filter_key: nobaris
+    can_sort: true
+  item.supplier1:
+    name: item.supplier1
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: suppliers
+    sort_key: item.supplier1
+    attribute_key: supplier.kode
+    can_filter: true
+    filter_key: item.supplier1
+    can_sort: true
+  item.merek:
+    name: item.merek
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: brands
+    sort_key: item.merek
+    attribute_key: brand.merek
+    can_filter: true
+    filter_key: item.merek
+    can_sort: true
+  item.jenis:
+    name: item.jenis
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: item_types
+    sort_key: item.jenis
+    attribute_key: item_type.jenis
+    can_filter: true
+    filter_key: item.jenis
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true
+  notransaksi:
+    name: notransaksi
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: notransaksi
+    attribute_key: notransaksi
+    can_filter: true
+    filter_key: notransaksi
+    can_sort: true

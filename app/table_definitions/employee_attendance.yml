@@ -1,0 +1,94 @@
+---
+:table_name: employee_attendances
+:columns:
+  employee_id:
+    name: employee_id
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: employees
+    sort_key: employee_id
+    attribute_key: employee.name
+    can_filter: true
+    filter_key: employee_id
+    can_sort: true
+  date:
+    name: date
+    type: date
+    excel_width: 25
+    client_width: 100
+    sort_key: date
+    attribute_key: date
+    can_filter: true
+    filter_key: date
+    can_sort: true
+  start_time:
+    name: start_time
+    type: time
+    excel_width: 25
+    client_width: 100
+    sort_key: start_time
+    attribute_key: start_work
+    can_filter: true
+    filter_key: start_time
+    can_sort: true
+  end_time:
+    name: end_time
+    type: time
+    excel_width: 25
+    client_width: 100
+    sort_key: end_time
+    attribute_key: end_work
+    can_filter: true
+    filter_key: end_time
+    can_sort: true
+  shift:
+    name: shift
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: shift
+    attribute_key: shift
+    can_filter: true
+    filter_key: shift
+    can_sort: true
+  is_late:
+    name: is_late
+    type: boolean
+    excel_width: 25
+    client_width: 100
+    sort_key: is_late
+    attribute_key: is_late
+    can_filter: true
+    filter_key: is_late
+    can_sort: true
+  allow_overtime:
+    name: allow_overtime
+    type: boolean
+    excel_width: 25
+    client_width: 100
+    sort_key: allow_overtime
+    attribute_key: allow_overtime
+    can_filter: true
+    filter_key: allow_overtime
+    can_sort: true
+  created_at:
+    name: created_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: created_at
+    attribute_key: created_at
+    can_filter: true
+    filter_key: created_at
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true

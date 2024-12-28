@@ -1,0 +1,23 @@
+---
+:table_name: tbl_itemmerek
+:columns:
+  merek:
+    name: merek
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: merek
+    attribute_key: merek
+    can_filter: true
+    filter_key: merek
+    can_sort: true
+  ketmerek:
+    name: ketmerek
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: ketmerek
+    attribute_key: ketmerek
+    can_filter: true
+    filter_key: ketmerek
+    can_sort: true

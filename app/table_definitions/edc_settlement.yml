@@ -1,0 +1,105 @@
+---
+:table_name: edc_settlements
+:columns:
+  cashier_session_id:
+    name: cashier_session_id
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: cashier_session_id
+    attribute_key: cashier_session_id
+    can_filter: true
+    filter_key: cashier_session_id
+    can_sort: true
+  payment_provider_id:
+    name: payment_provider_id
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: payment_providers
+    sort_key: payment_provider_id
+    attribute_key: payment_provider.code
+    can_filter: true
+    filter_key: payment_provider_id
+    can_sort: true
+  payment_type_id:
+    name: payment_type_id
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: payment_types
+    sort_key: payment_type_id
+    attribute_key: payment_type.name
+    can_filter: true
+    filter_key: payment_type_id
+    can_sort: true
+  status:
+    name: status
+    type: enum
+    excel_width: 25
+    client_width: 100
+    sort_key: status
+    attribute_key: status
+    can_filter: true
+    filter_key: status
+    can_sort: true
+  amount:
+    name: amount
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: amount
+    attribute_key: amount
+    can_filter: true
+    filter_key: amount
+    can_sort: true
+  diff_amount:
+    name: diff_amount
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: diff_amount
+    attribute_key: diff_amount
+    can_filter: true
+    filter_key: diff_amount
+    can_sort: true
+  merchant_id:
+    name: merchant_id
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: merchant_id
+    attribute_key: merchant_id
+    can_filter: true
+    filter_key: merchant_id
+    can_sort: true
+  terminal_id:
+    name: terminal_id
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: terminal_id
+    attribute_key: terminal_id
+    can_filter: true
+    filter_key: terminal_id
+    can_sort: true
+  created_at:
+    name: created_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: created_at
+    attribute_key: created_at
+    can_filter: true
+    filter_key: created_at
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true

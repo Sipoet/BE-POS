@@ -1,0 +1,217 @@
+---
+:table_name: item_sales_percentage_reports
+:columns:
+  item_code:
+    name: item_code
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: items
+    sort_key: item_code
+    attribute_key: item.namaitem
+    can_filter: true
+    filter_key: item_code
+    can_sort: true
+  item_name:
+    name: item_name
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: item_name
+    attribute_key: item_name
+    can_filter: true
+    filter_key: item_name
+    can_sort: true
+  item_type_name:
+    name: item_type_name
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: item_types
+    sort_key: item_type_name
+    attribute_key: item_type.ketjenis
+    can_filter: true
+    filter_key: item_type_name
+    can_sort: true
+  supplier_code:
+    name: supplier_code
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: suppliers
+    sort_key: supplier_code
+    attribute_key: supplier.nama
+    can_filter: true
+    filter_key: supplier_code
+    can_sort: true
+  supplier_name:
+    name: supplier_name
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: supplier_name
+    attribute_key: supplier_name
+    can_filter: true
+    filter_key: supplier_name
+    can_sort: true
+  brand_name:
+    name: brand_name
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: brands
+    sort_key: brand_name
+    attribute_key: brand.merek
+    can_filter: true
+    filter_key: brand_name
+    can_sort: true
+  recent_purchase_date:
+    name: recent_purchase_date
+    type: date
+    excel_width: 25
+    client_width: 100
+    sort_key: recent_purchase_date
+    attribute_key: recent_purchase_date
+    can_filter: true
+    filter_key: recent_purchase_date
+    can_sort: true
+  is_consignment:
+    name: is_consignment
+    type: boolean
+    excel_width: 25
+    client_width: 100
+    sort_key: is_consignment
+    attribute_key: is_consignment
+    can_filter: true
+    filter_key: is_consignment
+    can_sort: true
+  stock_left:
+    name: stock_left
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: stock_left
+    attribute_key: stock_left
+    can_filter: true
+    filter_key: stock_left
+    can_sort: true
+  warehouse_stock:
+    name: warehouse_stock
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: warehouse_stock
+    attribute_key: warehouse_stock
+    can_filter: true
+    filter_key: warehouse_stock
+    can_sort: true
+  store_stock:
+    name: store_stock
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: store_stock
+    attribute_key: store_stock
+    can_filter: true
+    filter_key: store_stock
+    can_sort: true
+  item_out:
+    name: item_out
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: item_out
+    attribute_key: item_out
+    can_filter: true
+    filter_key: item_out
+    can_sort: true
+  number_of_purchase:
+    name: number_of_purchase
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: number_of_purchase
+    attribute_key: number_of_purchase
+    can_filter: true
+    filter_key: number_of_purchase
+    can_sort: true
+  number_of_sales:
+    name: number_of_sales
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: number_of_sales
+    attribute_key: number_of_sales
+    can_filter: true
+    filter_key: number_of_sales
+    can_sort: true
+  qty_return:
+    name: qty_return
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: qty_return
+    attribute_key: qty_return
+    can_filter: true
+    filter_key: qty_return
+    can_sort: true
+  avg_buy_price:
+    name: avg_buy_price
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: avg_buy_price
+    attribute_key: avg_buy_price
+    can_filter: true
+    filter_key: avg_buy_price
+    can_sort: true
+  sell_price:
+    name: sell_price
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: sell_price
+    attribute_key: sell_price
+    can_filter: true
+    filter_key: sell_price
+    can_sort: true
+  purchase_total:
+    name: purchase_total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: purchase_total
+    attribute_key: purchase_total
+    can_filter: true
+    filter_key: purchase_total
+    can_sort: true
+  sales_total:
+    name: sales_total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: sales_total
+    attribute_key: sales_total
+    can_filter: true
+    filter_key: sales_total
+    can_sort: true
+  gross_profit:
+    name: gross_profit
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: gross_profit
+    attribute_key: gross_profit
+    can_filter: true
+    filter_key: gross_profit
+    can_sort: true
+  percentage_sales:
+    name: percentage_sales
+    type: percentage
+    excel_width: 25
+    client_width: 100
+    sort_key: percentage_sales
+    attribute_key: percentage_sales
+    can_filter: true
+    filter_key: percentage_sales
+    can_sort: true

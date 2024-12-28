@@ -1,0 +1,102 @@
+---
+:table_name: 
+:columns:
+  start_time:
+    name: start_time
+    type: date
+    excel_width: 25
+    client_width: 100
+    sort_key: start_time
+    attribute_key: start_time
+    can_filter: false
+    can_sort: true
+  end_time:
+    name: end_time
+    type: date
+    excel_width: 25
+    client_width: 100
+    sort_key: end_time
+    attribute_key: end_time
+    can_filter: false
+    can_sort: true
+  sales_total:
+    name: sales_total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: sales_total
+    attribute_key: sales_total
+    can_filter: false
+    can_sort: true
+  gross_profit:
+    name: gross_profit
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: gross_profit
+    attribute_key: gross_profit
+    can_filter: false
+    can_sort: true
+  num_of_transaction:
+    name: num_of_transaction
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: num_of_transaction
+    attribute_key: num_of_transaction
+    can_filter: false
+    can_sort: true
+  discount_total:
+    name: discount_total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: discount_total
+    attribute_key: discount_total
+    can_filter: false
+    can_sort: true
+  cash_total:
+    name: cash_total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: cash_total
+    attribute_key: cash_total
+    can_filter: false
+    can_sort: true
+  debit_total:
+    name: debit_total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: debit_total
+    attribute_key: debit_total
+    can_filter: false
+    can_sort: true
+  credit_total:
+    name: credit_total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: credit_total
+    attribute_key: credit_total
+    can_filter: false
+    can_sort: true
+  qris_total:
+    name: qris_total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: qris_total
+    attribute_key: qris_total
+    can_filter: false
+    can_sort: true
+  online_total:
+    name: online_total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: online_total
+    attribute_key: online_total
+    can_filter: false
+    can_sort: true

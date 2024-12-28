@@ -1,0 +1,227 @@
+---
+:table_name: tbl_imdt
+:columns:
+  kodeitem:
+    name: kodeitem
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: items
+    sort_key: kodeitem
+    attribute_key: item.namaitem
+    can_filter: true
+    filter_key: kodeitem
+    can_sort: true
+  jmlpesan:
+    name: jmlpesan
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: jmlpesan
+    attribute_key: jmlpesan
+    can_filter: true
+    filter_key: jmlpesan
+    can_sort: true
+  jumlah:
+    name: jumlah
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: jumlah
+    attribute_key: jumlah
+    can_filter: true
+    filter_key: jumlah
+    can_sort: true
+  harga:
+    name: harga
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: harga
+    attribute_key: harga
+    can_filter: true
+    filter_key: harga
+    can_sort: true
+  sell_price:
+    name: sell_price
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: sell_price
+    attribute_key: sell_price
+    can_filter: true
+    filter_key: sell_price
+    can_sort: true
+  satuan:
+    name: satuan
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: satuan
+    attribute_key: satuan
+    can_filter: true
+    filter_key: satuan
+    can_sort: true
+  subtotal:
+    name: subtotal
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: subtotal
+    attribute_key: subtotal
+    can_filter: true
+    filter_key: subtotal
+    can_sort: true
+  potongan:
+    name: potongan
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: potongan
+    attribute_key: potongan
+    can_filter: true
+    filter_key: potongan
+    can_sort: true
+  potongan2:
+    name: potongan2
+    type: percentage
+    excel_width: 25
+    client_width: 100
+    sort_key: potongan2
+    attribute_key: potongan2
+    can_filter: true
+    filter_key: potongan2
+    can_sort: true
+  potongan3:
+    name: potongan3
+    type: percentage
+    excel_width: 25
+    client_width: 100
+    sort_key: potongan3
+    attribute_key: potongan3
+    can_filter: true
+    filter_key: potongan3
+    can_sort: true
+  potongan4:
+    name: potongan4
+    type: percentage
+    excel_width: 25
+    client_width: 100
+    sort_key: potongan4
+    attribute_key: potongan4
+    can_filter: true
+    filter_key: potongan4
+    can_sort: true
+  pajak:
+    name: pajak
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: pajak
+    attribute_key: pajak
+    can_filter: true
+    filter_key: pajak
+    can_sort: true
+  total:
+    name: total
+    type: money
+    excel_width: 25
+    client_width: 100
+    sort_key: total
+    attribute_key: total
+    can_filter: true
+    filter_key: total
+    can_sort: true
+  tglexp:
+    name: tglexp
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: tglexp
+    attribute_key: tglexp
+    can_filter: true
+    filter_key: tglexp
+    can_sort: true
+  kodeprod:
+    name: kodeprod
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: kodeprod
+    attribute_key: kodeprod
+    can_filter: true
+    filter_key: kodeprod
+    can_sort: true
+  item.supplier1:
+    name: item.supplier1
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: suppliers
+    sort_key: item.supplier1
+    attribute_key: supplier.nama
+    can_filter: true
+    filter_key: item.supplier1
+    can_sort: true
+  item.merek:
+    name: item.merek
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: brands
+    sort_key: item.merek
+    attribute_key: brand.ketmerek
+    can_filter: true
+    filter_key: item.merek
+    can_sort: true
+  item.jenis:
+    name: item.jenis
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: item_types
+    sort_key: item.jenis
+    attribute_key: item_type.ketjenis
+    can_filter: true
+    filter_key: item.jenis
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true
+  hppdasar:
+    name: hppdasar
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: hppdasar
+    attribute_key: hppdasar
+    can_filter: true
+    filter_key: hppdasar
+    can_sort: true
+  nobaris:
+    name: nobaris
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: nobaris
+    attribute_key: nobaris
+    can_filter: true
+    filter_key: nobaris
+    can_sort: true
+  notransaksi:
+    name: notransaksi
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: notransaksi
+    attribute_key: notransaksi
+    can_filter: true
+    filter_key: notransaksi
+    can_sort: true

@@ -1,0 +1,93 @@
+---
+:table_name: tbl_itrhd
+:columns:
+  notransaksi:
+    name: notransaksi
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: notransaksi
+    attribute_key: notransaksi
+    can_filter: true
+    filter_key: notransaksi
+    can_sort: true
+  tanggal:
+    name: tanggal
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: tanggal
+    attribute_key: tanggal
+    can_filter: true
+    filter_key: tanggal
+    can_sort: true
+  kantordari:
+    name: kantordari
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: kantordari
+    attribute_key: kantordari
+    can_filter: true
+    filter_key: kantordari
+    can_sort: true
+  kantortujuan:
+    name: kantortujuan
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: kantortujuan
+    attribute_key: kantortujuan
+    can_filter: true
+    filter_key: kantortujuan
+    can_sort: true
+  keterangan:
+    name: keterangan
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: keterangan
+    attribute_key: keterangan
+    can_filter: true
+    filter_key: keterangan
+    can_sort: true
+  totalitem:
+    name: totalitem
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: totalitem
+    attribute_key: totalitem
+    can_filter: true
+    filter_key: totalitem
+    can_sort: true
+  user1:
+    name: user1
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: user1
+    attribute_key: user1
+    can_filter: true
+    filter_key: user1
+    can_sort: true
+  shiftkerja:
+    name: shiftkerja
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: shiftkerja
+    attribute_key: shiftkerja
+    can_filter: true
+    filter_key: shiftkerja
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true

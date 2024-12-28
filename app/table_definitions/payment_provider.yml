@@ -1,0 +1,93 @@
+---
+:table_name: payment_providers
+:columns:
+  name:
+    name: name
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: name
+    attribute_key: name
+    can_filter: true
+    filter_key: name
+    can_sort: true
+  bank_or_provider:
+    name: bank_or_provider
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: bank_or_provider
+    attribute_key: bank_or_provider
+    can_filter: true
+    filter_key: bank_or_provider
+    can_sort: true
+  status:
+    name: status
+    type: enum
+    excel_width: 25
+    client_width: 100
+    sort_key: status
+    attribute_key: status
+    can_filter: true
+    filter_key: status
+    can_sort: true
+  currency:
+    name: currency
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: currency
+    attribute_key: currency
+    can_filter: true
+    filter_key: currency
+    can_sort: true
+  account_number:
+    name: account_number
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: account_number
+    attribute_key: account_number
+    can_filter: true
+    filter_key: account_number
+    can_sort: true
+  account_register_name:
+    name: account_register_name
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: account_register_name
+    attribute_key: account_register_name
+    can_filter: true
+    filter_key: account_register_name
+    can_sort: true
+  swift_code:
+    name: swift_code
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: swift_code
+    attribute_key: swift_code
+    can_filter: true
+    filter_key: swift_code
+    can_sort: true
+  created_at:
+    name: created_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: created_at
+    attribute_key: created_at
+    can_filter: true
+    filter_key: created_at
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true

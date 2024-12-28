@@ -1,0 +1,64 @@
+---
+:table_name: users
+:columns:
+  username:
+    name: username
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: username
+    attribute_key: username
+    can_filter: true
+    filter_key: username
+    can_sort: true
+  email:
+    name: email
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: email
+    attribute_key: email
+    can_filter: true
+    filter_key: email
+    can_sort: true
+  role_id:
+    name: role_id
+    type: link
+    excel_width: 25
+    client_width: 100
+    path: roles
+    sort_key: roles.name
+    attribute_key: role.name
+    can_filter: true
+    filter_key: role_id
+    can_sort: true
+  created_at:
+    name: created_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: created_at
+    attribute_key: created_at
+    can_filter: true
+    filter_key: created_at
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true
+  current_sign_in_at:
+    name: current_sign_in_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: current_sign_in_at
+    attribute_key: current_sign_in_at
+    can_filter: true
+    filter_key: current_sign_in_at
+    can_sort: true

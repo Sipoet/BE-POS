@@ -1,0 +1,53 @@
+---
+:table_name: payrolls
+:columns:
+  name:
+    name: name
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: name
+    attribute_key: name
+    can_filter: true
+    filter_key: name
+    can_sort: true
+  paid_time_off:
+    name: paid_time_off
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: paid_time_off
+    attribute_key: paid_time_off
+    can_filter: true
+    filter_key: paid_time_off
+    can_sort: true
+  description:
+    name: description
+    type: integer
+    excel_width: 25
+    client_width: 100
+    sort_key: description
+    attribute_key: description
+    can_filter: true
+    filter_key: description
+    can_sort: true
+  created_at:
+    name: created_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: created_at
+    attribute_key: created_at
+    can_filter: true
+    filter_key: created_at
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    excel_width: 25
+    client_width: 100
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true

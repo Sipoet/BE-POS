@@ -1,0 +1,53 @@
+---
+:table_name: tbl_kaslacidt
+:columns:
+  notransaksi:
+    name: notransaksi
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: notransaksi
+    attribute_key: notransaksi
+    can_filter: true
+    filter_key: notransaksi
+    can_sort: true
+  nama_pengambil:
+    name: nama_pengambil
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: nama_pengambil
+    attribute_key: nama_pengambil
+    can_filter: true
+    filter_key: nama_pengambil
+    can_sort: true
+  kas_keluar:
+    name: kas_keluar
+    type: decimal
+    excel_width: 25
+    client_width: 100
+    sort_key: kas_keluar
+    attribute_key: kas_keluar
+    can_filter: true
+    filter_key: kas_keluar
+    can_sort: true
+  keterangan_p:
+    name: keterangan_p
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: keterangan_p
+    attribute_key: keterangan_p
+    can_filter: true
+    filter_key: keterangan_p
+    can_sort: true
+  iddetail:
+    name: iddetail
+    type: string
+    excel_width: 25
+    client_width: 100
+    sort_key: iddetail
+    attribute_key: iddetail
+    can_filter: true
+    filter_key: iddetail
+    can_sort: true
