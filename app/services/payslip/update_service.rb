@@ -32,7 +32,7 @@ class Payslip::UpdateService < ApplicationService
     permitted_params = params.required(:data)
                               .required(:relationships)
                               .required(:payslip_lines)
-                              .permit(data:[:type,:id, attributes:[:group,:payroll_type,:description,
+                              .permit(data:[:type,:id, attributes:[:group,:payroll_type_id,:description,
                                       :amount]])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
     payslip_lines = payslip.payslip_lines.index_by(&:id)
