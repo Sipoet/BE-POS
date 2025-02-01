@@ -45,6 +45,7 @@ gem 'sidekiq', '~> 7.2'
 gem 'xsv','~> 1.3.0'
 gem 'paper_trail','~> 15.1.0'
 gem 'paper_trail-association_tracking'
+gem 'prawn', '~> 2.5.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

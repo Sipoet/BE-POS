@@ -2,7 +2,6 @@
 table_name: tbl_imdt
 columns:
   kodeitem:
-    name: kodeitem
     type: link
     excel_width: 25
     client_width: 200
@@ -12,8 +11,14 @@ columns:
     can_filter: true
     filter_key: kodeitem
     can_sort: true
+  item_name:
+    type: string
+    excel_width: 25
+    client_width: 200
+    attribute_key: item.namaitem
+    can_filter: false
+    can_sort: false
   jmlpesan:
-    name: jmlpesan
     type: decimal
     excel_width: 25
     client_width: 200
@@ -23,7 +28,6 @@ columns:
     filter_key: jmlpesan
     can_sort: true
   jumlah:
-    name: jumlah
     type: decimal
     excel_width: 25
     client_width: 200
@@ -33,7 +37,6 @@ columns:
     filter_key: jumlah
     can_sort: true
   harga:
-    name: harga
     type: decimal
     excel_width: 25
     client_width: 200
@@ -43,7 +46,6 @@ columns:
     filter_key: harga
     can_sort: true
   sell_price:
-    name: sell_price
     type: money
     excel_width: 25
     client_width: 200
@@ -53,7 +55,6 @@ columns:
     filter_key: sell_price
     can_sort: true
   satuan:
-    name: satuan
     type: string
     excel_width: 25
     client_width: 200
@@ -63,7 +64,6 @@ columns:
     filter_key: satuan
     can_sort: true
   subtotal:
-    name: subtotal
     type: money
     excel_width: 25
     client_width: 200
@@ -73,7 +73,6 @@ columns:
     filter_key: subtotal
     can_sort: true
   potongan:
-    name: potongan
     type: decimal
     excel_width: 25
     client_width: 200
@@ -83,7 +82,6 @@ columns:
     filter_key: potongan
     can_sort: true
   potongan2:
-    name: potongan2
     type: percentage
     excel_width: 25
     client_width: 200
@@ -93,7 +91,6 @@ columns:
     filter_key: potongan2
     can_sort: true
   potongan3:
-    name: potongan3
     type: percentage
     excel_width: 25
     client_width: 200
@@ -103,7 +100,6 @@ columns:
     filter_key: potongan3
     can_sort: true
   potongan4:
-    name: potongan4
     type: percentage
     excel_width: 25
     client_width: 200
@@ -113,7 +109,6 @@ columns:
     filter_key: potongan4
     can_sort: true
   pajak:
-    name: pajak
     type: decimal
     excel_width: 25
     client_width: 200
@@ -123,7 +118,6 @@ columns:
     filter_key: pajak
     can_sort: true
   total:
-    name: total
     type: money
     excel_width: 25
     client_width: 200
@@ -133,7 +127,6 @@ columns:
     filter_key: total
     can_sort: true
   tglexp:
-    name: tglexp
     type: datetime
     excel_width: 25
     client_width: 200
@@ -143,7 +136,6 @@ columns:
     filter_key: tglexp
     can_sort: true
   kodeprod:
-    name: kodeprod
     type: string
     excel_width: 25
     client_width: 200
@@ -152,8 +144,7 @@ columns:
     can_filter: true
     filter_key: kodeprod
     can_sort: true
-  item.supplier1:
-    name: item.supplier1
+  supplier_code:
     type: link
     excel_width: 25
     client_width: 200
@@ -163,8 +154,7 @@ columns:
     can_filter: true
     filter_key: item.supplier1
     can_sort: true
-  item.merek:
-    name: item.merek
+  brand_name:
     type: link
     excel_width: 25
     client_width: 200
@@ -174,8 +164,7 @@ columns:
     can_filter: true
     filter_key: item.merek
     can_sort: true
-  item.jenis:
-    name: item.jenis
+  item_type_name:
     type: link
     excel_width: 25
     client_width: 200
@@ -186,7 +175,6 @@ columns:
     filter_key: item.jenis
     can_sort: true
   updated_at:
-    name: updated_at
     type: datetime
     excel_width: 25
     client_width: 200
@@ -196,7 +184,6 @@ columns:
     filter_key: updated_at
     can_sort: true
   hppdasar:
-    name: hppdasar
     type: decimal
     excel_width: 25
     client_width: 200
@@ -206,7 +193,6 @@ columns:
     filter_key: hppdasar
     can_sort: true
   nobaris:
-    name: nobaris
     type: integer
     excel_width: 25
     client_width: 200
@@ -216,7 +202,6 @@ columns:
     filter_key: nobaris
     can_sort: true
   notransaksi:
-    name: notransaksi
     type: string
     excel_width: 25
     client_width: 200

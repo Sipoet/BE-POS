@@ -93,6 +93,7 @@ Rails.application.routes.draw do
     post :cancel, on: :member
     post :pay, on: :member
     get :report, on: :collection
+    get :download, on: :member
   end
 
   resources :assets, param: :code, only: [:show, :create]

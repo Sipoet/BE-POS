@@ -36,4 +36,8 @@ class PayslipsController < ApplicationController
   def generate_payslip
     run_service_default
   end
+
+  def download
+    run_service_default
+  end
 end
