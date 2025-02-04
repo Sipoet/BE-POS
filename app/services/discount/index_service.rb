@@ -25,7 +25,7 @@ class Discount::IndexService < ApplicationService
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Discount)
     allowed_fields = [:discount, :item, :item_type, :supplier, :brand,
-                      :blacklist_brand, :blacklist_item_type,
+                      :blacklist_brand, :blacklist_item_type, :customer_group,
                       :blacklist_supplier]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,

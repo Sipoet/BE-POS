@@ -14,7 +14,10 @@ class Discount::ShowService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Discount)
-    allowed_fields = [:discount_brands, :discount_item_types, :discount_items,:discount_suppliers,'discount_brands.brand', 'discount_item_types.item_type', 'discount_items.item','discount_suppliers.supplier']
+    allowed_fields = [:discount_brands, :discount_item_types, :discount_items,
+    :customer_group, :discount_suppliers,
+    'discount_brands.brand', 'discount_item_types.item_type',
+    'discount_items.item','discount_suppliers.supplier']
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       table_definitions: @table_definitions)

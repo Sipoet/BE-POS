@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_29_101001) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_04_100307) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -143,6 +143,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_29_101001) do
     t.boolean "week6", default: false, null: false
     t.boolean "week7", default: false, null: false
     t.string "discount_group"
+    t.string "customer_group_code"
     t.index ["code"], name: "index_discounts_on_code", unique: true
     t.index ["start_time", "end_time", "item_code", "supplier_code", "item_type_name", "brand_name"], name: "active_promotion_idx", order: { end_time: :desc }
     t.index ["start_time", "end_time"], name: "index_discounts_on_start_time_and_end_time", order: { end_time: :desc }
@@ -2456,6 +2457,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_29_101001) do
   add_foreign_key "discounts", "tbl_itemmerek", column: "brand_name", primary_key: "merek"
   add_foreign_key "discounts", "tbl_supel", column: "blacklist_supplier_code", primary_key: "kode"
   add_foreign_key "discounts", "tbl_supel", column: "supplier_code", primary_key: "kode"
+  add_foreign_key "discounts", "tbl_supelgrup", column: "customer_group_code", primary_key: "kgrup"
   add_foreign_key "edc_settlements", "cashier_sessions"
   add_foreign_key "edc_settlements", "payment_providers"
   add_foreign_key "edc_settlements", "payment_types"

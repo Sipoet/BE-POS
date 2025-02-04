@@ -42,7 +42,7 @@ class CustomerGroup::IndexService < ApplicationService
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      customer_groups = customer_groups.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      customer_groups = customer_groups.where(['grup ilike ? ']+ Array.new(1,"%#{@search_text}%"))
     end
     @filters.each do |filter|
       customer_groups = customer_groups.where(filter.to_query)

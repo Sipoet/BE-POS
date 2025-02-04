@@ -104,6 +104,7 @@ class Discount::RefreshPromotion
           diskon2: discount.discount2,
           diskon3: discount.discount3,
           diskon4: discount.discount4,
+          kgruppel: discount.customer_group_code,
         }
     end
     Ipos::ItemPromotion.insert_all(item_p_docs)

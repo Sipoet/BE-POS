@@ -5,7 +5,7 @@ class Discount::UpdateService < ApplicationService
                               .required(:attributes)
                               .permit(:weight,:calculation_type, :discount_type,
                                       :week1, :week2, :week3, :week4,
-                                      :week5, :week6, :week7,
+                                      :week5, :week6, :week7,:customer_group_code,
                                       :discount1, :discount2,:discount3,
                                       :discount4, :start_time, :end_time)
     discount = Discount.find(@params[:id])

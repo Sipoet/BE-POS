@@ -10,6 +10,8 @@ class DiscountSerializer
     end
   end
 
+
+
   attribute :item_code do |object|
     filter_text(object.discount_items.included_items.limit(3).map(&:item_code))
   end
@@ -48,6 +50,8 @@ class DiscountSerializer
   has_many :discount_suppliers, if: Proc.new { |record, params| params[:include].include?('discount_suppliers') rescue false } do |discount|
     discount.discount_suppliers.order(supplier_code: :asc).includes(:supplier)
   end
+
+  belongs_to :customer_group, set_id: :customer_group_code, id_method_name: :customer_group_code
 
   def self.filter_text(text_arr)
     text = text_arr.join(', ')

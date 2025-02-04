@@ -67,7 +67,7 @@ class Discount < ApplicationRecord
   belongs_to :blacklist_item_type, optional: true, foreign_key: :item_type_name, primary_key: :jenis, class_name:'Ipos::ItemType'
   belongs_to :blacklist_brand, optional: true, foreign_key: :brand_name, primary_key: :merek, class_name:'Ipos::Brand'
   belongs_to :blacklist_supplier, optional: true, foreign_key: :supplier_code, primary_key: :kode, class_name:'Ipos::Supplier'
-
+  belongs_to :customer_group, optional: true, foreign_key: :customer_group_code, primary_key: :kgrup, class_name:'Ipos::CustomerGroup'
   validate :range_time_should_valid
   validate :filter_should_be_filled
 
