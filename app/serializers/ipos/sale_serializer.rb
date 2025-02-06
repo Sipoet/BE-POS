@@ -1,8 +1,8 @@
 class Ipos::SaleSerializer
   include JSONAPI::Serializer
+  include TextFormatter
   attributes :notransaksi,
               :user1,
-              :tanggal,
               :keterangan,
               :totalitem,
               :subtotal,
@@ -17,6 +17,10 @@ class Ipos::SaleSerializer
               :ppn,
               :pajak,
               :bank_code
+
+  attribute :tanggal do |object|
+    ipos_fix_date_timezone(object.tanggal)
+  end
 
   has_many :sale_items, serializer: Ipos::SaleItemSerializer, if: Proc.new { |record, params| params[:include].include?('sale_items') rescue false } do |sale|
     sale.sale_items.order(nobaris: :asc)
