@@ -10,7 +10,7 @@ class Supplier::IndexService < ApplicationService
       params:{include: @included},
       include: @included
     }
-    render_json(SupplierSerializer.new(@suppliers,options))
+    render_json(Ipos::SupplierSerializer.new(@suppliers,options))
   end
 
   def meta

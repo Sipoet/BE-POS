@@ -17,7 +17,7 @@ class Holiday::IndexService < ApplicationService
     {
       page: @page,
       limit: @limit,
-      total_rows: @holidays.count,
+      total_rows: @holidays.total_count,
        total_pages: @holidays.total_pages,
     }
   end

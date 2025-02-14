@@ -17,7 +17,7 @@ class PaymentProvider::IndexService < ApplicationService
     {
       page: @page,
       limit: @limit,
-      total_rows: @payment_providers.count,
+      total_rows: @payment_providers.total_count,
        total_pages: @payment_providers.total_pages,
     }
   end

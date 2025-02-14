@@ -24,7 +24,7 @@ class Purchase::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Purchase)
-    allowed_fields = [:purchase, :purchase_items]
+    allowed_fields = [:purchase, :purchase_items,:supplier]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       table_definitions: @table_definitions)

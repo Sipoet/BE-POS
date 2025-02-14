@@ -17,7 +17,7 @@ class CustomerGroupDiscount::IndexService < ApplicationService
     {
       page: @page,
       limit: @limit,
-      total_rows: @customer_group_discounts.count,
+      total_rows: @customer_group_discounts.total_count,
        total_pages: @customer_group_discounts.total_pages,
     }
   end

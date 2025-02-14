@@ -60,7 +60,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         {
           page: @page,
           limit: @limit,
-          total_rows: @#{plural_name}.count,
+          total_rows: @#{plural_name}.total_count,
            total_pages: @#{plural_name}.total_pages,
         }
       end

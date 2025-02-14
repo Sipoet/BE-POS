@@ -17,7 +17,7 @@ class Transfer::IndexService < ApplicationService
     {
       page: @page,
       limit: @limit,
-      total_rows: @transfers.count,
+      total_rows: @transfers.total_count,
        total_pages: @transfers.total_pages,
     }
   end

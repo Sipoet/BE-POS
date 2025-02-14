@@ -17,7 +17,7 @@ class PaymentProviderEdc::IndexService < ApplicationService
     {
       page: @page,
       limit: @limit,
-      total_rows: @payment_provider_edcs.count,
+      total_rows: @payment_provider_edcs.total_count,
        total_pages: @payment_provider_edcs.total_pages,
     }
   end

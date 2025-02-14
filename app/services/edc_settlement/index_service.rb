@@ -17,7 +17,7 @@ class EdcSettlement::IndexService < ApplicationService
     {
       page: @page,
       limit: @limit,
-      total_rows: @edc_settlements.count,
+      total_rows: @edc_settlements.total_count,
     }
   end
 
