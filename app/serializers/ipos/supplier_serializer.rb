@@ -1,4 +1,4 @@
-class SupplierSerializer
+class Ipos::SupplierSerializer
   include JSONAPI::Serializer
   attributes :kode, :nama,:alamat,:kontak,:email,:bank,:norek,:atasnama,
             :keterangan

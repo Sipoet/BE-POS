@@ -65,17 +65,18 @@ Rails.application.routes.draw do
 
   resources :purchases, only:[:index,:show] do
     get :report, on: :collection
+    post :update_price, on: :member
   end
+
+  resources :purchase_orders, only:[:index,:show] do
+    post :update_price, on: :member
+  end
+  resources :purchase_returns, only:[:index,:show]
 
   resources :purchase_items, only:[:index]
 
   resources :transfers, only:[:index, :show]
   resources :transfer_items, only:[:index]
-
-  resources :item_sales,controller:'sale_items', only:[] do
-    get :transaction_report, on: :collection
-    get :period_report, on: :collection
-  end
 
   resources :sale_items, only:[:index] do
     get :transaction_report, on: :collection
