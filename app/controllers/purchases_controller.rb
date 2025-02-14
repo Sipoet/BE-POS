@@ -11,4 +11,8 @@ class PurchasesController < ApplicationController
   def report
     run_service_default
   end
+
+  def update_price
+    run_service_default
+  end
 end
