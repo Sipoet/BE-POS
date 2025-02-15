@@ -15,5 +15,8 @@ class Ipos::Supplier < Ipos::Supel
     'SU'
   end
 
+  after_update do |record|
+    Cache.delete("supplier-serializer:ipos/suppliers/#{record.kode}")
+  end
 
 end

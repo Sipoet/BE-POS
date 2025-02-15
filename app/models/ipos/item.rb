@@ -19,6 +19,6 @@ class Ipos::Item < ApplicationRecord
   paginates_per 20
 
   after_update do |record|
-    Rails.cache.delete('item-serializer')
+    Cache.delete("item-serializer:ipos/items/#{record.kodeitem}")
   end
 end
