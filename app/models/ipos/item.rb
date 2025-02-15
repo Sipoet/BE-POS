@@ -29,4 +29,5 @@ class Ipos::Item < ApplicationRecord
   alias_attribute :description, :keterangan
   alias_attribute :updated_at, :dateupd
   alias_attribute :created_at, :tanggal_add
+
 end
