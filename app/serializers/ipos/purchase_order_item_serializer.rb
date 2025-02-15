@@ -7,7 +7,6 @@ class Ipos::PurchaseOrderItemSerializer
             :jumlah,
             :jmlterima,
             :harga,
-            :sell_price,
             :satuan,
             :subtotal,
             :potongan,

@@ -14,7 +14,7 @@ class PurchaseReturn::ShowService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(PurchaseReturn)
+    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::PurchaseReturn)
     allowed_fields = [:purchase_return,:purchase_return_items,'purchase_return_items.item',:supplier]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,

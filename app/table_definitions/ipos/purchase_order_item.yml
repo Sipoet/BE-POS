@@ -51,7 +51,7 @@ columns:
     client_width: 200
     sort_key: sell_price
     attribute_key: item.hargajual1
-    can_filter: true
+    can_filter: false
     filter_key: sell_price
     can_sort: true
   satuan:

@@ -3,8 +3,8 @@ class Purchase::UpdatePriceService < ApplicationService
   ROUND_TYPE_LIST = ['normal','ceil','floor','mark']
   def execute_service
     extract_params
-    purchase = Ipos::Purchase.find(params[:code])
-    raise RecordNotFound.new(params[:code],Purchase.model_name.human) if purchase.nil?
+    purchase = Ipos::Purchase.find(@code)
+    raise RecordNotFound.new(@code,Purchase.model_name.human) if purchase.nil?
     ApplicationRecord.transaction do
       update_po_items_price!(purchase)
     end
@@ -46,6 +46,7 @@ class Purchase::UpdatePriceService < ApplicationService
   end
 
   def round_type_mark(number)
+    @round_precission = round_precission_based_mark_separator(@mark_separator)
     num_floor = number.floor(@round_precission)
     if (number - num_floor) > @mark_separator
       number.floor(@round_precission) + @mark_upper
@@ -55,13 +56,17 @@ class Purchase::UpdatePriceService < ApplicationService
   end
 
   def extract_params
-    @margin = params.fetch(:margin,1).to_f
-    @round_type = params.fetch(:round_type, 'normal')
+    permitted_params = params.permit(:margin,:round_type,:mark_upper,:mark_lower,:mark_separator,:code)
+    @margin = permitted_params.fetch(:margin,1).to_f
+    @round_type = permitted_params.fetch(:round_type, 'normal')
     raise 'invalid round type' unless ROUND_TYPE_LIST.include?(@round_type)
-    @round_precission = params.fetch(:round_precission,0).to_i
-    @mark_upper = params.fetch(:mark_upper,0).to_f
-    @mark_lower = params.fetch(:mark_lower,0).to_f
-    @mark_separator = params.fetch(:mark_separator,0).to_i
+    @mark_upper = permitted_params.fetch(:mark_upper,0).to_f
+    @mark_lower = permitted_params.fetch(:mark_lower,0).to_f
+    @mark_separator = permitted_params.fetch(:mark_separator,0).to_i
+    @code = permitted_params[:code]
   end
 
+  def round_precission_based_mark_separator(mark_separator)
+    Math.log10(mark_separator).ceil * -1
+  end
 end

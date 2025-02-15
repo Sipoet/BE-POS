@@ -23,7 +23,7 @@ class PurchaseReturn::IndexService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(PurchaseReturn)
+    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::PurchaseReturn)
     allowed_fields = [:purchase_return,:supplier]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
@@ -43,7 +43,7 @@ class PurchaseReturn::IndexService < ApplicationService
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      purchase_returns = purchase_returns.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      purchase_returns = purchase_returns.where(['notransaksi ilike ? ']+ Array.new(1,"%#{@search_text}%"))
     end
     @filters.each do |filter|
       purchase_returns = purchase_returns.where(filter.to_query)
