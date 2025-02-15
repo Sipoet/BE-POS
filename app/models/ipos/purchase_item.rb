@@ -10,10 +10,6 @@ class Ipos::PurchaseItem < ApplicationRecord
 
   has_one :item_report, through: :item
 
-  def sell_price
-    item.try(:hargajual1)
-  end
-
   def subtotal
     harga * jumlah
   end
