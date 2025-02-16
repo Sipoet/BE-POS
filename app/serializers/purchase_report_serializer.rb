@@ -18,7 +18,8 @@ class PurchaseReportSerializer
               :grandtotal,
               :paid_amount,
               :last_paid_date,
-              :debt_amount
+              :debt_amount,
+              :status
 
 
   belongs_to :supplier, serializer: Ipos::SupplierSerializer, set_id: :supplier_code, id_method_name: :supplier_code

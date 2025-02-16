@@ -1,19 +1,19 @@
 id:
   activerecord:
     models:
-      purchase_report: "Pembelian item"
+      purchase_report: "Laporan Pembelian"
     attributes:
       purchase_report:
         code: 'No Transaksi'
         supplier_code: 'Kode Supplier'
-        purchase_date: 'Tanggal Beli'
+        purchase_date: 'Tanggal Barang Datang'
         due_date: 'Tanggal Jatuh Tempo'
         purchase_item_total: 'Total Item pembelian'
         purchase_subtotal: 'Subtotal Pembelian'
         header_discount_amount: 'Diskon Header Pembelian'
         purchase_other_cost: 'Biaya Lain'
         purchase_grand_total: 'Grand Total Pembelian'
-        order_date: 'Tanggal Pesan'
+        order_date: 'Tanggal Faktur'
         shipping_date: 'Tanggal dikirim'
         order_item_total: 'Total Item pesanan'
         order_grand_total: 'Grand Total Pesanan'
