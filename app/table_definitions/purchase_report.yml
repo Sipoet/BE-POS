@@ -171,8 +171,8 @@ columns:
     filter_key: last_paid_date
     can_sort: true
   status:
-    type: string
+    type: enum
     excel_width: 25
     client_width: 200
-    can_filter: false
-    can_sort: false
+    can_filter: true
+    can_sort: true

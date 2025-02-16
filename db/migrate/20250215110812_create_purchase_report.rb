@@ -21,7 +21,11 @@ class CreatePurchaseReport < ActiveRecord::Migration[7.1]
           payer.last_paid_date,
           purchase.totalakhir - COALESCE(pret.return_amount_total,0) AS grandtotal,
           purchase.dppesanan + COALESCE(payer.paid_amount,0) AS paid_amount,
-          purchase.totalakhir - COALESCE(pret.return_amount_total,0) - (purchase.dppesanan + COALESCE(payer.paid_amount,0)) AS debt_amount
+          purchase.totalakhir - COALESCE(pret.return_amount_total,0) - (purchase.dppesanan + COALESCE(payer.paid_amount,0)) AS debt_amount,
+          (CASE WHEN purchase.dppesanan + COALESCE(payer.paid_amount,0) = 0 then 'no_paid'
+          WHEN purchase.totalakhir - COALESCE(pret.return_amount_total,0) - (purchase.dppesanan + COALESCE(payer.paid_amount,0)) = 0 then 'paid'
+          WHEN purchase.totalakhir - COALESCE(pret.return_amount_total,0) - (purchase.dppesanan + COALESCE(payer.paid_amount,0)) < 0 then 'over_paid'
+          ELSE 'half_paid' END) as status
         FROM (
           SELECT *
           FROM tbl_imhd
