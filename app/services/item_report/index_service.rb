@@ -65,7 +65,7 @@ class ItemReport::IndexService < ApplicationService
 
   def generate_excel(rows)
     generator = ExcelGenerator.new
-    generator.add_column_definitions(ItemReport::TABLE_HEADER)
+    generator.add_column_definitions(@table_definitions.column_definitions)
     generator.add_data(rows)
     generator.add_metadata(@filter || {})
     generator.generate('laporan-item')

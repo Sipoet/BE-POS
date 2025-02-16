@@ -1,0 +1,31 @@
+id:
+  activerecord:
+    models:
+      purchase_report: "Pembelian item"
+    attributes:
+      purchase_report:
+        code: 'No Transaksi'
+        supplier_code: 'Kode Supplier'
+        purchase_date: 'Tanggal Beli'
+        due_date: 'Tanggal Jatuh Tempo'
+        purchase_item_total: 'Total Item pembelian'
+        purchase_subtotal: 'Subtotal Pembelian'
+        header_discount_amount: 'Diskon Header Pembelian'
+        purchase_other_cost: 'Biaya Lain'
+        purchase_grand_total: 'Grand Total Pembelian'
+        order_date: 'Tanggal Pesan'
+        shipping_date: 'Tanggal dikirim'
+        order_item_total: 'Total Item pesanan'
+        order_grand_total: 'Grand Total Pesanan'
+        return_item_total: 'Total Item Retur'
+        return_amount_total: 'Total Jumlah retur'
+        grandtotal: 'Grand Total'
+        paid_amount: 'Jumlah Sudah dibayar'
+        last_paid_date: 'Tanggal Terakhir bayar'
+        debt_amount: 'Sisa Hutang'
+        status: 'Status Bayar'
+        status_enum:
+          no_paid: 'Belum Bayar'
+          paid: 'Sudah Bayar'
+          over_paid: 'Kelebihan Bayar'
+          half_paid: 'Terbayar Sebagian'

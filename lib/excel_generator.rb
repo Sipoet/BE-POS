@@ -84,7 +84,10 @@ class ExcelGenerator
       if value.blank?
         next
       end
-      case column.type
+      case column.type.to_sym
+      when :link
+        value = @val_func.call(row, column.filter_key)
+        worksheet.write_string(y, x, value.to_s, @general_format)
       when :integer,:float,:decimal,:big_decimal
         worksheet.write_number(y, x, value.to_f, @num_format)
       when :money
