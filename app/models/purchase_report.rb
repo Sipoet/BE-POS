@@ -1,12 +1,35 @@
 class PurchaseReport < ApplicationRecord
+
   self.table_name = 'purchase_reports'
   self.primary_key = 'code'
-  include MaterializedView
 
-  belongs_to :supplier, foreign_key: :supplier_code, primary_key: :kode, class_name: 'Ipos::Supplier'
-  belongs_to :purchase, foreign_key: :code, primary_key: :notransaksi, class_name: 'Ipos::Purchase'
+
+  belongs_to :supplier, foreign_key: :supplier_code, primary_key: :kode, class_name:'Ipos::Supplier'
+  belongs_to :purchase, foreign_key: :code, primary_key: :notransaksi, class_name:'Ipos::Purchase'
 
   alias_attribute :id, :code
+
+  def readonly?
+    true
+  end
+
+  def status
+    if paid_amount == 0
+      'no_paid'
+    elsif debt_amount == 0
+      'paid'
+    elsif debt_amount < 0
+      'over_paid'
+    else
+      'half_paid'
+    end
+  end
+
+  def [](key)
+    key = key.to_s
+    return self.try(key) if self.respond_to?(key)
+    @payroll_type_amounts[key]
+  end
 
   def due_date
     attributes['due_date'].utc.to_date
