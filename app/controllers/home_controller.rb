@@ -2,7 +2,7 @@ class HomeController < ApplicationController
   before_action :authenticate_user!, only: [:settings]
   def dashboard
     render json: {
-      version: $APP_VERSION
+      app: 'POS Back End'
     }
   end
 
