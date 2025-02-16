@@ -1,3 +1,4 @@
+---
 table_name: purchase_reports
 columns:
   code:
@@ -12,9 +13,11 @@ columns:
       path: 'ipos/purchases'
       attribute_key: code
   supplier:
-    type: model
+    type: link
     excel_width: 25
     client_width: 200
+    path: suppliers
+    attribute_key: supplier.nama
     can_filter: true
     filter_key: supplier_code
     can_sort: true
