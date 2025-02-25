@@ -16,6 +16,8 @@ class Ipos::Item < ApplicationRecord
   belongs_to :brand, optional: true, foreign_key: :merek, primary_key: :merek
   belongs_to :item_type, foreign_key: :jenis, primary_key: :jenis
   belongs_to :supplier, optional: true, foreign_key: :supplier1, primary_key: :kode
+
+  has_many :discount_rules, through: :group_discount_items
   paginates_per 20
 
   after_update do |record|

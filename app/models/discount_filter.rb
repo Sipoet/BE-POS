@@ -1,0 +1,2 @@
+class DiscountFilter < ApplicationRecord
+end

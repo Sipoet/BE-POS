@@ -10,6 +10,8 @@ class ItemReport < ApplicationRecord
 
   alias_attribute :id, :item_code
 
+  has_many :discount_rules, through: :item_group_discounts, foreign_key: :item_code
+
   def readonly?
     true
   end

@@ -23,7 +23,17 @@ class ItemReportSerializer
     end
   end
 
-    attribute :recent_purchase_date do |object|
-      object.recent_purchase_date.try(:iso8601)
-    end
+  attribute :recent_purchase_date do |object|
+    object.recent_purchase_date.try(:iso8601)
+  end
+
+  attribute :margin do |object|
+    Rails.logger.debug "sell price #{object.sell_price} , buy price #{object.avg_buy_price}"
+     (object.sell_price / object.avg_buy_price -  1).round(3).to_f rescue nil
+  end
+
+  belongs_to :item, set_id: :item_code, id_method_name: :item_code
+  belongs_to :supplier, set_id: :supplier_code, id_method_name: :supplier_code, serializer: Ipos::SupplierSerializer
+  belongs_to :brand, set_id: :brand_name, id_method_name: :brand_name
+  belongs_to :item_type, set_id: :item_type_name, id_method_name: :item_type_name
 end

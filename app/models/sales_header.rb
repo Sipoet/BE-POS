@@ -1,0 +1,2 @@
+class SalesHeader < ApplicationRecord
+end

@@ -6,5 +6,6 @@ class ItemSerializer
   belongs_to :brand, set_id: :merek, id_method_name: :merek
   belongs_to :item_type, set_id: :jenis, id_method_name: :jenis
 
-  cache_options store: Rails.cache, namespace: 'item-serializer', expires_in: 1.hour
+  has_many :discount_rules, if: Proc.new { |record, params| params[:include].include?('discount_rules') rescue false }
+  # cache_options store: Rails.cache, namespace: 'item-serializer', expires_in: 1.hour
 end

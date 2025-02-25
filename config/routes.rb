@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   resources :purchases, only:[:index,:show] do
     get :report, on: :collection
     post :update_price, on: :member
+    get :generate_counterbill, on: :collection
   end
 
   resources :purchase_orders, only:[:index,:show] do

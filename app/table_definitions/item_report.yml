@@ -5,7 +5,7 @@ columns:
     name: item_code
     type: link
     excel_width: 25
-    client_width: 200
+    client_width: 180
     path: items
     sort_key: item_code
     attribute_key: item.namaitem
@@ -26,7 +26,7 @@ columns:
     name: item_type_name
     type: link
     excel_width: 25
-    client_width: 200
+    client_width: 170
     path: item_types
     sort_key: item_type_name
     attribute_key: item_type.ketjenis
@@ -37,7 +37,7 @@ columns:
     name: supplier_code
     type: link
     excel_width: 25
-    client_width: 200
+    client_width: 160
     path: suppliers
     sort_key: supplier_code
     attribute_key: supplier.nama
@@ -58,7 +58,7 @@ columns:
     name: brand_name
     type: link
     excel_width: 25
-    client_width: 200
+    client_width: 180
     path: brands
     sort_key: brand_name
     attribute_key: brand.merek
@@ -88,8 +88,8 @@ columns:
   stock_left:
     name: stock_left
     type: decimal
-    excel_width: 25
-    client_width: 200
+    excel_width: 10
+    client_width: 90
     sort_key: stock_left
     attribute_key: stock_left
     can_filter: true
@@ -98,8 +98,8 @@ columns:
   warehouse_stock:
     name: warehouse_stock
     type: decimal
-    excel_width: 25
-    client_width: 200
+    excel_width: 10
+    client_width: 90
     sort_key: warehouse_stock
     attribute_key: warehouse_stock
     can_filter: true
@@ -108,8 +108,8 @@ columns:
   store_stock:
     name: store_stock
     type: decimal
-    excel_width: 25
-    client_width: 200
+    excel_width: 10
+    client_width: 90
     sort_key: store_stock
     attribute_key: store_stock
     can_filter: true
@@ -118,8 +118,8 @@ columns:
   item_out:
     name: item_out
     type: integer
-    excel_width: 25
-    client_width: 200
+    excel_width: 10
+    client_width: 90
     sort_key: item_out
     attribute_key: item_out
     can_filter: true
@@ -128,8 +128,8 @@ columns:
   number_of_purchase:
     name: number_of_purchase
     type: integer
-    excel_width: 25
-    client_width: 200
+    excel_width: 10
+    client_width: 90
     sort_key: number_of_purchase
     attribute_key: number_of_purchase
     can_filter: true
@@ -138,8 +138,8 @@ columns:
   number_of_sales:
     name: number_of_sales
     type: integer
-    excel_width: 25
-    client_width: 200
+    excel_width: 10
+    client_width: 90
     sort_key: number_of_sales
     attribute_key: number_of_sales
     can_filter: true
@@ -148,8 +148,8 @@ columns:
   qty_return:
     name: qty_return
     type: integer
-    excel_width: 25
-    client_width: 200
+    excel_width: 10
+    client_width: 90
     sort_key: qty_return
     attribute_key: qty_return
     can_filter: true
@@ -165,6 +165,13 @@ columns:
     can_filter: true
     filter_key: avg_buy_price
     can_sort: true
+  margin:
+    name: margin
+    type: percentage
+    excel_width: 10
+    client_width: 90
+    can_filter: false
+    can_sort: false
   sell_price:
     name: sell_price
     type: money

@@ -15,4 +15,8 @@ class PurchasesController < ApplicationController
   def update_price
     run_service_default
   end
+
+  def generate_counterbill
+    run_service_default
+  end
 end

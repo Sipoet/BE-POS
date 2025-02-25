@@ -6,7 +6,7 @@ class DiscountSerializer
              :week7, :discount_type
   [:discount1, :discount2,:discount3,:discount4].each do |key|
     attribute key do |object|
-      object.send(key).to_f
+      (object.send(key) / 100).to_f
     end
   end
 

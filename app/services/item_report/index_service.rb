@@ -33,7 +33,7 @@ class ItemReport::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(ItemReport)
-    allowed_fields = [:item, :item_type, :supplier, :brand]
+    allowed_fields = [:item, :item_type, :supplier, :brand,'item.discount_rules']
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       table_definitions: @table_definitions)
@@ -54,6 +54,9 @@ class ItemReport::IndexService < ApplicationService
     end
     @filters.each do |filter|
       reports = reports.where(filter.to_query)
+    end
+    if @search_text.present?
+      reports = reports.where(['item_code ilike ? OR item_name ilike ? OR brand_name ilike ? OR item_type_name ilike ? OR supplier_code ilike ?']+ Array.new(5,"%#{@search_text}%"))
     end
     if @sort.present?
       reports = reports.order(@sort)
