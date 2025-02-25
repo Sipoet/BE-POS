@@ -10,7 +10,8 @@ class ColumnAuthorize < ApplicationRecord
   def valid_column
     return if  table.blank?
     klass = table.classify.constantize
-    if klass::TABLE_HEADER.map(&:name).include?(column)
+    table_definitions = Datatable::DefinitionExtractor.new(klass)
+    if table_definitions.column_names.include?(column)
       errors.add(:column,:inclusion)
     end
   end

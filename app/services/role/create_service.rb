@@ -72,7 +72,8 @@ class Role::CreateService < ApplicationService
   end
 
   def update_attribute(role)
-    allowed_columns = Role::TABLE_HEADER.map(&:name)
+    table_definitions = Datatable::DefinitionExtractor.new(Role)
+    allowed_columns = table_definitions.column_names
     permitted_params = params.required(:data)
                               .required(:attributes)
                               .permit(allowed_columns)

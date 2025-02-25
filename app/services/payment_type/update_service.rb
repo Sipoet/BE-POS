@@ -23,7 +23,8 @@ class PaymentType::UpdateService < ApplicationService
   end
 
   def update_attribute(payment_type)
-    allowed_columns = PaymentType::TABLE_HEADER.map(&:name)
+    table_definitions = Datatable::DefinitionExtractor.new(PaymentType)
+    allowed_columns = table_definitions.column_names
     @fields = {payment_type: allowed_columns}
     permitted_params = params.required(:data)
                               .required(:attributes)

@@ -23,7 +23,7 @@ class ItemReportSerializer
     end
   end
 
-    attribute :recent_purchase_date do |object|
-      object.recent_purchase_date.try(:iso8601)
+    attribute :last_purchase_date do |object|
+      object.last_purchase_date.try(:iso8601)
     end
 end

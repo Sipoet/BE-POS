@@ -195,7 +195,8 @@ class Transfer::CreateService < ApplicationService
 
   TIPE = 'TR'.freeze
   def build_attribute(transfer)
-    allowed_columns = Transfer::TABLE_HEADER.map(&:name)
+    table_definitions = Datatable::DefinitionExtractor.new(Transfer)
+    allowed_columns = table_definitions.column_names
     @fields = {transfer: allowed_columns}
     permitted_params = params.required(:data)
                               .required(:attributes)
