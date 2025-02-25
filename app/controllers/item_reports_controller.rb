@@ -5,10 +5,6 @@ class ItemReportsController < ApplicationController
     run_service_default
   end
 
-  def group_by_supplier
-    run_service_default
-  end
-
   def grouped_report
     run_service_default
   end

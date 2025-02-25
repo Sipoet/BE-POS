@@ -23,7 +23,8 @@ class PayrollType::UpdateService < ApplicationService
   end
 
   def update_attribute(payroll_type)
-    allowed_columns = PayrollType::TABLE_HEADER.map(&:name)
+    table_definitions = Datatable::DefinitionExtractor.new(PayrollType)
+    allowed_columns = table_definitions.column_names
     @fields = {payroll_type: allowed_columns}
     permitted_params = params.required(:data)
                               .required(:attributes)

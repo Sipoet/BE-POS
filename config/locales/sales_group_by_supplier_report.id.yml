@@ -9,3 +9,5 @@ id:
         number_of_purchase: 'Jumlah Pembelian'
         number_of_sales: 'Jumlah Penjualan'
         stock_left: 'Sisa Stok'
+        last_purchase_date: 'Tanggal Terakhir Beli'
+        supplier_name: 'Nama Supplier'

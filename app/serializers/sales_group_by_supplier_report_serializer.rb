@@ -22,4 +22,8 @@ class SalesGroupBySupplierReportSerializer
     obj.sales_percentage.to_f
   end
 
+  attribute :last_purchase_date do |obj|
+    obj.last_purchase_date.try(:iso8601)
+  end
+
 end

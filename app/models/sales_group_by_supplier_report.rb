@@ -1,18 +1,5 @@
 class SalesGroupBySupplierReport < ApplicationModel
 
-  TABLE_HEADER = [
-    datatable_column(self, :supplier_name, :string),
-    datatable_column(self, :item_type_name, :string),
-    datatable_column(self, :brand_name, :string),
-    datatable_column(self, :number_of_purchase, :integer),
-    datatable_column(self, :number_of_sales, :integer),
-    datatable_column(self, :stock_left, :integer),
-    datatable_column(self, :purchase_total, :money),
-    datatable_column(self, :sales_total, :money),
-    datatable_column(self, :gross_profit, :money),
-    datatable_column(self, :sales_percentage, :percentage)
-].freeze
-
   attr_accessor :supplier_code,
                 :supplier_name,
                 :item_type_name,
@@ -21,7 +8,8 @@ class SalesGroupBySupplierReport < ApplicationModel
                 :sales_total,
                 :purchase_total,
                 :gross_profit,
-                :brand_name
+                :brand_name,
+                :last_purchase_date
   def initialize(row)
     @supplier_code = row['supplier_code']
     @supplier_name = row['supplier_name']
@@ -32,6 +20,7 @@ class SalesGroupBySupplierReport < ApplicationModel
     @purchase_total = row['purchase_total']
     @sales_total = row['sales_total']
     @gross_profit = row['gross_profit']
+    @last_purchase_date = row['last_purchase_date']&.utc&.to_date
   end
 
   def id

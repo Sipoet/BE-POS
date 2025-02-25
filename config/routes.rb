@@ -31,13 +31,11 @@ Rails.application.routes.draw do
 
   resources :item_sales_percentage_reports,controller: :item_reports, only: [:index] do
     get :columns, on: :collection
-    get :group_by_supplier, on: :collection
     get :grouped_report, on: :collection
   end
 
   resources :item_reports, only: [:index] do
     get :columns, on: :collection
-    get :group_by_supplier, on: :collection
     get :grouped_report, on: :collection
   end
 
