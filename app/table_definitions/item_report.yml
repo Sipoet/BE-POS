@@ -65,15 +65,15 @@ columns:
     can_filter: true
     filter_key: brand_name
     can_sort: true
-  recent_purchase_date:
-    name: recent_purchase_date
+  last_purchase_date:
+    name: last_purchase_date
     type: date
     excel_width: 25
     client_width: 200
-    sort_key: recent_purchase_date
-    attribute_key: recent_purchase_date
+    sort_key: last_purchase_date
+    attribute_key: last_purchase_date
     can_filter: true
-    filter_key: recent_purchase_date
+    filter_key: last_purchase_date
     can_sort: true
   is_consignment:
     name: is_consignment

@@ -28,6 +28,15 @@ columns:
     attribute_key: brand_name
     can_filter: false
     can_sort: true
+  last_purchase_date:
+    name: last_purchase_date
+    type: string
+    excel_width: 25
+    client_width: 200
+    sort_key: last_purchase_date
+    attribute_key: last_purchase_date
+    can_filter: false
+    can_sort: true
   number_of_purchase:
     name: number_of_purchase
     type: integer
