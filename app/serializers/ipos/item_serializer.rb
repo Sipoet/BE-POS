@@ -16,4 +16,6 @@ class Ipos::ItemSerializer
     ipos_fix_date_timezone(object.updated_at)
   end
   cache_options store: Rails.cache, namespace: 'item-serializer', expires_in: 1.hour
+  has_many :discount_rules, if: Proc.new { |record, params| params[:include].include?('discount_rules') rescue false }
+  # cache_options store: Rails.cache, namespace: 'item-serializer', expires_in: 1.hour
 end

@@ -9,4 +9,7 @@ class ItemReport < ApplicationRecord
   belongs_to :supplier, foreign_key: :supplier_code, primary_key: :kode, class_name: 'Ipos::Supplier'
 
   alias_attribute :id, :item_code
+
+  has_many :discount_rules, through: :item_group_discounts, foreign_key: :item_code
+
 end

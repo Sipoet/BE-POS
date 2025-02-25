@@ -4,7 +4,8 @@ columns:
   item_code:
     type: string
     excel_width: 25
-    client_width: 150
+    client_width: 180
+    path: items
     sort_key: item_code
     can_filter: true
     filter_key: item_code
@@ -21,7 +22,8 @@ columns:
     name: item_type_name
     type: model
     excel_width: 25
-    client_width: 200
+    client_width: 170
+    path: item_types
     sort_key: item_type_name
     can_filter: true
     filter_key: item_type_name
@@ -34,7 +36,8 @@ columns:
     name: supplier_code
     type: model
     excel_width: 25
-    client_width: 200
+    client_width: 160
+    path: suppliers
     sort_key: supplier_code
     can_filter: true
     filter_key: supplier_code
@@ -57,7 +60,8 @@ columns:
     name: brand_name
     type: model
     excel_width: 25
-    client_width: 200
+    client_width: 180
+    path: brands
     sort_key: brand_name
     can_filter: true
     filter_key: brand_name
