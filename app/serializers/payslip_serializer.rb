@@ -5,7 +5,7 @@ class PayslipSerializer
               :nett_salary, :sick_leave, :work_days,
               :known_absence,:unknown_absence,
               :paid_time_off, :overtime_hour, :late, :status,
-              :created_at, :updated_at
+              :created_at, :updated_at, :total_day
   belongs_to :payroll
   belongs_to :employee
 

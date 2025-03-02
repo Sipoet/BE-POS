@@ -68,8 +68,8 @@ class EmployeeAttendance::MassUploadService < ApplicationService
           next
         end
         end_time = datetime
-        next if difference_minute(start_time,end_time) < time_offset
-        next if (attendances[index + 1].present? && difference_minute(end_time, attendances[index + 1]) < time_offset)
+        next if difference_minute(start_time,end_time) < min_read_attendance
+        next if (attendances[index + 1].present? && difference_minute(end_time, attendances[index + 1]) < min_read_attendance)
         day_attendances << {
           employee_id: selected_employee.id,
           start_time: start_time,
@@ -102,7 +102,7 @@ class EmployeeAttendance::MassUploadService < ApplicationService
         attendance[:shift] = shift
         work_schedule = work_schedules[0]
         if work_schedule.present?
-          attendance[:is_late] = parse_time(attendance[:date], work_schedule.begin_work) < attendance[:start_time]
+          attendance[:is_late] = late?(parse_time(attendance[:date], work_schedule.begin_work), attendance[:start_time])
         end
       end
 
@@ -111,12 +111,21 @@ class EmployeeAttendance::MassUploadService < ApplicationService
     time_attendances
   end
 
+  def late?(schedule_start_time, actual_start_at)
+    schedule_start_time + late_offset_in_minute < actual_start_at
+  end
+
+  def late_offset_in_minute
+    @late_offset_in_minute ||= (Setting.get('offset_late_attendance_in_minute')|| 0).to_i.minutes
+  end
+
   def open_hour_offset
     @store_open_hour ||= (Setting.get('day_separator_at') || '07:00')
   end
 
-  def time_offset
-    @time_offset ||= ((Setting.get('attendance_minute_offset') || '60').to_d)
+  # minimum minute that will be read as block of attendance in & out, less then setting will assumed is same type write absent before
+  def min_read_attendance
+    @min_read_attendance ||= ((Setting.get('attendance_minute_offset') || '60').to_d)
   end
 
   def find_employee(rows)
