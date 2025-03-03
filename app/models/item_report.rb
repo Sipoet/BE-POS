@@ -13,4 +13,8 @@ class ItemReport < ApplicationRecord
     true
   end
 
+  def margin
+    (sell_price / cogs).round(2) - 1
+  end
+
 end

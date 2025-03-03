@@ -18,6 +18,7 @@ class CreateItemSalesPercentageView < ActiveRecord::Migration[7.1]
 		    COALESCE(stok.stock_left,0) AS stock_left,
         purchase.last_purchase_date,
         ROUND(COALESCE(purchase.avg_buy_price,beginning_stock.avg_buy_price),2) AS avg_buy_price,
+        ROUND(tbl_item.hargapokok,2) AS cogs,
         ROUND(COALESCE(sales.number_of_sales,0),0) AS number_of_sales,
         ROUND(COALESCE(sales.qty_return,0),0) AS qty_return,
         ROUND(COALESCE(sales.sales_total,0),0) AS sales_total,
@@ -25,7 +26,7 @@ class CreateItemSalesPercentageView < ActiveRecord::Migration[7.1]
         ROUND(COALESCE(sales.item_out,0),0) AS item_out,
         ROUND(COALESCE(purchase.number_of_purchase,0) + COALESCE(beginning_stock.number_of_purchase,0),0) AS number_of_purchase,
         COALESCE(purchase.purchase_total,0) + COALESCE(beginning_stock.purchase_total,0) AS purchase_total,
-        ROUND(COALESCE(sales.number_of_sales,0) * 100/COALESCE(NULLIF(COALESCE(purchase.number_of_purchase,0) + COALESCE(beginning_stock.number_of_purchase,0),0 ),1),2) AS percentage_sales
+        ROUND(COALESCE(sales.number_of_sales,0) / COALESCE(NULLIF(COALESCE(purchase.number_of_purchase,0) + COALESCE(beginning_stock.number_of_purchase,0),0 ),1),2) AS percentage_sales
       FROM tbl_item
       INNER JOIN tbl_supel ON tbl_supel.kode = tbl_item.supplier1 AND tbl_supel.tipe = 'SU'
       INNER JOIN tbl_itemjenis ON tbl_itemjenis.jenis = tbl_item.jenis
