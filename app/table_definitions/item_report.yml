@@ -165,11 +165,16 @@ columns:
     can_filter: true
     filter_key: avg_buy_price
     can_sort: true
+  cogs:
+    type: money
+    excel_width: 10
+    client_width: 100
+    can_filter: true
+    can_sort: true
   margin:
-    name: margin
     type: percentage
     excel_width: 10
-    client_width: 90
+    client_width: 100
     can_filter: false
     can_sort: false
   sell_price:

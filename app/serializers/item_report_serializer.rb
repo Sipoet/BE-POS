@@ -2,7 +2,7 @@ class ItemReportSerializer
   include JSONAPI::Serializer
   attributes :item_code, :item_name, :item_type_name, :supplier_code,
              :supplier_name, :brand_name, :item_type_desc,
-             :gross_profit,:stock_left, :is_consignment
+             :gross_profit, :stock_left, :is_consignment, :margin, :cogs
   attribute :brand do |obj|
     obj.brand_name
   end

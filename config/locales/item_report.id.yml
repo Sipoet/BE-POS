@@ -27,4 +27,5 @@ id:
         stock_left: "Stok Sekarang"
         is_consignment: "Konsinyasi?"
         qty_return: "Jumlah Retur Jual"
-        margin: "Margin %"
+        margin: 'Margin %'
+        cogs: 'HPP'
