@@ -23,7 +23,7 @@ class PurchaseOrder::IndexService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(PurchaseOrder)
+    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::PurchaseOrder)
     allowed_fields = [:purchase_order,:purchase_order_items,:supplier]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
