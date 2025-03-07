@@ -13,6 +13,7 @@ class GroupItemDiscountRule < DiscountRule
   validates :discount_amount4, numericality: {less_than_or_equal_to: 100}
   validates :discount_amount5, numericality: {less_than_or_equal_to: 100}
 
+
   def self.sti_name
     1
   end
