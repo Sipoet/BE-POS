@@ -5,7 +5,7 @@ class ItemReportSerializer
              :gross_profit, :stock_left, :is_consignment
 
 
-  %i{avg_buy_price sales_total purchase_total :cogs sell_price percentage_sales}.each do |key|
+  %i{avg_buy_price sales_total purchase_total cogs sell_price percentage_sales}.each do |key|
     attribute key do |object|
       object.send(key).to_f.round(2)
     end
