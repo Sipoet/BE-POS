@@ -9,6 +9,7 @@ module JsonApiDeserializer
         fields: allowed_fields,
         filter: allowed_columns.map{|column| {column => filter_operators}},
         page:[:page,:limit])
+      Rails.logger.debug "==allowed columns: #{allowed_columns}"
       @table_definitions = table_definitions
       @allowed_columns = allowed_columns.index_by(&:to_sym)
       @allowed_fields = allowed_fields.map(&:to_s)

@@ -33,7 +33,7 @@ class ItemReport::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(ItemReport)
-    allowed_fields = [:item, :item_type, :supplier, :brand,'item.discount_rules']
+    allowed_fields = [:item, :item_type, :supplier, :brand,:discount_rules]
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       table_definitions: @table_definitions)

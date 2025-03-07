@@ -2,73 +2,100 @@ table_name: 'discounts'
 columns:
   code:
     type: string
+    client_width: 180
   supplier_code:
     type: link
     path: 'suppliers'
     attribute_key: 'supplier.nama'
+    client_width: 180
   item_type_name:
     type: link
     path: 'item_types'
     attribute_key: 'item_type.ketjenis'
+    client_width: 180
   brand_name:
     type: link
     path: 'brands'
     attribute_key: 'brand.merek'
+    client_width: 180
   item_code:
     type: link
     path: 'items'
     attribute_key: 'item.namaitem'
+    client_width: 180
   blacklist_supplier_code:
     type: link
     path: 'suppliers'
     attribute_key: 'blacklist_supplier.nama'
+    client_width: 180
   blacklist_item_type_name:
     type: link
     path: 'item_types'
     attribute_key: 'blacklist_item_type.ketjenis'
+    client_width: 180
   blacklist_brand_name:
     type: link
     path: 'brands'
     attribute_key: 'blacklist_brand.merek'
+    client_width: 180
   customer_group:
     type: link
     path: 'customer_groups'
     filter_key: 'customer_group_code'
     attribute_key: 'customer_group.grup'
     sort_key: 'tbl_supelgrup.kgrup'
+    client_width: 180
   calculation_type:
     type: enum
+    client_width: 180
   weight:
     type: string
+    client_width: 180
   discount1:
     type: percentage
+    client_width: 180
   discount2:
     type: percentage
+    client_width: 180
   discount3:
     type: percentage
+    client_width: 180
   discount4:
     type: percentage
+    client_width: 180
   discount_type:
     type: enum
+    client_width: 180
   start_time:
     type: datetime
+    client_width: 180
   end_time:
     type: datetime
+    client_width: 180
   week1:
     type: boolean
+    client_width: 180
   week2:
     type: boolean
+    client_width: 180
   week3:
     type: boolean
+    client_width: 180
   week4:
     type: boolean
+    client_width: 180
   week5:
     type: boolean
+    client_width: 180
   week6:
     type: boolean
+    client_width: 180
   week7:
     type: boolean
+    client_width: 180
   created_at:
     type: datetime
+    client_width: 180
   updated_at:
     type: datetime
+    client_width: 180

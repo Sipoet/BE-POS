@@ -1,0 +1,18 @@
+id:
+  activerecord:
+    models:
+      sales_cashier: "Sales Cashier"
+    attributes:
+      sales_cashier:
+        code: 'No Transaksi'
+        customer: 'Pelanggan'
+        tax_type: 'PPN'
+        transaction_date: 'Tanggal'
+        sales_person: 'Sales'
+        quantity: 'Jumlah'
+        voucher: 'Voucher'
+        header_discount_amount: 'Potongan'
+        total_item: 'Total item'
+        location: 'Keluar dari'
+        other_cost: 'Biaya Lain'
+        description: 'Keterangan'

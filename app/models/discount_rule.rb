@@ -23,6 +23,9 @@ class DiscountRule < ApplicationRecord
   validates :rule_type, presence: true
   validates :status, inclusion: {in: [true, false]}
 
+  has_many :discount_group_items
+  has_many :item_reports, through: :discount_group_items
+
 
   def self.find_sti_class(rule_type)
     klass_namespace = rule_type.to_s.classify
