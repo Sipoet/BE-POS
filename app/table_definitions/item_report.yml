@@ -174,9 +174,15 @@ columns:
   margin:
     type: percentage
     excel_width: 10
-    client_width: 100
-    can_filter: false
-    can_sort: false
+    client_width: 120
+    can_filter: true
+    can_sort: true
+  limit_profit_discount:
+    type: percentage
+    excel_width: 10
+    client_width: 150
+    can_filter: true
+    can_sort: true
   sell_price:
     name: sell_price
     type: money

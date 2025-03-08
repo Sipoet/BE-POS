@@ -22,10 +22,11 @@ id:
         number_of_purchase: 'Jumlah Pembelian'
         purchase_total: 'Total Pembelian'
         percentage_sales: 'Laku Terjual(%)'
-        recent_purchase_date: "Tanggal Akhir Beli"
+        last_purchase_date: "Tanggal Akhir Beli"
         item_out: "Jumlah Item Keluar"
         stock_left: "Stok Sekarang"
         is_consignment: "Konsinyasi?"
         qty_return: "Jumlah Retur Jual"
         margin: 'Margin %'
+        limit_profit_discount: 'Limit Diskon %'
         cogs: 'HPP'

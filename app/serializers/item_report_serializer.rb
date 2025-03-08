@@ -5,7 +5,7 @@ class ItemReportSerializer
              :gross_profit, :stock_left, :is_consignment, :cogs
 
 
-  %i{avg_buy_price sales_total purchase_total  sell_price percentage_sales}.each do |key|
+  %i{avg_buy_price sales_total purchase_total margin limit_profit_discount sell_price percentage_sales}.each do |key|
     attribute key do |object|
       object.send(key).to_f.round(2)
     end
@@ -17,9 +17,6 @@ class ItemReportSerializer
     end
   end
 
-  attribute :margin do |object|
-     (object.sell_price / object.cogs -  1).round(3).to_f rescue nil
-  end
 
   belongs_to :item, set_id: :item_code, id_method_name: :item_code
   belongs_to :supplier, set_id: :supplier_code, id_method_name: :supplier_code, serializer: Ipos::SupplierSerializer
