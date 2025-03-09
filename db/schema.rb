@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_20_134742) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_15_110812) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -91,25 +91,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_20_134742) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "discount_filters", force: :cascade do |t|
-    t.integer "discount_id", null: false
-    t.integer "filter_type", null: false
-    t.integer "operator", null: false
-    t.string "value", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "discount_group_items", force: :cascade do |t|
-    t.string "item_code", null: false
-    t.integer "discount_rule_id", null: false
-    t.integer "priority", default: 1, null: false
-    t.boolean "is_active", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["item_code", "priority"], name: "dg_prio_idx", unique: true, where: "(is_active = true)"
-  end
-
   create_table "discount_item_types", force: :cascade do |t|
     t.string "item_type_name", null: false
     t.boolean "is_exclude", default: false, null: false
@@ -124,26 +105,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_20_134742) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_exclude", default: false, null: false
-  end
-
-  create_table "discount_rules", force: :cascade do |t|
-    t.integer "priority", default: 1, null: false
-    t.string "name", null: false
-    t.integer "use_type", default: 0, null: false
-    t.integer "rule_type", default: 0, null: false
-    t.datetime "start_time", null: false
-    t.datetime "end_time", null: false
-    t.boolean "status", default: false, null: false
-    t.integer "min_quantity", default: 1, null: false
-    t.integer "min_sales_amount", default: 1, null: false
-    t.decimal "variable1"
-    t.decimal "variable2"
-    t.decimal "variable3"
-    t.decimal "variable4"
-    t.decimal "variable5"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_discount_rules_on_name", unique: true
   end
 
   create_table "discount_suppliers", force: :cascade do |t|
@@ -387,15 +348,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_20_134742) do
     t.integer "total_day", default: 0, null: false
   end
 
-  create_table "products", force: :cascade do |t|
-    t.string "supplier_id", null: false
-    t.string "supplier_product_code", null: false
-    t.string "brand_id", null: false
-    t.integer "item_type_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "role_work_schedules", force: :cascade do |t|
     t.string "group_name", null: false
     t.date "begin_active_at", null: false
@@ -417,22 +369,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_20_134742) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_roles_on_name", unique: true
-  end
-
-  create_table "sales_details", force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "quantity", null: false
-    t.integer "uom_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "sales_headers", force: :cascade do |t|
-    t.datetime "transaction_time", null: false
-    t.integer "status", null: false
-    t.integer "sales_type", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "settings", force: :cascade do |t|
@@ -2508,9 +2444,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_20_134742) do
   add_foreign_key "customer_group_discounts", "tbl_supelgrup", column: "customer_group_code", primary_key: "kgrup"
   add_foreign_key "discount_brands", "discounts"
   add_foreign_key "discount_brands", "tbl_itemmerek", column: "brand_name", primary_key: "merek"
-  add_foreign_key "discount_filters", "discounts"
-  add_foreign_key "discount_group_items", "discount_rules"
-  add_foreign_key "discount_group_items", "tbl_item", column: "item_code", primary_key: "kodeitem"
   add_foreign_key "discount_item_types", "discounts"
   add_foreign_key "discount_item_types", "tbl_itemjenis", column: "item_type_name", primary_key: "jenis"
   add_foreign_key "discount_items", "discounts"

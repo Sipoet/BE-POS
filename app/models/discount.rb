@@ -32,7 +32,8 @@ class Discount < ApplicationRecord
 
   enum :calculation_type,{
     percentage: 0,
-    nominal: 1
+    nominal: 1,
+    special_price: 2
   }
 
   enum :discount_type,{

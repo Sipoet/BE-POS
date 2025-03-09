@@ -5,41 +5,49 @@ columns:
     client_width: 180
   supplier_code:
     type: link
+    client_width: 180
     path: 'suppliers'
     attribute_key: 'supplier.nama'
     client_width: 180
   item_type_name:
     type: link
+    client_width: 180
     path: 'item_types'
     attribute_key: 'item_type.ketjenis'
     client_width: 180
   brand_name:
     type: link
+    client_width: 180
     path: 'brands'
     attribute_key: 'brand.merek'
     client_width: 180
   item_code:
     type: link
+    client_width: 180
     path: 'items'
     attribute_key: 'item.namaitem'
     client_width: 180
   blacklist_supplier_code:
     type: link
+    client_width: 180
     path: 'suppliers'
     attribute_key: 'blacklist_supplier.nama'
     client_width: 180
   blacklist_item_type_name:
     type: link
+    client_width: 180
     path: 'item_types'
     attribute_key: 'blacklist_item_type.ketjenis'
     client_width: 180
   blacklist_brand_name:
     type: link
+    client_width: 180
     path: 'brands'
     attribute_key: 'blacklist_brand.merek'
     client_width: 180
   customer_group:
     type: link
+    client_width: 180
     path: 'customer_groups'
     filter_key: 'customer_group_code'
     attribute_key: 'customer_group.grup'
