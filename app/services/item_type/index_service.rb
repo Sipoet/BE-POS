@@ -10,7 +10,7 @@ class ItemType::IndexService < ApplicationService
       params:{include: @included},
       include: @included
     }
-    render_json(ItemTypeSerializer.new(@item_types,options))
+    render_json(Ipos::ItemTypeSerializer.new(@item_types,options))
   end
 
   def meta

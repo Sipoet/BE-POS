@@ -10,7 +10,7 @@ class Brand::IndexService < ApplicationService
       params:{include: @included},
       include: @included
     }
-    render_json(BrandSerializer.new(@brands,options))
+    render_json(Ipos::BrandSerializer.new(@brands,options))
   end
 
   def meta

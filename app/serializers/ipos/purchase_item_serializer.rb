@@ -26,5 +26,5 @@ class Ipos::PurchaseItemSerializer
       ipos_fix_date_timezone(object.send(key))
     end
   end
-  belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: ItemSerializer
+  belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: Ipos::ItemSerializer
 end

@@ -89,10 +89,13 @@ class ExcelGenerator
         value = @val_func.call(row, column.filter_key)
         worksheet.write_string(y, x, value.to_s, @general_format)
       when :integer,:float,:decimal,:big_decimal
+        Rails.logger.debug "=== value: #{value.to_f}" if value.to_f ==  Float::INFINITY
         worksheet.write_number(y, x, value.to_f, @num_format)
       when :money
+        Rails.logger.debug "=== money value: #{value.to_f}" if value.to_f ==  Float::INFINITY
         worksheet.write_number(y, x, value.to_f, @money_format)
       when :percentage
+        Rails.logger.debug "=== #{row.item_code} percentage value: #{value.to_f}" if value.to_f ==  Float::INFINITY
         worksheet.write_number(y, x, value.to_f, @num_format)
       when :date
         worksheet.write_date_time(y, x, value.strftime('%d/%m/%Y'), @date_format)

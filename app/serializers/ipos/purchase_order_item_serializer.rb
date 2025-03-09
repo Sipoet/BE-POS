@@ -27,5 +27,5 @@ class Ipos::PurchaseOrderItemSerializer
     end
   end
 
-  belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: ItemSerializer
+  belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: Ipos::ItemSerializer
 end

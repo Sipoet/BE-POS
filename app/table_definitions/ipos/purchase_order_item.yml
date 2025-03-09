@@ -1,6 +1,15 @@
 ---
 table_name: tbl_pesandt
 columns:
+  nobaris:
+    type: integer
+    excel_width: 25
+    client_width: 200
+    sort_key: nobaris
+    attribute_key: nobaris
+    can_filter: true
+    filter_key: nobaris
+    can_sort: true
   kodeitem:
     type: link
     excel_width: 25
@@ -191,15 +200,6 @@ columns:
     attribute_key: hppdasar
     can_filter: true
     filter_key: hppdasar
-    can_sort: true
-  nobaris:
-    type: integer
-    excel_width: 25
-    client_width: 200
-    sort_key: nobaris
-    attribute_key: nobaris
-    can_filter: true
-    filter_key: nobaris
     can_sort: true
   notransaksi:
     type: string

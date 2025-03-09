@@ -24,7 +24,7 @@ class PurchaseOrder::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::PurchaseOrder)
-    allowed_fields = [:purchase_order,:purchase_order_items,:supplier]
+    allowed_fields = [:purchase_order,:purchase_order_items,:supplier,'purchase_order_items.item']
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       table_definitions: @table_definitions)
@@ -39,6 +39,7 @@ class PurchaseOrder::IndexService < ApplicationService
   end
 
   def find_purchase_orders
+    Rails.logger.debug "included #{@query_included}"
     purchase_orders = Ipos::PurchaseOrder.all.includes(@query_included)
       .page(@page)
       .per(@limit)
