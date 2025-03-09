@@ -94,13 +94,18 @@ class Discount::RefreshPromotion
   def create_item_promotions(uom_items:[],promotion:)
     item_p_docs = uom_items.map do |uom_item|
       item = uom_item.item
+      discount1 = if discount.special_price?
+        item.hargajual1 - discount.discount1
+      else
+        discount.discount1
+      end
       debug_log "item #{item.kodeitem} diskon #{discount.code}"
         {
           iddiskon: promotion.iddiskon,
           kodeitem: item.kodeitem,
           satuan: uom_item.satuan,
           opsidiskon: discount.percentage? ? 1 : 2,
-          diskon1: discount.discount1,
+          diskon1: discount1,
           diskon2: discount.discount2,
           diskon3: discount.discount3,
           diskon4: discount.discount4,
