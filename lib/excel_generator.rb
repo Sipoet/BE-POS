@@ -88,6 +88,9 @@ class ExcelGenerator
       case column.type.to_sym
       when :model
         worksheet.write_string(y, x, value&.identifier_code, @general_format)
+      when :link
+        value = @val_func.call(row, column.filter_key)
+        worksheet.write_string(y, x, value.to_s, @general_format)
       when :integer, :float, :decimal, :big_decimal
         Rails.logger.debug "=== value: #{value.to_f}" if value.to_f == Float::INFINITY
         worksheet.write_number(y, x, value.to_f, @num_format)
