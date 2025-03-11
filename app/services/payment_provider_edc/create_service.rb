@@ -22,7 +22,8 @@ class PaymentProviderEdc::CreateService < ApplicationService
   end
 
   def update_attribute(payment_provider_edc)
-    allowed_columns = PaymentProviderEdc::TABLE_HEADER.map(&:name)
+    table_definitions = Datatable::DefinitionExtractor.new(PaymentProviderEdc)
+    allowed_columns = table_definitions.column_names
     @fields = {payment_provider_edc: allowed_columns}
     permitted_params = params.required(:data)
                               .required(:attributes)

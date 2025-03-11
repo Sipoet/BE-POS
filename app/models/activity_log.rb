@@ -1,13 +1,5 @@
 class ActivityLog < ApplicationModel
 
-  TABLE_HEADER = [
-    datatable_column(self,:item_type, :string),
-    datatable_column(self,:item_id, :integer),
-    datatable_column(self,:event, :string),
-    datatable_column(self,:actor, :link),
-    datatable_column(self,:description, :string),
-    datatable_column(self,:created_at, :datetime),
-  ]
 
   attr_accessor :item_type, :item_id, :event, :id,
                 :user_id, :description, :created_at

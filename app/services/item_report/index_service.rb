@@ -53,7 +53,7 @@ class ItemReport::IndexService < ApplicationService
       reports = reports.page(@page).per(@limit)
     end
     @filters.each do |filter|
-      reports = reports.where(filter.to_query)
+      reports = filter.add_filter_to_query(reports)
     end
     if @search_text.present?
       reports = reports.where(['item_code ilike ? OR item_name ilike ? OR brand_name ilike ? OR item_type_name ilike ? OR supplier_code ilike ?']+ Array.new(5,"%#{@search_text}%"))

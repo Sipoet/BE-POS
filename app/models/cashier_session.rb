@@ -1,12 +1,5 @@
 class CashierSession < ApplicationRecord
 
-  TABLE_HEADER = [
-    datatable_column(self,:date, :date),
-    datatable_column(self,:total_in, :decimal),
-    datatable_column(self,:total_out, :decimal),
-    datatable_column(self,:created_at, :datetime),
-    datatable_column(self,:updated_at, :datetime),
-  ]
 
   enum :status,{
     draft: 0,

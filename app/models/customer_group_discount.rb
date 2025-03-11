@@ -1,21 +1,5 @@
 class CustomerGroupDiscount < ApplicationRecord
-  TABLE_HEADER = [
-    datatable_column(self,:customer_group_code, :link,path:'customer_group_discounts', attribute_key:'customer_groups.grup'),
-    datatable_column(self,:period_type, :string),
-    datatable_column(self,:discount_percentage, :decimal),
-    datatable_column(self,:start_active_date, :date),
-    datatable_column(self,:end_active_date, :date),
-    datatable_column(self,:level, :integer),
-    datatable_column(self,:variable1, :decimal),
-    datatable_column(self,:variable2, :decimal),
-    datatable_column(self,:variable3, :decimal),
-    datatable_column(self,:variable4, :decimal),
-    datatable_column(self,:variable5, :decimal),
-    datatable_column(self,:variable6, :decimal),
-    datatable_column(self,:variable7, :decimal),
-    datatable_column(self,:created_at, :datetime),
-    datatable_column(self,:updated_at, :datetime),
-  ]
+
   enum :period_type, {
     active_period: 0,
     day_of_month: 1,

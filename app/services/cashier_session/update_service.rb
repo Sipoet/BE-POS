@@ -29,7 +29,8 @@ class CashierSession::UpdateService < ApplicationService
   private
 
   def update_attribute(cashier_session)
-    allowed_columns = CashierSession::TABLE_HEADER.map(&:name)
+    table_definitions = Datatable::DefinitionExtractor.new(CashierSession)
+    allowed_columns = table_definitions.column_names
     @fields = {cashier_session: allowed_columns}
     permitted_params = params.required(:data)
                               .required(:attributes)
@@ -51,7 +52,8 @@ class CashierSession::UpdateService < ApplicationService
                               .required(:relationships)
 
     return if permitted_params[:cash_in_session_details].blank?
-    allowed_columns = CashInSessionDetail::TABLE_HEADER.map(&:name)
+    table_definitions = Datatable::DefinitionExtractor.new(CashInSessionDetail)
+    allowed_columns = table_definitions.column_names
     permitted_params = permitted_params.required(:cash_in_session_details)
                               .permit(data:[:type,:id, attributes:allowed_columns])
     edit_attributes(permitted_params[:data], cashier_session.cash_in_session_details)
@@ -61,7 +63,8 @@ class CashierSession::UpdateService < ApplicationService
     permitted_params = params.required(:data)
                               .required(:relationships)
     return if permitted_params[:cash_out_session_details].blank?
-    allowed_columns = CashOutSessionDetail::TABLE_HEADER.map(&:name)
+    table_definitions = Datatable::DefinitionExtractor.new(CashOutSessionDetail)
+    allowed_columns = table_definitions.column_names
     permitted_params = permitted_params.required(:cash_out_session_details)
                               .permit(data:[:type,:id, attributes: allowed_columns])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
@@ -72,7 +75,8 @@ class CashierSession::UpdateService < ApplicationService
     permitted_params = params.required(:data)
                               .required(:relationships)
     return if permitted_params[:edc_settlements].blank?
-    allowed_columns = EdcSettlement::TABLE_HEADER.map(&:name)
+    table_definitions = Datatable::DefinitionExtractor.new(EdcSettlement)
+    allowed_columns = table_definitions.column_names
     permitted_params = permitted_params.required(:edc_settlements)
                               .permit(data:[:type,:id, attributes: allowed_columns])
     return if (permitted_params.blank? || permitted_params[:data].blank?)

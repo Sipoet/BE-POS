@@ -1,15 +1,6 @@
 class EmployeeLeave < ApplicationRecord
   has_paper_trail ignore: [:id, :created_at, :updated_at]
-  TABLE_HEADER = [
-    datatable_column(self,:employee_id, :link,path:'employees',attribute_key: 'employee.name'),
-    datatable_column(self,:date, :date),
-    datatable_column(self,:leave_type, :enum),
-    datatable_column(self,:change_date, :date),
-    datatable_column(self,:change_shift, :integer),
-    datatable_column(self,:description, :string),
-    datatable_column(self,:created_at, :datetime),
-    datatable_column(self,:updated_at, :datetime),
-  ]
+
   enum :leave_type, {
     sick_leave: 0,
     annual_leave: 1,

@@ -1,25 +1,5 @@
 class Ipos::Sale < Ipos::ItemOutHeader
 
-  TABLE_HEADER = [
-    datatable_column(self,:notransaksi, :string),
-    datatable_column(self,:tanggal, :datetime),
-    datatable_column(self,:totalitem, :decimal),
-    datatable_column(self,:subtotal, :money),
-    datatable_column(self,:potnomfaktur, :decimal),
-    datatable_column(self,:biayalain, :decimal),
-    datatable_column(self,:pajak, :decimal),
-    datatable_column(self,:totalakhir, :decimal),
-    datatable_column(self,:payment_type, :string),
-    datatable_column(self,:bank_code, :string),
-    datatable_column(self,:jmltunai, :decimal),
-    datatable_column(self,:jmldebit, :decimal),
-    datatable_column(self,:jmlkk, :decimal),
-    datatable_column(self,:jmlemoney, :decimal),
-    datatable_column(self,:keterangan, :string),
-    datatable_column(self,:user1, :string),
-    datatable_column(self,:ppn, :string),
-
-  ].freeze
 
   has_many :sale_items, class_name: 'Ipos::SaleItem', foreign_key: :notransaksi, dependent: :destroy, inverse_of: :sale
   belongs_to :credit_bank, optional: true, primary_key: 'kodebank',class_name: 'Ipos::Bank',foreign_key:'byr_kk_bank'

@@ -5,6 +5,7 @@ class ExcelGenerator
   def initialize
     @columns = []
     @rows = []
+    @metadata={}
     @row_data_type = :instance_variable
   end
 
@@ -55,7 +56,8 @@ class ExcelGenerator
   def add_format(workbook)
     @header_format = workbook.add_format(bold: true, size: 12)
     @num_format = workbook.add_format(size: 12, num_format: '#,##0.0')
-    @money_format = workbook.add_format(size: 12, num_format: 'Rp#,##0.0')
+    @percentage_format = workbook.add_format(size: 12, num_format: '0%')
+    @money_format = workbook.add_format(size: 12, num_format: 'Rp#,##0')
     @general_format = workbook.add_format(size: 12)
     @date_format = workbook.add_format(size: 12, num_format: 'dd/mm/yyyy')
     @datetime_format = workbook.add_format(size: 12, num_format: 'dd/mm/yyyy hh:mm')
@@ -95,8 +97,7 @@ class ExcelGenerator
         Rails.logger.debug "=== money value: #{value.to_f}" if value.to_f ==  Float::INFINITY
         worksheet.write_number(y, x, value.to_f, @money_format)
       when :percentage
-        Rails.logger.debug "=== #{row.item_code} percentage value: #{value.to_f}" if value.to_f ==  Float::INFINITY
-        worksheet.write_number(y, x, value.to_f, @num_format)
+        worksheet.write_number(y, x, value.to_f, @percentage_format)
       when :date
         worksheet.write_date_time(y, x, value.strftime('%d/%m/%Y'), @date_format)
       when :datetime, :time

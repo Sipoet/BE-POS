@@ -2,24 +2,6 @@ class Ipos::TransferItem < ApplicationRecord
   self.table_name = 'tbl_itrdt'
   self.primary_key = 'iddetail'
 
-  TABLE_HEADER=[
-    datatable_column(self,:kodeitem, :link, path: 'items',attribute_key: 'item.namaitem'),
-    datatable_column(self,:jumlah, :decimal),
-    datatable_column(self,:cogs, :decimal),
-    datatable_column(self,:sell_price, :money),
-    datatable_column(self,:satuan, :string),
-    datatable_column(self,:tglexp, :datetime),
-    datatable_column(self,:kodeprod, :string),
-    datatable_column(self,:jmlkonversi, :decimal),
-    datatable_column(self,:detinfo, :string),
-    datatable_column(self,:nobaris, :integer),
-    datatable_column(self, 'item.supplier1', :link, path:'suppliers', attribute_key:'supplier.kode'),
-    datatable_column(self, 'item.merek', :link, path:'brands', attribute_key:'brand.merek'),
-    datatable_column(self, 'item.jenis', :link, path:'item_types', attribute_key:'item_type.jenis'),
-    datatable_column(self,:updated_at, :datetime),
-    datatable_column(self, :notransaksi, :string),
-  ]
-
   alias_attribute :id, :iddetail
   alias_attribute :updated_at, :dateupd
 

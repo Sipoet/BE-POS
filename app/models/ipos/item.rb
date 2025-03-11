@@ -1,14 +1,4 @@
 class Ipos::Item < ApplicationRecord
-  TABLE_HEADER = [
-    datatable_column(self,:kodeitem, :string),
-    datatable_column(self,:namaitem, :string),
-    datatable_column(self,:supplier1, :link, path:'suppliers', attribute_key:'supplier.kode'),
-    datatable_column(self,:jenis, :link, path:'item_types', attribute_key:'item_type.jenis'),
-    datatable_column(self,:merek, :link, path:'brands', attribute_key:'brand.merek'),
-    datatable_column(self,:satuan, :string),
-    datatable_column(self,:hargapokok, :decimal),
-    datatable_column(self,:hargajual1, :decimal),
-  ]
 
   self.table_name = 'tbl_item'
   self.primary_key = 'kodeitem'
@@ -24,4 +14,10 @@ class Ipos::Item < ApplicationRecord
   after_update do |record|
     Cache.delete("item-serializer:ipos/items/#{record.kodeitem}")
   end
+  alias_attribute :item_code, :kodeitem
+  alias_attribute :brand_name, :merek
+  alias_attribute :item_type_name, :jenis
+  alias_attribute :supplier_code, :supplier1
+  alias_attribute :sell_price, :hargajual1
+  alias_attribute :cogs, :hargapokok
 end

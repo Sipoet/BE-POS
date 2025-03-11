@@ -89,7 +89,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
           #{plural_name} = #{plural_name}.where(['name ilike ? ']+ Array.new(1,"%\#{@search_text}%"))
         end
         @filters.each do |filter|
-          #{plural_name} = #{plural_name}.where(filter.to_query)
+          #{plural_name} = filter.add_filter_to_query(#{plural_name})
         end
         if @sort.present?
           #{plural_name} = #{plural_name}.order(@sort)

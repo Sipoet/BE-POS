@@ -1,16 +1,5 @@
 class CashInSessionDetail < ApplicationRecord
 
-  TABLE_HEADER = [
-    datatable_column(self,:user_id, :link,path: 'users', attribute_key:'users.code'),
-    datatable_column(self,:start_time, :datetime),
-    datatable_column(self,:end_time, :datetime),
-    datatable_column(self,:status, :decimal),
-    datatable_column(self,:begin_cash, :decimal),
-    datatable_column(self,:cash_in, :decimal),
-    datatable_column(self,:end_cash, :decimal),
-    datatable_column(self,:created_at, :datetime),
-    datatable_column(self,:updated_at, :datetime),
-  ]
 
   enum :status,{
     draft: 0,

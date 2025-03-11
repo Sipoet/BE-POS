@@ -15,7 +15,8 @@ class Role::ColumnNameService < ApplicationService
     table_name = permitted_params[:table_name]
     return [] if table_name.blank?
     klass = table_name.classify.constantize
-    column_names = klass::TABLE_HEADER.map(&:name)
+    table_definitions = Datatable::DefinitionExtractor.new(EdcSettlement)
+    column_names = table_definitions.column_names
     return column_names if search_text.blank?
     column_names.select{|column_name| column_name.to_s.include?(search_text)}
   end
