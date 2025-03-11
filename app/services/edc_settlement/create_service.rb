@@ -27,7 +27,8 @@ class EdcSettlement::CreateService < ApplicationService
   end
 
   def update_attribute(edc_settlement)
-    allowed_columns = EdcSettlement::TABLE_HEADER.map(&:name) + [:payment_provider, :payment_type, :cashier_session]
+    table_definitions = Datatable::DefinitionExtractor.new(EdcSettlement)
+    allowed_columns = table_definitions.column_names + [:payment_provider, :payment_type, :cashier_session]
     @fields = {edc_settlement: allowed_columns}
     permitted_params = params.required(:data)
                               .required(:attributes)
