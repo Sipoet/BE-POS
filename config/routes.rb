@@ -54,6 +54,7 @@ Rails.application.routes.draw do
     get :columns, on: :collection
     delete :delete_inactive_past_discount, on: :collection
     get :template_mass_upload_excel, on: :collection
+    get :download_items, on: :member
   end
 
   resources :sales, only:[:index, :show] do

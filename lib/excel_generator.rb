@@ -55,7 +55,8 @@ class ExcelGenerator
   def add_format(workbook)
     @header_format = workbook.add_format(bold: true, size: 12)
     @num_format = workbook.add_format(size: 12, num_format: '#,##0.0')
-    @money_format = workbook.add_format(size: 12, num_format: 'Rp#,##0.0')
+    @percentage_format = workbook.add_format(size: 12, num_format: '0%')
+    @money_format = workbook.add_format(size: 12, num_format: 'Rp#,##0')
     @general_format = workbook.add_format(size: 12)
     @date_format = workbook.add_format(size: 12, num_format: 'dd/mm/yyyy')
     @datetime_format = workbook.add_format(size: 12, num_format: 'dd/mm/yyyy hh:mm')
@@ -84,13 +85,13 @@ class ExcelGenerator
       if value.blank?
         next
       end
-      case column.type
+      case column.type.to_sym
       when :integer,:float,:decimal,:big_decimal
         worksheet.write_number(y, x, value.to_f, @num_format)
       when :money
         worksheet.write_number(y, x, value.to_f, @money_format)
       when :percentage
-        worksheet.write_number(y, x, value.to_f, @num_format)
+        worksheet.write_number(y, x, value.to_f, @percentage_format)
       when :date
         worksheet.write_date_time(y, x, value.strftime('%d/%m/%Y'), @date_format)
       when :datetime, :time

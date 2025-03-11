@@ -27,7 +27,7 @@ class Discount::CreateService < ApplicationService
     permitted_params = params.required(:data)
                               .required(:relationships)
                               .required(:discount_items)
-                              .permit(data:[:type,:id, attributes:[:item_code]])
+                              .permit(data:[:type,:id, attributes:[:item_code, :is_exclude]])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
     permitted_params[:data].each do |line_params|
       discount.discount_items.build(line_params[:attributes])
