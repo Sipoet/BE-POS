@@ -9,9 +9,10 @@ class Discount::DownloadActiveItemService < ApplicationService
   end
 
   def find_reports
+    now = Time.now
     query = Ipos::ItemPromotion
                 .joins(:promotion,:discount)
-                .where(promotion:{stsact: true})
+                .where(promotion:{tgldari: ..now,tglsampai: now.., stsact: true})
                 .includes(:item,:discount,promotion: :discount)
                 .order(kodeitem: :asc)
     query.to_a.map do |item_promotion|
