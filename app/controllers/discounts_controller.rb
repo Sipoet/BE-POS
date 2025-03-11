@@ -46,6 +46,10 @@ class DiscountsController < ApplicationController
     run_service_default
   end
 
+  def download_active_items
+    run_service_default
+  end
+
   def columns
     run_service(Discount::ColumnsService)
   end

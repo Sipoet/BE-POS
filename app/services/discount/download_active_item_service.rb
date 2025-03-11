@@ -1,23 +1,23 @@
-class Discount::DownloadItemService < ApplicationService
+class Discount::DownloadActiveItemService < ApplicationService
+
   include ActionView::Helpers::NumberHelper
 
   def execute_service
-    discount = Discount.find_by(id: @params[:id])
-    raise ApplicationService::RecordNotFound.new(@params[:id],Discount.name) if discount.nil?
-    reports = find_reports(discount)
-    file = generate_file(reports,discount)
+    reports = find_reports
+    file = generate_file(reports)
     @controller.send_file file
   end
 
-  def find_reports(discount)
+  def find_reports
     query = Ipos::ItemPromotion
                 .joins(:promotion,:discount)
-                .where(promotion:{stsact: true},discount: {id: discount.id})
-                .includes(:item,:discount,promotion:[:discount])
+                .where(promotion:{stsact: true})
+                .includes(:item,:discount,promotion: :discount)
                 .order(kodeitem: :asc)
     query.to_a.map do |item_promotion|
       item = item_promotion.item
-      discount_amount = calculate_discount(discount,item.sell_price)
+      discount = item_promotion.discount
+      discount_amount = calculate_discount(discount,item.sell_price) || 0
       {
         item_code: item_promotion.kodeitem,
         brand_name: item.brand_name,
@@ -31,6 +31,7 @@ class Discount::DownloadItemService < ApplicationService
   end
 
   def calculate_discount(discount,sell_price = 0)
+    return nil if discount.nil?
     if discount.special_price?
       return sell_price - discount.discount1
     end
@@ -48,6 +49,7 @@ class Discount::DownloadItemService < ApplicationService
   end
 
   def discount_format(discount, discount_amount)
+    return nil if discount.nil?
     return  "SP #{money_format(discount.discount1)}" if discount.special_price?
     if discount.percentage?
       return [discount.discount1,discount.discount2,discount.discount3,discount.discount4].select{|x|x> 0}
@@ -64,7 +66,7 @@ class Discount::DownloadItemService < ApplicationService
 
   WHITELIST_COLUMN = [:item_code,:brand_name,:item_type_name,:sell_price]
 
-  def generate_file(reports, discount)
+  def generate_file(reports)
     column_definitions = Datatable::DefinitionExtractor.new(ItemReport)
                               .column_definitions
                               .select {|column| WHITELIST_COLUMN.include?(column.name)}
@@ -72,21 +74,13 @@ class Discount::DownloadItemService < ApplicationService
     column_definitions += [
       Datatable::TableColumn.new(:discount, {humanize_name: 'Diskon'}),
       Datatable::TableColumn.new(:sell_price_after_discount, {humanize_name: 'Harga Setelah Diskon',type: 'money'}),
+      Datatable::TableColumn.new(:discount_code, {humanize_name: 'Kode Promo'}),
     ]
     generator = ExcelGenerator.new
     generator.add_column_definitions(column_definitions)
     generator.set_row_data_type_hash!
     generator.add_data(reports)
-    filter = {
-      'Periode Aktif' => "#{discount.start_time.strftime('%d/%m/%y %H:%M')} - #{discount.end_time.strftime('%d/%m/%y %H:%M')}",
-      'Tipe diskon' => discount.calculation_type.to_s,
-      'diskon 1' => discount.percentage? ? "#{discount.discount1}%": money_format(discount.discount1),
-      'diskon 2' => "#{discount.discount2}%",
-      'diskon 3' => "#{discount.discount3}%",
-      'diskon 4' => "#{discount.discount4}%"
-    }
-    generator.add_metadata(filter)
-    generator.generate("laporan-diskon-item-#{discount.code}-#{timestamp}")
+    generator.generate("laporan-aktif-diskon-item-#{timestamp}")
   end
 
   def timestamp

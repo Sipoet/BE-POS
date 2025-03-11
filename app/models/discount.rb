@@ -2,8 +2,6 @@ require 'big_decimal.rb'
 class Discount < ApplicationRecord
   has_paper_trail ignore:[:id, :created_at, :updated_at]
 
-  attr_readonly :code
-
   enum :calculation_type,{
     percentage: 0,
     nominal: 1,

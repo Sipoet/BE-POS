@@ -3,7 +3,7 @@ class Discount::UpdateService < ApplicationService
   def execute_service
     permitted_params = @params.required(:data)
                               .required(:attributes)
-                              .permit(:weight,:calculation_type, :discount_type,
+                              .permit(:code, :weight,:calculation_type, :discount_type,
                                       :week1, :week2, :week3, :week4,
                                       :week5, :week6, :week7,:customer_group_code,
                                       :discount1, :discount2,:discount3,

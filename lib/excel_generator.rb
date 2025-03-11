@@ -5,6 +5,7 @@ class ExcelGenerator
   def initialize
     @columns = []
     @rows = []
+    @metadata={}
     @row_data_type = :instance_variable
   end
 
