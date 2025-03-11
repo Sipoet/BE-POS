@@ -53,7 +53,7 @@ class ItemReport::IndexService < ApplicationService
       reports = reports.page(@page).per(@limit)
     end
     @filters.each do |filter|
-      reports = reports.where(filter.to_query)
+      reports = filter.add_filter_to_query(reports)
     end
     if @sort.present?
       reports = reports.order(@sort)

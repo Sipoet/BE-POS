@@ -143,22 +143,43 @@ module JsonApiDeserializer
       def set_value(val)
         values = val.split(',')
         if values.length == 1
-          @value = values[0]
+          @value = ActiveRecord::Base::sanitize_sql(values[0])
         else
           @value = values
+        end
+      end
+
+      def add_filter_to_query(query)
+        case @operator
+        when :eq then query.where(key => value)
+        when :not then query.where.not(key => value)
+        when :like then query.where(["#{key} ilike ?", "%#{ApplicationRecord.sanitize_sql_like(value)}%"])
+        when :gt then query.where(["#{key} > ?", value])
+        when :gte then query.where(key => value..)
+        when :lt then query.where(key => ..value)
+        when :lte then query.where(key => ...value)
+        when :btw then query.where(key => value[0]..value[1])
+        else
+          raise "filter not supported operator #{operator}"
         end
       end
 
       def to_query
         case @operator
         when :eq then {key => value}
-        when :not then ["#{key} != ?", value]
-        when :like then ["#{key} ilike ?", "%#{value}%"]
+        when :not
+          if value.is_a?(Array)
+            ["#{key} not IN (?)", value]
+          else
+            sanitize_values = value.map{|line_value| ActiveRecord::Base::sanitize_sql(line_value) }
+            ["#{key} != ?", sanitize_values]
+          end
+        when :like then ["#{key} ilike ?", "%#{ApplicationRecord.sanitize_sql_like(value)}%"]
         when :gt then ["#{key} > ?", value]
-        when :gte then ["#{key} >= ?", value]
-        when :lt then ["#{key} < ?", value]
-        when :lte then ["#{key} <= ?", value]
-        when :btw then ["#{key} BETWEEN ? and ?", value[0],value[1]]
+        when :gte then {key => value..}
+        when :lt then {key => ..value}
+        when :lte then {key => ...value}
+        when :btw then {key => value[0]..value[1]}
         else
           raise "filter not supported operator #{operator}"
         end
