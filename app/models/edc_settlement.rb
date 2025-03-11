@@ -1,16 +1,5 @@
 class EdcSettlement < ApplicationRecord
-  TABLE_HEADER = [
-    datatable_column(self,:cashier_session_id,:integer),
-    datatable_column(self,:payment_provider_id, :link,path: 'payment_providers', attribute_key:'payment_provider.code'),
-    datatable_column(self,:payment_type_id, :link,path: 'payment_types', attribute_key:'payment_type.name'),
-    datatable_column(self,:status, :enum),
-    datatable_column(self,:amount, :money),
-    datatable_column(self,:diff_amount, :money),
-    datatable_column(self,:merchant_id, :string),
-    datatable_column(self,:terminal_id, :string),
-    datatable_column(self,:created_at, :datetime),
-    datatable_column(self,:updated_at, :datetime),
-  ]
+
 
   enum :status,{
     draft:0,

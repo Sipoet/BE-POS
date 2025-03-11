@@ -1,18 +1,5 @@
 class SalesTransactionReport < ApplicationModel
 
-  TABLE_HEADER = [
-    datatable_column(self,:start_time, :date),
-    datatable_column(self,:end_time, :date),
-    datatable_column(self,:sales_total, :money),
-    datatable_column(self,:gross_profit, :money),
-    datatable_column(self,:num_of_transaction, :integer),
-    datatable_column(self,:discount_total, :money),
-    datatable_column(self,:cash_total, :money),
-    datatable_column(self,:debit_total, :money),
-    datatable_column(self,:credit_total, :money),
-    datatable_column(self,:qris_total, :money),
-    datatable_column(self,:online_total, :money),
-  ].freeze
 
   attr_accessor :start_time,
                 :end_time,

@@ -1,32 +1,6 @@
 require 'big_decimal.rb'
 class Discount < ApplicationRecord
   has_paper_trail ignore:[:id, :created_at, :updated_at]
-  TABLE_HEADER = [
-    datatable_column(self,:code, :string),
-    datatable_column(self,:supplier_code, :link, path:'suppliers',attribute_key: 'supplier.nama'),
-    datatable_column(self,:item_type_name, :link, path:'item_types',attribute_key: 'item_type.ketjenis'),
-    datatable_column(self,:brand_name, :link, path:'brands',attribute_key: 'brand.merek'),
-    datatable_column(self,:item_code, :link, path:'items',attribute_key: 'item.namaitem'),
-    datatable_column(self,:blacklist_supplier_code, :link, path:'suppliers',attribute_key: 'blacklist_supplier.nama'),
-    datatable_column(self,:blacklist_item_type_name, :link, path:'item_types',attribute_key: 'blacklist_item_type.ketjenis'),
-    datatable_column(self,:blacklist_brand_name, :link, path:'brands',attribute_key: 'blacklist_brand.merek'),
-    datatable_column(self,:calculation_type, :enum),
-    datatable_column(self,:weight, :string),
-    datatable_column(self,:discount1, :percentage),
-    datatable_column(self,:discount2, :percentage),
-    datatable_column(self,:discount3, :percentage),
-    datatable_column(self,:discount4, :percentage),
-    datatable_column(self,:discount_type, :enum),
-    datatable_column(self,:start_time, :datetime),
-    datatable_column(self,:end_time, :datetime),
-    datatable_column(self,:week1, :boolean),
-    datatable_column(self,:week2, :boolean),
-    datatable_column(self,:week3, :boolean),
-    datatable_column(self,:week4, :boolean),
-    datatable_column(self,:week5, :boolean),
-    datatable_column(self,:week6, :boolean),
-    datatable_column(self,:week7, :boolean),
-  ].freeze
 
   attr_readonly :code
 

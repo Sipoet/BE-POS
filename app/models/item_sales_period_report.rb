@@ -1,21 +1,5 @@
 class ItemSalesPeriodReport < ApplicationModel
 
-  TABLE_HEADER = [
-    datatable_column(self,:item_code, :string),
-    datatable_column(self,:item_name, :string),
-    datatable_column(self,:supplier_code, :string),
-    datatable_column(self,:item_type_name, :string),
-    datatable_column(self,:brand_name, :string),
-    datatable_column(self,:is_consignment, :boolean),
-    datatable_column(self,:discount_percentage, :decimal),
-    datatable_column(self,:buy_price, :money),
-    datatable_column(self,:sell_price, :money),
-    datatable_column(self,:quantity, :integer),
-    datatable_column(self,:subtotal, :money),
-    datatable_column(self,:discount_total, :money),
-    datatable_column(self,:sales_total, :money)
-  ].freeze
-
   attr_accessor :item_code,
                 :item_name,
                 :supplier_code,
