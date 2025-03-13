@@ -1,12 +1,12 @@
 id:
   activerecord:
     models:
-      ipos/purchase_item: "Pembelian item"
+      ipos/purchase_order_item: "Pesanan Pembelian item"
     attributes:
-      ipos/purchase_item:
+      ipos/purchase_order_item:
         kodeitem: "Kode Item"
         namaitem: "Nama Item"
-        jmlpesan: "Pesan"
+        jmlterima: "Terima"
         jumlah: "Jumlah"
         harga: "Harga"
         sell_price: "Harga Jual"
@@ -24,3 +24,6 @@ id:
         hppdasar: "HPP"
         nobaris: "No"
         supplier1: 'Supplier'
+        brand_name: 'Merek'
+        item_type_name: 'Jenis/Departemen'
+        supplier_code: 'Kode Supplier'
