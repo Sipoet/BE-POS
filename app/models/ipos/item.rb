@@ -12,9 +12,11 @@ class Ipos::Item < ApplicationRecord
   paginates_per 20
 
   after_update do |record|
-    Cache.delete("item-serializer:ipos/items/#{record.kodeitem}")
+    Cache.delete("item-serializer:ipos/items/#{record.code}")
   end
-  alias_attribute :item_code, :kodeitem
+
+  alias_attribute :code, :kodeitem
+  alias_attribute :name, :namaitem
   alias_attribute :brand_name, :merek
   alias_attribute :item_type_name, :jenis
   alias_attribute :supplier_code, :supplier1
