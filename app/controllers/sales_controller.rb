@@ -16,4 +16,8 @@ class SalesController < ApplicationController
   def transaction_report
     run_service_default
   end
+
+  def daily_transaction_report
+    run_service_default
+  end
 end

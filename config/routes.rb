@@ -60,6 +60,7 @@ Rails.application.routes.draw do
 
   resources :sales, only:[:index, :show] do
     get :transaction_report, on: :collection
+    get :daily_transaction_report, on: :collection
     get :report, on: :collection
   end
 

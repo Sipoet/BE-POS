@@ -14,8 +14,8 @@ class SalesTransactionReport < ApplicationModel
                 :gross_profit
 
   def initialize(row)
-    @start_time = row['start_time'].try(:to_datetime)
-    @end_time = row['end_time'].try(:to_datetime)
+    @start_time = row['start_time']
+    @end_time = row['end_time']
     @sales_total = row['sales_total']
     @num_of_transaction = row['num_of_transaction'].to_i
     @discount_total = row['discount_total']
