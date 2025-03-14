@@ -50,6 +50,8 @@ class Sale::DailyTransactionReportService < ApplicationService
     WHERE tanggal BETWEEN '#{start_time}' AND '#{end_time}' AND #{sale_table}.tipe in('KSR','JL')
     GROUP BY
       DATE_TRUNC('day',#{sale_table}.tanggal)
+    ORDER BY
+      date ASC
     SQL
   end
 
