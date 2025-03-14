@@ -1,0 +1,177 @@
+table_name: purchase_reports
+columns:
+  code:
+    type: string
+    excel_width: 25
+    client_width: 200
+    can_filter: true
+    can_sort: true
+  supplier:
+    type: link
+    excel_width: 25
+    client_width: 200
+    path: suppliers
+    attribute_key: supplier.nama
+    can_filter: true
+    filter_key: supplier_code
+    can_sort: true
+    sort_key: supplier_code
+  purchase_date:
+    type: datetime
+    excel_width: 25
+    client_width: 200
+    sort_key: purchase_date
+    attribute_key: purchase_date
+    can_filter: true
+    filter_key: purchase_date
+    can_sort: true
+  due_date:
+    type: datetime
+    excel_width: 25
+    client_width: 200
+    sort_key: due_date
+    attribute_key: due_date
+    can_filter: true
+    filter_key: due_date
+    can_sort: true
+  purchase_item_total:
+    type: decimal
+    excel_width: 25
+    client_width: 200
+    sort_key: purchase_item_total
+    attribute_key: purchase_item_total
+    can_filter: true
+    filter_key: purchase_item_total
+    can_sort: true
+  purchase_subtotal:
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: purchase_subtotal
+    attribute_key: purchase_subtotal
+    can_filter: true
+    filter_key: purchase_subtotal
+    can_sort: true
+  header_discount_amount:
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: header_discount_amount
+    attribute_key: header_discount_amount
+    can_filter: true
+    filter_key: header_discount_amount
+    can_sort: true
+  purchase_other_cost:
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: purchase_other_cost
+    attribute_key: purchase_other_cost
+    can_filter: true
+    filter_key: purchase_other_cost
+    can_sort: true
+  purchase_grand_total:
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: purchase_grand_total
+    attribute_key: purchase_grand_total
+    can_filter: true
+    filter_key: purchase_grand_total
+    can_sort: true
+  order_date:
+    type: datetime
+    excel_width: 25
+    client_width: 200
+    sort_key: order_date
+    attribute_key: order_date
+    can_filter: true
+    filter_key: order_date
+    can_sort: true
+  shipping_date:
+    type: datetime
+    excel_width: 25
+    client_width: 200
+    sort_key: shipping_date
+    attribute_key: shipping_date
+    can_filter: true
+    filter_key: shipping_date
+    can_sort: true
+  order_item_total:
+    type: decimal
+    excel_width: 25
+    client_width: 200
+    sort_key: order_item_total
+    attribute_key: order_item_total
+    can_filter: true
+    filter_key: order_item_total
+    can_sort: true
+  order_grand_total:
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: order_grand_total
+    attribute_key: order_grand_total
+    can_filter: true
+    filter_key: order_grand_total
+    can_sort: true
+  return_item_total:
+    type: decimal
+    excel_width: 25
+    client_width: 200
+    sort_key: return_item_total
+    attribute_key: return_item_total
+    can_filter: true
+    filter_key: return_item_total
+    can_sort: true
+  return_amount_total:
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: return_amount_total
+    attribute_key: return_amount_total
+    can_filter: true
+    filter_key: return_amount_total
+    can_sort: true
+  grandtotal:
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: grandtotal
+    attribute_key: grandtotal
+    can_filter: true
+    filter_key: grandtotal
+    can_sort: true
+  paid_amount:
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: paid_amount
+    attribute_key: paid_amount
+    can_filter: true
+    filter_key: paid_amount
+    can_sort: true
+  debt_amount:
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: debt_amount
+    attribute_key: debt_amount
+    can_filter: true
+    filter_key: debt_amount
+    can_sort: true
+  last_paid_date:
+    type: datetime
+    excel_width: 25
+    client_width: 200
+    sort_key: last_paid_date
+    attribute_key: last_paid_date
+    can_filter: true
+    filter_key: last_paid_date
+    can_sort: true
+  status:
+    type: enum
+    excel_width: 25
+    client_width: 200
+    can_filter: true
+    can_sort: true
