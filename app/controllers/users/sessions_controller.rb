@@ -5,7 +5,7 @@ class Users::SessionsController < Devise::SessionsController
   private
 
   def respond_with(current_user, _opts = {})
-    if current_user
+    if current_user && !current_user.new_record?
       render json: {
           message: 'Logged in successfully',
           data: { user: UserSerializer.new(current_user).serializable_hash[:data][:attributes] }
