@@ -132,4 +132,5 @@ Rails.application.routes.draw do
   end
   resources :payroll_types, only:[:index,:create,:update,:destroy]
   resources :holidays, only:[:index,:create,:update,:destroy]
+  resources :book_payslip_lines, only:[:index,:create,:update,:destroy]
 end
