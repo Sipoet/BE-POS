@@ -1,7 +1,7 @@
 ---
 table_name: tbl_item
 columns:
-  kodeitem:
+  code:
     name: kodeitem
     type: string
     excel_width: 25
@@ -11,7 +11,7 @@ columns:
     can_filter: true
     filter_key: kodeitem
     can_sort: true
-  namaitem:
+  name:
     name: namaitem
     type: string
     excel_width: 25
@@ -21,40 +21,43 @@ columns:
     can_filter: true
     filter_key: namaitem
     can_sort: true
-  supplier1:
+  supplier_code:
     name: supplier1
     type: link
     excel_width: 25
     client_width: 200
-    path: suppliers
     sort_key: supplier1
-    attribute_key: supplier.kode
     can_filter: true
     filter_key: supplier1
     can_sort: true
-  jenis:
+    input_options:
+      path: suppliers
+      attribute_key: supplier.nama
+  item_type_name:
     name: jenis
     type: link
     excel_width: 25
     client_width: 200
-    path: item_types
     sort_key: jenis
-    attribute_key: item_type.jenis
     can_filter: true
     filter_key: jenis
     can_sort: true
-  merek:
+    input_options:
+      path: item_types
+      attribute_key: item_type.ketjenis
+  brand_name:
     name: merek
     type: link
     excel_width: 25
     client_width: 200
-    path: brands
     sort_key: merek
-    attribute_key: brand.merek
     can_filter: true
     filter_key: merek
     can_sort: true
-  satuan:
+    input_options:
+      path: brands
+      attribute_key: brand.merek
+  uom:
     name: satuan
     type: string
     excel_width: 25
@@ -64,9 +67,9 @@ columns:
     can_filter: true
     filter_key: satuan
     can_sort: true
-  hargapokok:
+  cogs:
     name: hargapokok
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: hargapokok
@@ -74,9 +77,9 @@ columns:
     can_filter: true
     filter_key: hargapokok
     can_sort: true
-  hargajual1:
+  sell_price:
     name: hargajual1
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: hargajual1
