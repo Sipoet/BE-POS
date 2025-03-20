@@ -20,4 +20,5 @@ class Ipos::Item < ApplicationRecord
   alias_attribute :supplier_code, :supplier1
   alias_attribute :sell_price, :hargajual1
   alias_attribute :cogs, :hargapokok
+  alias_attribute :uom, :satuan
 end

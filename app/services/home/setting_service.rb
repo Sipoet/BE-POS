@@ -3,7 +3,8 @@ class Home::SettingService < ApplicationService
   def execute_service
     menus = find_menus(@current_user.role)
     table_columns = find_table_columns(@current_user.role)
-    render_json({data: {menus: menus, table_columns: table_columns}})
+
+    render_json({menus: menus, table_columns: table_columns}.as_json)
   end
 
   private
@@ -55,20 +56,16 @@ class Home::SettingService < ApplicationService
       klass = table_name.classify.constantize
       table_key = table_name.camelize(:lower)
       if role.name == Role::SUPERADMIN
-        obj[table_key] = Datatable::DefinitionExtractor.new(klass).column_definitions
-        if table_key == 'itemReport'
-          obj['itemSalesPercentageReport'] = obj[table_key]
-        end
+        obj[table_key] = TableColumnSerializer.new(Datatable::DefinitionExtractor.new(klass).column_definitions).as_json
         next
       end
       columns = allowed_columns[table_name]
       next if columns.blank?
       table_def = Datatable::DefinitionExtractor.new(klass)
-      obj[table_key] = columns.map {|authorize| table_def.column_of(authorize.column) }
-                              .compact
-      if table_key == 'itemReport'
-        obj['itemSalesPercentageReport'] = obj[table_key]
-      end
+      obj[table_key] = TableColumnSerializer.new(
+        columns.map {|authorize| table_def.column_of(authorize.column) }
+               .compact
+      ).as_json
     end
   end
 
