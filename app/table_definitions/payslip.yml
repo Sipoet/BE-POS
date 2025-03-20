@@ -1,16 +1,20 @@
 table_name: 'payslips'
 columns:
   employee_name:
-    type: link
-    path: 'employees'
+    type: model
+    input_options:
+      path: 'employees'
+      model_name: employee
+      attribute_key: name
     filter_key: 'employee_id'
-    attribute_key: 'employee.name'
     sort_key: 'employees.name'
   payroll:
-    type: link
-    path: 'payrolls'
+    type: model
+    input_options:
+      path: 'payrolls'
+      model_name: payroll
+      attribute_key: 'name'
     filter_key: 'payroll_id'
-    attribute_key: 'payroll.name'
     sort_key: 'payrolls.name'
   status:
     type: enum

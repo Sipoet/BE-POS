@@ -3,12 +3,14 @@ table_name: employee_leaves
 columns:
   employee_id:
     name: employee_id
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: employees
-    sort_key: employee_id
-    attribute_key: employee.name
+    sort_key: employees.name
+    input_options:
+      path: employees
+      model_name: employee
+      attribute_key: name
     can_filter: true
     filter_key: employee_id
     can_sort: true

@@ -4,51 +4,59 @@ columns:
     type: string
     client_width: 180
   supplier_code:
-    type: link
+    type: model
     client_width: 180
     input_options:
+      model_name: supplier
       path: 'suppliers'
-      attribute_key: 'supplier.nama'
+      attribute_key: 'code'
   item_type_name:
-    type: link
+    type: model
     client_width: 180
     input_options:
       path: 'item_types'
-      attribute_key: 'item_type.ketjenis'
+      model_name: item_type
+      attribute_key: 'name'
   brand_name:
-    type: link
+    type: model
     client_width: 180
     input_options:
       path: 'brands'
-      attribute_key: 'brand.merek'
+      model_name: brand
+      attribute_key: name
   item_code:
-    type: link
+    type: model
     client_width: 180
     input_options:
       path: 'items'
-      attribute_key: 'item.namaitem'
+      model_name: 'item'
+      attribute_key: 'code'
   blacklist_supplier_code:
-    type: link
+    type: model
     client_width: 180
     input_options:
+      model_name: supplier
       path: 'suppliers'
-      attribute_key: 'blacklist_supplier.nama'
+      attribute_key: 'code'
   blacklist_item_type_name:
-    type: link
+    type: model
     client_width: 180
     input_options:
       path: 'item_types'
-      attribute_key: 'blacklist_item_type.ketjenis'
+      model_name: item_type
+      attribute_key: 'name'
   blacklist_brand_name:
-    type: link
+    type: model
     client_width: 180
     input_options:
       path: 'brands'
-      attribute_key: 'blacklist_brand.merek'
+      model_name: brand
+      attribute_key: name
   customer_group:
-    type: link
+    type: model
     client_width: 180
     input_options:
+      model_name: customer_group
       path: 'customer_groups'
       attribute_key: 'customer_group.grup'
     sort_key: 'tbl_supelgrup.kgrup'

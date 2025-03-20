@@ -30,13 +30,17 @@ columns:
     can_sort: true
   actor:
     name: actor
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
     sort_key: actor
     attribute_key: actor
     can_filter: false
     can_sort: true
+    input_options:
+      path: users
+      model_name: 'user'
+      attribute_key: username
   description:
     name: description
     type: string

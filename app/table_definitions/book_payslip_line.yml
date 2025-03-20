@@ -3,21 +3,25 @@ columns:
   transaction_date:
     type: date
   employee:
-    type: link
-    path: 'employees'
+    type: model
     filter_key: 'employee_id'
-    attribute_key: 'employee.name'
     sort_key: 'employees.name'
+    input_options:
+      path: employees
+      model_name: 'employee'
+      attribute_key: name
   group:
     type: enum
     enum_list:
       - earning
       - deduction
   payroll_type:
-    type: link
-    path: 'payroll_types'
+    type: model
     filter_key: 'payroll_type_id'
-    attribute_key: 'payroll_type.name'
+    input_options:
+      path: 'payroll_types'
+      model_name: 'payroll_type'
+      attribute_key: name
     sort_key: 'payroll_types.name'
   amount:
     type: money

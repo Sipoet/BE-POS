@@ -3,15 +3,17 @@ table_name: tbl_itrdt
 columns:
   kodeitem:
     name: kodeitem
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: items
     sort_key: kodeitem
-    attribute_key: item.namaitem
     can_filter: true
     filter_key: kodeitem
     can_sort: true
+    input_options:
+      path: items
+      model_name: 'item'
+      attribute_key: code
   jumlah:
     name: jumlah
     type: decimal
@@ -104,29 +106,33 @@ columns:
     can_sort: true
   item.supplier1:
     name: item.supplier1
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: suppliers
     sort_key: item.supplier1
-    attribute_key: supplier.kode
     can_filter: true
     filter_key: item.supplier1
     can_sort: true
+    input_options:
+      path: suppliers
+      model_name: 'supplier'
+      attribute_key: name
   item.merek:
     name: item.merek
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: brands
     sort_key: item.merek
-    attribute_key: brand.merek
     can_filter: true
     filter_key: item.merek
     can_sort: true
+    input_options:
+      path: brands
+      model_name: 'brand'
+      attribute_key: name
   item.jenis:
     name: item.jenis
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
     path: item_types

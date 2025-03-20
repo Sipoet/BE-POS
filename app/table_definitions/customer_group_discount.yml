@@ -3,12 +3,14 @@ table_name: customer_group_discounts
 columns:
   customer_group_code:
     name: customer_group_code
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: customer_group_discounts
     sort_key: customer_group_code
-    attribute_key: customer_groups.grup
+    input_options:
+      model_name: customer_group
+      path: customer_groups
+      attribute_key: grup
     can_filter: true
     filter_key: customer_group_code
     can_sort: true

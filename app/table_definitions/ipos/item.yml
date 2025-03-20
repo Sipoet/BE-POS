@@ -33,7 +33,7 @@ columns:
     input_options:
       path: suppliers
       model_name: 'supplier'
-      attribute_key: nama
+      attribute_key: name
   item_type:
     name: jenis
     type: model
@@ -46,7 +46,7 @@ columns:
     input_options:
       path: item_types
       model_name: 'item_type'
-      attribute_key: ketjenis
+      attribute_key: name
   brand:
     name: merek
     type: model
@@ -59,7 +59,7 @@ columns:
     input_options:
       path: brands
       model_name: 'brand'
-      attribute_key: merek
+      attribute_key: name
   uom:
     name: satuan
     type: string

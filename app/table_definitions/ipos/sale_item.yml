@@ -1,9 +1,13 @@
 table_name: 'tbl_ikdt'
 columns:
   kodeitem:
-    type: link
+    type: model
     path: 'items'
     attribute_key: 'item.namaitem'
+    input_options:
+      path: items
+      model_name: item
+      attribute_key: name
   item_name:
     type: string
     filter_key: 'tbl_item.namaitem'
@@ -31,21 +35,27 @@ columns:
   total:
     type: money
   supplier_code:
-    type: link
-    path: 'suppliers'
+    type: model
     filter_key: 'tbl_item.supplier1'
     sort_key: 'tbl_item.supplier1'
-    attribute_key: 'supplier.nama'
+    input_options:
+      path: suppliers
+      model_name: supplier
+      attribute_key: code
   brand_name:
-    type: link
-    path: 'brands'
+    type: model
     filter_key: 'tbl_item.merek'
-    attribute_key: 'brand.ketmerek'
+    input_options:
+      path: 'brands'
+      model_name: brand
+      attribute_key: name
   item_type_name:
-    type: link
-    path: 'item_types'
+    type: model
     filter_key: 'tbl_item.jenis'
-    attribute_key: 'item_type.ketjenis'
+    input_options:
+      path: 'item_types'
+      model_name: item_type
+      attribute_key: name
   updated_at:
     type: datetime
   sistemhargajual:
