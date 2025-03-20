@@ -1,7 +1,7 @@
 ---
 table_name: tbl_supel
 columns:
-  kode:
+  code:
     name: kode
     type: string
     excel_width: 25
@@ -11,7 +11,7 @@ columns:
     can_filter: true
     filter_key: kode
     can_sort: true
-  nama:
+  name:
     name: nama
     type: string
     excel_width: 25
@@ -21,7 +21,7 @@ columns:
     can_filter: true
     filter_key: nama
     can_sort: true
-  alamat:
+  address:
     name: alamat
     type: string
     excel_width: 25
@@ -31,7 +31,7 @@ columns:
     can_filter: true
     filter_key: alamat
     can_sort: true
-  kontak:
+  contact:
     name: kontak
     type: string
     excel_width: 25
@@ -61,7 +61,7 @@ columns:
     can_filter: true
     filter_key: bank
     can_sort: true
-  norek:
+  account:
     name: norek
     type: string
     excel_width: 25
@@ -71,7 +71,7 @@ columns:
     can_filter: true
     filter_key: norek
     can_sort: true
-  atasnama:
+  account_register_name:
     name: atasnama
     type: string
     excel_width: 25
@@ -81,7 +81,7 @@ columns:
     can_filter: true
     filter_key: atasnama
     can_sort: true
-  keterangan:
+  description:
     name: keterangan
     type: string
     excel_width: 25

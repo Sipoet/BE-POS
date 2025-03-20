@@ -1,7 +1,7 @@
 ---
 table_name: tbl_itemjenis
 columns:
-  jenis:
+  name:
     name: jenis
     type: string
     excel_width: 25
@@ -11,7 +11,7 @@ columns:
     can_filter: true
     filter_key: jenis
     can_sort: true
-  ketjenis:
+  description:
     name: ketjenis
     type: string
     excel_width: 25

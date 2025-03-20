@@ -1,5 +1,5 @@
 class BrandSerializer
   include JSONAPI::Serializer
-  attributes :merek, :ketmerek
+  attributes :name, :description
   cache_options store: Rails.cache, namespace: 'brand-serializer', expires_in: 1.hour
 end

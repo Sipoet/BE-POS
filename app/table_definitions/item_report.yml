@@ -168,7 +168,7 @@ columns:
   cogs:
     type: money
     excel_width: 10
-    client_width: 100
+    client_width: 180
     can_filter: true
     can_sort: true
   margin:

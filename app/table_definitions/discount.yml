@@ -6,45 +6,53 @@ columns:
   supplier_code:
     type: link
     client_width: 180
-    path: 'suppliers'
-    attribute_key: 'supplier.nama'
+    input_options:
+      path: 'suppliers'
+      attribute_key: 'supplier.nama'
   item_type_name:
     type: link
     client_width: 180
-    path: 'item_types'
-    attribute_key: 'item_type.ketjenis'
+    input_options:
+      path: 'item_types'
+      attribute_key: 'item_type.ketjenis'
   brand_name:
     type: link
     client_width: 180
-    path: 'brands'
-    attribute_key: 'brand.merek'
+    input_options:
+      path: 'brands'
+      attribute_key: 'brand.merek'
   item_code:
     type: link
     client_width: 180
-    path: 'items'
-    attribute_key: 'item.namaitem'
+    input_options:
+      path: 'items'
+      attribute_key: 'item.namaitem'
   blacklist_supplier_code:
     type: link
     client_width: 180
-    path: 'suppliers'
-    attribute_key: 'blacklist_supplier.nama'
+    input_options:
+      path: 'suppliers'
+      attribute_key: 'blacklist_supplier.nama'
   blacklist_item_type_name:
     type: link
     client_width: 180
-    path: 'item_types'
-    attribute_key: 'blacklist_item_type.ketjenis'
+    input_options:
+      path: 'item_types'
+      attribute_key: 'blacklist_item_type.ketjenis'
   blacklist_brand_name:
     type: link
     client_width: 180
-    path: 'brands'
-    attribute_key: 'blacklist_brand.merek'
+    input_options:
+      path: 'brands'
+      attribute_key: 'blacklist_brand.merek'
   customer_group:
     type: link
     client_width: 180
-    path: 'customer_groups'
-    filter_key: 'customer_group_code'
-    attribute_key: 'customer_group.grup'
+    input_options:
+      path: 'customer_groups'
+      attribute_key: 'customer_group.grup'
     sort_key: 'tbl_supelgrup.kgrup'
+    filter_key: 'customer_group_code'
   calculation_type:
     type: enum
     client_width: 180
