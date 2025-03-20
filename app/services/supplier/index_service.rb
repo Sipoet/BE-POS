@@ -42,7 +42,7 @@ class Supplier::IndexService < ApplicationService
       .page(@page)
       .per(@limit)
     if @search_text.present?
-      suppliers = suppliers.where(['kode ilike ? OR nama ilike ?']+ Array.new(2,"%#{@search_text}%"))
+      suppliers = suppliers.where(['kode ilike ? OR nama ilike ? OR keterangan ilike ? OR alamat ilike ?']+ Array.new(4,"%#{@search_text}%"))
     end
     @filters.each do |filter|
       suppliers = suppliers.where(filter.to_query)

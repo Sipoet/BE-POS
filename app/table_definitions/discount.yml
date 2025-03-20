@@ -9,21 +9,21 @@ columns:
     input_options:
       model_name: supplier
       path: 'suppliers'
-      attribute_key: 'code'
+      attribute_key: 'name'
   item_type_name:
     type: model
     client_width: 180
     input_options:
       path: 'item_types'
       model_name: item_type
-      attribute_key: 'name'
+      attribute_key: 'description'
   brand_name:
     type: model
     client_width: 180
     input_options:
       path: 'brands'
       model_name: brand
-      attribute_key: name
+      attribute_key: description
   item_code:
     type: model
     client_width: 180

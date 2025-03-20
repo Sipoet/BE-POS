@@ -39,7 +39,8 @@ class Payroll::ReportService < ApplicationService
           humanize_name: Employee.human_attribute_name(:name),
           type: :string,
           name: :employee_name,
-          width: 25,
+          excel_width: 25,
+          client_width: 200,
           attribute_key: 'employees.name',
           path: 'employees'
         }
@@ -48,9 +49,10 @@ class Payroll::ReportService < ApplicationService
         :salary_total,
         {
           humanize_name: PayrollReport.human_attribute_name(:salary_total),
-          type: :decimal,
+          type: :money,
           name: :salary_total,
-          width: 25
+          excel_width: 25,
+          client_width: 200
         }
         )
     ]
@@ -59,9 +61,10 @@ class Payroll::ReportService < ApplicationService
         payroll_type.id.to_s,
         {
           humanize_name: payroll_type.name,
-          type: :decimal,
+          type: :money,
           name: payroll_type.id.to_s,
-          width: 25
+          excel_width: 25,
+          client_width: 200
         }
         )
     end

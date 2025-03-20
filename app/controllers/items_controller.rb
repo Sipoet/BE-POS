@@ -8,4 +8,8 @@ class ItemsController < ApplicationController
       run_service_default
     end
   end
+
+  def update
+    run_service_default
+  end
 end

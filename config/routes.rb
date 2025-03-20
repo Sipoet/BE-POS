@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     get :grouped_report, on: :collection
   end
 
-  resources :items, param: :code, only: [:index, :show]
+  resources :items, param: :code, only: [:index, :update]
 
   resources :suppliers,param: :code, only: [:index, :show]
 
