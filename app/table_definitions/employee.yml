@@ -44,8 +44,8 @@ columns:
       path: roles
       model_name: role
       attribute_key: name
-  payroll_id:
-    name: payroll_id
+  payroll:
+    name: payroll
     type: model
     excel_width: 25
     client_width: 200
