@@ -11,12 +11,13 @@ columns:
     filter_key: nobaris
     can_sort: true
   kodeitem:
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: items
     sort_key: kodeitem
-    attribute_key: item.namaitem
+    input_options:
+      path: items
+      attribute_key: code
     can_filter: true
     filter_key: kodeitem
     can_sort: true
@@ -46,7 +47,7 @@ columns:
     filter_key: jmlterima
     can_sort: true
   harga:
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: harga
@@ -154,32 +155,38 @@ columns:
     filter_key: kodeprod
     can_sort: true
   supplier_code:
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: suppliers
     sort_key: item.supplier1
-    attribute_key: supplier.nama
+    input_options:
+      path: suppliers
+      model_name: supplier
+      attribute_key: name
     can_filter: true
     filter_key: item.supplier1
     can_sort: true
   brand_name:
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: brands
     sort_key: item.merek
-    attribute_key: brand.ketmerek
+    input_options:
+      path: brands
+      model_name: brand
+      attribute_key: name
     can_filter: true
-    filter_key: item.merek
+    filter_key: items.merek
     can_sort: true
   item_type_name:
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: item_types
     sort_key: item.jenis
-    attribute_key: item_type.ketjenis
+    input_options:
+      path: item_types
+      model_name: item_type
+      attribute_key: name
     can_filter: true
     filter_key: item.jenis
     can_sort: true
@@ -202,7 +209,7 @@ columns:
     filter_key: hppdasar
     can_sort: true
   notransaksi:
-    type: string
+    type: model
     excel_width: 25
     client_width: 200
     sort_key: notransaksi
@@ -210,3 +217,7 @@ columns:
     can_filter: true
     filter_key: notransaksi
     can_sort: true
+    input_options:
+      path: purchase_orders
+      model_name: purchase_order
+      attribute_key: code

@@ -13,7 +13,7 @@ columns:
     can_sort: true
   kodesupel:
     name: kodesupel
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
     path: suppliers
@@ -22,6 +22,10 @@ columns:
     can_filter: true
     filter_key: kodesupel
     can_sort: true
+    input_options:
+      path: suppliers
+      model_name: supplier
+      attribute_key: name
   tanggal:
     name: tanggal
     type: datetime

@@ -1,7 +1,7 @@
 ---
 table_name: tbl_itemmerek
 columns:
-  merek:
+  name:
     name: merek
     type: string
     excel_width: 25
@@ -11,7 +11,7 @@ columns:
     can_filter: true
     filter_key: merek
     can_sort: true
-  ketmerek:
+  description:
     name: ketmerek
     type: string
     excel_width: 25

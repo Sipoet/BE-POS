@@ -1,17 +1,19 @@
 ---
 table_name: cash_in_session_details
 columns:
-  user_id:
+  user:
     name: user_id
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: users
     sort_key: user_id
-    attribute_key: users.code
     can_filter: true
     filter_key: user_id
     can_sort: true
+    input_options:
+      path: users
+      model_name: 'user'
+      attribute_key: username
   start_time:
     name: start_time
     type: datetime

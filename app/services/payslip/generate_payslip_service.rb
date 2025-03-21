@@ -68,12 +68,30 @@ class Payslip::GeneratePayslipService < ApplicationService
         amount: amount)
       recent_sum += amount *(payroll_line.earning? ? 1 : -1)
     end
+
+    add_booked_payslip_line(payslip)
+
     payslip.work_days = attendance_summary.total_full_work_days > 0 ? attendance_summary.total_full_work_days : attendance_summary.work_days
     payslip.notes="HK#{payslip.work_days},TK#{attendance_summary.total_day},OT#{overtime_hour},TK#{attendance_summary.unknown_absence},IZ#{attendance_summary.known_absence},SKS#{attendance_summary.sick_leave}"
     calculate_payslip(payslip)
     payslip.save!
     payslip.reload
     payslip
+  end
+
+  def add_booked_payslip_line(payslip)
+    BookPayslipLine.where(employee_id: payslip.employee_id,
+                          transaction_date: @start_date..@end_date)
+                   .each do |book_payslip_line|
+      payslip.payslip_lines.build(
+        description: book_payslip_line.description,
+        group: book_payslip_line.group,
+        payroll_type: book_payslip_line.payroll_type,
+        formula: :basic,
+        variable1: book_payslip_line.amount,
+        amount: book_payslip_line.amount
+      )
+    end
   end
 
   def commission_summary

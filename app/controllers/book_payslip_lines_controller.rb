@@ -1,6 +1,4 @@
-class SalesController < ApplicationController
-  before_action :authorize_user!
-
+class BookPayslipLinesController < ApplicationController
   def index
     run_service_default
   end
@@ -9,15 +7,15 @@ class SalesController < ApplicationController
     run_service_default
   end
 
-  def report
+  def create
     run_service_default
   end
 
-  def transaction_report
+  def update
     run_service_default
   end
 
-  def daily_transaction_report
+  def destroy
     run_service_default
   end
 end

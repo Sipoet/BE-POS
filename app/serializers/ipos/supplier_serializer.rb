@@ -1,7 +1,7 @@
 class Ipos::SupplierSerializer
   include JSONAPI::Serializer
-  attributes :kode, :nama,:alamat,:kontak,:email,:bank,:norek,:atasnama,
-            :keterangan
+  attributes :code, :name,:address,:contact,:email,:bank,:account,:account_register_name,
+            :description,:city
 
   cache_options store: Rails.cache, namespace: 'supplier-serializer', expires_in: 1.hour
 end

@@ -4,55 +4,63 @@ columns:
     type: string
     client_width: 180
   supplier_code:
-    type: link
+    type: model
     client_width: 180
-    path: 'suppliers'
-    attribute_key: 'supplier.nama'
-    client_width: 180
+    input_options:
+      model_name: supplier
+      path: 'suppliers'
+      attribute_key: 'name'
   item_type_name:
-    type: link
+    type: model
     client_width: 180
-    path: 'item_types'
-    attribute_key: 'item_type.ketjenis'
-    client_width: 180
+    input_options:
+      path: 'item_types'
+      model_name: item_type
+      attribute_key: 'description'
   brand_name:
-    type: link
+    type: model
     client_width: 180
-    path: 'brands'
-    attribute_key: 'brand.merek'
-    client_width: 180
+    input_options:
+      path: 'brands'
+      model_name: brand
+      attribute_key: description
   item_code:
-    type: link
+    type: model
     client_width: 180
-    path: 'items'
-    attribute_key: 'item.namaitem'
-    client_width: 180
+    input_options:
+      path: 'items'
+      model_name: 'item'
+      attribute_key: 'code'
   blacklist_supplier_code:
-    type: link
+    type: model
     client_width: 180
-    path: 'suppliers'
-    attribute_key: 'blacklist_supplier.nama'
-    client_width: 180
+    input_options:
+      model_name: supplier
+      path: 'suppliers'
+      attribute_key: 'code'
   blacklist_item_type_name:
-    type: link
+    type: model
     client_width: 180
-    path: 'item_types'
-    attribute_key: 'blacklist_item_type.ketjenis'
-    client_width: 180
+    input_options:
+      path: 'item_types'
+      model_name: item_type
+      attribute_key: 'name'
   blacklist_brand_name:
-    type: link
+    type: model
     client_width: 180
-    path: 'brands'
-    attribute_key: 'blacklist_brand.merek'
-    client_width: 180
+    input_options:
+      path: 'brands'
+      model_name: brand
+      attribute_key: name
   customer_group:
-    type: link
+    type: model
     client_width: 180
-    path: 'customer_groups'
-    filter_key: 'customer_group_code'
-    attribute_key: 'customer_group.grup'
+    input_options:
+      model_name: customer_group
+      path: 'customer_groups'
+      attribute_key: 'customer_group.grup'
     sort_key: 'tbl_supelgrup.kgrup'
-    client_width: 180
+    filter_key: 'customer_group_code'
   calculation_type:
     type: enum
     client_width: 180

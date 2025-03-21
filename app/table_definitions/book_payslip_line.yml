@@ -1,0 +1,38 @@
+table_name: 'book_payslip_lines'
+columns:
+  transaction_date:
+    type: date
+  employee:
+    type: model
+    filter_key: 'employee_id'
+    sort_key: 'employees.name'
+    input_options:
+      path: employees
+      model_name: 'employee'
+      attribute_key: name
+  group:
+    type: enum
+    enum_list:
+      - earning
+      - deduction
+  payroll_type:
+    type: model
+    filter_key: 'payroll_type_id'
+    input_options:
+      path: 'payroll_types'
+      model_name: 'payroll_type'
+      attribute_key: name
+    sort_key: 'payroll_types.name'
+  amount:
+    type: money
+  description:
+    type: string
+  status:
+    type: string
+    can_sort: false
+    can_filter: false
+  created_at:
+    type: datetime
+  updated_at:
+    type: datetime
+

@@ -5,7 +5,7 @@ class Ipos::Supplier < Ipos::Supel
   end
 
   after_update do |record|
-    Cache.delete("supplier-serializer:ipos/suppliers/#{record.kode}")
+    Cache.delete("supplier-serializer:ipos/suppliers/#{record.id}")
   end
 
 end

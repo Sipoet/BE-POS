@@ -23,7 +23,7 @@ class Datatable::DefinitionExtractor
   end
 
   def allowed_columns
-    @column_definitions.keys - [:created_at,:updated_at]
+    @column_definitions.values.select(&:can_filter).map(&:filter_key) - [:created_at,:updated_at]
   end
 
   private

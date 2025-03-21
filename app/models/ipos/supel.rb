@@ -4,6 +4,14 @@ class Ipos::Supel < ApplicationRecord
   self.primary_key = ['kode','tipe']
 
   alias_attribute :id, :kode
+  alias_attribute :code, :kode
+  alias_attribute :name, :nama
+  alias_attribute :address, :alamat
+  alias_attribute :contact, :kontak
+  alias_attribute :description, :keterangan
+  alias_attribute :account, :norek
+  alias_attribute :account_register_name, :atasnama
+  alias_attribute :city, :kota
 
   @@list={
     'SU'=> 'Ipos::Supplier',

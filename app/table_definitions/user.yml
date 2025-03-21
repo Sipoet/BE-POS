@@ -21,17 +21,19 @@ columns:
     can_filter: true
     filter_key: email
     can_sort: true
-  role_id:
-    name: role_id
-    type: link
+  role:
+    name: role
+    type: model
     excel_width: 25
     client_width: 200
-    path: roles
     sort_key: roles.name
-    attribute_key: role.name
     can_filter: true
     filter_key: role_id
     can_sort: true
+    input_options:
+      model_name: role
+      path: roles
+      attribute_key: name
   created_at:
     name: created_at
     type: datetime

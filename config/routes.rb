@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     get :grouped_report, on: :collection
   end
 
-  resources :items, param: :code, only: [:index, :show]
+  resources :items, param: :code, only: [:index, :update]
 
   resources :suppliers,param: :code, only: [:index, :show]
 
@@ -60,6 +60,7 @@ Rails.application.routes.draw do
 
   resources :sales, only:[:index, :show] do
     get :transaction_report, on: :collection
+    get :daily_transaction_report, on: :collection
     get :report, on: :collection
   end
 
@@ -132,4 +133,5 @@ Rails.application.routes.draw do
   end
   resources :payroll_types, only:[:index,:create,:update,:destroy]
   resources :holidays, only:[:index,:create,:update,:destroy]
+  resources :book_payslip_lines, only:[:index,:create,:update,:destroy]
 end

@@ -1,22 +1,27 @@
----
 table_name: purchase_reports
 columns:
   code:
-    type: string
+    type: model
     excel_width: 25
     client_width: 200
     can_filter: true
     can_sort: true
+    input_options:
+      model_name: purchase
+      path: purchases
+      attribute_key: code
   supplier:
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: suppliers
-    attribute_key: supplier.nama
     can_filter: true
     filter_key: supplier_code
     can_sort: true
     sort_key: supplier_code
+    input_options:
+      model_name: supplier
+      path: suppliers
+      attribute_key: name
   purchase_date:
     type: datetime
     excel_width: 25

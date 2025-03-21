@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_20_134742) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_15_121927) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_20_134742) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["role_id"], name: "index_access_authorizes_on_role_id"
+  end
+
+  create_table "book_payslip_lines", force: :cascade do |t|
+    t.date "transaction_date", null: false
+    t.text "description"
+    t.integer "payroll_type_id", null: false
+    t.integer "group", default: 1, null: false
+    t.decimal "amount", null: false
+    t.integer "employee_id", null: false
+    t.integer "payslip_line_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "cash_in_session_details", force: :cascade do |t|
@@ -2502,6 +2514,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_20_134742) do
   end
 
   add_foreign_key "access_authorizes", "roles"
+  add_foreign_key "book_payslip_lines", "employees"
+  add_foreign_key "book_payslip_lines", "payroll_types"
+  add_foreign_key "book_payslip_lines", "payslip_lines"
   add_foreign_key "cash_in_session_details", "cashier_sessions"
   add_foreign_key "cash_in_session_details", "users"
   add_foreign_key "column_authorizes", "roles"

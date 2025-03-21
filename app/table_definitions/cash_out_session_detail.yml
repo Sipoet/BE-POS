@@ -11,17 +11,19 @@ columns:
     can_filter: true
     filter_key: date
     can_sort: true
-  user_id:
+  user:
     name: user_id
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: users
     sort_key: user_id
-    attribute_key: users.code
     can_filter: true
     filter_key: user_id
     can_sort: true
+    input_options:
+      path: users
+      model_name: 'user'
+      attribute_key: username
   name:
     name: name
     type: string

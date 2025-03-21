@@ -31,28 +31,32 @@ columns:
     can_filter: true
     filter_key: status
     can_sort: true
-  role_id:
-    name: role_id
-    type: link
+  role:
+    name: role
+    type: model
     excel_width: 25
     client_width: 200
-    path: roles
     sort_key: roles.name
-    attribute_key: role.name
     can_filter: true
     filter_key: role_id
     can_sort: true
+    input_options:
+      path: roles
+      model_name: role
+      attribute_key: name
   payroll_id:
     name: payroll_id
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: payrolls
     sort_key: payrolls.name
-    attribute_key: payroll.name
     can_filter: true
     filter_key: payroll_id
     can_sort: true
+    input_options:
+      path: payrolls
+      model_name: payroll
+      attribute_key: name
   shift:
     name: shift
     type: string

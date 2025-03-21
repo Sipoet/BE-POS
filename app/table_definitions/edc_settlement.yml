@@ -13,26 +13,30 @@ columns:
     can_sort: true
   payment_provider_id:
     name: payment_provider_id
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: payment_providers
     sort_key: payment_provider_id
-    attribute_key: payment_provider.code
     can_filter: true
     filter_key: payment_provider_id
     can_sort: true
+    input_options:
+      path: payment_providers
+      model_name: payment_provider
+      attribute_key: name
   payment_type_id:
     name: payment_type_id
-    type: link
+    type: model
     excel_width: 25
     client_width: 200
-    path: payment_types
     sort_key: payment_type_id
-    attribute_key: payment_type.name
     can_filter: true
     filter_key: payment_type_id
     can_sort: true
+    input_options:
+      path: payment_types
+      model_name: payment_type
+      attribute_key: name
   status:
     name: status
     type: enum

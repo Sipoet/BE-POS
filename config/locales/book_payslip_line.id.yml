@@ -1,0 +1,13 @@
+id:
+  activerecord:
+    models:
+      book_payslip_line: "Book Payslip Line"
+    attributes:
+      book_payslip_line:
+        employee_name: "Nama Karyawan"
+        transaction_date: "Tanggal"
+        payroll_type: "Tipe Payroll"
+        employee: "Karyawan"
+        amount: "Jumlah"
+        description: "Deskripsi"
+        status: "Status"

@@ -1,0 +1,17 @@
+id:
+  activemodel:
+    models:
+      sales_transaction_report: 'Laporan Penjualan Harian'
+    attributes:
+      sales_transaction_report:
+        start_time: 'Tanggal Mulai'
+        end_time: 'Tanggal Selesai'
+        sales_total: "Total Penjualan"
+        num_of_transaction: 'Jumlah Transaksi'
+        discount_total: 'Total Diskon'
+        cash_total: 'Total Tunai'
+        debit_total: 'Total Kartu Debit'
+        credit_total: 'Total Kartu Kredit'
+        qris_total: 'Total QRIS'
+        online_total: 'Total Online Transfer'
+        gross_profit: 'Omzet Kotor'
