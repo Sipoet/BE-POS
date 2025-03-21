@@ -22,7 +22,7 @@ class Item::UpdateService < ApplicationService
   end
 
   def update_attribute!(item)
-    @table_definitions = Datatable::DefinitionExtractor.new(Item)
+    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Item)
     @fields = {item: @table_definitions.allowed_columns}
     permitted_params = params.required(:data)
                               .required(:attributes)
