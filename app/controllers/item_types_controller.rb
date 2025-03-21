@@ -7,4 +7,8 @@ class ItemTypesController < ApplicationController
       run_service_default
     end
   end
+
+  def show
+    run_service_default
+  end
 end

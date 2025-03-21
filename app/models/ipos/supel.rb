@@ -1,7 +1,7 @@
 class Ipos::Supel < ApplicationRecord
   self.table_name = "tbl_supel"
   self.inheritance_column = :tipe
-  self.primary_key = ['kode','tipe']
+  self.primary_key = 'kode'
 
   alias_attribute :id, :kode
   alias_attribute :code, :kode

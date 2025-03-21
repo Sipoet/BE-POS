@@ -9,6 +9,10 @@ class ItemsController < ApplicationController
     end
   end
 
+  def show
+    run_service_default
+  end
+
   def update
     run_service_default
   end
