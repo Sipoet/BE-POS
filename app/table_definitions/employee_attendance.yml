@@ -1,8 +1,7 @@
 ---
 table_name: employee_attendances
 columns:
-  employee_id:
-    name: employee_id
+  employee:
     type: model
     excel_width: 25
     client_width: 200
