@@ -31,6 +31,7 @@ class Discount::CreateService < ApplicationService
     return if (permitted_params.blank? || permitted_params[:data].blank?)
     permitted_params[:data].each do |line_params|
       discount.discount_items.build(line_params[:attributes])
+      Rails.logger.debug "#{discount.discount_items.last.item_code} ga valid" unless discount.discount_items.last.valid?
     end
   end
 

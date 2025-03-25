@@ -4,7 +4,7 @@ class CashierSession::ShowService < ApplicationService
   def execute_service
     extract_params
     cashier_session = if params[:id] == 'today'
-      CashierSession.today.first
+      CashierSession.today_session
     else
       CashierSession.find(params[:id])
     end

@@ -71,4 +71,5 @@ group :test do
   gem 'factory_bot_rails','~>6.4.2'
   gem 'ffaker', '~>2.23.0'
   gem 'rspec-sidekiq', '~>4.1.0'
+  gem 'timecop', '~> 0.9.10'
 end
