@@ -1,24 +1,36 @@
 class Role::ActionNameService < ApplicationService
 
   def execute_service
+    extract_params
     actions = find_controller_actions
-    render_json({
-      data: actions.map{|action|{id: action, name: action}}
-    })
+    if @page == 1
+      render_json({
+        data: actions.map{|action|{id: action, name: action}}
+      })
+    else
+      render_json({
+        data: []
+      })
+    end
   end
 
   private
 
+  def extract_params
+    permitted_params = params.permit(:controller_name, :search_text,page:[:page,:limit])
+    @controller_name = permitted_params[:controller_name]
+    @search_text = permitted_params[:search_text]
+    @page = permitted_params[:page].fetch(:page,1).to_i rescue 1
+
+  end
+
   def find_controller_actions
-    permitted_params = params.permit(:controller_name, :search_text)
-    controller_name = permitted_params[:controller_name]
-    search_text = permitted_params[:search_text]
-    return [] if controller_name.blank?
+    return [] if @controller_name.blank?
     actions = []
     Rails.application.routes.routes.each do |route|
-      actions << route.defaults[:action] if route.defaults[:controller] == controller_name
+      actions << route.defaults[:action] if route.defaults[:controller] == @controller_name
     end
-    return actions if search_text.blank?
-    actions.select{|action| action.include?(search_text)}
+    return actions if @search_text.blank?
+    actions.select{|action| action.include?(@search_text)}
   end
 end

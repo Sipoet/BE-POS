@@ -21,7 +21,7 @@ class Role::ColumnNameService < ApplicationService
     permitted_params = params.permit(:search_text,:table_name,page:[:page,:limit])
     @search_text = permitted_params[:search_text]
     @table_name = permitted_params[:table_name]
-    @page = (permitted_params[:page][:page] || 1).to_i
+    @page = permitted_params[:page].fetch(:page,1).to_i rescue 1
   end
 
   def find_table_columns
