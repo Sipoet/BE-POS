@@ -2,6 +2,8 @@ table_name: 'holidays'
 columns:
   date:
     type: date
+  religion:
+    type: enum
   description:
     type: string
     can_sort: false

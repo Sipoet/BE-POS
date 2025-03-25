@@ -6,7 +6,7 @@ class Employee::UpdateService < ApplicationService
       permitted_column = [:code,:name,:role_id,:start_working_date,
       :end_working_date, :description,:payroll_id,
       :id_number,:contact_number, :address, :bank_register_name,
-      :marital_status, :tax_number,
+      :marital_status, :tax_number, :religion, :email,
       :bank, :bank_account, :status, :image_code]
     end
     permitted_params = @params.required(:data)

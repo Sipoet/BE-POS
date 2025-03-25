@@ -14,6 +14,16 @@ class Employee < ApplicationRecord
     married_3_or_more_child: 4
   }
 
+  enum :religion, {
+    other: 0,
+    catholic: 6,
+    christian: 1,
+    buddhism: 2,
+    hindu: 3,
+    islam: 4,
+    khonghucu: 5,
+  }
+
   belongs_to :role
   belongs_to :payroll, optional: true
 
