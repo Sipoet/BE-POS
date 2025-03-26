@@ -78,9 +78,15 @@ class CashierSession::UpdateService < ApplicationService
     table_definitions = Datatable::DefinitionExtractor.new(EdcSettlement)
     allowed_columns = table_definitions.column_names
     permitted_params = permitted_params.required(:edc_settlements)
-                              .permit(data:[:type,:id, attributes: allowed_columns])
+                              .permit(data:[:type,:id, attributes: allowed_columns+[:_destroy]-[:cashier_session_id]])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
+    cashier_session.edc_settlements.each do |edc_settlement|
+      Rails.logger.debug "===before #{edc_settlement.id} #{edc_settlement.marked_for_destruction?}"
+    end
     edit_attributes(permitted_params[:data], cashier_session.edc_settlements)
+    cashier_session.edc_settlements.each do |edc_settlement|
+      Rails.logger.debug "===after #{edc_settlement.id} #{edc_settlement.marked_for_destruction?}"
+    end
     cashier_session.edc_settlements.each{|edc_settlement|edc_settlement.diff_amount =0}
   end
 
