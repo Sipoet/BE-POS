@@ -53,7 +53,7 @@ class CashierSession::UpdateService < ApplicationService
 
     return if permitted_params[:cash_in_session_details].blank?
     table_definitions = Datatable::DefinitionExtractor.new(CashInSessionDetail)
-    allowed_columns = table_definitions.column_names
+    allowed_columns = table_definitions.allowed_columns
     permitted_params = permitted_params.required(:cash_in_session_details)
                               .permit(data:[:type,:id, attributes:allowed_columns])
     edit_attributes(permitted_params[:data], cashier_session.cash_in_session_details)
@@ -64,7 +64,7 @@ class CashierSession::UpdateService < ApplicationService
                               .required(:relationships)
     return if permitted_params[:cash_out_session_details].blank?
     table_definitions = Datatable::DefinitionExtractor.new(CashOutSessionDetail)
-    allowed_columns = table_definitions.column_names
+    allowed_columns = table_definitions.allowed_columns
     permitted_params = permitted_params.required(:cash_out_session_details)
                               .permit(data:[:type,:id, attributes: allowed_columns])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
@@ -76,17 +76,11 @@ class CashierSession::UpdateService < ApplicationService
                               .required(:relationships)
     return if permitted_params[:edc_settlements].blank?
     table_definitions = Datatable::DefinitionExtractor.new(EdcSettlement)
-    allowed_columns = table_definitions.column_names
+    allowed_columns = table_definitions.allowed_columns
     permitted_params = permitted_params.required(:edc_settlements)
                               .permit(data:[:type,:id, attributes: allowed_columns+[:_destroy]-[:cashier_session_id]])
     return if (permitted_params.blank? || permitted_params[:data].blank?)
-    cashier_session.edc_settlements.each do |edc_settlement|
-      Rails.logger.debug "===before #{edc_settlement.id} #{edc_settlement.marked_for_destruction?}"
-    end
     edit_attributes(permitted_params[:data], cashier_session.edc_settlements)
-    cashier_session.edc_settlements.each do |edc_settlement|
-      Rails.logger.debug "===after #{edc_settlement.id} #{edc_settlement.marked_for_destruction?}"
-    end
     cashier_session.edc_settlements.each{|edc_settlement|edc_settlement.diff_amount =0}
   end
 

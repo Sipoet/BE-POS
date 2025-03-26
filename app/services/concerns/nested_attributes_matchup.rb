@@ -21,7 +21,6 @@ module NestedAttributesMatchup
           record.attributes = attributes
           records.delete(line_params[:id].to_i)
         else
-          Rails.logger.debug"==atr #{attributes}"
           record = attributes_records.build(attributes)
         end
       end

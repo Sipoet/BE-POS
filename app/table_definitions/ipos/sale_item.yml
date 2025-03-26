@@ -58,6 +58,7 @@ columns:
       attribute_key: name
   updated_at:
     type: datetime
+    can_edit: false
   sistemhargajual:
     type: string
   tipepromo:

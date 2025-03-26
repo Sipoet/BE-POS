@@ -44,5 +44,7 @@ columns:
     type: decimal
   created_at:
     type: datetime
+    can_edit: false
   updated_at:
     type: datetime
+    can_edit: false

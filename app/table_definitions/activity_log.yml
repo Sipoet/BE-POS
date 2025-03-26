@@ -53,6 +53,7 @@ columns:
   created_at:
     name: created_at
     type: datetime
+    can_edit: false
     excel_width: 25
     client_width: 200
     sort_key: created_at

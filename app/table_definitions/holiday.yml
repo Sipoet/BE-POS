@@ -9,5 +9,7 @@ columns:
     can_sort: false
   created_at:
     type: datetime
+    can_edit: false
   updated_at:
     type: datetime
+    can_edit: false

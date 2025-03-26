@@ -144,6 +144,7 @@ columns:
   updated_at:
     name: updated_at
     type: datetime
+    can_edit: false
     excel_width: 25
     client_width: 200
     sort_key: updated_at
