@@ -22,7 +22,7 @@ module JsonApiDeserializer
     def deserialize
       column_hash = @table_definitions.column_definitions.index_by(&:name)
       result = Result.new
-      result.search_text = @params[:search_text].to_s
+      result.search_text = ApplicationRecord.sanitize_sql_like(@params[:search_text].to_s)
       result.filters = deserialize_filters(column_hash)
       result.sort = deserialize_sort(column_hash)
       result.page, result.limit = deserialize_pagination

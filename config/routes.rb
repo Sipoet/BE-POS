@@ -39,7 +39,9 @@ Rails.application.routes.draw do
     get :grouped_report, on: :collection
   end
 
-  resources :items, param: :code, only: [:index, :show, :update]
+  resources :items, param: :code, only: [:index, :show, :update] do
+    get :with_discount, on: :collection
+  end
 
   resources :suppliers,param: :code, only: [:index, :show]
 
