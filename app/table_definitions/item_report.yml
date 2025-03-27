@@ -2,14 +2,13 @@
 table_name: item_sales_percentage_reports
 columns:
   item:
-    name: item_code
     type: model
     excel_width: 25
     client_width: 200
     input_options:
       path: items
       model_name: item
-      attribute_key: code
+      attribute_key: name
     sort_key: item_code
     can_filter: true
     filter_key: item_code
