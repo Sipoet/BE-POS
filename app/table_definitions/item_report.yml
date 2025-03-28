@@ -48,7 +48,7 @@ columns:
     input_options:
       path: suppliers
       model_name: 'supplier'
-      attribute_key: code
+      attribute_key: name
   supplier_name:
     name: supplier_name
     type: string
