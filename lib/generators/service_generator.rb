@@ -168,7 +168,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         @fields = {#{model_name}: @table_definitions.allowed_columns}
         permitted_params = params.required(:data)
                                   .required(:attributes)
-                                  .permit(@table_definitions.allowed_columns)
+                                  .permit(@table_definitions.allowed_edit_columns)
         #{model_name}.attributes = permitted_params
       end
     end
@@ -208,7 +208,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         @fields = {#{model_name}: @table_definitions.allowed_columns}
         permitted_params = params.required(:data)
                                   .required(:attributes)
-                                  .permit(@table_definitions.allowed_columns)
+                                  .permit(@table_definitions.allowed_edit_columns)
         #{model_name}.attributes = permitted_params
       end
     end

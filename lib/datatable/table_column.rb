@@ -1,6 +1,6 @@
 class Datatable::TableColumn
   attr_reader :name, :type, :humanize_name, :excel_width,
-              :input_options, :can_edit,
+              :input_options, :can_edit, :edit_key,
               :path, :attribute_key, :can_filter,:can_sort,:filter_key,
               :sort_key,:client_width
 
@@ -25,6 +25,9 @@ class Datatable::TableColumn
     end
 
     @can_edit = options[:can_edit].nil? ? @can_filter : options[:can_edit]
+    if @can_edit
+      @edit_key = options[:edit_key] || @filter_key
+    end
   end
 
   def id
