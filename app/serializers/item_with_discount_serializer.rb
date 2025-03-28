@@ -25,9 +25,8 @@ class ItemWithDiscountSerializer
 
   def self.sell_price_after_discount(sell_price,discount)
     if discount.percentage?
-      [discount.discount1,discount.discount2,discount.discount3,discount.discount4]
-          .compact
-          .reduce{|sum, n| sum == 0 ? sell_price * (100 - n) / 100.0 : sum * (100 - n) / 100.0}
+      percents = [discount.discount1,discount.discount2,discount.discount3,discount.discount4].compact
+      calculate_percent(sell_price,percents)
     elsif discount.nominal?
       sell_price - discount.discount1
     elsif discount.special_price?
@@ -35,6 +34,15 @@ class ItemWithDiscountSerializer
     else
       sell_price
     end
+  end
+
+  def self.calculate_percent(sell_price,percents)
+    result = sell_price
+    percents.each do |percent|
+      next if percent <= 0
+      result -= result * percent / 100.0
+    end
+    result
   end
 
   def self.discount_desc(discount)
