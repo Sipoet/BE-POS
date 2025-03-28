@@ -3,7 +3,7 @@ class BookPayslipLine::CreateService < ApplicationService
   def execute_service
     book_payslip_line = BookPayslipLine.new
     if record_save?(book_payslip_line)
-      render_json(BookPayslipLineSerializer.new(book_payslip_line,fields:@fields),{status: :created})
+      render_json(BookPayslipLineSerializer.new(book_payslip_line,fields:@fields,include: [:payroll_type,:employee]),{status: :created})
     else
       render_error_record(book_payslip_line)
     end

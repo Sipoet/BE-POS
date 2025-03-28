@@ -4,7 +4,7 @@ class BookPayslipLine::UpdateService < ApplicationService
     book_payslip_line = BookPayslipLine.find(params[:id])
     raise RecordNotFound.new(params[:id],BookPayslipLine.model_name.human) if book_payslip_line.nil?
     if record_save?(book_payslip_line)
-      render_json(BookPayslipLineSerializer.new(book_payslip_line,{fields: @fields}))
+      render_json(BookPayslipLineSerializer.new(book_payslip_line,{fields: @fields,include: [:payroll_type,:employee]}))
     else
       render_error_record(book_payslip_line)
     end

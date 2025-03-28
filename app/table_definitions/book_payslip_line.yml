@@ -4,7 +4,7 @@ columns:
     type: date
   employee:
     type: model
-    filter_key: 'employee_id'
+    filter_key: 'employee'
     sort_key: 'employees.name'
     input_options:
       path: employees
@@ -17,7 +17,7 @@ columns:
       - deduction
   payroll_type:
     type: model
-    filter_key: 'payroll_type_id'
+    filter_key: 'payroll_type'
     input_options:
       path: 'payroll_types'
       model_name: 'payroll_type'
