@@ -11,7 +11,7 @@ class ItemWithDiscountSerializer
     if discount.present?
       discount_desc(discount)
     else
-      ''
+      nil
     end
   end
 
@@ -47,7 +47,7 @@ class ItemWithDiscountSerializer
 
   def self.discount_desc(discount)
     if discount.percentage?
-      'Diskon ' + [discount.discount1,discount.discount2,discount.discount3,discount.discount4]
+      [discount.discount1,discount.discount2,discount.discount3,discount.discount4]
           .compact
           .select{|disc_percent| disc_percent > 0}
           .map{|disc_percent| "#{disc_percent}%"}
@@ -57,7 +57,7 @@ class ItemWithDiscountSerializer
     elsif discount.special_price?
       "Special Price Rp #{number_format(discount.discount1)}"
     else
-      'Tidak diskon'
+      nil
     end
   end
 end
