@@ -2,7 +2,7 @@ class Item::UpdateService < ApplicationService
 
   def execute_service
     item = Ipos::Item.find(params[:code])
-    raise RecordNotFound.new(params[:code],Item.model_name.human) if item.nil?
+    raise RecordNotFound.new(params[:code],Ipos::Item.model_name.human) if item.nil?
     if record_save?(item)
       render_json(ItemSerializer.new(item,{fields: @fields}))
     else
@@ -22,8 +22,8 @@ class Item::UpdateService < ApplicationService
   end
 
   def update_attribute!(item)
-    @table_definitions = Datatable::DefinitionExtractor.new(Item)
-    @fields = {item: @table_definitions.allowed_columns}
+    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Item)
+    @fields = {item: @table_definitions.column_names}
     permitted_params = params.required(:data)
                               .required(:attributes)
                               .permit(:sell_price,:cogs)

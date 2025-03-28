@@ -6,5 +6,5 @@ class DiscountItem < ApplicationRecord
   scope :included_items, ->{where(is_exclude: false)}
   scope :excluded_items, ->{where(is_exclude: true)}
 
-  validates :item, presence: true
+  validates :item, presence: {message: ->(record,data){ "item kode #{record.item_code} tidak ditemukan"}}
 end

@@ -18,7 +18,17 @@ class CashierSession < ApplicationRecord
   has_many :edc_settlements, inverse_of: :cashier_session, dependent: :destroy
 
   accepts_nested_attributes_for :cash_in_session_details, :cash_out_session_details, :edc_settlements, allow_destroy: true
-  scope :today, -> {where(date: Date.today)}
+
+
+  def self.today_session
+    sep_hour = Setting.get('day_separator_at') || '07:00'
+    sep_time = DateTime.parse("#{Date.today.iso8601} #{sep_hour}")
+    if DateTime.now >= sep_time
+      CashierSession.find_by(date: Date.today)
+    else
+      CashierSession.find_by(date: Date.yesterday)
+    end
+  end
 
   def start_time
     cash_in_session_details.minimum(:start_time)

@@ -2,10 +2,14 @@ table_name: 'holidays'
 columns:
   date:
     type: date
+  religion:
+    type: enum
   description:
     type: string
     can_sort: false
   created_at:
     type: datetime
+    can_edit: false
   updated_at:
     type: datetime
+    can_edit: false

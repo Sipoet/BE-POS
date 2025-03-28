@@ -2,91 +2,81 @@
 table_name: tbl_item
 columns:
   code:
-    name: kodeitem
     type: string
     excel_width: 25
     client_width: 200
     sort_key: kodeitem
-    attribute_key: kodeitem
-    can_filter: true
     filter_key: kodeitem
+    can_filter: true
     can_sort: true
   name:
-    name: namaitem
     type: string
     excel_width: 25
     client_width: 200
     sort_key: namaitem
-    attribute_key: namaitem
-    can_filter: true
     filter_key: namaitem
+    can_filter: true
     can_sort: true
   supplier:
-    name: supplier1
     type: model
     excel_width: 25
     client_width: 200
     sort_key: supplier1
-    can_filter: true
     filter_key: supplier1
+    can_filter: true
     can_sort: true
     input_options:
       path: suppliers
       model_name: 'supplier'
       attribute_key: name
   item_type:
-    name: jenis
     type: model
     excel_width: 25
     client_width: 200
     sort_key: jenis
-    can_filter: true
     filter_key: jenis
+    can_filter: true
     can_sort: true
     input_options:
       path: item_types
       model_name: 'item_type'
       attribute_key: name
   brand:
-    name: merek
     type: model
     excel_width: 25
     client_width: 200
     sort_key: merek
-    can_filter: true
     filter_key: merek
+    can_filter: true
     can_sort: true
     input_options:
       path: brands
       model_name: 'brand'
       attribute_key: name
   uom:
-    name: satuan
     type: string
     excel_width: 25
     client_width: 200
     sort_key: satuan
+    filter_key: satuan
     attribute_key: satuan
     can_filter: true
-    filter_key: satuan
     can_sort: true
   cogs:
-    name: hargapokok
     type: money
     excel_width: 25
     client_width: 200
     sort_key: hargapokok
+    filter_key: hargapokok
     attribute_key: hargapokok
     can_filter: true
-    filter_key: hargapokok
     can_sort: true
   sell_price:
-    name: hargajual1
     type: money
     excel_width: 25
     client_width: 200
     sort_key: hargajual1
+    filter_key: hargajual1
     attribute_key: hargajual1
     can_filter: true
-    filter_key: hargajual1
     can_sort: true

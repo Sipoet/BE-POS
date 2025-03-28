@@ -367,6 +367,7 @@ GEM
     stringio (3.1.0)
     thor (1.3.1)
     tilt (2.3.0)
+    timecop (0.9.10)
     timeout (0.4.1)
     ttfunk (1.8.0)
       bigdecimal (~> 3.1)
@@ -426,6 +427,7 @@ DEPENDENCIES
   sidekiq-cron (~> 1.12.0)
   solargraph
   spring
+  timecop (~> 0.9.10)
   tzinfo-data
   write_xlsx (~> 1.11.1)
   xsv (~> 1.3.0)

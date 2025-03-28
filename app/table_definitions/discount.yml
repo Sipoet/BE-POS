@@ -111,7 +111,9 @@ columns:
     client_width: 180
   created_at:
     type: datetime
+    can_edit: false
     client_width: 180
   updated_at:
     type: datetime
+    can_edit: false
     client_width: 180

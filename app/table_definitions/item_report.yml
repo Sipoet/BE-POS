@@ -1,15 +1,14 @@
 ---
 table_name: item_sales_percentage_reports
 columns:
-  item_code:
-    name: item_code
+  item:
     type: model
     excel_width: 25
     client_width: 200
     input_options:
       path: items
       model_name: item
-      attribute_key: code
+      attribute_key: name
     sort_key: item_code
     can_filter: true
     filter_key: item_code
@@ -24,7 +23,7 @@ columns:
     can_filter: true
     filter_key: item_name
     can_sort: true
-  item_type_name:
+  item_type:
     name: item_type_name
     type: model
     excel_width: 25
@@ -37,7 +36,7 @@ columns:
       path: item_types
       model_name: 'item_type'
       attribute_key: name
-  supplier_code:
+  supplier:
     name: supplier_code
     type: model
     excel_width: 25
@@ -49,7 +48,7 @@ columns:
     input_options:
       path: suppliers
       model_name: 'supplier'
-      attribute_key: code
+      attribute_key: name
   supplier_name:
     name: supplier_name
     type: string
@@ -60,7 +59,7 @@ columns:
     can_filter: true
     filter_key: supplier_name
     can_sort: true
-  brand_name:
+  brand:
     name: brand_name
     type: model
     excel_width: 25

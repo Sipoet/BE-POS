@@ -11,6 +11,7 @@ class CreateItemSalesPercentageView < ActiveRecord::Migration[7.1]
         tbl_item.supplier1 AS supplier_code,
         tbl_supel.nama AS supplier_name,
         tbl_item.merek AS brand_name,
+        tbl_item.satuan AS uom,
         tbl_item.konsinyasi = 'Y' AS is_consignment,
         ROUND(tbl_item.hargajual1,0) AS sell_price,
         COALESCE(stok.warehouse_stock,0) AS warehouse_stock,

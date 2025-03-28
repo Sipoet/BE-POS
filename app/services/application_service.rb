@@ -57,8 +57,12 @@ class ApplicationService
   ALL_COLUMN = :all_column
   def permitted_column_names(record_class)
     return ALL_COLUMN if current_user.role.name == Role::SUPERADMIN
+    table_definitions = Datatable::DefinitionExtractor.new(record_class)
     ColumnAuthorize.where(role_id: current_user.role_id, table: record_class.name.underscore)
                    .pluck(:column)
+                   .map{|column_name| table_definitions.column_of(column_name).try(:filter_key)}
+                   .compact
+
   end
 
   class RecordNotFound < StandardError

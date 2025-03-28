@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_15_121927) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_25_083017) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -270,6 +270,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_15_121927) do
     t.string "image_code"
     t.integer "marital_status", default: 0, null: false
     t.string "tax_number"
+    t.string "email"
+    t.integer "religion", default: 0, null: false
     t.index ["code"], name: "index_employees_on_code", unique: true
   end
 
@@ -289,6 +291,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_15_121927) do
     t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "religion"
     t.index ["date"], name: "index_holidays_on_date", unique: true
   end
 

@@ -2,14 +2,18 @@ module JsonApiDeserializer
   extend ActiveSupport::Concern
   class TableIndex
 
+    FILTER_OPERATORS = [:eq,:not,:lt,:lte,:gt,:gte,:btw,:like].freeze
+
     def initialize(params, allowed_fields, table_definitions)
       allowed_columns = table_definitions.column_names
+      filter_keys = allowed_columns.map{|name| {name => FILTER_OPERATORS}}
       @params = params.permit(
         :search_text,:include,:sort,
         fields: allowed_fields,
-        filter: allowed_columns.map{|column| {column => filter_operators}},
+        filter: filter_keys,
         page:[:page,:limit])
       Rails.logger.debug "==allowed columns: #{allowed_columns}"
+      Rails.logger.debug "filter key: #{@params[:filter]}"
       @table_definitions = table_definitions
       @allowed_columns = allowed_columns.index_by(&:to_sym)
       @allowed_fields = allowed_fields.map(&:to_s)
@@ -19,7 +23,7 @@ module JsonApiDeserializer
     def deserialize
       column_hash = @table_definitions.column_definitions.index_by(&:name)
       result = Result.new
-      result.search_text = @params[:search_text].to_s
+      result.search_text = ApplicationRecord.sanitize_sql_like(@params[:search_text].to_s)
       result.filters = deserialize_filters(column_hash)
       result.sort = deserialize_sort(column_hash)
       result.page, result.limit = deserialize_pagination
@@ -27,10 +31,6 @@ module JsonApiDeserializer
       result.included = deserialize_included & @allowed_fields
       result.query_included = deserialize_query_included
       result
-    end
-
-    def filter_operators
-      [:eq,:not,:lt,:lte,:gt,:gte,:btw,:like]
     end
 
     private

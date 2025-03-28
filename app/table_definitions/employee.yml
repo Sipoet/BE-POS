@@ -44,8 +44,8 @@ columns:
       path: roles
       model_name: role
       attribute_key: name
-  payroll_id:
-    name: payroll_id
+  payroll:
+    name: payroll
     type: model
     excel_width: 25
     client_width: 200
@@ -57,6 +57,30 @@ columns:
       path: payrolls
       model_name: payroll
       attribute_key: name
+  religion:
+    type: enum
+    excel_width: 25
+    client_width: 200
+    sort_key: religion
+    can_filter: true
+    filter_key: religion
+    can_sort: true
+    input_options:
+      enums:
+        - buddhism
+        - catholic
+        - christian
+        - hindu
+        - islam
+        - khonghucu
+  email:
+    type: string
+    excel_width: 20
+    client_width: 160
+    sort_key: email
+    can_filter: true
+    filter_key: email
+    can_sort: true
   shift:
     name: shift
     type: string
@@ -200,6 +224,7 @@ columns:
   created_at:
     name: created_at
     type: datetime
+    can_edit: false
     excel_width: 25
     client_width: 200
     sort_key: created_at
@@ -210,6 +235,7 @@ columns:
   updated_at:
     name: updated_at
     type: datetime
+    can_edit: false
     excel_width: 25
     client_width: 200
     sort_key: updated_at
