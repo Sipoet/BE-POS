@@ -8,7 +8,8 @@ columns:
     sort_key: kodeitem
     input_options:
       path: items
-      attribute_key: code
+      attribute_key: name
+      model_name: item
     can_filter: true
     filter_key: kodeitem
     can_sort: true
@@ -125,6 +126,7 @@ columns:
     sort_key: item.supplier1
     input_options:
       path: suppliers
+      model_name: supplier
       attribute_key: name
     can_filter: true
     filter_key: item.supplier1
@@ -136,6 +138,7 @@ columns:
     sort_key: item.merek
     input_options:
       path: brands
+      model_name: brand
       attribute_key: name
     can_filter: true
     filter_key: items.merek
@@ -147,6 +150,7 @@ columns:
     sort_key: item.jenis
     input_options:
       path: item_types
+      model_name: item_type
       attribute_key: name
     can_filter: true
     filter_key: item.jenis

@@ -8,7 +8,8 @@ columns:
     sort_key: kodeitem
     input_options:
       path: items
-      attribute_key: code
+      model_name: item
+      attribute_key: name
     can_filter: true
     filter_key: kodeitem
     can_sort: true
