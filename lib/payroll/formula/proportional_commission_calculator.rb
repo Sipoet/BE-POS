@@ -8,31 +8,43 @@ class Payroll::Formula::ProportionalCommissionCalculator < Payroll::Formula::App
     commission_total_type = payroll_line.variable1.to_i
     percentage = Setting.get("percentage_commission_type#{commission_total_type}") || 0
     logic_shared_type = payroll_line.variable3 || 1
-    return comission_individual(percentage) if logic_shared_type == 3
+    return 0 if attendance_summary.is_last_work
+    if logic_shared_type == 3
+      return comission_individual(percentage)
+    elsif logic_shared_type == 2
+      return comission_shift(percentage)
+    elsif logic_shared_type == 1
+      return comission_per_day(percentage)
+    else
+      return 0
+    end
+  end
+
+  private
+
+  def comission_per_day(percentage)
     multiplier = payroll_line.variable2 || 1
     total_commission = 0
-    calculated_key = total_based_type_key
-    return 0 if attendance_summary.is_last_work
     attendance_summary.details.each do |detail|
       next if detail.work_hours <= 0
       date = detail.date
       result = commission_analyzer.result_of(date)
-      if logic_shared_type ==2
-        shift = detail.shift>2 ? 2 : detail.shift
-        result = result.result_per_shift[shift]
-      end
-      total_people = logic_shared_type ==3 ? 1: result.total_people
+      total_people = result.total_people
       next if total_people == 0
-      total = result.send(calculated_key)
+      total = result.send(total_based_type_key)
       commission_per_day = percentage * total / (100.0 * total_people)
       Rails.logger.debug"====date#{date} total #{total} total_people #{total_people}. commission_per_day #{commission_per_day}"
       total_commission += commission_per_day.round(-2)
     end
-    Rails.logger.debug"====total_commission #{total_commission}"
     total_commission
   end
 
-  private
+  def comission_shift(percentage)
+    result = commission_analyzer.result_of_employee(employee.id)
+    return 0 if result.nil?
+    total_commission = (result.send(total_based_type_key) * percentage / 100).floor(-2)
+    total_commission
+  end
 
   def comission_individual(percentage)
     # not implemented
