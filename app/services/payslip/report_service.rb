@@ -46,7 +46,7 @@ class Payslip::ReportService < ApplicationService
         type: :model,
         input_options:{
           path: 'employees',
-          model_name:'employee'
+          model_name:'employee',
           attribute_key: 'employee_name',
         }
         sort_key: 'employee_name'
