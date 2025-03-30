@@ -45,7 +45,7 @@ class Payroll::ReportService < ApplicationService
             model_name: 'employee',
             attribute_key: 'employees.name',
             path: 'employees'
-          }
+          },
         }
       ),
       Datatable::TableColumn.new(
