@@ -44,10 +44,11 @@ class Payslip::ReportService < ApplicationService
       {
         humanize_name: PayslipReport.human_attribute_name(:employee_name),
         type: :model,
-        input_options:
+        input_options:{
           path: 'employees',
           model_name:'employee'
           attribute_key: 'employee_name',
+        }
         sort_key: 'employee_name'
       }),
       Datatable::TableColumn.new(

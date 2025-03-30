@@ -41,12 +41,13 @@ class Payroll::ReportService < ApplicationService
           name: :employee_name,
           excel_width: 25,
           client_width: 200,
-          input_options:
+          input_options:{
             model_name: 'employee',
             attribute_key: 'employees.name',
             path: 'employees'
+          }
         }
-        ),
+      ),
       Datatable::TableColumn.new(
         :salary_total,
         {
