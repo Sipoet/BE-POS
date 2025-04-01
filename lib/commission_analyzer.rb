@@ -33,7 +33,6 @@ class CommissionAnalyzer
 
     sales = Ipos::Sale.where(tanggal: start_date.beginning_of_day..(@end_date.end_of_day),
                              tipe:['KSR','JL'])
-                      .includes(:sale_items)
     sales.each do |sale|
       sale_calculate_result(sale)
     end
