@@ -34,6 +34,7 @@ class Employee < ApplicationRecord
   validate :end_working_date_should_valid
   validates :payroll, presence: true, if: :active?
   validates :shift, presence: true
+  validates :religion, presence: true
 
   has_many :work_schedules, dependent: :destroy
   has_many :employee_day_offs, dependent: :destroy

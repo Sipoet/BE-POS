@@ -120,7 +120,7 @@ class AttendanceAnalyzer
   def scheduled_work?(date)
     return false unless employee_still_working?(date)
     return true if @changed_employee_leaves[date].present?
-    return false if @holidays[date].present?
+    return logic_holiday(@holidays[date]) if @holidays[date].present?
     day_offs = @employee_day_offs[date.cwday] || []
     day_offs.each do |employee_day_off|
       return false if employee_day_off.all_week?
@@ -140,6 +140,11 @@ class AttendanceAnalyzer
     employee_leave = @employee_leaves[date]
     return false if employee_leave.present? && employee_leave.change_day?
     @work_schedules[date.cwday].present?
+  end
+
+  def logic_holiday(holiday)
+    return true if holiday.religion.nil?
+    return holiday.religion == @employee.religion
   end
 
   def find_attendances
