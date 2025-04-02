@@ -61,11 +61,10 @@ class Home::SettingService < ApplicationService
       end
       columns = allowed_columns[table_name]
       next if columns.blank?
-      table_def = Datatable::DefinitionExtractor.new(klass)
-      obj[table_key] = TableColumnSerializer.new(
-        columns.map {|authorize| table_def.column_of(authorize.column) }
-               .compact
-      ).as_json
+      columns = columns.index_by(&:column)
+      table_def = Datatable::DefinitionExtractor.new(klass).column_definitions
+      selected_columns = table_def.select{|table_column|columns[table_column.name.to_s].present? }
+      obj[table_key] = TableColumnSerializer.new(selected_columns)
     end
   end
 
