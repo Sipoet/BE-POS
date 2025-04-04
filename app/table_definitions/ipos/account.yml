@@ -1,0 +1,53 @@
+---
+table_name: tbl_bank
+columns:
+  code:
+    type: string
+    excel_width: 25
+    client_width: 200
+    sort_key: code
+    attribute_key: code
+    can_filter: true
+    filter_key: code
+    can_sort: true
+  name:
+    type: string
+    excel_width: 25
+    client_width: 200
+    sort_key: name
+    attribute_key: name
+    can_filter: true
+    filter_key: name
+    can_sort: true
+  parentacc:
+    type: string
+    excel_width: 25
+    client_width: 200
+    sort_key: parentacc
+    attribute_key: parentacc
+    can_filter: true
+    filter_key: parentacc
+    can_sort: true
+  matauang:
+    type: string
+    excel_width: 25
+    client_width: 200
+    sort_key: matauang
+    attribute_key: matauang
+    can_filter: true
+    filter_key: matauang
+    can_sort: true
+  kasbank:
+    type: boolean
+    excel_width: 25
+    client_width: 200
+    sort_key: kasbank
+    attribute_key: kasbank
+    can_filter: true
+    filter_key: kasbank
+    can_sort: false
+  updated_at:
+    type: datetime
+    excel_width: 25
+    client_width: 150
+    can_edit: false

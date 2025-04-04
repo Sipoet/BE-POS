@@ -79,6 +79,7 @@ Rails.application.routes.draw do
   resources :purchase_items, only:[:index]
 
   resources :transfers, only:[:index, :show]
+  resources :locations, only:[:index, :show]
   resources :transfer_items, only:[:index]
 
   resources :sale_items, only:[:index] do
@@ -95,7 +96,7 @@ Rails.application.routes.draw do
     post :generate_payslip, on: :collection
     post :confirm, on: :member
     post :cancel, on: :member
-    post :pay, on: :member
+    post :pay, on: :collection
     get :report, on: :collection
     get :download, on: :member
   end
@@ -135,4 +136,5 @@ Rails.application.routes.draw do
   resources :payroll_types, only:[:index,:create,:update,:destroy]
   resources :holidays, only:[:index,:create,:update,:destroy]
   resources :book_payslip_lines, only:[:index,:create,:update,:destroy]
+  resources :accounts, only:[:index, :show]
 end

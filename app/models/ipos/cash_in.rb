@@ -1,7 +1,7 @@
-class Ipos::CashOut < Ipos::AccountCash
+class Ipos::CashIn < Ipos::AccountCash
 
   def self.sti_name
-    'KASO'
+    'KASI'
   end
 
   validates :kodekantor, presence: true
@@ -14,7 +14,7 @@ class Ipos::CashOut < Ipos::AccountCash
   validates :jumlah, presence: true
   validates :subtotal, presence: true
   validates :dateupd, presence: true
-  validates :bc_trf_sts, inclusion: {in: [true, false]}
+  validates :bc_trf_sts, presence: true
 
 
 end
