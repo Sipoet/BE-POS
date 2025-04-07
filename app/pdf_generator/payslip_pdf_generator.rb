@@ -74,19 +74,19 @@ class PayslipPdfGenerator
       move_down 0.5
       text ": #{@payslip.employee.name}"
       move_down 0.5
-      text ": #{@payslip.work_days}"
+      text ": #{@payslip.work_days} Hari"
       move_down 0.5
-      text ": #{@payslip.total_day}"
+      text ": #{@payslip.total_day} Hari"
       move_down 0.5
-      text ": #{@payslip.overtime_hour}"
+      text ": #{@payslip.overtime_hour} Jam"
       move_down 0.5
-      text ": #{@payslip.late}"
+      text ": #{@payslip.late} kali"
       move_down 0.5
-      text ": #{@payslip.sick_leave}"
+      text ": #{@payslip.sick_leave} Hari"
       move_down 0.5
-      text ": #{@payslip.known_absence}"
+      text ": #{@payslip.known_absence} Hari"
       move_down 0.5
-      text ": #{@payslip.unknown_absence}"
+      text ": #{@payslip.unknown_absence} Hari"
       @payslip_lines.each do |payslip_line|
         text ": #{money_format(payslip_line.amount)}",color: payslip_line.earning? ? '000000': 'FF0000'
         move_down 0.5

@@ -31,6 +31,11 @@ class AttendanceAnalyzer
       min_total_day += 1
     end
     result.total_day = min_total_day if result.total_day < min_total_day
+    if result.total_day < 26
+      result.total_day = 26
+    elsif result.total_day > 29
+      result.total_day = 29
+    end
     result
   end
 
@@ -60,7 +65,7 @@ class AttendanceAnalyzer
       grouped_employee_attendances.each.with_index do |employee_attendance,index|
         work_schedule = work_schedules[index]
         allow_overtime ||= employee_attendance.allow_overtime
-        if work_schedule.present? && !work_schedule.is_flexible
+        if work_schedule.present? &&  !flexible?(work_schedule, date)
           work_hours += work_hours_of(employee_attendance, work_schedule)
           scheduled_begin_at = schedule_of(date, work_schedule.begin_work)
           is_late ||= employee_attendance.is_late
@@ -87,6 +92,11 @@ class AttendanceAnalyzer
     end
   end
 
+  def flexible?(work_schedule, date)
+    book_employee_attendance = BookEmployeeAttendance.find_by(start_date: date.., end_date: ..date, employee_id:[nil,@employee.id])
+    return book_employee_attendance.is_flexible if book_employee_attendance.present?
+    work_schedule.is_flexible
+  end
   def schedule_work_hours(work_schedule)
     date1 = Date.today
     date2 = work_schedule.begin_work > work_schedule.end_work ? Date.tomorrow : Date.today

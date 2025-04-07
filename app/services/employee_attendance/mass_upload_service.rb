@@ -8,12 +8,32 @@ class EmployeeAttendance::MassUploadService < ApplicationService
     ApplicationRecord.transaction do
       result = EmployeeAttendance.insert_all!(employee_attendances, returning: [:id])
       ids = result.to_a.map{|row|row['id']}
+      override_overtime_and_late(range, ids)
       employee_attendances = EmployeeAttendance.where(id: ids).includes(:employee)
-      render_json(EmployeeAttendanceSerializer.new(employee_attendances,{include:['employee'],field:{employee: [:id,:name]}}),{status: :created})
     end
+    render_json(EmployeeAttendanceSerializer.new(employee_attendances,{include:['employee'],field:{employee: [:id,:name]}}),{status: :created})
+
   end
 
   private
+
+  def override_overtime_and_late(range, employee_attendance_ids)
+    book_employee_attendances = BookEmployeeAttendance.where(start_date: ..(range.last), end_date: (range.first)..)
+    book_employee_attendances.each do |book|
+      query = EmployeeAttendance.where(id: employee_attendance_ids)
+      attributes = {}
+      if book.employee_id.present?
+        query = query.where(employee_id: book.employee_id)
+      end
+      if !book.allow_overtime.nil?
+        attributes[:allow_overtime] = book.allow_overtime
+      end
+      if !book.is_late.nil?
+        attributes[:is_late] = book.is_late
+      end
+      query.update_all(attributes)
+    end
+  end
 
   def remove_old_attendances(range)
     EmployeeAttendance.where("start_time <= ? AND end_time >= ?", range.last.end_of_day, range.first.beginning_of_day)
