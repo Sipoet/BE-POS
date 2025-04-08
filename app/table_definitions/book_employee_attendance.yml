@@ -1,0 +1,39 @@
+table_name: 'book_employee_attendances'
+columns:
+  start_date:
+    type: date
+    client_width: 180
+  end_date:
+    type: date
+    client_width: 180
+  employee:
+    type: model
+    client_width: 180
+    filter_key: 'employee_id'
+    edit_key: 'employee_id'
+    sort_key: 'employees.name'
+    input_options:
+      path: employees
+      model_name: 'employee'
+      attribute_key: name
+  allow_overtime:
+    type: boolean
+    client_width: 100
+  is_late:
+    type: boolean
+    client_width: 100
+  is_flexible:
+    type: boolean
+    client_width: 100
+  description:
+    client_width: 180
+    type: string
+  created_at:
+    type: datetime
+    client_width: 180
+    can_edit: false
+  updated_at:
+    type: datetime
+    client_width: 180
+    can_edit: false
+

@@ -20,7 +20,7 @@ class EmployeeAttendance::MassUploadService < ApplicationService
   def override_overtime_and_late(range, employee_attendance_ids)
     book_employee_attendances = BookEmployeeAttendance.where(start_date: ..(range.last), end_date: (range.first)..)
     book_employee_attendances.each do |book|
-      query = EmployeeAttendance.where(id: employee_attendance_ids)
+      query = EmployeeAttendance.where(id: employee_attendance_ids, date: (book.start_date)..(book.end_date))
       attributes = {}
       if book.employee_id.present?
         query = query.where(employee_id: book.employee_id)

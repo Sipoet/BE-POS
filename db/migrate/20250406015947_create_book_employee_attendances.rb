@@ -11,5 +11,6 @@ class CreateBookEmployeeAttendances < ActiveRecord::Migration[7.1]
       t.timestamps
     end
     add_foreign_key :book_employee_attendances, :employees, column: :employee_id
+    add_index :book_employee_attendances, [:start_date, :end_date, :employee_id], name: 'b_e_a_uniq_idx', unique: true
   end
 end

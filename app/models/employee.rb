@@ -46,7 +46,8 @@ class Employee < ApplicationRecord
 
   private
   def end_working_date_should_valid
-    if end_working_date.present? && end_working_date < start_working_date
+    return if start_working_date.nil? || end_working_date.nil?
+    if end_working_date < start_working_date
       errors.add(:end_working_date,:greater_than, count: start_working_date.strftime('%d/%m/%y'))
     end
   end

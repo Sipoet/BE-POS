@@ -93,7 +93,11 @@ class AttendanceAnalyzer
   end
 
   def flexible?(work_schedule, date)
-    book_employee_attendance = BookEmployeeAttendance.find_by(start_date: date.., end_date: ..date, employee_id:[nil,@employee.id])
+    book_employee_attendance = BookEmployeeAttendance.find_by(
+      start_date: ..date,
+      end_date: date..,
+      employee_id:[nil,@employee.id]
+    )
     return book_employee_attendance.is_flexible if book_employee_attendance.present?
     work_schedule.is_flexible
   end

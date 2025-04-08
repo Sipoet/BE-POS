@@ -33,6 +33,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_06_015947) do
     t.boolean "is_flexible"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["start_date", "end_date", "employee_id"], name: "b_e_a_uniq_idx", unique: true
   end
 
   create_table "book_payslip_lines", force: :cascade do |t|
