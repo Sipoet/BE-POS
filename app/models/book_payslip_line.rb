@@ -3,6 +3,7 @@ class BookPayslipLine < ApplicationRecord
   validates :group, presence: true
   validates :payroll_type, presence: true
   validates :employee, presence: true
+  validates :description, presence: true
   validates :amount, presence: true,numericality: {greater_than: 0}
 
 

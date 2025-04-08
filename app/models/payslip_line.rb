@@ -22,4 +22,5 @@ class PayslipLine < ApplicationRecord
 
   belongs_to :payslip, inverse_of: :payslip_lines
   belongs_to :payroll_type, optional: true
+  has_one :book_payslip_line, dependent: :nullify
 end
