@@ -44,6 +44,7 @@ class Payslip::ReportService < ApplicationService
       {
         humanize_name: PayslipReport.human_attribute_name(:employee_name),
         type: :model,
+        client_width: 180,
         input_options:{
           path: 'employees',
           model_name:'employee',
@@ -56,21 +57,24 @@ class Payslip::ReportService < ApplicationService
       {
         humanize_name: PayslipReport.human_attribute_name(:employee_start_working_date),
         type: :date,
-        width:14
+        client_width: 180,
+        excel_width:14
       }),
       Datatable::TableColumn.new(
       :start_date,
       {
         humanize_name: PayslipReport.human_attribute_name(:start_date),
         type: :date,
-        width:14
+        client_width: 180,
+        excel_width:14
       }),
       Datatable::TableColumn.new(
       :end_date,
       {
         humanize_name: PayslipReport.human_attribute_name(:end_date),
         type: :date,
-         width:15
+        client_width: 180,
+        excel_width:15
       }
       ),
       Datatable::TableColumn.new(
@@ -78,50 +82,58 @@ class Payslip::ReportService < ApplicationService
       {
         humanize_name: PayslipReport.human_attribute_name(:work_days),
         type: :decimal,
-         width:10}),
+        client_width: 150,
+        excel_width:10}),
       Datatable::TableColumn.new(
       :total_day,
       {
         humanize_name: PayslipReport.human_attribute_name(:total_day),
         type: :integer,
-        width:10}),
+        client_width: 150,
+        excel_width:10}),
       Datatable::TableColumn.new(
       :overtime_hour,
       {
         humanize_name: PayslipReport.human_attribute_name(:overtime_hour),
         type: :integer,
-         width:10}),
+        client_width: 150,
+        excel_width:10}),
       Datatable::TableColumn.new(
       :late,
       {
         humanize_name: PayslipReport.human_attribute_name(:late),
         type: :integer,
-         width:5}),
+        client_width: 150,
+        excel_width:5}),
       Datatable::TableColumn.new(
       :sick_leave,
       {
         humanize_name: PayslipReport.human_attribute_name(:sick_leave),
         type: :integer,
-        width:5}),
+        client_width: 150,
+        excel_width:5}),
       Datatable::TableColumn.new(
       :known_absence,
       {
         humanize_name: PayslipReport.human_attribute_name(:known_absence),
         type: :integer,
-        width:4}),
+        client_width: 150,
+        excel_width:4}),
       Datatable::TableColumn.new(
       :unknown_absence,
       {
         humanize_name: PayslipReport.human_attribute_name(:unknown_absence),
         type: :integer,
-        width:5}),
+        client_width: 150,
+        excel_width:5}),
   ]
   result += @payroll_types.map do |payroll_type|
     Datatable::TableColumn.new(
       payroll_type.id.to_s,{
       humanize_name: payroll_type.name,
       type: :decimal,
-      width:12})
+      client_width: 160,
+      excel_width:12})
   end
   result += [
       Datatable::TableColumn.new(
@@ -129,31 +141,36 @@ class Payslip::ReportService < ApplicationService
       {
         humanize_name: PayslipReport.human_attribute_name(:nett_salary),
         type: :decimal,
-        width:12}),
+        client_width: 160,
+        excel_width:12}),
       Datatable::TableColumn.new(
       :description,
       {
         humanize_name: PayslipReport.human_attribute_name(:description),
         type: :string,
-        width:17}),
+        client_width: 180,
+        excel_width:17}),
       Datatable::TableColumn.new(
       :bank,
       {
         humanize_name: PayslipReport.human_attribute_name(:bank),
         type: :string,
-        width:6}),
+        client_width: 160,
+        excel_width:6}),
       Datatable::TableColumn.new(
       :bank_account,
       {
         humanize_name: PayslipReport.human_attribute_name(:bank_account),
         type: :string,
-        width:20}),
+        client_width: 180,
+        excel_width:20}),
       Datatable::TableColumn.new(
       :bank_register_name,
       {
         humanize_name: PayslipReport.human_attribute_name(:bank_register_name),
         type: :string,
-        width:35}),
+        client_width: 180,
+        excel_width:35}),
     ]
     result
   end
