@@ -131,7 +131,7 @@ class Payslip::ReportService < ApplicationService
     Datatable::TableColumn.new(
       payroll_type.id.to_s,{
       humanize_name: payroll_type.name,
-      type: :decimal,
+      type: :money,
       client_width: 160,
       excel_width:12})
   end
@@ -140,7 +140,7 @@ class Payslip::ReportService < ApplicationService
       :nett_salary,
       {
         humanize_name: PayslipReport.human_attribute_name(:nett_salary),
-        type: :decimal,
+        type: :money,
         client_width: 160,
         excel_width:12}),
       Datatable::TableColumn.new(

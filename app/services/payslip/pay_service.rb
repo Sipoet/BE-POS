@@ -10,6 +10,7 @@ class Payslip::PayService < ApplicationService
     ApplicationRecord.transaction do
       cash_out = create_cash_out_from_payslips(payslips)
       create_account_journal(cash_out)
+      send_payslip_via_email(payslips)
       payslips.update_all(payment_time: @paid_at, status: :paid)
     end
     render_json({message:'Sukses Simpan Pembayaran'})
@@ -17,12 +18,30 @@ class Payslip::PayService < ApplicationService
 
   private
 
+  def send_payslip_via_email(payslips)
+    payslip_ids = payslips.pluck(:id)
+    payslip_ids.each do |payslip_id|
+      PayslipMailer.with(payslip_id: payslip_id)
+                   .employee_payslip
+                   .deliver_later
+    end
+  end
+
   def find_payslips
-    Payslip.where(id: @payslip_ids).where.not(status: :paid)
+    query = Payslip.where(start_date: @start_date,end_date: @end_date)
+           .where.not(status: :paid)
+    if @employee_ids.present?
+      query = query.where(employee_id: @employee_ids)
+    end
+    query
   end
 
   def extract_params
-    permitted_params = params.permit(:paid_at,:description,:location,:cash_account, payslip_ids: [])
+    permitted_params = params.permit(:paid_at,:description,:location,:cash_account, :start_date, :end_date, employee_ids:[])
+    @employee_ids = permitted_params[:employee_ids] || []
+    @start_date = Date.parse(permitted_params[:start_date]) rescue nil
+    @end_date = Date.parse(permitted_params[:end_date]) rescue nil
+
     @payslip_ids = permitted_params[:payslip_ids]
     @paid_at = DateTime.parse(permitted_params[:paid_at])
     @cash_account = Ipos::Account.find(permitted_params[:cash_account])

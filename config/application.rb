@@ -6,7 +6,8 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 $HOST = ENV['HOST']
-$APP_VERSION = '0.2.0'
+$APP_EMAIL = ENV['APP_EMAIL']
+$APP_EMAIL_PASSWORD = ENV['APP_EMAIL_PASSWORD']
 module Myapp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.

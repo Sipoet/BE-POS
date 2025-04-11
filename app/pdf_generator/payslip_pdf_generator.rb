@@ -15,13 +15,13 @@ class PayslipPdfGenerator
   end
 
   def generate(options = {})
-    file_path = options[:file_path] || TempFile.new(['Slip gaji','.pdf']).path
+    file_path = options[:file_path] || Tempfile.new(['Slip gaji','.pdf']).path
     file_margin = options[:file_margin] || 30
     file_size = options[:file_size] || 'A4'
     @document = Prawn::Document.new(page_size: file_size, margin: file_margin)
     font FONT_FAMILY
     define_grid(rows: 9, columns: 7, gutter: 10)
-    add_permission
+    add_permission(options)
     add_header
     add_body
     save_as(file_path)
@@ -29,9 +29,9 @@ class PayslipPdfGenerator
 
   private
 
-  def add_permission
+  def add_permission(options ={})
     encrypt_document(
-      # user_password: @payslip.employee.,
+      user_password: options[:file_password],
       owner_password: :random,
       permissions: {
         print_document: false,
