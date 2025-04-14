@@ -33,6 +33,6 @@ class SalesGroupBySupplierReport < ApplicationModel
 
   def sales_percentage
     return 0 if number_of_purchase == 0
-    (number_of_sales.to_d/number_of_purchase.to_d * 100).round(2)
+    (number_of_sales.to_d/number_of_purchase.to_d).round(2)
   end
 end
