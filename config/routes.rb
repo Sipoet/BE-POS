@@ -138,4 +138,5 @@ Rails.application.routes.draw do
   resources :book_payslip_lines, only:[:index,:create,:update,:destroy]
   resources :book_employee_attendances, only:[:index,:create,:update,:destroy]
   resources :accounts, only:[:index, :show]
+  resources :system_settings, only:[:index, :show, :update]
 end

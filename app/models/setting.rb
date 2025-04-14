@@ -27,9 +27,12 @@ class Setting < ApplicationRecord
       return JSON.parse(setting.value)['data']
     end
 
-    def set!(key_name, value, user_id: nil)
+    def set!(key_name, value, user_id: nil,value_type:nil)
       setting = self.find_or_initialize_by(key_name:key_name, user_id: user_id)
-      setting.value = {data: value}.to_json
+      setting.value = {
+        data: value,
+        value_type: value_type || value.class.to_s.downcase
+      }.to_json
       setting.save!
       setting
     end

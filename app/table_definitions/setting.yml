@@ -1,0 +1,41 @@
+---
+table_name: 'settings'
+columns:
+  key_name:
+    type: string
+    excel_width: 20
+    client_width: 180
+  value:
+    type: string
+    excel_width: 20
+    client_width: 180
+  user:
+    type: model
+    excel_width: 20
+    client_width: 180
+    input_options:
+      path: 'users'
+      model_name: user
+      attribute_key: 'username'
+  created_at:
+    name: created_at
+    type: datetime
+    can_edit: false
+    excel_width: 25
+    client_width: 200
+    sort_key: created_at
+    attribute_key: created_at
+    can_filter: true
+    filter_key: created_at
+    can_sort: true
+  updated_at:
+    name: updated_at
+    type: datetime
+    can_edit: false
+    excel_width: 25
+    client_width: 200
+    sort_key: updated_at
+    attribute_key: updated_at
+    can_filter: true
+    filter_key: updated_at
+    can_sort: true
