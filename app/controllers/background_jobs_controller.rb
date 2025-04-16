@@ -16,4 +16,8 @@ class BackgroundJobsController < ApplicationController
   def destroy
     run_service_default
   end
+
+  def cancel
+    run_service_default
+  end
 end

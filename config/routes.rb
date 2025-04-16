@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   end
   resources :background_jobs, only:[:index, :show, :destroy] do
     post :retry, on: :member
+    post :cancel, on: :member
   end
 
   resources :item_sales_percentage_reports,controller: :item_reports, only: [:index] do

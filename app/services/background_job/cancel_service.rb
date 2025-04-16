@@ -1,4 +1,4 @@
-class BackgroundJob::RetryService < ApplicationService
+class BackgroundJob::CancelService < ApplicationService
 
   def execute_service
     job = Sidekiq::Queue.new.find_job(params[:id])
@@ -6,9 +6,8 @@ class BackgroundJob::RetryService < ApplicationService
     if job.blank?
       raise ApplicationService::RecordNotFound('BackgroundJob',params[:id])
     end
-    job.retry
+    ApplicationJob.cancel!(params[:id])
     render_json({data: job},{status: :ok})
-
   end
 
 end
