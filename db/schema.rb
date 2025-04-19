@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_06_015947) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_19_064459) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -266,7 +266,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_06_015947) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "religion"
-    t.index ["date"], name: "index_holidays_on_date", unique: true
+    t.index ["date", "religion"], name: "hlday_uniq_idx", unique: true
   end
 
   create_table "payment_methods", force: :cascade do |t|
