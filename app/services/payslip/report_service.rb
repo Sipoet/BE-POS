@@ -53,6 +53,17 @@ class Payslip::ReportService < ApplicationService
         sort_key: 'employee_name'
       }),
       Datatable::TableColumn.new(
+      :employee_status,
+      {
+        humanize_name: PayslipReport.human_attribute_name(:employee_status),
+        type: :enum,
+        client_width: 180,
+        excel_width:14,
+        input_options:{
+          enums: Employee.statuses.keys
+        },
+      }),
+      Datatable::TableColumn.new(
       :employee_start_working_date,
       {
         humanize_name: PayslipReport.human_attribute_name(:employee_start_working_date),
@@ -77,6 +88,17 @@ class Payslip::ReportService < ApplicationService
         excel_width:15
       }
       ),
+      Datatable::TableColumn.new(
+      :payslip_status,
+      {
+        humanize_name: PayslipReport.human_attribute_name(:payslip_status),
+        type: :enum,
+        client_width: 180,
+        excel_width:14,
+        input_options:{
+          enums: Payslip.statuses.keys,
+        },
+      }),
       Datatable::TableColumn.new(
       :work_days,
       {
@@ -181,8 +203,10 @@ class Payslip::ReportService < ApplicationService
     result.end_date = payslip.end_date
     result.employee_id = payslip.employee_id
     result.payslip_id = payslip.id
+    result.payslip_status = payslip.status
     employee = payslip.employee
     if employee.present?
+      result.employee_status = employee.status
       result.employee_name = employee.name
       result.employee_start_working_date = employee.start_working_date
       result.bank = employee.bank
@@ -234,9 +258,11 @@ class Payslip::ReportService < ApplicationService
   def extract_params
     @payroll_types = PayrollType.all.order(order: :asc) || []
     permitted_params = params.required(:filter)
-                             .permit(:start_date,:end_date,:employee_ids)
+                             .permit(:start_date,:end_date,:employee_status,:payslip_status,:employee_ids)
     @start_date = permitted_params[:start_date].try(:to_date)
     @end_date = permitted_params[:end_date].try(:to_date)
+    @payslip_status = permitted_params[:payslip_status]
+    @employee_status = Employee.statuses[permitted_params[:employee_status]]
     if @start_date.blank? || @end_date.blank?
       raise ExpectedError.new('tanggal mulai dan tanggal akhir harus dipilih')
     end
@@ -251,6 +277,12 @@ class Payslip::ReportService < ApplicationService
                   .order('employees.name' => :asc)
     if @employee_ids.present?
       query = query.where(employee_id: @employee_ids)
+    end
+    if @employee_status.present?
+      query = query.where('employees.status = ?',@employee_status)
+    end
+    if @payslip_status.present?
+      query = query.where(status: @payslip_status)
     end
     query
   end
