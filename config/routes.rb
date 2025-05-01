@@ -100,6 +100,7 @@ Rails.application.routes.draw do
     post :pay, on: :collection
     get :report, on: :collection
     get :download, on: :member
+    get :send_email, on: :member
   end
 
   resources :assets, param: :code, only: [:show, :create]

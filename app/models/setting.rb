@@ -31,10 +31,26 @@ class Setting < ApplicationRecord
       setting = self.find_or_initialize_by(key_name:key_name, user_id: user_id)
       setting.value = {
         data: value,
-        value_type: value_type || value.class.to_s.downcase
+        value_type: value_type || get_value_type(value)
       }.to_json
       setting.save!
       setting
+    end
+
+    def get_value_type(value)
+      if value.is_a? Numeric
+        'number'
+      elsif value.is_a?(DateTime) || value.is_a?(Time)
+        'datetime'
+      elsif value.is_a? Date
+        'date'
+      elsif [true,false].include? value
+        'boolean'
+      elsif value.is_a? String
+        'string'
+      else
+        'json'
+      end
     end
   end
 
