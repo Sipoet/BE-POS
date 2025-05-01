@@ -145,7 +145,7 @@ class EmployeeAttendance::MassUploadService < ApplicationService
 
   # minimum minute that will be read as block of attendance in & out, less then setting will assumed is same type write absent before
   def min_read_attendance
-    @min_read_attendance ||= ((Setting.get('attendance_minute_offset') || '60').to_d)
+    @min_read_attendance ||= ((Setting.get('in_out_attendance_minute_offset') || '60').to_d)
   end
 
   def find_employee(rows)
