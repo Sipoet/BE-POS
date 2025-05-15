@@ -35,7 +35,7 @@ columns:
     input_options:
       path: item_types
       model_name: 'item_type'
-      attribute_key: name
+      attribute_key: description
   supplier:
     name: supplier_code
     type: model
