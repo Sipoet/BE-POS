@@ -40,7 +40,7 @@ class Payslip::ReportService < ApplicationService
   def table_columns
     result = [
       Datatable::TableColumn.new(
-      :employee_name,
+      :employee,
       {
         humanize_name: PayslipReport.human_attribute_name(:employee_name),
         type: :model,
