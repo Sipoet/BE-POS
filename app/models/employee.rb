@@ -44,6 +44,10 @@ class Employee < ApplicationRecord
     self.code = SecureRandom.alphanumeric(6).upcase
   end
 
+  def identifier_code
+    name
+  end
+
   private
   def end_working_date_should_valid
     return if start_working_date.nil? || end_working_date.nil?
