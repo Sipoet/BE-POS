@@ -27,5 +27,21 @@ class Ipos::PurchaseItemSerializer
       ipos_fix_date_timezone(object.send(key))
     end
   end
+
+  attribute :stock_left do |object|
+    object.item_report&.stock_left
+  end
+
+  attribute :warehouse_stock do |object|
+    object.item_report&.warehouse_stock
+  end
+  attribute :store_stock do |object|
+    object.item_report&.store_stock
+  end
+
+  attribute :number_of_sales do |object|
+    object.item_report&.number_of_sales
+  end
+
   belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: ItemSerializer
 end

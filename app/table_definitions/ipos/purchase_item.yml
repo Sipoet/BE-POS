@@ -4,7 +4,7 @@ columns:
   kodeitem:
     type: model
     excel_width: 25
-    client_width: 200
+    client_width: 180
     sort_key: kodeitem
     input_options:
       path: items
@@ -23,7 +23,7 @@ columns:
   jmlpesan:
     type: decimal
     excel_width: 25
-    client_width: 200
+    client_width: 130
     sort_key: jmlpesan
     attribute_key: jmlpesan
     can_filter: true
@@ -32,12 +32,40 @@ columns:
   jumlah:
     type: decimal
     excel_width: 25
-    client_width: 200
+    client_width: 130
     sort_key: jumlah
     attribute_key: jumlah
     can_filter: true
     filter_key: jumlah
     can_sort: true
+  stock_left:
+    type: decimal
+    excel_width: 25
+    client_width: 130
+    attribute_key: stock_left
+    can_filter: false
+    can_sort: false
+  number_of_sales:
+    type: decimal
+    excel_width: 25
+    client_width: 130
+    attribute_key: number_of_sales
+    can_filter: false
+    can_sort: false
+  warehouse_stock:
+    type: decimal
+    excel_width: 25
+    client_width: 140
+    attribute_key: warehouse_stock
+    can_filter: false
+    can_sort: false
+  store_stock:
+    type: decimal
+    excel_width: 25
+    client_width: 130
+    attribute_key: store_stock
+    can_filter: false
+    can_sort: false
   harga:
     type: decimal
     excel_width: 25
