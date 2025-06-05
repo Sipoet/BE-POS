@@ -75,6 +75,15 @@ Rails.application.routes.draw do
   resources :purchase_orders, only:[:index,:show] do
     post :update_price, on: :member
   end
+
+  resources :consignment_ins, only:[:index,:show] do
+    post :update_price, on: :member
+  end
+
+  resources :consignment_in_orders, only:[:index,:show] do
+    post :update_price, on: :member
+  end
+
   resources :purchase_returns, only:[:index,:show]
 
   resources :purchase_items, only:[:index]

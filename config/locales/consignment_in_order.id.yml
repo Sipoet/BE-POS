@@ -1,12 +1,11 @@
 id:
   activerecord:
     models:
-      ipos/purchase: "Pembelian"
+      ipos/consignment_in_order: "Pesanan Konsinyasi Masuk"
     attributes:
-      ipos/purchase:
-        notransaksi: "No Transaksi"
-        tanggal: "Tanggal Barang Datang"
-        note_date: "Tanggal Faktur"
+      ipos/consignment_in_order:
+        notransaksi: "No Faktur"
+        tanggal: "Tanggal Faktur"
         kantortujuan: "Lokasi"
         totalitem: "Total Item"
         subtotal: "Subtotal"
@@ -17,8 +16,4 @@ id:
         totalakhir: "Total Akhir"
         keterangan: "Keterangan"
         user1: "User"
-        jmltunai: "Bayar Tunai"
-        jmlkredit: "Bayar Kredit"
-        jmldeposit: "Bayar deposit"
-        notrsorder: "Nota Pesanan"
         kodesupel: 'Supplier'

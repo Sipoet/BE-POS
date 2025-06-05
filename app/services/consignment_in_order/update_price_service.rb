@@ -1,10 +1,10 @@
-class PurchaseOrder::UpdatePriceService < ApplicationService
+class ConsignmentInOrder::UpdatePriceService < ApplicationService
   ROUND_TYPE_LIST = ['normal','ceil','floor','mark']
 
   def execute_service
     extract_params
-    purchase_order = Ipos::PurchaseOrder.find(@code)
-    raise RecordNotFound.new(@code,Ipos::PurchaseOrder.model_name.human) if purchase_order.nil?
+    purchase_order = Ipos::ConsignmentInOrder.find(@code)
+    raise RecordNotFound.new(@code,Ipos::ConsignmentInOrder.model_name.human) if purchase_order.nil?
     ApplicationRecord.transaction do
       update_po_items_price!(purchase_order)
     end

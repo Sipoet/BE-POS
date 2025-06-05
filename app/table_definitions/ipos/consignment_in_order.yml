@@ -1,5 +1,5 @@
 ---
-table_name: tbl_imhd
+table_name: tbl_pesanhd
 columns:
   notransaksi:
     name: notransaksi
@@ -26,30 +26,11 @@ columns:
       path: suppliers
       model_name: supplier
       attribute_key: name
-  notrsorder:
-    name: notrsorder
-    type: string
-    excel_width: 25
-    client_width: 200
-    sort_key: notrsorder
-    attribute_key: notrsorder
-    can_filter: true
-    filter_key: notrsorder
-    can_sort: true
-  note_date:
-    type: datetime
-    excel_width: 25
-    client_width: 180
-    sort_key: 'tbl_pesanhd.tanggal'
-    attribute_key: 'purchase_order.tanggal'
-    can_filter: true
-    filter_key: 'tbl_pesanhd.tanggal'
-    can_sort: true
   tanggal:
     name: tanggal
     type: datetime
     excel_width: 25
-    client_width: 180
+    client_width: 200
     sort_key: tanggal
     attribute_key: tanggal
     can_filter: true

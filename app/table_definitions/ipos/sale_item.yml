@@ -75,3 +75,7 @@ columns:
     type: integer
   transaction_date:
     type: datetime
+    filter_key: 'tbl_ikhd.tanggal'
+    sort_key: 'tbl_ikhd.tanggal'
+    can_filter: true
+    can_sort: true

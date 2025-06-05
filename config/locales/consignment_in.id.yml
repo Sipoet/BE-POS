@@ -1,9 +1,9 @@
 id:
   activerecord:
     models:
-      ipos/purchase: "Pembelian"
+      ipos/consignment_in: "Konsinyasi Masuk"
     attributes:
-      ipos/purchase:
+      ipos/consignment_in:
         notransaksi: "No Transaksi"
         tanggal: "Tanggal Barang Datang"
         note_date: "Tanggal Faktur"

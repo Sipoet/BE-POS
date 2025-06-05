@@ -4,7 +4,7 @@ class PurchaseOrder::ShowService < ApplicationService
   def execute_service
     extract_params
     purchase_order = Ipos::PurchaseOrder.find(@code)
-    raise RecordNotFound.new(@code,PurchaseOrder.model_name.human) if purchase_order.nil?
+    raise RecordNotFound.new(@code,Ipos::PurchaseOrder.model_name.human) if purchase_order.nil?
     options = {
       fields: @fields,
       params:{include: @included},
@@ -14,7 +14,7 @@ class PurchaseOrder::ShowService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(PurchaseOrder)
+    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::PurchaseOrder)
     allowed_fields = [:purchase_order,:purchase_order_items,:supplier,:'purchase_order_items.item']
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,

@@ -7,6 +7,7 @@ id:
         kodeitem: "Kode Item"
         namaitem: "Nama Item"
         jmlpesan: "Pesan"
+        jumlah: "Jumlah Item Datang"
         stock_left: "Jumlah Sekarang"
         number_of_sales: "Jumlah Terjual"
         warehouse_stock: "Jumlah di Gudang"
