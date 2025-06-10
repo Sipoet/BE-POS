@@ -24,6 +24,7 @@ class Ipos::PurchaseSerializer
   end
 
   belongs_to :supplier, set_id: :kodesupel, id_method_name: :kodesupel, serializer: Ipos::SupplierSerializer, if: Proc.new { |record, params| params[:include].include?('supplier') rescue false }
+  belongs_to :purchase_order, set_id: :notrsorder, id_method_name: :notrsorder, serializer: Ipos::PurchaseOrderSerializer, if: Proc.new { |record, params| params[:include].include?('purchase_order') rescue false }
 
   has_many :purchase_items, serializer: Ipos::PurchaseItemSerializer, if: Proc.new { |record, params| params[:include].include?('purchase_items') rescue false } do |purchase|
     purchase.purchase_items.includes(:item).order(nobaris: :asc)
