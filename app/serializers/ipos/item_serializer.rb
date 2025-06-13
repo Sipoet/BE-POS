@@ -1,4 +1,4 @@
-class ItemSerializer
+class Ipos::ItemSerializer
   include JSONAPI::Serializer
   attributes :code, :name, :sell_price, :cogs, :code, :name, :supplier_code, :brand_name,
               :item_type_name, :uom, :description

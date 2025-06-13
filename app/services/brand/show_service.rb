@@ -10,7 +10,7 @@ class Brand::ShowService < ApplicationService
       params:{include: @included},
       include: @included
     }
-    render_json(BrandSerializer.new(brand,options))
+    render_json(Ipos::BrandSerializer.new(brand,options))
   end
 
   def extract_params

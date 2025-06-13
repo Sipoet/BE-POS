@@ -10,7 +10,7 @@ class ItemType::ShowService < ApplicationService
       params:{include: @included},
       include: @included
     }
-    render_json(ItemTypeSerializer.new(item_type,options))
+    render_json(Ipos::ItemTypeSerializer.new(item_type,options))
   end
 
   def extract_params

@@ -36,7 +36,7 @@ class Payroll::ReportService < ApplicationService
       Datatable::TableColumn.new(
         :employee_name,
         {
-          humanize_name: Employee.human_attribute_name(:name),
+          humanize_name: PayslipReport.human_attribute_name(:employee_name),
           type: :model,
           name: :employee_name,
           excel_width: 25,

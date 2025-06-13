@@ -1,4 +1,4 @@
-class ItemTypeSerializer
+class Ipos::ItemTypeSerializer
   include JSONAPI::Serializer
   attributes :name, :description
 

@@ -43,5 +43,5 @@ class Ipos::PurchaseItemSerializer
     object.item_report&.number_of_sales
   end
 
-  belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: ItemSerializer
+  belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: Ipos::ItemSerializer
 end
