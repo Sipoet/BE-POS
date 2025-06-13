@@ -88,7 +88,7 @@ columns:
     client_width: 200
     sort_key: payment_type
     attribute_key: payment_type
-    can_filter: true
+    can_filter: false
     filter_key: payment_type
     can_sort: true
   bank_code:
@@ -96,10 +96,10 @@ columns:
     type: string
     excel_width: 25
     client_width: 200
-    sort_key: bank_code
-    attribute_key: bank_code
-    can_filter: true
-    filter_key: bank_code
+    sort_key: byr_debit_bank
+    attribute_key: byr_debit_bank
+    can_filter: false
+    filter_key: byr_debit_bank
     can_sort: true
   jmltunai:
     name: jmltunai

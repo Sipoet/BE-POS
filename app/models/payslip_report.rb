@@ -4,7 +4,8 @@ class PayslipReport < ApplicationModel
                 :employee_start_working_date, :debt,:late,
                 :total_day, :work_days, :sick_leave, :overtime_hour,
                 :known_absence, :unknown_absence, :nett_salary,
-                :payslip_id, :bank, :bank_account,
+                :payslip_id, :bank, :bank_account, :payslip_status,
+                :employee_status,
                 :bank_register_name, :description, :payroll_type_amounts
 
 

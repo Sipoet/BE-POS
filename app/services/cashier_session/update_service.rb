@@ -44,7 +44,7 @@ class CashierSession::UpdateService < ApplicationService
     #                                       .sum(:totalakhir)
     # codes = Ipos::CashDrawer.where(wkt_mulai: ..(cashier_session.end_time),wkt_akhir: cashier_session.start_time..)
     #                         .pluck(:notransaksi)
-    # cashier_session.total_out = Ipos::CashOut.where(notransaksi: codes).sum(:kas_keluar)
+    # cashier_session.total_out = Ipos::CashDrawerDetail.where(notransaksi: codes).sum(:kas_keluar)
   end
 
   def update_cash_in_session_details(cashier_session)

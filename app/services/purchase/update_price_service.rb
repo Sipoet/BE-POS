@@ -4,7 +4,7 @@ class Purchase::UpdatePriceService < ApplicationService
   def execute_service
     extract_params
     purchase = Ipos::Purchase.find(@code)
-    raise RecordNotFound.new(@code,Purchase.model_name.human) if purchase.nil?
+    raise RecordNotFound.new(@code,Ipos::Purchase.model_name.human) if purchase.nil?
     ApplicationRecord.transaction do
       update_po_items_price!(purchase)
     end

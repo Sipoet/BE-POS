@@ -2,9 +2,12 @@ table_name: 'book_payslip_lines'
 columns:
   transaction_date:
     type: date
+    client_width: 180
   employee:
     type: model
-    filter_key: 'employee'
+    client_width: 180
+    filter_key: 'employee_id'
+    edit_key: 'employee_id'
     sort_key: 'employees.name'
     input_options:
       path: employees
@@ -12,29 +15,37 @@ columns:
       attribute_key: name
   group:
     type: enum
+    client_width: 180
     enum_list:
       - earning
       - deduction
   payroll_type:
     type: model
-    filter_key: 'payroll_type'
+    client_width: 180
+    filter_key: 'payroll_type_id'
+    edit_key: payroll_type_id
     input_options:
       path: 'payroll_types'
       model_name: 'payroll_type'
       attribute_key: name
     sort_key: 'payroll_types.name'
   amount:
+    client_width: 180
     type: money
   description:
+    client_width: 180
     type: string
   status:
+    client_width: 100
     type: string
     can_sort: false
     can_filter: false
   created_at:
     type: datetime
+    client_width: 180
     can_edit: false
   updated_at:
     type: datetime
+    client_width: 180
     can_edit: false
 

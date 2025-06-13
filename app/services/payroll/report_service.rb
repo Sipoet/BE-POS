@@ -36,15 +36,18 @@ class Payroll::ReportService < ApplicationService
       Datatable::TableColumn.new(
         :employee_name,
         {
-          humanize_name: Employee.human_attribute_name(:name),
-          type: :string,
+          humanize_name: PayslipReport.human_attribute_name(:employee_name),
+          type: :model,
           name: :employee_name,
           excel_width: 25,
           client_width: 200,
-          attribute_key: 'employees.name',
-          path: 'employees'
+          input_options:{
+            model_name: 'employee',
+            attribute_key: 'employees.name',
+            path: 'employees'
+          },
         }
-        ),
+      ),
       Datatable::TableColumn.new(
         :salary_total,
         {

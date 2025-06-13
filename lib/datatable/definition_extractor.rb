@@ -26,6 +26,10 @@ class Datatable::DefinitionExtractor
     @column_definitions.values.select(&:can_edit).map(&:filter_key)
   end
 
+  def allowed_edit_columns
+    @column_definitions.values.select(&:can_edit).map(&:edit_key)
+  end
+
   private
 
   def convert_to_column_definitions(raw_yml)

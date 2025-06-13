@@ -42,3 +42,6 @@
 lib/tasks/test.rake
 lib/tasks/data_modifier.rake
 .byebug_history
+
+# Ignore config yml
+config/database.yml

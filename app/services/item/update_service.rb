@@ -4,7 +4,7 @@ class Item::UpdateService < ApplicationService
     item = Ipos::Item.find(params[:code])
     raise RecordNotFound.new(params[:code],Ipos::Item.model_name.human) if item.nil?
     if record_save?(item)
-      render_json(ItemSerializer.new(item,{fields: @fields}))
+      render_json(Ipos::ItemSerializer.new(item,{fields: @fields}))
     else
       render_error_record(item)
     end

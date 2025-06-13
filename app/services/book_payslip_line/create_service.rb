@@ -26,7 +26,7 @@ class BookPayslipLine::CreateService < ApplicationService
     @fields = {book_payslip_line: @table_definitions.allowed_columns}
     permitted_params = params.required(:data)
                               .required(:attributes)
-                              .permit(@table_definitions.allowed_columns)
+                              .permit(@table_definitions.allowed_edit_columns)
     book_payslip_line.attributes = permitted_params
   end
 

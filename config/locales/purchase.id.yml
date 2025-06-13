@@ -5,7 +5,8 @@ id:
     attributes:
       ipos/purchase:
         notransaksi: "No Transaksi"
-        tanggal: "Tanggal"
+        tanggal: "Tanggal Barang Datang"
+        note_date: "Tanggal Faktur"
         kantortujuan: "Lokasi"
         totalitem: "Total Item"
         subtotal: "Subtotal"

@@ -5,7 +5,9 @@ require "rails/all"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-$HOST = ENV['HOST']
+$HOST = ENV['HOST'].split(' ')
+$APP_EMAIL = ENV['APP_EMAIL']
+$APP_EMAIL_PASSWORD = ENV['APP_EMAIL_PASSWORD']
 module Myapp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -15,8 +17,7 @@ module Myapp
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w(assets tasks generators))
-    config.hosts << $HOST
-    config.hosts << 'backend'
+    config.hosts += $HOST
     config.active_job.queue_adapter = :sidekiq
     config.i18n.default_locale = :id
     config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time, ActiveSupport::TimeWithZone, ActiveSupport::TimeZone, BigDecimal]

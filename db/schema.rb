@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_25_083017) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_19_064459) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_25_083017) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["role_id"], name: "index_access_authorizes_on_role_id"
+  end
+
+  create_table "book_employee_attendances", force: :cascade do |t|
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.text "description"
+    t.integer "employee_id"
+    t.boolean "allow_overtime"
+    t.boolean "is_late"
+    t.boolean "is_flexible"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["start_date", "end_date", "employee_id"], name: "b_e_a_uniq_idx", unique: true
   end
 
   create_table "book_payslip_lines", force: :cascade do |t|
@@ -292,7 +305,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_25_083017) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "religion"
-    t.index ["date"], name: "index_holidays_on_date", unique: true
+    t.index ["date", "religion"], name: "hlday_uniq_idx", unique: true
   end
 
   create_table "payment_methods", force: :cascade do |t|
@@ -2517,6 +2530,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_25_083017) do
   end
 
   add_foreign_key "access_authorizes", "roles"
+  add_foreign_key "book_employee_attendances", "employees"
   add_foreign_key "book_payslip_lines", "employees"
   add_foreign_key "book_payslip_lines", "payroll_types"
   add_foreign_key "book_payslip_lines", "payslip_lines"

@@ -4,7 +4,7 @@ id:
       employee_attendance: "Absensi Karyawan"
     attributes:
       employee_attendance:
-        employee_id: 'Karyawan'
+        employee: 'Karyawan'
         employee_name: 'Nama Karyawan'
         date: "Tanggal"
         start_time: 'Jam Masuk'

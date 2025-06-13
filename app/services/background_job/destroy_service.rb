@@ -1,7 +1,8 @@
 class BackgroundJob::DestroyService < ApplicationService
   require 'sidekiq/api'
   def execute_service
-    job = Sidekiq::Queue.new.find_job(params[:id])
+    job = Sidekiq::ScheduledSet.new.find_job(params[:id])
+    job = Sidekiq::DeadSet.new.find_job(params[:id]) if job.blank?
     if job.blank?
       raise ApplicationService::RecordNotFound.new(record_type: 'background job',record_id: params[:id])
     end

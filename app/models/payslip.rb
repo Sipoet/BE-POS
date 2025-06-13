@@ -11,7 +11,12 @@ class Payslip < ApplicationRecord
   belongs_to :employee
   has_many :payslip_lines, dependent: :destroy, inverse_of: :payslip
   accepts_nested_attributes_for :payslip_lines, allow_destroy: true
-  [:work_days, :sick_leave, :known_absence, :unknown_absence].each do |key|
+  [:work_days, :sick_leave, :known_absence, :unknown_absence, :tax_amount].each do |key|
     validates key, presence: true, numericality:{greater_than_or_equal_to: 0}
   end
+
+  [:nett_salary, :gross_salary].each do |key|
+    validates key, presence: true, numericality:{greater_than_or_equal_to: 0}
+  end
+
 end

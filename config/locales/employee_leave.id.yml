@@ -4,7 +4,7 @@ id:
       employee_leave: "Cuti Karyawan"
     attributes:
       employee_leave:
-        employee_id: 'Karyawan'
+        employee: 'Karyawan'
         employee_name: 'Nama Karyawan'
         date: "Tanggal"
         leave_type: 'Tipe Cuti'

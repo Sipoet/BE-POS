@@ -15,13 +15,13 @@ class PayslipPdfGenerator
   end
 
   def generate(options = {})
-    file_path = options[:file_path] || TempFile.new(['Slip gaji','.pdf']).path
+    file_path = options[:file_path] || Tempfile.new(['Slip gaji','.pdf']).path
     file_margin = options[:file_margin] || 30
     file_size = options[:file_size] || 'A4'
     @document = Prawn::Document.new(page_size: file_size, margin: file_margin)
     font FONT_FAMILY
     define_grid(rows: 9, columns: 7, gutter: 10)
-    add_permission
+    add_permission(options)
     add_header
     add_body
     save_as(file_path)
@@ -29,9 +29,9 @@ class PayslipPdfGenerator
 
   private
 
-  def add_permission
+  def add_permission(options ={})
     encrypt_document(
-      # user_password: @payslip.employee.,
+      user_password: options[:file_password],
       owner_password: :random,
       permissions: {
         print_document: false,
@@ -74,19 +74,19 @@ class PayslipPdfGenerator
       move_down 0.5
       text ": #{@payslip.employee.name}"
       move_down 0.5
-      text ": #{@payslip.work_days}"
+      text ": #{@payslip.work_days} Hari"
       move_down 0.5
-      text ": #{@payslip.total_day}"
+      text ": #{@payslip.total_day} Hari"
       move_down 0.5
-      text ": #{@payslip.overtime_hour}"
+      text ": #{@payslip.overtime_hour} Jam"
       move_down 0.5
-      text ": #{@payslip.late}"
+      text ": #{@payslip.late} kali"
       move_down 0.5
-      text ": #{@payslip.sick_leave}"
+      text ": #{@payslip.sick_leave} Hari"
       move_down 0.5
-      text ": #{@payslip.known_absence}"
+      text ": #{@payslip.known_absence} Hari"
       move_down 0.5
-      text ": #{@payslip.unknown_absence}"
+      text ": #{@payslip.unknown_absence} Hari"
       @payslip_lines.each do |payslip_line|
         text ": #{money_format(payslip_line.amount)}",color: payslip_line.earning? ? '000000': 'FF0000'
         move_down 0.5

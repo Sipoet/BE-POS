@@ -1,0 +1,19 @@
+id:
+  activerecord:
+    models:
+      ipos/consignment_in_order: "Pesanan Konsinyasi Masuk"
+    attributes:
+      ipos/consignment_in_order:
+        notransaksi: "No Faktur"
+        tanggal: "Tanggal Faktur"
+        kantortujuan: "Lokasi"
+        totalitem: "Total Item"
+        subtotal: "Subtotal"
+        potnomfaktur: "Diskon"
+        biayalain: "Biaya Lain"
+        ppn: "Tipe Pajak"
+        pajak: "Biaya Pajak"
+        totalakhir: "Total Akhir"
+        keterangan: "Keterangan"
+        user1: "User"
+        kodesupel: 'Supplier'

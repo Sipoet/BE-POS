@@ -40,4 +40,8 @@ class PayslipsController < ApplicationController
   def download
     run_service_default
   end
+
+  def send_email
+    run_service_default
+  end
 end

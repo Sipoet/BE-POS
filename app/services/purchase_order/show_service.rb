@@ -4,7 +4,7 @@ class PurchaseOrder::ShowService < ApplicationService
   def execute_service
     extract_params
     purchase_order = Ipos::PurchaseOrder.find(@code)
-    raise RecordNotFound.new(@code,PurchaseOrder.model_name.human) if purchase_order.nil?
+    raise RecordNotFound.new(@code,Ipos::PurchaseOrder.model_name.human) if purchase_order.nil?
     options = {
       fields: @fields,
       params:{include: @included},

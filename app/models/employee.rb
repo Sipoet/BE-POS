@@ -34,6 +34,7 @@ class Employee < ApplicationRecord
   validate :end_working_date_should_valid
   validates :payroll, presence: true, if: :active?
   validates :shift, presence: true
+  validates :religion, presence: true
 
   has_many :work_schedules, dependent: :destroy
   has_many :employee_day_offs, dependent: :destroy
@@ -43,9 +44,14 @@ class Employee < ApplicationRecord
     self.code = SecureRandom.alphanumeric(6).upcase
   end
 
+  def identifier_code
+    name
+  end
+
   private
   def end_working_date_should_valid
-    if end_working_date.present? && end_working_date < start_working_date
+    return if start_working_date.nil? || end_working_date.nil?
+    if end_working_date < start_working_date
       errors.add(:end_working_date,:greater_than, count: start_working_date.strftime('%d/%m/%y'))
     end
   end

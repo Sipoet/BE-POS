@@ -83,13 +83,12 @@ class ExcelGenerator
   def decorate_row(y,row,worksheet)
     columns.each.with_index(0) do |column, x|
       value = @val_func.call(row, column.name)
-      if value.blank?
+      if value.nil?
         next
       end
       case column.type.to_sym
-      when :link
-        value = @val_func.call(row, column.filter_key)
-        worksheet.write_string(y, x, value.to_s, @general_format)
+      when :model
+        worksheet.write_string(y, x, value&.identifier_code, @general_format)
       when :integer,:float,:decimal,:big_decimal
         Rails.logger.debug "=== value: #{value.to_f}" if value.to_f ==  Float::INFINITY
         worksheet.write_number(y, x, value.to_f, @num_format)
@@ -102,6 +101,8 @@ class ExcelGenerator
         worksheet.write_date_time(y, x, value.strftime('%d/%m/%Y'), @date_format)
       when :datetime, :time
         worksheet.write_date_time(y, x, value.strftime('%d/%m/%Y %H:%M'), @datetime_format)
+      when :boolean
+        worksheet.write_boolean(y,x,value)
       else
         worksheet.write_string(y, x, value.to_s, @general_format)
       end

@@ -4,11 +4,11 @@ class PayslipReportSerializer
             :nett_salary,
             :sick_leave, :known_absence,
             :unknown_absence, :overtime_hour,
-            :work_days,
+            :work_days, :employee_status,
             :total_day, :employee_id, :employee_name,
             :employee_start_working_date,
             :bank, :bank_account,:bank_register_name, :description,
-            :late
+            :late, :payslip_status
 
   attribute :payroll_type_amounts do |obj, params|
     payroll_types = params[:payroll_types] || []
