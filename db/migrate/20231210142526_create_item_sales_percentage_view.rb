@@ -51,6 +51,7 @@ class CreateItemSalesPercentageView < ActiveRecord::Migration[7.1]
         SUM(tbl_imdt.total) AS purchase_total
         FROM tbl_imdt
         INNER JOIN tbl_imhd on tbl_imhd.notransaksi = tbl_imdt.notransaksi
+        WHERE tbl_imhd.tipe IN('BL','KI')
         GROUP BY kodeitem
       )purchase ON purchase.kodeitem = tbl_item.kodeitem AND purchase.number_of_purchase > 0
       LEFT OUTER JOIN (
