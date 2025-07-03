@@ -25,16 +25,15 @@ class AttendanceAnalyzer
     result.paid_time_off = BigDecimal(@payroll.paid_time_off)
     result.is_first_work = @employee.start_working_date.between?(@start_date,@end_date)
     result.is_last_work = @employee.end_working_date.present? && @employee.end_working_date.between?(@start_date,@end_date)
-    min_total_day = -3
+
     (@start_date..@end_date).each do |date|
       analyze_date(date,result)
-      min_total_day += 1
     end
-    result.total_day = min_total_day if result.total_day < min_total_day
+
     if result.total_day < 26
       result.total_day = 26
-    elsif result.total_day > 29
-      result.total_day = 29
+    elsif result.total_day > 28
+      result.total_day = 28
     end
     result
   end
