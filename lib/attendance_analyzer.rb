@@ -32,8 +32,8 @@ class AttendanceAnalyzer
 
     if result.total_day < 26
       result.total_day = 26
-    elsif result.total_day > 28
-      result.total_day = 28
+    elsif result.total_day > 29
+      result.total_day = 29
     end
     result
   end
