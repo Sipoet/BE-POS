@@ -1,0 +1,2 @@
+class StockKeepingUnit < ApplicationRecord
+end

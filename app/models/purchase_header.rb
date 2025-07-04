@@ -1,0 +1,2 @@
+class PurchaseHeader < ApplicationRecord
+end
