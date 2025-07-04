@@ -25,12 +25,11 @@ class AttendanceAnalyzer
     result.paid_time_off = BigDecimal(@payroll.paid_time_off)
     result.is_first_work = @employee.start_working_date.between?(@start_date,@end_date)
     result.is_last_work = @employee.end_working_date.present? && @employee.end_working_date.between?(@start_date,@end_date)
-    min_total_day = -3
+
     (@start_date..@end_date).each do |date|
       analyze_date(date,result)
-      min_total_day += 1
     end
-    result.total_day = min_total_day if result.total_day < min_total_day
+
     if result.total_day < 26
       result.total_day = 26
     elsif result.total_day > 29
@@ -134,7 +133,10 @@ class AttendanceAnalyzer
   def scheduled_work?(date)
     return false unless employee_still_working?(date)
     return true if @changed_employee_leaves[date].present?
-    return logic_holiday(@holidays[date]) if @holidays[date].present?
+    if @holidays[date].present?
+      is_holiday = logic_holiday(@holidays[date])
+      return false if is_holiday
+    end
     day_offs = @employee_day_offs[date.cwday] || []
     day_offs.each do |employee_day_off|
       return false if employee_day_off.all_week?
