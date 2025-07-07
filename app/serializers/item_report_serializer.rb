@@ -18,10 +18,10 @@ class ItemReportSerializer
   end
 
 
-  belongs_to :item, set_id: :item_code, id_method_name: :item_code
+  belongs_to :item, set_id: :item_code, id_method_name: :item_code, serializer: Ipos::ItemSerializer
   belongs_to :supplier, set_id: :supplier_code, id_method_name: :supplier_code, serializer: Ipos::SupplierSerializer
-  belongs_to :brand, set_id: :brand_name, id_method_name: :brand_name
-  belongs_to :item_type, set_id: :item_type_name, id_method_name: :item_type_name
+  belongs_to :brand, set_id: :brand_name, id_method_name: :brand_name, serializer: Ipos::BrandSerializer
+  belongs_to :item_type, set_id: :item_type_name, id_method_name: :item_type_name, serializer: Ipos::ItemTypeSerializer
 
   attribute :last_purchase_date do |object|
     object.last_purchase_date.try(:iso8601)
