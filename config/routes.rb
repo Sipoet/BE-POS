@@ -69,6 +69,7 @@ Rails.application.routes.draw do
 
   resources :purchases, only:[:index,:show] do
     get :report, on: :collection
+    post :refresh_report, on: :collection
     post :update_price, on: :member
   end
 

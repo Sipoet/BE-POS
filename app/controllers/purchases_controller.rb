@@ -12,6 +12,11 @@ class PurchasesController < ApplicationController
     run_service_default
   end
 
+  def refresh_report
+    PurchaseReport.refresh!
+    head :no_content
+  end
+
   def update_price
     run_service_default
   end

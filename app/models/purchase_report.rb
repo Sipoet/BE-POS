@@ -13,10 +13,8 @@ class PurchaseReport < ApplicationRecord
     true
   end
 
-  def [](key)
-    key = key.to_s
-    return self.try(key) if self.respond_to?(key)
-    @payroll_type_amounts[key]
+  def self.refresh!
+    connection.execute "REFRESH MATERIALIZED VIEW CONCURRENTLY purchase_reports"
   end
 
   def due_date
