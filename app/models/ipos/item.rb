@@ -24,6 +24,8 @@ class Ipos::Item < ApplicationRecord
   alias_attribute :cogs, :hargapokok
   alias_attribute :uom, :satuan
   alias_attribute :description, :keterangan
+  alias_attribute :updated_at, :dateupd
+  alias_attribute :created_at, :tanggal_add
 
 
 end

@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
   resources :items, param: :code, only: [:index, :show, :update] do
     get :with_discount, on: :collection
+    get :download, on: :collection
   end
 
   resources :suppliers,param: :code, only: [:index, :show]
