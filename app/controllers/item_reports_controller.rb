@@ -9,6 +9,11 @@ class ItemReportsController < ApplicationController
     run_service_default
   end
 
+  def refresh_report
+    ItemReport.refresh!
+    head :no_content
+  end
+
   def columns
     run_service(ItemReport::ColumnsService)
   end

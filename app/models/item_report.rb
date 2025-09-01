@@ -1,5 +1,5 @@
 class ItemReport < ApplicationRecord
-  self.table_name = 'item_sales_percentage_reports'
+  self.table_name = 'item_reports'
   self.primary_key = 'item_code'
 
   belongs_to :item, foreign_key: :item_code, primary_key: :kodeitem, class_name:'Ipos::Item'
@@ -11,6 +11,10 @@ class ItemReport < ApplicationRecord
 
   def readonly?
     true
+  end
+
+  def self.refresh!
+    connection.execute "REFRESH MATERIALIZED VIEW CONCURRENTLY #{table_name}"
   end
 
 end

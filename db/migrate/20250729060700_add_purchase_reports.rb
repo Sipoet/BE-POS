@@ -110,8 +110,9 @@ class AddPurchaseReports < ActiveRecord::Migration[7.1]
   end
 
   def down
-    ActiveRecord::Base.connection.execute "
-    DROP UNIQUE INDEX IF EXISTS u_idx_purchase_reports
-    DROP MATERIALIZED VIEW IF EXISTS purchase_reports"
+    ActiveRecord::Base.connection.execute """
+    DROP INDEX IF EXISTS u_idx_purchase_reports;
+    DROP MATERIALIZED VIEW IF EXISTS purchase_reports;
+    """
   end
 end
