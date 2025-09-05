@@ -1,0 +1,35 @@
+class CreateWeekSalesPerformanceReports < ActiveRecord::Migration[7.1]
+  def up
+    ActiveRecord::Base.connection.execute <<-SQL
+    CREATE MATERIALIZED VIEW week_sales_performance_reports AS (
+      SELECT
+        tbl_item.kodeitem as item_code,
+        merek AS brand_name,
+        jenis AS item_type_name,
+        supplier1 AS supplier_code,
+        last_purchase_year,
+        sales_year,
+        sales_week,
+        CONCAT(sales_year,'-',to_char(sales_week,'FM00')) as date_pk,
+        SUM(sales_quantity) AS sales_quantity,
+        SUM(sales_discount_quantity) AS sales_discount_quantity,
+        SUM(sales_total) AS sales_total
+      FROM item_sales_performance_reports
+      inner join tbl_item on tbl_item.kodeitem = item_sales_performance_reports.item_code
+      GROUP BY
+        tbl_item.kodeitem,
+        last_purchase_year,
+        sales_year,
+        sales_week
+    );
+    CREATE UNIQUE INDEX u_idx_wspr
+      ON week_sales_performance_reports (item_code,last_purchase_year,date_pk);
+    SQL
+  end
+
+  def down
+    ActiveRecord::Base.connection.execute <<-SQL
+      DROP MATERIALIZED VIEW IF EXISTS week_sales_performance_reports;
+    SQL
+  end
+end
