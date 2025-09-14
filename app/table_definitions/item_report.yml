@@ -1,5 +1,5 @@
 ---
-table_name: item_sales_percentage_reports
+table_name: item_reports
 columns:
   item:
     type: model
