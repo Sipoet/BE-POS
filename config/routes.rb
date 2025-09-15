@@ -30,11 +30,6 @@ Rails.application.routes.draw do
     post :cancel, on: :member
   end
 
-  resources :item_sales_percentage_reports,controller: :item_reports, only: [:index] do
-    get :columns, on: :collection
-    get :grouped_report, on: :collection
-  end
-
   resources :item_reports, only: [:index] do
     get :columns, on: :collection
     get :grouped_report, on: :collection
