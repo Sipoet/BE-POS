@@ -1,5 +1,5 @@
 class CreateDaySalesPerformanceReports < ActiveRecord::Migration[7.1]
-  def migrate_group_day_view
+  def up
     ActiveRecord::Base.connection.execute <<-SQL
     CREATE MATERIALIZED VIEW day_sales_performance_reports AS (
       SELECT
@@ -11,9 +11,9 @@ class CreateDaySalesPerformanceReports < ActiveRecord::Migration[7.1]
         sales_year,
         sales_month,
         sales_day,
-        CONCAT(sales_year,'-',to_char(sales_month,'FM00'),'-',to_char(sales_day,'FM00')) as date_pk,
+        CONCAT(sales_year,'-',to_char(sales_month,'FM00'),'-',to_char(sales_day,'FM00'))::DATE as date_pk,
         SUM(sales_quantity) AS sales_quantity,
-        SUM(sales_discount_quantity) AS sales_discount_quantity,
+        SUM(sales_discount_amount) AS sales_discount_amount,
         SUM(sales_total) AS sales_total
       FROM item_sales_performance_reports
       inner join tbl_item on tbl_item.kodeitem = item_sales_performance_reports.item_code

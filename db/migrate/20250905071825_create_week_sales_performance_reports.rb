@@ -12,7 +12,7 @@ class CreateWeekSalesPerformanceReports < ActiveRecord::Migration[7.1]
         sales_week,
         CONCAT(sales_year,'-',to_char(sales_week,'FM00')) as date_pk,
         SUM(sales_quantity) AS sales_quantity,
-        SUM(sales_discount_quantity) AS sales_discount_quantity,
+        SUM(sales_discount_amount) AS sales_discount_amount,
         SUM(sales_total) AS sales_total
       FROM item_sales_performance_reports
       inner join tbl_item on tbl_item.kodeitem = item_sales_performance_reports.item_code

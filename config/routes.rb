@@ -152,4 +152,10 @@ Rails.application.routes.draw do
   resources :book_employee_attendances, only:[:index,:create,:update,:destroy]
   resources :accounts, only:[:index, :show]
   resources :system_settings, only:[:index, :show, :update]
+
+  resources :item_sales_performance_reports, only: [:index] do
+    get :supplier, on: :collection
+    get :brand, on: :collection
+    get :item_type, on: :collection
+  end
 end

@@ -8,7 +8,7 @@ class CreateDaySalesTrafficReports < ActiveRecord::Migration[7.1]
         sales_hour,
         sales_day_in_week,
         SUM(sales_quantity) AS sales_quantity,
-        SUM(sales_discount_quantity) AS sales_discount_quantity,
+        SUM(sales_discount_amount) AS sales_discount_amount,
         SUM(sales_total) AS sales_total
       FROM item_sales_performance_reports
       inner join tbl_item on tbl_item.kodeitem = item_sales_performance_reports.item_code
