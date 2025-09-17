@@ -5,7 +5,7 @@ class CreateItemSalesPerformanceReports < ActiveRecord::Migration[7.1]
       CREATE MATERIALIZED VIEW item_sales_performance_reports AS (
         SELECT
           CONCAT(sales.kodeitem, '-', sales.sales_year, '-', sales.sales_month, '-', sales.sales_day, '-', sales.sales_hour) AS pk_code,
-          CONCAT(sales_year,'-',to_char(sales_month,'FM00'),'-',to_char(sales_day,'FM00'),'T',to_char(sales_hour,'FM00'),':00')::DATE as date_pk,
+          CONCAT(sales_year,'-',to_char(sales_month,'FM00'),'-',to_char(sales_day,'FM00'),'T',to_char(sales_hour,'FM00'),':00')::TIMESTAMP as date_pk,
           sales.kodeitem AS item_code,
           COALESCE(purchase.tahun_beli,#{first_fiscal_year}) AS last_purchase_year,
           tbl_item.merek AS brand_name,
@@ -14,7 +14,7 @@ class CreateItemSalesPerformanceReports < ActiveRecord::Migration[7.1]
           sales.sales_hour,
           sales.sales_day,
           sales.sales_week,
-          sales.sales_day_in_week,
+          sales.sales_day_of_week,
           sales.sales_month,
           sales.sales_year,
           sales.sales_quantity,
@@ -26,7 +26,7 @@ class CreateItemSalesPerformanceReports < ActiveRecord::Migration[7.1]
             sale_header.sales_hour,
             sale_header.sales_day,
             sale_header.sales_week,
-			      sale_header.sales_day_in_week,
+			      sale_header.sales_day_of_week,
             sale_header.sales_month,
             sale_header.sales_year,
             ROUND(SUM(tbl_ikdt.jumlah),2) AS sales_quantity,
@@ -37,7 +37,7 @@ class CreateItemSalesPerformanceReports < ActiveRecord::Migration[7.1]
             SELECT tbl_ikhd.notransaksi,
             date_part('hour',tbl_ikhd.tanggal)::INTEGER as sales_hour,
             date_part('day',tbl_ikhd.tanggal)::INTEGER AS sales_day,
-            date_part('dow',tbl_ikhd.tanggal)::INTEGER AS sales_day_in_week,
+            date_part('dow',tbl_ikhd.tanggal)::INTEGER AS sales_day_of_week,
             date_part('week',tbl_ikhd.tanggal)::INTEGER AS sales_week,
             date_part('month',tbl_ikhd.tanggal)::INTEGER AS sales_month,
             date_part('year',tbl_ikhd.tanggal)::INTEGER AS sales_year
@@ -49,13 +49,13 @@ class CreateItemSalesPerformanceReports < ActiveRecord::Migration[7.1]
             sale_header.sales_hour,
             sale_header.sales_day,
             sale_header.sales_week,
-			      sale_header.sales_day_in_week,
+			      sale_header.sales_day_of_week,
             sale_header.sales_month,
             sale_header.sales_year
         ) sales ON sales.kodeitem = tbl_item.kodeitem
         LEFT OUTER JOIN (
           SELECT tbl_imdt.kodeitem,
-            MAX(DATE_PART('year',tbl_imhd.tanggal)) AS tahun_beli
+            MAX(DATE_PART('year',tbl_imhd.tanggal))::INTEGER AS tahun_beli
           FROM tbl_imdt
           INNER JOIN tbl_imhd ON tbl_imdt.notransaksi = tbl_imhd.notransaksi
           WHERE tbl_imhd.tipe IN ('BL','KI')
