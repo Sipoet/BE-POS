@@ -153,4 +153,10 @@ Rails.application.routes.draw do
     get :brand, on: :collection
     get :item_type, on: :collection
   end
+
+  resources :supplier_sales_performance_reports, only: [] do
+    get :compare, on: :collection
+    get :group_by_brand, on: :collection
+    get :group_by_item_type, on: :collection
+  end
 end
