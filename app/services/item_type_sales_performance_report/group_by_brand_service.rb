@@ -1,4 +1,4 @@
-class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
+class ItemTypeSalesPerformanceReport::GroupByBrandService < ApplicationService
 
   def execute_service
     extract_params
@@ -13,9 +13,9 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
         end_date: @end_date,
         identifier_list: identifier_list,
         brand_names: @brand_names,
-        item_type_names: @item_type_names,
+        supplier_codes: @supplier_codes,
         last_purchase_years: @last_purchase_years,
-        supplier_code: @supplier_code
+        item_type_name: @item_type_name
       },
     })
   end
@@ -24,13 +24,13 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
 
   def find_reports
     query = @base_query.order(brand_name: :asc,@id_field_name => :asc)
-                       .where(supplier_code: @supplier_code)
+                       .where(item_type_name: @item_type_name)
 
+    if @supplier_codes.any?
+      query = query.where(supplier_code: @supplier_codes)
+    end
     if @brand_names.any?
       query = query.where(brand_name: @brand_names)
-    end
-    if @item_type_names.any?
-      query = query.where(item_type_name: @item_type_names)
     end
     if @last_purchase_years.any?
       query = query.where(last_purchase_year: @last_purchase_years)
@@ -177,12 +177,12 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
   end
 
   def extract_params
-    permitted_params = params.permit(:range_period,:group_period,:value_type,:separate_purchase_year,:supplier_code,last_purchase_years:[],brands:[],item_types:[])
+    permitted_params = params.permit(:range_period,:group_period,:value_type,:separate_purchase_year,:item_type_name,last_purchase_years:[],brands:[],suppliers:[])
     @range_period = permitted_params.fetch(:range_period, 'month')
     @group_period = permitted_params.fetch(:group_period, 'daily')
-    @supplier_code = permitted_params[:supplier_code]
+    @item_type_name = permitted_params[:item_type_name]
+    @supplier_codes = permitted_params.fetch(:suppliers, [])
     @brand_names = permitted_params.fetch(:brands, [])
-    @item_type_names = permitted_params.fetch(:item_types, [])
     @value_type = permitted_params.fetch(:value_type,'sales_total')
     @last_purchase_years = permitted_params.fetch(:last_purchase_years,[])
     @separate_purchase_year = params.fetch(:separate_purchase_year, '0') == '1'
@@ -195,8 +195,8 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
     if !['day', 'week', 'month', 'year', '5_year', 'all'].include?(@range_period)
       raise 'parameter range period invalid'
     end
-    if @supplier_code.nil?
-      raise 'supplier must not null'
+    if @item_type_name.nil?
+      raise 'Item Type must not null'
     end
   end
 

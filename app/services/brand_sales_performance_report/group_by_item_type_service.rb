@@ -1,11 +1,11 @@
-class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
+class BrandSalesPerformanceReport::GroupByItemTypeService < ApplicationService
 
   def execute_service
     extract_params
     extract_date_range
     reports = find_reports
     identifier_list = get_identifiers(reports)
-    grouped_report = group_by_brand(reports,identifier_list)
+    grouped_report = group_by_item_type(reports,identifier_list)
     render_json({
       data: grouped_report,
       metadata: {
@@ -15,7 +15,7 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
         brand_names: @brand_names,
         item_type_names: @item_type_names,
         last_purchase_years: @last_purchase_years,
-        supplier_code: @supplier_code
+        brand_name: @brand_name
       },
     })
   end
@@ -23,11 +23,11 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
   private
 
   def find_reports
-    query = @base_query.order(brand_name: :asc,@id_field_name => :asc)
-                       .where(supplier_code: @supplier_code)
+    query = @base_query.order(item_type_name: :asc,@id_field_name => :asc)
+                       .where(brand_name: @brand_name)
 
-    if @brand_names.any?
-      query = query.where(brand_name: @brand_names)
+    if @supplier_codes.any?
+      query = query.where(supplier_code: @supplier_codes)
     end
     if @item_type_names.any?
       query = query.where(item_type_name: @item_type_names)
@@ -35,7 +35,7 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
     if @last_purchase_years.any?
       query = query.where(last_purchase_year: @last_purchase_years)
     end
-    group_field = [:brand_name, @id_field_name]
+    group_field = [:item_type_name, @id_field_name]
     if @separate_purchase_year
       group_field << :last_purchase_year
     end
@@ -43,7 +43,7 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
           .sum(@value_type)
          .map do |keys,value|
             QueryResult.new(
-              brand_name: keys[0],
+              item_type_name: keys[0],
               last_purchase_year: keys[2],
               value: value,
               date_pk: keys[1])
@@ -92,27 +92,27 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
     end
   end
 
-  def group_by_brand(reports,identifier_list)
-    brands = Ipos::Brand.where(name: reports.map(&:brand_name).uniq).index_by(&:name)
-    reports.group_by{|row|[row.brand_name, row.last_purchase_year].compact}
+  def group_by_item_type(reports,identifier_list)
+    item_types = Ipos::ItemType.where(name: reports.map(&:item_type_name).uniq).index_by(&:name)
+    reports.group_by{|row|[row.item_type_name, row.last_purchase_year].compact}
            .map do |keys,values|
-              row = LineResult.new(brand_name: keys[0], last_purchase_year: keys[1])
+              row = LineResult.new(item_type_name: keys[0], last_purchase_year: keys[1])
               if !values.empty?
                 value_hash = values.index_by(&:date_pk)
                 identifier_list.each do |date_pk|
                   row.add_spot([date_pk, value_hash[date_pk]&.value || 0.0])
                 end
               end
-              row.brand_description = brands[row.brand_name]&.description
+              row.item_type_description = item_types[row.item_type_name]&.description
               row
            end
   end
 
   class QueryResult
-    attr_accessor :brand_name, :last_purchase_year, :date_pk, :value
+    attr_accessor :item_type_name, :last_purchase_year, :date_pk, :value
 
-    def initialize(brand_name:,last_purchase_year: nil,value:,date_pk:)
-      @brand_name = brand_name
+    def initialize(item_type_name:,last_purchase_year: nil,value:,date_pk:)
+      @item_type_name = item_type_name
       @last_purchase_year = last_purchase_year
       @date_pk = date_pk
       @value = value.to_f
@@ -121,12 +121,12 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
   end
 
   class LineResult
-    attr_accessor :brand_name, :brand_description, :last_purchase_year, :spots
+    attr_accessor :item_type_name, :item_type_description, :last_purchase_year, :spots
 
-    def initialize(brand_name:,brand_description: nil,last_purchase_year: nil, spots:[])
-      @brand_name = brand_name
+    def initialize(item_type_name:,item_type_description: nil,last_purchase_year: nil, spots:[])
+      @item_type_name = item_type_name
       @last_purchase_year = last_purchase_year
-      @brand_description = brand_description
+      @item_type_description = item_type_description
       @spots = spots
     end
 
@@ -177,11 +177,11 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
   end
 
   def extract_params
-    permitted_params = params.permit(:range_period,:group_period,:value_type,:separate_purchase_year,:supplier_code,last_purchase_years:[],brands:[],item_types:[])
+    permitted_params = params.permit(:range_period,:group_period,:value_type,:separate_purchase_year,:brand_name,last_purchase_years:[],suppliers:[],item_types:[])
     @range_period = permitted_params.fetch(:range_period, 'month')
     @group_period = permitted_params.fetch(:group_period, 'daily')
-    @supplier_code = permitted_params[:supplier_code]
-    @brand_names = permitted_params.fetch(:brands, [])
+    @brand_name = permitted_params[:brand_name]
+    @supplier_codes = permitted_params.fetch(:suppliers, [])
     @item_type_names = permitted_params.fetch(:item_types, [])
     @value_type = permitted_params.fetch(:value_type,'sales_total')
     @last_purchase_years = permitted_params.fetch(:last_purchase_years,[])
@@ -195,8 +195,8 @@ class SupplierSalesPerformanceReport::GroupByBrandService < ApplicationService
     if !['day', 'week', 'month', 'year', '5_year', 'all'].include?(@range_period)
       raise 'parameter range period invalid'
     end
-    if @supplier_code.nil?
-      raise 'supplier must not null'
+    if @brand_name.nil?
+      raise 'brand must not null'
     end
   end
 

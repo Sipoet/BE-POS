@@ -5,7 +5,7 @@ class SupplierSalesPerformanceReport::GroupByItemTypeService < ApplicationServic
     extract_date_range
     reports = find_reports
     identifier_list = get_identifiers(reports)
-    grouped_report = group_by_supplier(reports,identifier_list)
+    grouped_report = group_by_item_type(reports,identifier_list)
     render_json({
       data: grouped_report,
       metadata: {
@@ -92,7 +92,7 @@ class SupplierSalesPerformanceReport::GroupByItemTypeService < ApplicationServic
     end
   end
 
-  def group_by_supplier(reports,identifier_list)
+  def group_by_item_type(reports,identifier_list)
     item_types = Ipos::ItemType.where(name: reports.map(&:item_type_name).uniq).index_by(&:name)
     reports.group_by{|row|[row.item_type_name, row.last_purchase_year].compact}
            .map do |keys,values|
