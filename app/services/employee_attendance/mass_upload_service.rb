@@ -83,13 +83,31 @@ class EmployeeAttendance::MassUploadService < ApplicationService
       end_time = nil
       day_attendances = []
       attendances.each.with_index do |datetime, index|
+        if date == Date.new(2025,7,26) && selected_employee.id == 33
+          Rails.logger.debug "start_time: #{start_time} endtime: #{end_time} datetime: #{datetime}"
+        end
         if start_time.nil?
           start_time = datetime
+          if date == Date.new(2025,7,26) && selected_employee.id == 33
+          Rails.logger.debug "Masuk 0 start_time: #{start_time} endtime: #{end_time} datetime: #{datetime}"
+        end
           next
         end
         end_time = datetime
-        next if difference_minute(start_time,end_time) < min_read_attendance
+        if date == Date.new(2025,7,26) && selected_employee.id == 33
+          Rails.logger.debug "Masuk 1 start_time: #{start_time} endtime: #{end_time} datetime: #{datetime}"
+        end
+        if difference_minute(start_time,end_time) < min_read_attendance
+          end_time = nil
+          next
+        end
+        if date == Date.new(2025,7,26) && selected_employee.id == 33
+          Rails.logger.debug "Masuk 2 start_time: #{start_time} endtime: #{end_time} datetime: #{datetime}"
+        end
         next if (attendances[index + 1].present? && difference_minute(end_time, attendances[index + 1]) < min_read_attendance)
+        if date == Date.new(2025,7,26) && selected_employee.id == 33
+          Rails.logger.debug "Masuk 3 start_time: #{start_time} endtime: #{end_time} datetime: #{datetime}"
+        end
         day_attendances << {
           employee_id: selected_employee.id,
           start_time: start_time,

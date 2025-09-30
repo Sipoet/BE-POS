@@ -78,7 +78,7 @@ class ItemReport::GroupedReportService < ApplicationService
         ROUND(SUM(sales_total),0) AS sales_total,
         ROUND(SUM(purchase_total),0) AS purchase_total,
         ROUND(SUM(gross_profit),0) AS gross_profit
-      FROM item_sales_percentage_reports
+      FROM item_reports
         #{filter_query}
       GROUP BY
         #{group_names_field}

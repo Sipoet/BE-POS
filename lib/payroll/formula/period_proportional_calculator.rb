@@ -1,15 +1,14 @@
 class Payroll::Formula::PeriodProportionalCalculator < Payroll::Formula::ApplicationCalculator
 
-  # variable1 amount if full period presence
-  # variable2 = include sick day? 1 is true, anything else is false
+  # variable1 = amount of pay
+  # variable2 = how many day get amount of pay
+  # variable3 = include sick day? 1 is true, anything else is false
 
   def calculate
-    fraction = if include_sick_day?(payroll_line)
-      (attendance_summary.work_days.to_d + attendance_summary.sick_leave) / attendance_summary.total_day.to_d
-    else
-      attendance_summary.work_days.to_d / attendance_summary.total_day.to_d
-    end
-    (fraction * payroll_line.variable1.to_d).round(payslip_round)
+    fraction = attendance_summary.work_days.to_d
+    fraction += attendance_summary.sick_leave if include_sick_day?(payroll_line)
+    separator = (payroll_line.variable2 || 1).to_d
+    (fraction * payroll_line.variable1.to_d / separator).round(payslip_round)
   end
 
   def self.main_amount(payroll_line)
@@ -17,7 +16,7 @@ class Payroll::Formula::PeriodProportionalCalculator < Payroll::Formula::Applica
   end
 
   def self.full_amount(payroll_line)
-    payroll_line.variable1
+    payroll_line.variable1 / payroll_line.variable2 * 29
   end
 
   private

@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authorize_user!
 
   def index
     run_service_default
@@ -10,6 +10,10 @@ class ItemsController < ApplicationController
   end
 
   def update
+    run_service_default
+  end
+
+  def download
     run_service_default
   end
 

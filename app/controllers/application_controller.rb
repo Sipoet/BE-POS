@@ -26,8 +26,9 @@ class ApplicationController < ActionController::API
   end
 
   def run_service_default
+    Rails.logger.debug "===controller: #{controller_path}"
     begin
-      class_name = "#{controller_name.classify}::#{action_name.classify}Service"
+      class_name = "#{controller_path.classify}::#{action_name.classify}Service"
       service_klass = class_name.constantize
       service_klass.run(self)
     rescue StandardError => e
