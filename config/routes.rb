@@ -149,9 +149,7 @@ Rails.application.routes.draw do
   resources :system_settings, only:[:index, :show, :update]
 
   resources :item_sales_performance_reports, only: [:index] do
-    get :supplier, on: :collection
-    get :brand, on: :collection
-    get :item_type, on: :collection
+    get :group_by, on: :collection
   end
 
   resources :supplier_sales_performance_reports, only: [] do
