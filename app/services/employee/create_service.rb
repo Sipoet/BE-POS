@@ -6,7 +6,7 @@ class Employee::CreateService < ApplicationService
       permitted_column = [:code,:name,:role_id,:start_working_date,
       :end_working_date, :description,:payroll_id, :religion,
       :id_number,:contact_number, :address, :bank_register_name,
-      :marital_status, :tax_number, :email,
+      :marital_status, :tax_number, :email,:user_code,
       :bank, :bank_account, :status, :image_code]
     end
     permitted_params = params.required(:data)
