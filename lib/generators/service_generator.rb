@@ -26,8 +26,8 @@ class ServiceGenerator < Rails::Generators::NamedBase
   end
 
   def default_template(model_name, service_name)
-    create_file "app/services/#{model_name}/#{service_name.singularize}_service.rb", <<~END
-    class #{model_name.classify}::#{service_name.classify}Service < ApplicationService
+    create_file "app/services/#{file_path}/#{service_name.singularize}_service.rb", <<~END
+    class #{klass_name}::#{service_name.classify}Service < ApplicationService
 
       def execute_service
         # insert code here
@@ -38,10 +38,10 @@ class ServiceGenerator < Rails::Generators::NamedBase
   end
 
   def index_template(model_name)
-    plural_name = model_name.pluralize
-    klass_name = model_name.classify
-    create_file "app/services/#{model_name}/index_service.rb", <<~END
-    class #{model_name.classify}::IndexService < ApplicationService
+    plural_name = file_name.underscore.pluralize
+    klass_name = file_path.classify
+    create_file "app/services/#{file_path}/index_service.rb", <<~END
+    class #{klass_name}::IndexService < ApplicationService
 
       include JsonApiDeserializer
       def execute_service
@@ -104,10 +104,10 @@ class ServiceGenerator < Rails::Generators::NamedBase
   end
 
   def show_template(model_name)
-    plural_name = model_name.pluralize
-    klass_name = model_name.classify
-    create_file "app/services/#{model_name}/show_service.rb", <<~END
-    class #{model_name.classify}::ShowService < ApplicationService
+    plural_name = file_name.underscore.pluralize
+    klass_name = file_path.classify
+    create_file "app/services/#{file_path}/show_service.rb", <<~END
+    class #{klass_name}::ShowService < ApplicationService
 
       include JsonApiDeserializer
       def execute_service
@@ -137,10 +137,10 @@ class ServiceGenerator < Rails::Generators::NamedBase
   end
 
   def create_template(model_name)
-    plural_name = model_name.pluralize
-    klass_name = model_name.classify
-    create_file "app/services/#{model_name}/create_service.rb", <<~END
-    class #{model_name.classify}::CreateService < ApplicationService
+    plural_name = file_name.underscore.pluralize
+    klass_name = file_path.classify
+    create_file "app/services/#{file_path}/create_service.rb", <<~END
+    class #{klass_name}::CreateService < ApplicationService
 
       def execute_service
         #{model_name} = #{klass_name}.new
@@ -176,10 +176,10 @@ class ServiceGenerator < Rails::Generators::NamedBase
   end
 
   def update_template(model_name)
-    plural_name = model_name.pluralize
-    klass_name = model_name.classify
-    create_file "app/services/#{model_name}/update_service.rb", <<~END
-    class #{model_name.classify}::UpdateService < ApplicationService
+    plural_name = file_name.underscore.pluralize
+    klass_name = file_path.classify
+    create_file "app/services/#{file_path}/update_service.rb", <<~END
+    class #{klass_name}::UpdateService < ApplicationService
 
       def execute_service
         #{model_name} = #{klass_name}.find(params[:id])
@@ -217,10 +217,10 @@ class ServiceGenerator < Rails::Generators::NamedBase
 
 
   def destroy_template(model_name)
-    plural_name = model_name.pluralize
-    klass_name = model_name.classify
-    create_file "app/services/#{model_name}/destroy_service.rb", <<~END
-    class #{model_name.classify}::DestroyService < ApplicationService
+    plural_name = file_name.underscore.pluralize
+    klass_name = file_path.classify
+    create_file "app/services/#{file_path}/destroy_service.rb", <<~END
+    class #{klass_name}::DestroyService < ApplicationService
 
       def execute_service
         #{model_name} = #{klass_name}.find( params[:id])
