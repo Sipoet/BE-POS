@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     get :by_user, on: :collection
   end
 
+
   resources :users, param: :username, only: [:index, :show, :destroy, :update, :create] do
     post :unlock_access, on: :member
   end
@@ -170,5 +171,9 @@ Rails.application.routes.draw do
     get :compare, on: :collection
     get :group_by_brand, on: :collection
     get :group_by_supplier, on: :collection
+  end
+
+  scope :ipos do
+    resources :users, controller: 'ipos/users', only: [:index]
   end
 end
