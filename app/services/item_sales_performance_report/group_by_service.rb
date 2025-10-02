@@ -50,7 +50,7 @@ class ItemSalesPerformanceReport::GroupByService < ApplicationService
       if @validator.separate_purchase_year
         query.map do |keys,value|
           QueryResult.new(
-            name: 'result',
+            name: 'All',
             date_pk: keys[0],
             last_purchase_year: keys[1],
             value: value
@@ -59,7 +59,7 @@ class ItemSalesPerformanceReport::GroupByService < ApplicationService
       else
         query.map do |key,value|
           QueryResult.new(
-            name: 'result',
+            name: 'All',
             date_pk: key,
             last_purchase_year: nil,
             value: value

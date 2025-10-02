@@ -13,7 +13,8 @@ class ItemSalesPerformanceReport::GroupByValidator < ApplicationModel
   attribute :item_codes, :array, of: :string, default: []
 
   validates :group_period, presence: true, inclusion: {in: ['hourly','daily','dow','weekly','monthly','yearly']}
-  validates :value_type, presence: true, inclusion: {in: ['sales_total','sales_quantity','sales_discount_amount']}
+  validates :value_type, presence: true, inclusion: {in: ['sales_total','sales_quantity','sales_discount_amount',
+                                                          'gross_profit','cash_total','debit_total','credit_total','qris_total','online_total']}
   validates :group_type, presence: true, inclusion: {in: ['supplier','brand','item_type','item','period']}
   validates :start_date, presence: true
   validates :end_date, presence: true

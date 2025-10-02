@@ -25,7 +25,8 @@ class UpdateItemSalesPerformanceReport < ActiveRecord::Migration[7.1]
           sales.credit_total,
           sales.cash_total,
           sales.qris_total,
-          sales.online_total
+          sales.online_total,
+          sales.gross_profit
         FROM tbl_item
         INNER JOIN (
           SELECT tbl_ikdt.kodeitem,
@@ -42,8 +43,21 @@ class UpdateItemSalesPerformanceReport < ActiveRecord::Migration[7.1]
             SUM(sale_header.credit_total) AS credit_total,
             SUM(sale_header.cash_total) AS cash_total,
             SUM(sale_header.qris_total) AS qris_total,
-            SUM(sale_header.online_total) AS online_total
+            SUM(sale_header.online_total) AS online_total,
+            SUM(tbl_ikdt.total) - SUM(cogs_detail.cogs_total) AS gross_profit
           FROM tbl_ikdt
+          INNER JOIN (
+            SELECT
+              tbl_item_ik.tanggal,
+              tbl_item_ik.iddetailtrs,
+              round(SUM(tbl_item_ik.jumlahdasar * tbl_item_im.hargadasar),0) AS cogs_total
+            FROM tbl_item_ik
+            INNER JOIN tbl_item_im ON tbl_item_ik.iddetailim = tbl_item_im.iddetail
+            GROUP BY
+              tbl_item_ik.tanggal,
+              tbl_item_ik.iddetailtrs
+          ) cogs_detail
+          ON tbl_ikdt.iddetail = cogs_detail.iddetailtrs
           INNER JOIN (
             SELECT tbl_ikhd.notransaksi,
             date_part('hour',tbl_ikhd.tanggal)::INTEGER as sales_hour,
@@ -99,7 +113,8 @@ class UpdateItemSalesPerformanceReport < ActiveRecord::Migration[7.1]
           SUM(credit_total) AS credit_total,
           SUM(cash_total) AS cash_total,
           SUM(qris_total) AS qris_total,
-          SUM(online_total) AS online_total
+          SUM(online_total) AS online_total,
+          SUM(gross_profit) AS gross_profit
         FROM item_sales_performance_reports
         inner join tbl_item on tbl_item.kodeitem = item_sales_performance_reports.item_code
         GROUP BY
@@ -128,7 +143,8 @@ class UpdateItemSalesPerformanceReport < ActiveRecord::Migration[7.1]
         SUM(credit_total) AS credit_total,
         SUM(cash_total) AS cash_total,
         SUM(qris_total) AS qris_total,
-        SUM(online_total) AS online_total
+        SUM(online_total) AS online_total,
+        SUM(gross_profit) AS gross_profit
       FROM item_sales_performance_reports
       inner join tbl_item on tbl_item.kodeitem = item_sales_performance_reports.item_code
       GROUP BY
@@ -156,7 +172,8 @@ class UpdateItemSalesPerformanceReport < ActiveRecord::Migration[7.1]
         SUM(credit_total) AS credit_total,
         SUM(cash_total) AS cash_total,
         SUM(qris_total) AS qris_total,
-        SUM(online_total) AS online_total
+        SUM(online_total) AS online_total,
+        SUM(gross_profit) AS gross_profit
       FROM item_sales_performance_reports
       inner join tbl_item on tbl_item.kodeitem = item_sales_performance_reports.item_code
       GROUP BY
@@ -182,7 +199,8 @@ class UpdateItemSalesPerformanceReport < ActiveRecord::Migration[7.1]
         SUM(credit_total) AS credit_total,
         SUM(cash_total) AS cash_total,
         SUM(qris_total) AS qris_total,
-        SUM(online_total) AS online_total
+        SUM(online_total) AS online_total,
+        SUM(gross_profit) AS gross_profit
       FROM item_sales_performance_reports
       inner join tbl_item on tbl_item.kodeitem = item_sales_performance_reports.item_code
       GROUP BY
