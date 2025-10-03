@@ -5,15 +5,8 @@ class ItemSalesPerformanceReportsController < ApplicationController
     run_service_default
   end
 
-  def supplier
+  def group_by
     run_service_default
   end
 
-  def item_type
-    run_service_default
-  end
-
-  def brand
-    run_service_default
-  end
 end
