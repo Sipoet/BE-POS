@@ -22,17 +22,13 @@ Rails.application.routes.draw do
     get :by_user, on: :collection
   end
 
+
   resources :users, param: :username, only: [:index, :show, :destroy, :update, :create] do
     post :unlock_access, on: :member
   end
   resources :background_jobs, only:[:index, :show, :destroy] do
     post :retry, on: :member
     post :cancel, on: :member
-  end
-
-  resources :item_sales_percentage_reports,controller: :item_reports, only: [:index] do
-    get :columns, on: :collection
-    get :grouped_report, on: :collection
   end
 
   resources :item_reports, only: [:index] do
@@ -42,6 +38,7 @@ Rails.application.routes.draw do
 
   resources :items, param: :code, only: [:index, :show, :update] do
     get :with_discount, on: :collection
+    get :download, on: :collection
   end
 
   resources :suppliers,param: :code, only: [:index, :show]
@@ -69,6 +66,7 @@ Rails.application.routes.draw do
 
   resources :purchases, only:[:index,:show] do
     get :report, on: :collection
+    post :refresh_report, on: :collection
     post :update_price, on: :member
     get :generate_counterbill, on: :collection
   end
@@ -151,4 +149,12 @@ Rails.application.routes.draw do
   resources :book_employee_attendances, only:[:index,:create,:update,:destroy]
   resources :accounts, only:[:index, :show]
   resources :system_settings, only:[:index, :show, :update]
+
+  resources :item_sales_performance_reports, only: [:index] do
+    get :group_by, on: :collection
+  end
+
+  scope :ipos do
+    resources :users, controller: 'ipos/users', only: [:index]
+  end
 end

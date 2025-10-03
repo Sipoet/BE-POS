@@ -2,6 +2,8 @@ table_name: 'payslips'
 columns:
   employee_name:
     type: model
+    excel_width: 22
+    client_width: 180
     input_options:
       path: 'employees'
       model_name: employee
@@ -10,6 +12,8 @@ columns:
     sort_key: 'employees.name'
   payroll:
     type: model
+    excel_width: 22
+    client_width: 180
     input_options:
       path: 'payrolls'
       model_name: payroll
@@ -19,8 +23,12 @@ columns:
   status:
     type: enum
   start_date:
+    excel_width: 22
+    client_width: 180
     type: date
   end_date:
+    excel_width: 22
+    client_width: 180
     type: date
   work_days:
     type: decimal
@@ -45,6 +53,10 @@ columns:
   created_at:
     type: datetime
     can_edit: false
+    excel_width: 22
+    client_width: 180
   updated_at:
     type: datetime
     can_edit: false
+    excel_width: 22
+    client_width: 180

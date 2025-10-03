@@ -220,6 +220,14 @@ class AttendanceAnalyzer
       )
     end
 
+    def start_date
+      details.min_by(&:date)&.date
+    end
+
+    def end_date
+      details.max_by(&:date)&.date
+    end
+
     def sick_leave
       details.count(&:is_sick)
     end

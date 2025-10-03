@@ -1,4 +1,5 @@
 class PayrollLine < ApplicationRecord
+  include PayrollFormula
   has_paper_trail ignore: [:id, :created_at, :updated_at]
 
   belongs_to :payroll, inverse_of: :payroll_lines
@@ -15,17 +16,7 @@ class PayrollLine < ApplicationRecord
     deduction: 1
   }
 
-  enum :formula,{
-    basic: 0,
-    fulltime_schedule: 1,
-    overtime_hour: 2,
-    period_proportional: 3,
-    annual_leave_cut: 4,
-    sick_leave_cut: 5,
-    hourly_daily: 6,
-    fulltime_hour_per_day: 7,
-    proportional_commission: 8,
-  }
+  enum :formula,PAYROLL_FORMULA_LIST
 
   belongs_to :payroll_type, optional: true
 end

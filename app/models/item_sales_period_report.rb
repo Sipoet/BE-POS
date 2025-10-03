@@ -10,6 +10,7 @@ class ItemSalesPeriodReport < ApplicationModel
                 :quantity,
                 :sales_total,
                 :discount_percentage,
+                :discount_amount,
                 :is_consignment,
                 :subtotal
   def initialize(row)
@@ -20,7 +21,7 @@ class ItemSalesPeriodReport < ApplicationModel
     @brand_name = row['brand_name']
     @quantity = row['quantity'].to_i
     @sales_total = row['sales_total'].to_f
-    @discount_percentage = row['discount_percentage'].to_f
+    @discount_percentage = row['discount_percentage'].to_f / 100
     @subtotal = row['subtotal'].to_f
     @buy_price = row['buy_price'].to_f
     @sell_price = row['sell_price'].to_f
