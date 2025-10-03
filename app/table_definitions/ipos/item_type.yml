@@ -2,22 +2,25 @@
 table_name: tbl_itemjenis
 columns:
   name:
-    name: jenis
     type: string
     excel_width: 25
     client_width: 200
-    sort_key: jenis
-    attribute_key: jenis
     can_filter: true
-    filter_key: jenis
     can_sort: true
   description:
-    name: ketjenis
     type: string
     excel_width: 25
     client_width: 200
-    sort_key: ketjenis
-    attribute_key: ketjenis
     can_filter: true
-    filter_key: ketjenis
     can_sort: true
+  parent:
+    type: model
+    excel_width: 25
+    client_width: 200
+    can_sort: false
+    can_filter: true
+    filter_key: parent_id
+    input_options:
+      path: item_types
+      model_name: 'item_type'
+      attribute_key: name

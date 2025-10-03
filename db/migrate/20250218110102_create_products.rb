@@ -9,6 +9,6 @@ class CreateProducts < ActiveRecord::Migration[7.1]
       t.string :base_uom, null: false
       t.timestamps
     end
-    add_foreign_key :products, :suppliers
+    # add_foreign_key :products, :suppliers
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_03_094017) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -116,6 +116,25 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "discount_filters", force: :cascade do |t|
+    t.integer "discount_id", null: false
+    t.integer "filter_type", null: false
+    t.integer "operator", null: false
+    t.string "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "discount_group_items", force: :cascade do |t|
+    t.string "item_code", null: false
+    t.integer "discount_rule_id", null: false
+    t.integer "priority", default: 1, null: false
+    t.boolean "is_active", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_code", "priority"], name: "dg_prio_idx", unique: true, where: "(is_active = true)"
+  end
+
   create_table "discount_item_types", force: :cascade do |t|
     t.string "item_type_name", null: false
     t.boolean "is_exclude", default: false, null: false
@@ -130,6 +149,26 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_exclude", default: false, null: false
+  end
+
+  create_table "discount_rules", force: :cascade do |t|
+    t.integer "priority", default: 1, null: false
+    t.string "name", null: false
+    t.integer "use_type", default: 0, null: false
+    t.integer "rule_type", default: 0, null: false
+    t.datetime "start_time", null: false
+    t.datetime "end_time", null: false
+    t.boolean "status", default: false, null: false
+    t.integer "min_quantity", default: 1, null: false
+    t.integer "min_sales_amount", default: 1, null: false
+    t.decimal "variable1"
+    t.decimal "variable2"
+    t.decimal "variable3"
+    t.decimal "variable4"
+    t.decimal "variable5"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_discount_rules_on_name", unique: true
   end
 
   create_table "discount_suppliers", force: :cascade do |t|
@@ -377,6 +416,69 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
     t.integer "total_day", default: 0, null: false
   end
 
+  create_table "product_tags", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_product_tags_on_product_id"
+    t.index ["tag_id"], name: "index_product_tags_on_tag_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "supplier_id", null: false
+    t.string "supplier_product_code", null: false
+    t.string "brand_id", null: false
+    t.integer "item_type_id", null: false
+    t.string "stock_account", null: false
+    t.string "base_uom", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "purchase_detail_skus", force: :cascade do |t|
+    t.bigint "purchase_detail_id", null: false
+    t.bigint "stock_keeping_unit_id"
+    t.decimal "quantity", null: false
+    t.string "uom"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["purchase_detail_id"], name: "index_purchase_detail_skus_on_purchase_detail_id"
+    t.index ["stock_keeping_unit_id"], name: "index_purchase_detail_skus_on_stock_keeping_unit_id"
+  end
+
+  create_table "purchase_details", force: :cascade do |t|
+    t.bigint "purchase_header_id", null: false
+    t.decimal "quantity", null: false
+    t.string "uom", null: false
+    t.integer "product_id", null: false
+    t.decimal "buy_price", null: false
+    t.decimal "discount_amount", null: false
+    t.string "discount_desc", null: false
+    t.decimal "total", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["purchase_header_id"], name: "index_purchase_details_on_purchase_header_id"
+  end
+
+  create_table "purchase_headers", force: :cascade do |t|
+    t.integer "supplier_id", null: false
+    t.boolean "is_consignment", default: false, null: false
+    t.date "transaction_date", null: false
+    t.datetime "shipping_at"
+    t.integer "location_id", null: false
+    t.string "supplier_transaction_number"
+    t.integer "contrabon_id"
+    t.decimal "subtotal"
+    t.decimal "header_discount_amount"
+    t.decimal "tax_amount"
+    t.integer "tax_type"
+    t.decimal "grandtotal"
+    t.decimal "shipping_cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "role_work_schedules", force: :cascade do |t|
     t.string "group_name", null: false
     t.date "begin_active_at", null: false
@@ -400,6 +502,22 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
     t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
+  create_table "sales_details", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "quantity", null: false
+    t.integer "uom_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "sales_headers", force: :cascade do |t|
+    t.datetime "transaction_time", null: false
+    t.integer "status", null: false
+    t.integer "sales_type", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "settings", force: :cascade do |t|
     t.string "key_name", null: false
     t.integer "user_id"
@@ -408,6 +526,33 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
     t.datetime "updated_at", null: false
     t.index ["key_name"], name: "index_settings_on_key_name"
     t.index ["user_id"], name: "index_settings_on_user_id"
+  end
+
+  create_table "stock_keeping_units", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.string "document_type", null: false
+    t.bigint "document_id", null: false
+    t.string "barcode", null: false
+    t.date "expired_date"
+    t.decimal "sell_price", default: "0.0", null: false
+    t.decimal "cogs", default: "0.0", null: false
+    t.string "uom"
+    t.integer "option1_id"
+    t.integer "option2_id"
+    t.integer "option3_id"
+    t.string "serial_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["document_type", "document_id"], name: "index_stock_keeping_units_on_document"
+    t.index ["product_id"], name: "index_stock_keeping_units_on_product_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.integer "parent_id"
+    t.string "value"
+    t.string "group"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tbl_acc_sa", id: false, force: :cascade do |t|
@@ -1379,8 +1524,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
     t.index ["kodeitem"], name: "kodeitem7"
   end
 
+  create_table "tbl_itemjeni_hierarchies", id: false, force: :cascade do |t|
+    t.string "ancestor_id", null: false
+    t.string "descendant_id", null: false
+    t.integer "generations", null: false
+    t.index ["ancestor_id", "descendant_id", "generations"], name: "item_type_anc_desc_idx", unique: true
+    t.index ["descendant_id"], name: "item_type_desc_idx"
+  end
+
   create_table "tbl_itemjenis", primary_key: "jenis", id: { type: :string, limit: 50 }, force: :cascade do |t|
     t.string "ketjenis", limit: 100
+    t.string "parent_id"
   end
 
   create_table "tbl_itemketerangan", primary_key: ["kodeket", "jenisket"], force: :cascade do |t|
@@ -2477,6 +2631,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
   add_foreign_key "customer_group_discounts", "tbl_supelgrup", column: "customer_group_code", primary_key: "kgrup"
   add_foreign_key "discount_brands", "discounts"
   add_foreign_key "discount_brands", "tbl_itemmerek", column: "brand_name", primary_key: "merek"
+  add_foreign_key "discount_filters", "discounts"
+  add_foreign_key "discount_group_items", "discount_rules"
+  add_foreign_key "discount_group_items", "tbl_item", column: "item_code", primary_key: "kodeitem"
   add_foreign_key "discount_item_types", "discounts"
   add_foreign_key "discount_item_types", "tbl_itemjenis", column: "item_type_name", primary_key: "jenis"
   add_foreign_key "discount_items", "discounts"
@@ -2507,8 +2664,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
   add_foreign_key "payslip_lines", "payslips"
   add_foreign_key "payslips", "employees"
   add_foreign_key "payslips", "payrolls"
+  add_foreign_key "purchase_details", "products"
   add_foreign_key "role_work_schedules", "roles"
   add_foreign_key "settings", "users"
+  add_foreign_key "stock_keeping_units", "products"
+  add_foreign_key "stock_keeping_units", "tags", column: "option1_id"
+  add_foreign_key "stock_keeping_units", "tags", column: "option2_id"
+  add_foreign_key "stock_keeping_units", "tags", column: "option3_id"
   add_foreign_key "tbl_acc_sa", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_acc_sa_matauang", on_update: :cascade
   add_foreign_key "tbl_acc_sa", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_acc_sa_kodeacc", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tbl_accdepositdt", "tbl_accdeposithd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_accdepodt_hd", on_update: :cascade

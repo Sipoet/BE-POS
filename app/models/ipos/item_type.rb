@@ -6,4 +6,6 @@ class Ipos::ItemType < ApplicationRecord
   alias_attribute :id, :jenis
   alias_attribute :name, :jenis
   alias_attribute :description, :ketjenis
+
+  has_closure_tree order: 'jenis'
 end

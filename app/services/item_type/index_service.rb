@@ -17,8 +17,8 @@ class ItemType::IndexService < ApplicationService
     {
       page: @page,
       limit: @limit,
-      total_pages: @item_types.total_pages,
-      total_rows: @item_types.total_count,
+      total_pages: @page.present? ? @item_types.total_pages : 1,
+      total_rows: @page.present? ? @item_types.total_count : @item_types.count,
     }
   end
 
@@ -28,7 +28,7 @@ class ItemType::IndexService < ApplicationService
     result = dezerialize_table_params(params,
       allowed_fields: allowed_fields,
       table_definitions: @table_definitions)
-    @page = result.page || 1
+    @page = result.page
     @limit = result.limit || 20
     @search_text = result.search_text
     @sort = result.sort
@@ -39,8 +39,10 @@ class ItemType::IndexService < ApplicationService
 
   def find_item_types
     item_types = Ipos::ItemType.all.includes(@included)
-      .page(@page)
-      .per(@limit)
+    if @page.present?
+      item_types = item_types.page(@page)
+                             .per(@limit)
+    end
     if @search_text.present?
       item_types = item_types.where(['jenis ilike ? OR ketjenis ilike ? ']+ Array.new(2,"%#{@search_text}%"))
     end

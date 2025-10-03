@@ -1,14 +1,18 @@
 class ItemTypesController < ApplicationController
   before_action :authenticate_user!
   def index
-    if params[:query].present?
-      run_service(ItemType::OldIndexService)
-    else
-      run_service_default
-    end
+    run_service_default
   end
 
   def show
+    run_service_default
+  end
+
+  def create
+    run_service_default
+  end
+
+  def update
     run_service_default
   end
 end
