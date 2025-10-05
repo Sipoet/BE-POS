@@ -16,6 +16,14 @@ class Payroll::Formula::CashierCommissionCalculator < Payroll::Formula::Applicat
     comission_total
   end
 
+  def self.main_amount(payroll_line)
+    payroll_line.variable1 * 29
+  end
+
+  def self.full_amount(payroll_line)
+    payroll_line.variable1 * 30
+  end
+
   private
 
   def grouped_cash_drawers

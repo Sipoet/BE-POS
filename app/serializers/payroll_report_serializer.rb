@@ -3,7 +3,7 @@ class PayrollReportSerializer
 
   set_id :employee_id
 
-  attributes :employee_id, :employee_name, :salary_total
+  attributes :employee_id, :employee_name, :salary_total, :start_working_date
 
   attribute :payroll_type_amount do |obj,params|
     payroll_types = params[:payroll_types] || []
