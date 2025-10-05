@@ -404,7 +404,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   byebug
-  closure_tree
+  closure_tree (~> 7.4.0)
   database_cleaner-active_record (~> 2.1.0)
   database_cleaner-redis (~> 2.0.0)
   debug
