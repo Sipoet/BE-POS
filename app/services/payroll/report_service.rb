@@ -41,11 +41,17 @@ class Payroll::ReportService < ApplicationService
           name: :employee_name,
           excel_width: 25,
           client_width: 200,
-          input_options:{
-            model_name: 'employee',
-            attribute_key: 'employees.name',
-            path: 'employees'
-          },
+
+        }
+      ),
+      Datatable::TableColumn.new(
+        :start_working_date,
+        {
+          humanize_name: Employee.human_attribute_name(:start_working_date),
+          type: :date,
+          name: :start_working_date,
+          excel_width: 25,
+          client_width: 200,
         }
       ),
       Datatable::TableColumn.new(
@@ -88,6 +94,7 @@ class Payroll::ReportService < ApplicationService
       PayrollReport.new(salary_details: salary_details,
                         employee_name: employee.name,
                         employee_id: employee.id,
+                        start_working_date: employee.start_working_date,
                         salary_total: salary_total)
     end
   end
