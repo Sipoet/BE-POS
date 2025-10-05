@@ -37,7 +37,7 @@ class Payroll::ReportService < ApplicationService
         :employee_name,
         {
           humanize_name: PayslipReport.human_attribute_name(:employee_name),
-          type: :model,
+          type: :string,
           name: :employee_name,
           excel_width: 25,
           client_width: 200,

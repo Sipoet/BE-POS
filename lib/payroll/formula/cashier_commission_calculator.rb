@@ -17,11 +17,11 @@ class Payroll::Formula::CashierCommissionCalculator < Payroll::Formula::Applicat
   end
 
   def self.main_amount(payroll_line)
-    0
+    payroll_line.variable1 * 29
   end
 
   def self.full_amount(payroll_line)
-    0
+    payroll_line.variable1 * 30
   end
 
   private
