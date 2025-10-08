@@ -149,6 +149,7 @@ Rails.application.routes.draw do
   resources :accounts, only:[:index, :show]
   resources :system_settings, only:[:index, :show, :update] do
     post :refresh_table, on: :collection
+    get :list_tables, on: :collection
   end
 
   resources :item_sales_performance_reports, only: [:index] do

@@ -16,4 +16,8 @@ class SystemSettingsController < ApplicationController
   def refresh_table
     run_service_default
   end
+
+  def list_tables
+    run_service_default
+  end
 end
