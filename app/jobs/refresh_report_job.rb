@@ -4,9 +4,9 @@ class RefreshReportJob < ApplicationJob
   def perform
     PurchaseReport.refresh!
     ItemReport.refresh!
+    ItemMovement.refresh!
     ItemSalesPerformanceReport.refresh!
     DaySalesPerformanceReport.refresh!
-    DaySalesTrafficReport.refresh!
     YearSalesPerformanceReport.refresh!
     MonthSalesPerformanceReport.refresh!
     WeekSalesPerformanceReport.refresh!
