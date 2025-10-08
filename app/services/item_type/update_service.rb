@@ -1,7 +1,7 @@
 class ItemType::UpdateService < ApplicationService
 
   def execute_service
-    item_type = Ipos::ItemType.find(params[:id])
+    item_type = Ipos::ItemType.find_by(id: params[:code])
     raise RecordNotFound.new(params[:id],Ipos::ItemType.model_name.human) if item_type.nil?
     if record_save?(item_type)
       render_json(Ipos::ItemTypeSerializer.new(item_type,{fields: @fields}))
