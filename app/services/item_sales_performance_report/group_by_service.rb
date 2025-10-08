@@ -29,8 +29,21 @@ class ItemSalesPerformanceReport::GroupByService < ApplicationService
 
   private
 
-  def find_reports
-    query = @base_query.order(query_sort)
+  def start_stock_query
+    query = ItemMovement.where(ApplicationRecord.sanitize_sql(['transaction_date < ?',@validator.start_date]))
+    query = filter_query(query)
+    query = query.group(@validator.indicator_field)
+                 .sum(:quantity)
+  end
+
+  def period_increase_stock_query
+    query = ItemMovement.where(transaction_date: @validator.start_date..(@validator.end_date), movement_type: :in)
+    query = filter_query(query)
+    query = query.group(@validator.indicator_field)
+                 .sum(:quantity)
+  end
+
+  def filter_query(query)
     if @validator.supplier_codes.any?
       query = query.where(supplier_code: @validator.supplier_codes)
     end
@@ -43,38 +56,38 @@ class ItemSalesPerformanceReport::GroupByService < ApplicationService
     if @validator.last_purchase_years.any?
       query = query.where(last_purchase_year: @validator.last_purchase_years)
     end
+    query
+  end
+
+  def find_reports
+    query = @base_query.order(query_sort)
+    query = filter_query(query)
     group_field = get_group_field
+    sum_field = @validator.value_type == 'sales_through_rate' ? 'sales_quantity': @validator.value_type
     query = query.group(group_field)
-                 .sum(@validator.value_type)
+                 .sum(sum_field)
+    name_of = ->(keys,value){keys[0]}
+    date_pk_of = ->(keys,value){keys[1]}
+    last_purchase_year_of = ->(keys,value){keys[2]}
+
     if @validator.group_type == 'period'
+      name_of = ->(keys,value){'All'}
       if @validator.separate_purchase_year
-        query.map do |keys,value|
-          QueryResult.new(
-            name: 'All',
-            date_pk: keys[0],
-            last_purchase_year: keys[1],
-            value: value
-          )
-        end
+        last_purchase_year_of = ->(keys,value){keys[1]}
+        date_pk_of = ->(keys,value){keys[0]}
       else
-        query.map do |key,value|
-          QueryResult.new(
-            name: 'All',
-            date_pk: key,
-            last_purchase_year: nil,
-            value: value
-          )
-        end
+        last_purchase_year_of = ->(keys,value){nil}
+        date_pk_of = ->(key,value){key}
       end
-    else
-      query.map do |keys,value|
-        QueryResult.new(
-          name: keys[0],
-          date_pk: keys[1],
-          last_purchase_year: keys[2],
-          value: value
-        )
-      end
+    end
+
+    query.map do |keys,value|
+      QueryResult.new(
+        name: name_of.call(keys,value),
+        date_pk: date_pk_of.call(keys,value),
+        last_purchase_year: last_purchase_year_of.call(keys,value),
+        value: value
+      )
     end
   end
 
@@ -113,7 +126,6 @@ class ItemSalesPerformanceReport::GroupByService < ApplicationService
       date = start_date
       end_date_cweek = end_date.to_date.cweek
       end_date_year = end_date.year
-
       list = []
       loop do
         break if date.year > end_date_year
@@ -144,18 +156,42 @@ class ItemSalesPerformanceReport::GroupByService < ApplicationService
   def group_by(reports,identifier_list)
     lines = models_of(@validator.group_type, reports.map(&:name).uniq)
     description_key = ['brand','item_type'].include?(@validator.group_type) ? :description : :name
-    reports.group_by{|row|[row.name, row.last_purchase_year].compact}
-           .map do |keys,values|
-              row = LineResult.new(name: keys[0], last_purchase_year: keys[1])
-              if !values.empty?
-                value_hash = values.index_by(&:date_pk)
-                identifier_list.each do |date_pk|
-                  row.add_spot([date_pk, value_hash[date_pk]&.value || 0.0])
-                end
-              end
-              row.description = lines[row.name].try(description_key)
-              row
-           end
+    grouped = reports.group_by{|row|[row.name, row.last_purchase_year].compact}
+    if @validator.value_type == 'sales_through_rate'
+      start_stock = start_stock_query
+      period_increase_stock = period_increase_stock_query
+      grouped.map do |keys,values|
+        row = LineResult.new(name: keys[0], last_purchase_year: keys[1])
+        row.start_stock = (start_stock[row.name] || 0)
+        row.increase_period_stock = (period_increase_stock[row.name] || 0)
+        total_stock = row.start_stock.to_d + row.increase_period_stock.to_d
+        row.sales_quantity = 0
+        if !values.empty?
+          value_hash = values.index_by(&:date_pk)
+          identifier_list.each do |date_pk|
+            sales_quantity = value_hash[date_pk]&.value || 0.0
+            rate = total_stock == 0 ? 1 : (sales_quantity.to_d / total_stock)
+            row.add_spot([date_pk, rate.to_f])
+            total_stock -= sales_quantity
+            row.sales_quantity += sales_quantity
+          end
+        end
+        row.description = lines[row.name].try(description_key)
+        row
+      end
+    else
+      grouped.map do |keys,values|
+        row = LineResult.new(name: keys[0], last_purchase_year: keys[1])
+        if !values.empty?
+          value_hash = values.index_by(&:date_pk)
+          identifier_list.each do |date_pk|
+            row.add_spot([date_pk, value_hash[date_pk]&.value || 0.0])
+          end
+        end
+        row.description = lines[row.name].try(description_key)
+        row
+      end
+    end
   end
 
 
@@ -187,7 +223,8 @@ class ItemSalesPerformanceReport::GroupByService < ApplicationService
   end
 
   class LineResult
-    attr_accessor :name, :description, :last_purchase_year, :spots
+    attr_accessor :name, :description, :last_purchase_year, :spots,
+                  :sales_quantity, :start_stock, :increase_period_stock
 
     def initialize(name:,description: nil,last_purchase_year: nil, spots:[])
       @name = name
