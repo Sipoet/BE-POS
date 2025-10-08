@@ -1,4 +1,6 @@
 class SystemSettingsController < ApplicationController
+  before_action :authorize_user!
+
   def index
     run_service_default
   end
@@ -8,6 +10,10 @@ class SystemSettingsController < ApplicationController
   end
 
   def update
+    run_service_default
+  end
+
+  def refresh_table
     run_service_default
   end
 end

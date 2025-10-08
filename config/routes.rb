@@ -147,7 +147,9 @@ Rails.application.routes.draw do
   resources :book_payslip_lines, only:[:index,:create,:update,:destroy]
   resources :book_employee_attendances, only:[:index,:create,:update,:destroy]
   resources :accounts, only:[:index, :show]
-  resources :system_settings, only:[:index, :show, :update]
+  resources :system_settings, only:[:index, :show, :update] do
+    post :refresh_table, on: :collection
+  end
 
   resources :item_sales_performance_reports, only: [:index] do
     get :group_by, on: :collection
