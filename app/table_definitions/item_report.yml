@@ -13,16 +13,6 @@ columns:
     can_filter: true
     filter_key: item_code
     can_sort: true
-  item_name:
-    name: item_name
-    type: string
-    excel_width: 25
-    client_width: 200
-    sort_key: item_name
-    attribute_key: item_name
-    can_filter: true
-    filter_key: item_name
-    can_sort: true
   item_type:
     name: item_type_name
     type: model
@@ -92,15 +82,45 @@ columns:
     can_filter: true
     filter_key: is_consignment
     can_sort: true
+  number_of_purchase:
+    name: number_of_purchase
+    type: integer
+    excel_width: 10
+    client_width: 160
+    sort_key: number_of_purchase
+    attribute_key: number_of_purchase
+    can_filter: true
+    filter_key: number_of_purchase
+    can_sort: true
   stock_left:
     name: stock_left
     type: decimal
     excel_width: 10
-    client_width: 90
+    client_width: 160
     sort_key: stock_left
     attribute_key: stock_left
     can_filter: true
     filter_key: stock_left
+    can_sort: true
+  number_of_sales:
+    name: number_of_sales
+    type: integer
+    excel_width: 10
+    client_width: 160
+    sort_key: number_of_sales
+    attribute_key: number_of_sales
+    can_filter: true
+    filter_key: number_of_sales
+    can_sort: true
+  item_out:
+    name: item_out
+    type: integer
+    excel_width: 10
+    client_width: 160
+    sort_key: item_out
+    attribute_key: item_out
+    can_filter: true
+    filter_key: item_out
     can_sort: true
   warehouse_stock:
     name: warehouse_stock
@@ -121,36 +141,6 @@ columns:
     attribute_key: store_stock
     can_filter: true
     filter_key: store_stock
-    can_sort: true
-  item_out:
-    name: item_out
-    type: integer
-    excel_width: 10
-    client_width: 90
-    sort_key: item_out
-    attribute_key: item_out
-    can_filter: true
-    filter_key: item_out
-    can_sort: true
-  number_of_purchase:
-    name: number_of_purchase
-    type: integer
-    excel_width: 10
-    client_width: 90
-    sort_key: number_of_purchase
-    attribute_key: number_of_purchase
-    can_filter: true
-    filter_key: number_of_purchase
-    can_sort: true
-  number_of_sales:
-    name: number_of_sales
-    type: integer
-    excel_width: 10
-    client_width: 90
-    sort_key: number_of_sales
-    attribute_key: number_of_sales
-    can_filter: true
-    filter_key: number_of_sales
     can_sort: true
   qty_return:
     name: qty_return
