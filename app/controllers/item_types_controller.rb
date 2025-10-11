@@ -15,4 +15,8 @@ class ItemTypesController < ApplicationController
   def update
     run_service_default
   end
+
+  def destroy
+    run_service_default
+  end
 end

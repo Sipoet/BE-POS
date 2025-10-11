@@ -43,7 +43,7 @@ Rails.application.routes.draw do
 
   resources :suppliers,param: :code, only: [:index, :show]
 
-  resources :item_types,param: :code, only: [:index, :show, :create, :update]
+  resources :item_types, param: :code, only: [:index, :show, :create, :update, :destroy]
 
   resources :brands,param: :code, only: [:index, :show]
 
