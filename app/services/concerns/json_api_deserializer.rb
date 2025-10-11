@@ -172,7 +172,7 @@ module JsonApiDeserializer
           if value.is_a?(Array)
             ["#{key} not IN (?)", value]
           else
-            sanitize_values = value.map{|line_value| ActiveRecord::Base::sanitize_sql(line_value) }
+            sanitize_values = value.map{|line_value| ActiveRecord::Base.sanitize_sql(line_value) }
             ["#{key} != ?", sanitize_values]
           end
         when :like then ["#{key} ilike ?", "%#{ApplicationRecord.sanitize_sql_like(value)}%"]
