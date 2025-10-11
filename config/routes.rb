@@ -168,6 +168,7 @@ Rails.application.routes.draw do
 
   resources :purchase_payment_histories, only: [:index]
   resources :cash_transaction_reports, only: [:index]
+  resources :products, only: [:index, :show, :create, :update, :destroy]
 
   scope :ipos do
     resources :users, controller: 'ipos/users', only: [:index]
