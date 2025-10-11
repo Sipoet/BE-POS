@@ -157,6 +157,8 @@ Rails.application.routes.draw do
     get :group_by, on: :collection
   end
 
+  resources :products, only: [:index, :show, :create, :update, :destroy]
+
   scope :ipos do
     resources :users, controller: 'ipos/users', only: [:index]
   end

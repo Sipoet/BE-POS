@@ -1,0 +1,75 @@
+---
+table_name: products
+columns:
+  description:
+    main: true
+    type: string
+    excel_width: 25
+    client_width: 200
+    sort_key: description
+    filter_key: description
+    can_filter: true
+    can_sort: true
+  supplier_product_code:
+    type: string
+    excel_width: 25
+    client_width: 200
+    sort_key: kodeitem
+    filter_key: kodeitem
+    can_filter: true
+    can_sort: true
+  supplier:
+    type: model
+    excel_width: 25
+    client_width: 200
+    sort_key: supplier_id
+    filter_key: supplier_id
+    can_filter: true
+    can_sort: true
+    input_options:
+      path: suppliers
+      model_name: 'supplier'
+      attribute_key: name
+  item_type:
+    type: model
+    excel_width: 25
+    client_width: 200
+    sort_key: item_type_id
+    filter_key: item_type_id
+    can_filter: true
+    can_sort: true
+    input_options:
+      path: item_types
+      model_name: 'item_type'
+      attribute_key: name
+  brand:
+    type: model
+    excel_width: 25
+    client_width: 200
+    sort_key: brand_id
+    filter_key: brand_id
+    can_filter: true
+    can_sort: true
+    input_options:
+      path: brands
+      model_name: 'brand'
+      attribute_key: name
+  base_uom:
+    type: string
+    excel_width: 25
+    client_width: 200
+    sort_key: base_uom
+    filter_key: base_uom
+    attribute_key: base_uom
+    can_filter: true
+    can_sort: true
+  stock_account:
+    type: string
+    excel_width: 25
+    client_width: 200
+    sort_key: stock_account
+    filter_key: stock_account
+    attribute_key: stock_account
+    can_filter: true
+    can_sort: true
+

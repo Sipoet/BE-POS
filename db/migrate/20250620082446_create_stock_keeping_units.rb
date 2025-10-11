@@ -5,6 +5,8 @@ class CreateStockKeepingUnits < ActiveRecord::Migration[7.1]
       t.references :document, polymorphic: true, null: false
       t.string :barcode, null: false
       t.date :expired_date
+      t.date :purchase_date
+      t.date :production_date
       t.decimal :sell_price, null: false, default: 0
       t.decimal :cogs, null: false, default: 0
       t.string :uom

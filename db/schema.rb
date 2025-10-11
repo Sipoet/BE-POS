@@ -427,9 +427,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_08_090930) do
 
   create_table "products", force: :cascade do |t|
     t.string "supplier_id", null: false
-    t.string "supplier_product_code", null: false
+    t.string "supplier_product_code"
+    t.string "description", null: false
     t.string "brand_id", null: false
-    t.integer "item_type_id", null: false
+    t.string "item_type_id", null: false
     t.string "stock_account", null: false
     t.string "base_uom", null: false
     t.datetime "created_at", null: false
@@ -534,6 +535,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_08_090930) do
     t.bigint "document_id", null: false
     t.string "barcode", null: false
     t.date "expired_date"
+    t.date "purchase_date"
+    t.date "production_date"
     t.decimal "sell_price", default: "0.0", null: false
     t.decimal "cogs", default: "0.0", null: false
     t.string "uom"
@@ -2664,6 +2667,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_08_090930) do
   add_foreign_key "payslip_lines", "payslips"
   add_foreign_key "payslips", "employees"
   add_foreign_key "payslips", "payrolls"
+  add_foreign_key "products", "tbl_itemjenis", column: "item_type_id", primary_key: "jenis"
+  add_foreign_key "products", "tbl_itemmerek", column: "brand_id", primary_key: "merek"
+  add_foreign_key "products", "tbl_supel", column: "supplier_id", primary_key: "kode"
   add_foreign_key "purchase_details", "products"
   add_foreign_key "role_work_schedules", "roles"
   add_foreign_key "settings", "users"
