@@ -1,8 +1,13 @@
 class SystemSetting::ListTableService < ApplicationService
 
   def execute_service
+    cache = Cache.get('view_table_list')
+    if cache.present?
+      render_json(cache)
+      return
+    end
     tables = SystemSetting::RefreshTableService::TABLE_LIST.keys.to_a
-    render_json({
+    data = {
       data: tables.map do|table|
         {
           value: table,
@@ -10,7 +15,9 @@ class SystemSetting::ListTableService < ApplicationService
           id: table,
         }
       end
-    })
+    }
+    render_json(data)
+    cache = Cache.set('view_table_list',data.to_json, expire: 1.hour)
   end
 
 end
