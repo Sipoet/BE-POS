@@ -9,7 +9,8 @@ class SystemSetting::RefreshTableService < ApplicationService
       YearSalesPerformanceReport,
       MonthSalesPerformanceReport,
       WeekSalesPerformanceReport
-    ]
+    ],
+    monthly_expense_report: MonthlyExpenseReport,
   }
 
   def execute_service
