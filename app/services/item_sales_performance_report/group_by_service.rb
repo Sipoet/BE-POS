@@ -265,7 +265,7 @@ class ItemSalesPerformanceReport::GroupByService < ApplicationService
     @validator = ItemSalesPerformanceReport::GroupByValidator.new(permitted_params)
     raise ValidationError if !@validator.valid?
 
-    if @validator.start_date.year == 1000
+    if @validator.start_date.year <= 1000
       @validator.start_date = Ipos::Sale.all.minimum(:tanggal)
     end
   end
