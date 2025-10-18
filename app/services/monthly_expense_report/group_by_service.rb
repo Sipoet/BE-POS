@@ -12,11 +12,11 @@ class MonthlyExpenseReport::GroupByService < ApplicationService
 
   def find_reports
     range = @validator.start_date..(@validator.end_date)
-    query = MonthlyExpenseReport.where(date_pk: range).order(date_pk: :asc)
+    query = MonthlyExpenseReport.where(date_pk: range)
     if @validator.group_period == 'monthly'
-     query.to_a
+     query.order(date_pk: :asc).to_a
     elsif @validator.group_period == 'yearly'
-      query.group(:year).sum(:total).map do |year,total|
+      query.group(:year).order(year: :asc).sum(:total).map do |year,total|
         MonthlyExpenseReport.new(date_pk: Date.new(year),year: year,total: total)
       end
     end
