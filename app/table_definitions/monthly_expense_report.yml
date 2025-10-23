@@ -1,0 +1,34 @@
+table_name: monthly_expense_report
+columns:
+  date_pk:
+    type: date
+    excel_width: 25
+    client_width: 180
+    sort_key: date_pk
+    attribute_key: date_pk
+    can_filter: true
+    can_sort: true
+  year:
+    type: integer
+    excel_width: 25
+    client_width: 120
+    sort_key: year
+    attribute_key: year
+    can_filter: true
+    can_sort: true
+  month:
+    type: integer
+    excel_width: 25
+    client_width: 120
+    sort_key: month
+    attribute_key: month
+    can_filter: true
+    can_sort: true
+  total:
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: total
+    attribute_key: total
+    can_filter: true
+    can_sort: true

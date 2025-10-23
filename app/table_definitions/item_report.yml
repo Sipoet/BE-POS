@@ -1,14 +1,10 @@
 ---
 table_name: item_reports
 columns:
-  item:
-    type: model
+  item_code:
+    type: string
     excel_width: 25
-    client_width: 200
-    input_options:
-      path: items
-      model_name: item
-      attribute_key: name
+    client_width: 150
     sort_key: item_code
     can_filter: true
     filter_key: item_code

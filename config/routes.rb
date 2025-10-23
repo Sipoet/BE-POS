@@ -158,6 +158,9 @@ Rails.application.routes.draw do
   end
 
   resources :products, only: [:index, :show, :create, :update, :destroy]
+  resources :monthly_expense_reports, only: [:index] do
+    get :group_by, on: :collection
+  end
 
   scope :ipos do
     resources :users, controller: 'ipos/users', only: [:index]
