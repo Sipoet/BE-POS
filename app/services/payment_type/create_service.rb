@@ -1,9 +1,8 @@
 class PaymentType::CreateService < ApplicationService
-
   def execute_service
     payment_type = PaymentType.new
     if record_save?(payment_type)
-      render_json(PaymentTypeSerializer.new(payment_type,fields:@fields),{status: :created})
+      render_json(PaymentTypeSerializer.new(payment_type, fields: @fields), { status: :created })
     else
       render_error_record(payment_type)
     end
@@ -14,20 +13,20 @@ class PaymentType::CreateService < ApplicationService
       update_attribute(payment_type)
       payment_type.save!
     end
-    return true
-  rescue => e
+    true
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace
-    return false
+    false
   end
 
   def update_attribute(payment_type)
-    table_definitions = Datatable::DefinitionExtractor.new(PaymentType)
-    allowed_columns = table_definitions.column_names
-    @fields = {payment_type: allowed_columns}
+    table_definition = Datatable::DefinitionExtractor.new(PaymentType)
+    allowed_columns = table_definition.column_names
+    @fields = { payment_type: allowed_columns }
     permitted_params = params.required(:data)
-                              .required(:attributes)
-                              .permit(allowed_columns)
+                             .required(:attributes)
+                             .permit(allowed_columns)
     payment_type.attributes = permitted_params
   end
 end

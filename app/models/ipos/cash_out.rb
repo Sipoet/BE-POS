@@ -1,5 +1,6 @@
-class Ipos::CashOut < Ipos::AccountCash
+# frozen_string_literal: true
 
+class Ipos::CashOut < Ipos::AccountCash
   def self.sti_name
     'KASO'
   end
@@ -14,7 +15,5 @@ class Ipos::CashOut < Ipos::AccountCash
   validates :jumlah, presence: true
   validates :subtotal, presence: true
   validates :dateupd, presence: true
-  validates :bc_trf_sts, inclusion: {in: [true, false]}
-
-
+  validates :bc_trf_sts, inclusion: { in: [true, false] }
 end

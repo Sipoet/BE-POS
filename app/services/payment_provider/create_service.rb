@@ -6,9 +6,9 @@ class PaymentProvider::CreateService < ApplicationService
       options = {
         fields: @fields,
         include: ['payment_provider_edcs'],
-        params:{include: ['payment_provider_edcs']}
+        params: { include: ['payment_provider_edcs'] }
       }
-      render_json(PaymentProviderSerializer.new(payment_provider,options),{status: :created})
+      render_json(PaymentProviderSerializer.new(payment_provider, options), { status: :created })
     else
       render_error_record(payment_provider)
     end
@@ -20,28 +20,28 @@ class PaymentProvider::CreateService < ApplicationService
       build_payment_provider_edcs(payment_provider)
       payment_provider.save!
     end
-    return true
-  rescue => e
+    true
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace
-    return false
+    false
   end
 
   def build_payment_provider_edcs(payment_provider)
     permitted_params = params.required(:data)
-                              .required(:relationships)
-                              .required(:payment_provider_edcs)
-                              .permit(data:[:type,:id, attributes:[:merchant_id,:terminal_id]])
-    build_attributes(permitted_params[:data],payment_provider.payment_provider_edcs)
+                             .required(:relationships)
+                             .required(:payment_provider_edcs)
+                             .permit(data: [:type, :id, { attributes: %i[merchant_id terminal_id] }])
+    build_attributes(permitted_params[:data], payment_provider.payment_provider_edcs)
   end
 
   def update_attribute(payment_provider)
-    table_definitions = Datatable::DefinitionExtractor.new(PaymentProvider)
-    allowed_columns = table_definitions.column_names + [:payment_provider_edcs]
-    @fields = {payment_provider: allowed_columns}
+    table_definition = Datatable::DefinitionExtractor.new(PaymentProvider)
+    allowed_columns = table_definition.column_names + [:payment_provider_edcs]
+    @fields = { payment_provider: allowed_columns }
     permitted_params = params.required(:data)
-                              .required(:attributes)
-                              .permit(allowed_columns)
+                             .required(:attributes)
+                             .permit(allowed_columns)
     payment_provider.attributes = permitted_params
   end
 end

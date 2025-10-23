@@ -11,7 +11,10 @@ class CreateDiscountBrands < ActiveRecord::Migration[7.1]
     ApplicationRecord.transaction do
       Discount.where('brand_name is not null or blacklist_brand_name is not null').each do |discount|
         discount.discount_brands.build(brand_name: discount.brand_name) if discount.brand_name.present?
-        discount.discount_brands.build(is_exclude: true, brand_name: discount.blacklist_brand_name) if discount.blacklist_brand_name.present?
+        if discount.blacklist_brand_name.present?
+          discount.discount_brands.build(is_exclude: true,
+                                         brand_name: discount.blacklist_brand_name)
+        end
         discount.save!
       end
     end

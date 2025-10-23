@@ -74,14 +74,6 @@ columns:
     can_filter: true
     filter_key: religion
     can_sort: true
-    input_options:
-      enums:
-        - buddhism
-        - catholic
-        - christian
-        - hindu
-        - islam
-        - khonghucu
   email:
     type: string
     excel_width: 20
@@ -89,16 +81,6 @@ columns:
     sort_key: email
     can_filter: true
     filter_key: email
-    can_sort: true
-  shift:
-    name: shift
-    type: string
-    excel_width: 25
-    client_width: 200
-    sort_key: shift
-    attribute_key: shift
-    can_filter: true
-    filter_key: shift
     can_sort: true
   start_working_date:
     name: start_working_date
@@ -132,7 +114,7 @@ columns:
     can_sort: true
   contact_number:
     name: contact_number
-    type: string
+    type: tel
     excel_width: 25
     client_width: 200
     sort_key: contact_number

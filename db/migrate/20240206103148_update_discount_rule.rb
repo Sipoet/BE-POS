@@ -13,5 +13,4 @@ class UpdateDiscountRule < ActiveRecord::Migration[7.1]
     add_foreign_key :discounts, :tbl_itemjenis, column: :blacklist_item_type_name, primary_key: :jenis
     add_foreign_key :discounts, :tbl_itemmerek, column: :blacklist_brand_name, primary_key: :merek
   end
-
 end

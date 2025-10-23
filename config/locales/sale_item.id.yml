@@ -29,3 +29,4 @@ id:
         brand_name: 'Merek'
         item_type_name: 'Jenis/Departemen'
         transaction_date: 'Tanggal'
+        sale: 'No Transaksi'

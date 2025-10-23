@@ -1,5 +1,4 @@
 class Ipos::Item < ApplicationRecord
-
   self.table_name = 'tbl_item'
   self.primary_key = 'kodeitem'
 
@@ -7,6 +6,7 @@ class Ipos::Item < ApplicationRecord
   belongs_to :item_type, foreign_key: :jenis, primary_key: :jenis
   belongs_to :supplier, optional: true, foreign_key: :supplier1, primary_key: :kode
   has_one :item_report, foreign_key: :item_code
+  has_many :item_sell_uoms, class_name: 'Ipos::ItemSellUom', foreign_key: :kodeitem
 
   has_many :discount_group_items, foreign_key: :item_code
   has_many :discount_rules, through: :discount_group_items
@@ -29,6 +29,4 @@ class Ipos::Item < ApplicationRecord
   alias_attribute :description, :keterangan
   alias_attribute :updated_at, :dateupd
   alias_attribute :created_at, :tanggal_add
-
-
 end

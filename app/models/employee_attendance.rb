@@ -1,7 +1,6 @@
 class EmployeeAttendance < ApplicationRecord
   has_paper_trail
 
-
   validates :date, presence: true
   validates :start_time, presence: true
   validates :end_time, presence: true
@@ -18,10 +17,12 @@ class EmployeeAttendance < ApplicationRecord
   end
 
   private
+
   def end_time_valid
-    return if (start_time.blank? || end_time.blank?)
-    if start_time > end_time
-      errors.add(:end_time,:greater_than, count: start_time)
-    end
+    return if start_time.blank? || end_time.blank?
+
+    return unless start_time > end_time
+
+    errors.add(:end_time, :greater_than, count: start_time)
   end
 end

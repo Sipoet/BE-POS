@@ -13,5 +13,4 @@ module PayrollFormula
     proportional_commission: 8,
     cashier_commission: 9
   }.freeze
-
 end

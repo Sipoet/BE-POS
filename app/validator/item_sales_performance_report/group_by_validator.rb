@@ -1,5 +1,4 @@
 class ItemSalesPerformanceReport::GroupByValidator < ApplicationModel
-
   attribute :group_type, :string
   attribute :group_period, :string
   attribute :value_type, :string
@@ -12,14 +11,15 @@ class ItemSalesPerformanceReport::GroupByValidator < ApplicationModel
   attribute :item_type_names, :array, of: :string, default: []
   attribute :item_codes, :array, of: :string, default: []
 
-  validates :group_period, presence: true, inclusion: {in: ['hourly','daily','dow','weekly','monthly','yearly']}
-  validates :value_type, presence: true, inclusion: {in: ['sales_total','sales_quantity','sales_discount_amount',
-                                                          'gross_profit','cash_total','debit_total','credit_total','qris_total','online_total']}
-  validates :group_type, presence: true, inclusion: {in: ['supplier','brand','item_type','item','period']}
+  validates :group_period, presence: true, inclusion: { in: %w[hourly daily dow weekly monthly yearly] }
+  validates :value_type, presence: true, inclusion: { in: %w[sales_total sales_quantity sales_discount_amount sales_through_rate
+                                                             gross_profit cash_total debit_total credit_total qris_total online_total] }
+  validates :group_type, presence: true, inclusion: { in: %w[supplier brand item_type item period] }
   validates :start_date, presence: true
   validates :end_date, presence: true
 
-  validate :validate_filter_group_type
+  validate :sales_through_rate_not_support_period
+  validate :group_by_item_must_filter_item
 
   def indicator_field
     case group_type
@@ -71,28 +71,17 @@ class ItemSalesPerformanceReport::GroupByValidator < ApplicationModel
 
   private
 
-  def validate_filter_group_type
-    if @group_type.nil?
-      return
-    end
-    case @group_type
-      when'supplier'
-        if supplier_codes.blank?
-          errors.add(:supplier_codes,:presence)
-        end
-      when'brand'
-        if brand_names.blank?
-          errors.add(:brand_names,:presence)
-        end
-      when'item_type'
-        if item_type_names.blank?
-          errors.add(:item_type_names,:presence)
-        end
-      when'item'
-        if item_codes.blank?
-          errors.add(:item_codes,:presence)
-        end
-    end
+  def sales_through_rate_not_support_period
+    return unless group_type == 'period' && value_type == 'sales_through_rate'
+
+    errors.add(:value_type, 'kecepatan penjualan tidak bisa dipisah dalam periode')
+    false
   end
 
+  def group_by_item_must_filter_item
+    return unless group_type == 'item' && item_codes.blank?
+
+    errors.add(:item_codes, 'Item Harus dipilih jika memilih grup berdasarkan item')
+    false
+  end
 end

@@ -1,0 +1,20 @@
+id:
+  activerecord:
+    models:
+      purchase_payment_history: "Riwayat Pembayaran Pembelian"
+    attributes:
+      purchase_payment_history:
+        code: 'No Pembayaran'
+        description: 'Keterangan'
+        grand_total: 'Total Pembelian'
+        discount_amount: 'Jumlah Diskon'
+        payment_amount: 'Jumlah Bayar'
+        transaction_at: 'Tanggal Bayar'
+        invoiced_at: 'Tanggal Faktur'
+        stock_arrived_at: 'Tanggal Barang Datang'
+        supplier_code: 'Kode Supplier'
+        purchase_code: 'Nota Pembelian'
+        purchase_order_code: 'Nota Pesanan'
+        debt_left: 'Sisa Hutang Sesudah'
+        debt_total: 'Sisa Hutang Sebelum'
+        payment_account: 'Akun Bayar'

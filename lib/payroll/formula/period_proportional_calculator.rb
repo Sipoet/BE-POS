@@ -1,12 +1,16 @@
-class Payroll::Formula::PeriodProportionalCalculator < Payroll::Formula::ApplicationCalculator
+# frozen_string_literal: true
 
+class Payroll::Formula::PeriodProportionalCalculator < Payroll::Formula::ApplicationCalculator
   # variable1 = amount of pay
   # variable2 = how many day get amount of pay
   # variable3 = include sick day? 1 is true, anything else is false
 
   def calculate
-    fraction = attendance_summary.work_days.to_d
-    fraction += attendance_summary.sick_leave if include_sick_day?(payroll_line)
+    fraction = attendance_summary.work_days.to_d + attendance_summary.paid_leave
+    if include_sick_day?
+      max_leave_covered = Setting.get('sick_leave_covered_day') || 31
+      fraction += [attendance_summary.sick_leave, max_leave_covered].min
+    end
     separator = (payroll_line.variable2 || 1).to_d
     (fraction * payroll_line.variable1.to_d / separator).round(payslip_round)
   end
@@ -20,7 +24,8 @@ class Payroll::Formula::PeriodProportionalCalculator < Payroll::Formula::Applica
   end
 
   private
-  def include_sick_day?(payroll_line)
+
+  def include_sick_day?
     payroll_line.variable3 == 1
   end
 

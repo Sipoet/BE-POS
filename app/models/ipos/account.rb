@@ -1,5 +1,4 @@
 class Ipos::Account < ApplicationRecord
-
   self.table_name = 'tbl_perkiraan'
   self.primary_key = 'kodeacc'
 

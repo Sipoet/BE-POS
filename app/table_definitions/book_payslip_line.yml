@@ -6,6 +6,7 @@ columns:
   employee:
     type: model
     client_width: 180
+    class_name: 'Employee'
     filter_key: 'employee_id'
     edit_key: 'employee_id'
     sort_key: 'employees.name'
@@ -16,12 +17,10 @@ columns:
   group:
     type: enum
     client_width: 180
-    enum_list:
-      - earning
-      - deduction
   payroll_type:
     type: model
     client_width: 180
+    class_name: 'PayrollType'
     filter_key: 'payroll_type_id'
     edit_key: payroll_type_id
     input_options:

@@ -1,0 +1,9 @@
+id:
+  activerecord:
+    models:
+      holiday: "Libur Karyawan"
+    attributes:
+      holiday:
+        religion: "Agama"
+        date: 'Tanggal'
+        description: 'Keterangan'

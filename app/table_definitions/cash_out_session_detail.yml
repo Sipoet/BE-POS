@@ -11,8 +11,7 @@ columns:
     can_filter: true
     filter_key: date
     can_sort: true
-  user:
-    name: user_id
+  cashier:
     type: model
     excel_width: 25
     client_width: 200
@@ -44,6 +43,7 @@ columns:
     can_filter: true
     filter_key: status
     can_sort: true
+    input_options:
   amount:
     name: amount
     type: money

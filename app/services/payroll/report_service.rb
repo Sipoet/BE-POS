@@ -1,13 +1,12 @@
 class Payroll::ReportService < ApplicationService
-
   def execute_service
     extract_params
     payroll_types = find_payroll_types
     table_columns = generate_table_columns(payroll_types)
-    reports = generate_report(table_columns,payroll_types)
+    reports = generate_report(table_columns, payroll_types)
     case @report_type
     when 'xlsx'
-      file_excel = generate_excel(table_columns,reports)
+      file_excel = generate_excel(table_columns, reports)
       @controller.send_file file_excel
     else
       options = {
@@ -19,11 +18,11 @@ class Payroll::ReportService < ApplicationService
           page: 1,
           limit: reports.length,
           table_columns: table_columns,
-          total_rows: reports.length,
+          total_rows: reports.length
         },
-        params:{
+        params: {
           payroll_types: payroll_types
-        },
+        }
       }
       render_json(PayrollReportSerializer.new(reports, options))
     end
@@ -37,16 +36,22 @@ class Payroll::ReportService < ApplicationService
         :employee_name,
         {
           humanize_name: PayslipReport.human_attribute_name(:employee_name),
-          type: :model,
+          type: :string,
           name: :employee_name,
           excel_width: 25,
-          client_width: 200,
-          input_options:{
-            model_name: 'employee',
-            attribute_key: 'employees.name',
-            path: 'employees'
-          },
-        }
+          client_width: 200
+
+        }, PayrollReport
+      ),
+      Datatable::TableColumn.new(
+        :start_working_date,
+        {
+          humanize_name: Employee.human_attribute_name(:start_working_date),
+          type: :date,
+          name: :start_working_date,
+          excel_width: 25,
+          client_width: 200
+        }, PayrollReport
       ),
       Datatable::TableColumn.new(
         :salary_total,
@@ -56,8 +61,8 @@ class Payroll::ReportService < ApplicationService
           name: :salary_total,
           excel_width: 25,
           client_width: 200
-        }
-        )
+        }, PayrollReport
+      )
     ]
     columns += payroll_types.map do |payroll_type|
       Datatable::TableColumn.new(
@@ -68,26 +73,27 @@ class Payroll::ReportService < ApplicationService
           name: payroll_type.id.to_s,
           excel_width: 25,
           client_width: 200
-        }
-        )
+        }, PayrollReport
+      )
     end
     columns
   end
 
-  def generate_report(table_columns,payroll_types)
+  def generate_report(_table_columns, payroll_types)
     employees = Employee
-      .where(start_working_date: ..@date,
-             end_working_date: nil)
-      .or(Employee.where(start_working_date: ..@date,
-                end_working_date: @date..))
-      .order(name: :asc)
-    group_salary_details = find_salary_details(employees,payroll_types)
+                .where(start_working_date: ..@date,
+                       end_working_date: nil)
+                .or(Employee.where(start_working_date: ..@date,
+                                   end_working_date: @date..))
+                .order(name: :asc)
+    group_salary_details = find_salary_details(employees, payroll_types)
     employees.map do |employee|
       salary_details = group_salary_details[employee.payroll_id]
       salary_total = salary_details.sum(&:full_amount)
       PayrollReport.new(salary_details: salary_details,
                         employee_name: employee.name,
                         employee_id: employee.id,
+                        start_working_date: employee.start_working_date,
                         salary_total: salary_total)
     end
   end
@@ -99,21 +105,22 @@ class Payroll::ReportService < ApplicationService
       .where(payroll_id: payroll_ids,
              payroll_type: payroll_types)
       .group_by(&:payroll_id)
-      .each_with_object({}) do |(payroll_id,payroll_lines),obj|
+      .each_with_object({}) do |(payroll_id, payroll_lines), obj|
         obj[payroll_id] = []
-         payroll_lines.group_by(&:payroll_type_id).each do |payroll_type_id, payroll_lines|
+        payroll_lines.group_by(&:payroll_type_id).each do |payroll_type_id, payroll_lines|
           payroll_type = group_payroll_type[payroll_type_id]
-          obj[payroll_id] << convert_to_report_detail(payroll_type,payroll_lines)
+          obj[payroll_id] << convert_to_report_detail(payroll_type, payroll_lines)
         end
       end
   end
 
-  def convert_to_report_detail(payroll_type,payroll_lines)
+  def convert_to_report_detail(payroll_type, payroll_lines)
     main_amount = 0
     full_amount = 0
     payroll_lines.each do |payroll_line|
-      formula_calculator_class= Payroll::Calculator.calculator_class(payroll_line)
-      payroll_line = payroll_line_from_date(payroll_line)
+      formula_calculator_class = Payroll::Calculator.calculator_class(payroll_line)
+      payroll_line = payroll_line_from_date(payroll_line) if Date.today > @date
+
       main_amount += formula_calculator_class.main_amount(payroll_line)
       amount = formula_calculator_class.full_amount(payroll_line)
       full_amount += (payroll_line.earning? ? amount : amount * -1)
@@ -128,25 +135,23 @@ class Payroll::ReportService < ApplicationService
   end
 
   def payroll_line_from_date(payroll_line)
-    payroll_line.paper_trail.version_at(@date)
+    payroll_line.paper_trail.version_at(@date.end_of_day)
   end
 
   def find_payroll_types
     payroll_types = PayrollType.all
-    if @payroll_type_ids.present?
-      payroll_types = payroll_types.where(id: @payroll_type_ids)
-    end
+    payroll_types = payroll_types.where(id: @payroll_type_ids) if @payroll_type_ids.present?
     payroll_types
   end
 
   def extract_params
-    permitted_params = params.permit(:report_type,:date,payroll_type_ids:[])
+    permitted_params = params.permit(:report_type, :date, payroll_type_ids: [])
     @date = Date.try(:parse, permitted_params[:date])
     @payroll_type_ids = *permitted_params[:payroll_type_ids]
     @report_type = permitted_params[:report_type].to_s
   end
 
-  def generate_excel(table_columns,rows)
+  def generate_excel(table_columns, rows)
     generator = ExcelGenerator.new
     generator.set_row_data_type_hash!
     generator.add_column_definitions(table_columns)
@@ -154,5 +159,4 @@ class Payroll::ReportService < ApplicationService
     generator.add_metadata(@filter || {})
     generator.generate("laporan-payroll-#{@date}")
   end
-
 end

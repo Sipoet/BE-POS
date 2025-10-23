@@ -10,7 +10,7 @@ class RefreshAllPromotionJob < ApplicationJob
         end
       end
     end
-  rescue JobCancelled => e
+  rescue JobCancelled
     debug_log "job #{jid} cancelled safely"
   end
 end

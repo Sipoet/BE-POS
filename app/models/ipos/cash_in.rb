@@ -1,5 +1,4 @@
 class Ipos::CashIn < Ipos::AccountCash
-
   def self.sti_name
     'KASI'
   end
@@ -15,6 +14,4 @@ class Ipos::CashIn < Ipos::AccountCash
   validates :subtotal, presence: true
   validates :dateupd, presence: true
   validates :bc_trf_sts, presence: true
-
-
 end

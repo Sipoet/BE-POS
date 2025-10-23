@@ -17,13 +17,13 @@ id:
         brand: 'Merek'
         sell_price: 'Harga Jual'
         avg_buy_price: 'Harga Beli Rata-rata'
-        number_of_sales: 'Jumlah Penjualan'
+        number_of_sales: 'Jumlah Terjual'
         sales_total: 'Total Penjualan'
         number_of_purchase: 'Jumlah Pembelian'
         purchase_total: 'Total Pembelian'
         percentage_sales: 'Laku Terjual(%)'
         last_purchase_date: "Tanggal Akhir Beli"
-        item_out: "Jumlah Item Keluar"
+        item_out: "Jumlah Keluar"
         stock_left: "Stok Sekarang"
         is_consignment: "Konsinyasi?"
         qty_return: "Jumlah Retur Jual"

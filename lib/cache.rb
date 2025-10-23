@@ -1,10 +1,15 @@
 class Cache
-  @@redis = Redis.new(url: 'redis://redis:6379/1')
+  @@redis = Redis.new(url: "redis://#{$REDIS_HOST}:6379/1")
   def self.get(key)
     @@redis.get(key)
   end
-  def self.set(key, value)
-    @@redis.set(key, value)
+
+  def self.set(key, value, option = {})
+    if option[:expire].present?
+      @@redis.setex(key, option[:expire], value)
+    else
+      @@redis.set(key, value)
+    end
   end
 
   def self.keys(namespace)

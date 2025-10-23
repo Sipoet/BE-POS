@@ -33,17 +33,35 @@ class Ipos::ConsignmentInOrderSerializer
               :acc_biaya_pot,
               :opsikirim
 
-
-  [:tanggal, :tanggalkirim, :dateupd].each do |key|
+  %i[tanggal tanggalkirim dateupd].each do |key|
     attribute key do |object|
       ipos_fix_date_timezone(object.send(key))
     end
   end
 
-  belongs_to :supplier, set_id: :kodesupel, id_method_name: :kodesupel, serializer: Ipos::SupplierSerializer, if: Proc.new { |record, params| params[:include].include?('supplier') rescue false }
+  belongs_to :supplier, set_id: :kodesupel, id_method_name: :kodesupel, serializer: Ipos::SupplierSerializer, if: proc { |_record, params|
+    begin
+      params[:include].include?('supplier')
+    rescue StandardError
+      false
+    end
+  }
 
-  has_many :purchase_order_items, serializer: Ipos::PurchaseOrderItemSerializer, if: Proc.new { |record, params| params[:include].include?('purchase_order_items') rescue false } do |consignment_in_order|
+  has_one :consignment_in, serializer: Ipos::ConsignmentInSerializer, if: proc { |_record, params|
+    begin
+      params[:include].include?('consignment_in')
+    rescue StandardError
+      false
+    end
+  }
+
+  has_many :purchase_order_items, serializer: Ipos::PurchaseOrderItemSerializer, if: proc { |_record, params|
+    begin
+      params[:include].include?('purchase_order_items')
+    rescue StandardError
+      false
+    end
+  } do |consignment_in_order|
     consignment_in_order.purchase_order_items.includes(:item).order(nobaris: :asc)
   end
-
 end

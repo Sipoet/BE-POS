@@ -11,7 +11,10 @@ class CreateDiscountItemTypes < ActiveRecord::Migration[7.1]
     ApplicationRecord.transaction do
       Discount.where('item_type_name is not null or blacklist_item_type_name is not null').each do |discount|
         discount.discount_item_types.build(item_type_name: discount.item_type_name) if discount.item_type_name.present?
-        discount.discount_item_types.build(is_exclude: true, item_type_name: discount.blacklist_item_type_name) if discount.blacklist_item_type_name.present?
+        if discount.blacklist_item_type_name.present?
+          discount.discount_item_types.build(is_exclude: true,
+                                             item_type_name: discount.blacklist_item_type_name)
+        end
         discount.save!
       end
     end

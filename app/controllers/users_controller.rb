@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :authorize_user!, only: [:index,:create,:destroy]
-  before_action :authorize_if_current_user!, only: [:show,:update]
+  before_action :authorize_user!, only: %i[index create destroy]
+  before_action :authorize_if_current_user!, only: %i[show update]
   def index
     run_service_default
   end

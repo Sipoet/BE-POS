@@ -2,12 +2,12 @@ class Ipos::SaleItem < ApplicationRecord
   self.table_name = 'tbl_ikdt'
   self.primary_key = 'iddetail'
 
-
   belongs_to :item, foreign_key: :kodeitem, primary_key: :kodeitem
   belongs_to :sale, class_name: 'Ipos::ItemOutHeader', foreign_key: :notransaksi, primary_key: :notransaksi
 
   alias_attribute :id, :iddetail
   alias_attribute :updated_at, :dateupd
+  alias_attribute :item_code, :kodeitem
 
   def subtotal
     jumlah * harga
@@ -30,6 +30,10 @@ class Ipos::SaleItem < ApplicationRecord
   end
 
   def transaction_date
-    sale.tanggal
+    sale&.tanggal
+  end
+
+  def sale_type
+    sale.tipe
   end
 end

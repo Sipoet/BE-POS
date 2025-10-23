@@ -1,5 +1,4 @@
 class EmployeeAttendance::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class EmployeeAttendance::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(EmployeeAttendanceSerializer.new(@employee_attendances,options))
+    render_json(EmployeeAttendanceSerializer.new(@employee_attendances, options))
   end
 
   def meta
@@ -18,40 +17,38 @@ class EmployeeAttendance::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @employee_attendances.total_pages,
-      total_rows: @employee_attendances.total_count,
+      total_rows: @employee_attendances.total_count
     }
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(EmployeeAttendance)
-    allowed_fields = [:employee_attendance, :employee]
-    result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+    @table_definition = Datatable::DefinitionExtractor.new(EmployeeAttendance)
+    allowed_includes = %i[employee_attendance employee]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
+                                      table_definition: @table_definition)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: EmployeeAttendance)
   end
 
   def find_employee_attendances
     employee_attendances = EmployeeAttendance.all
                                              .includes(@included)
-                                              .page(@page)
-                                              .per(@limit)
+                                             .page(@page)
+                                             .per(@limit)
 
     @filters.each do |filter|
       employee_attendances = employee_attendances.where(filter.to_query)
     end
     if @sort.present?
-      employee_attendances = employee_attendances.order(@sort)
+      employee_attendances.order(@sort)
     else
-      employee_attendances = employee_attendances.order(id: :asc)
+      employee_attendances.order(id: :asc)
     end
-    employee_attendances
   end
-
 end

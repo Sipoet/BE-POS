@@ -4,7 +4,8 @@ id:
       ipos/consignment_in: "Konsinyasi Masuk"
     attributes:
       ipos/consignment_in:
-        notransaksi: "No Transaksi"
+        notransaksi: "No Faktur"
+        consignment_in_order: 'No Pesanan'
         tanggal: "Tanggal Barang Datang"
         note_date: "Tanggal Faktur"
         kantortujuan: "Lokasi"
@@ -22,3 +23,4 @@ id:
         jmldeposit: "Bayar deposit"
         notrsorder: "Nota Pesanan"
         kodesupel: 'Supplier'
+        supplier: 'Supplier'

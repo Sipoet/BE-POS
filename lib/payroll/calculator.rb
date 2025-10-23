@@ -1,9 +1,14 @@
 class Payroll::Calculator
+  def initialize(payroll_line:, attendance_summary:, employee:, commission_analyzer:, recent_sum: 0)
+    unless payroll_line.is_a?(PayrollLine)
+      raise "should be payroll line, got #{payroll_line.class} #{payroll_line} instead"
+    end
 
-  def initialize(payroll_line:, attendance_summary:, recent_sum: 0, employee:,commission_analyzer:)
-    raise "should be payroll line, got #{payroll_line.class} #{payroll_line} instead" unless payroll_line.is_a?(PayrollLine)
     @payroll_line = payroll_line
-    raise "should be attendance summary, got #{attendance_summary.class} #{attendance_summary} instead" unless attendance_summary.is_a?(AttendanceAnalyzer::Result)
+    unless attendance_summary.is_a?(AttendanceAnalyzer::Result)
+      raise "should be attendance summary, got #{attendance_summary.class} #{attendance_summary} instead"
+    end
+
     @attendance_summary = attendance_summary
     @recent_sum = recent_sum || 0
     @employee = employee
@@ -11,16 +16,14 @@ class Payroll::Calculator
   end
 
   def self.calculator_class(payroll_line)
-    begin
-      klass = "Payroll::Formula::#{payroll_line.formula.to_s.classify}Calculator".constantize
-    rescue
-      raise "payroll formula #{payroll_line.formula} not supported"
-    end
+    "Payroll::Formula::#{payroll_line.formula.to_s.classify}Calculator".constantize
+  rescue StandardError
+    raise "payroll formula #{payroll_line.formula} not supported"
   end
 
   def calculate!
     klass = self.class.calculator_class(@payroll_line)
-    formula_calculator = klass.new(@payroll_line,@attendance_summary,@recent_sum,@employee,@commission_analyzer)
+    formula_calculator = klass.new(@payroll_line, @attendance_summary, @recent_sum, @employee, @commission_analyzer)
     amount = formula_calculator.calculate
     @meta = formula_calculator.meta
     amount
@@ -28,6 +31,7 @@ class Payroll::Calculator
 
   def get_meta(key)
     return nil if @meta.nil?
+
     @meta[key.to_sym]
   end
 end

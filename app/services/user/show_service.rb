@@ -2,29 +2,32 @@ class User::ShowService < ApplicationService
   include JsonApiDeserializer
   def execute_service
     extract_params
-    user = if @params[:username] =='current_user'
-      current_user
-    else
-     User.find_by(username: @params[:username])
+    user = User.find_by(username: @params[:username])
+    raise ApplicationService::RecordNotFound.new(@params[:username], User.name) if user.nil?
+
+    if current_user.id == user.id && !@fields.nil?
+      @fields[:user] ||= []
+      @fields[:user] += %i[username email]
+      @fields[:user].uniq!
     end
-    raise ApplicationService::RecordNotFound.new(@params[:username],User.name) if user.nil?
     options = {
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
+    Rails.logger.debug "===options #{options}"
     render_json(UserSerializer.new(user, options))
   end
 
   private
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(User)
-    allowed_fields = [:user, :role]
-    result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+    @table_definition = Datatable::DefinitionExtractor.new(User)
+    allowed_includes = %i[user role]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
+                                      table_definition: @table_definition)
     @included = result.included
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: User)
   end
 end

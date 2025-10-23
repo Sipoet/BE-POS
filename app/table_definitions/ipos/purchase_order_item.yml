@@ -12,11 +12,12 @@ columns:
     can_sort: true
   kodeitem:
     type: model
+    class_name: 'Ipos::Item'
     excel_width: 25
     client_width: 200
     sort_key: kodeitem
     input_options:
-      path: items
+      path: 'ipos/items'
       model_name: item
       attribute_key: name
     can_filter: true
@@ -157,11 +158,12 @@ columns:
     can_sort: true
   supplier_code:
     type: model
+    class_name: 'Ipos::Supplier'
     excel_width: 25
     client_width: 200
     sort_key: item.supplier1
     input_options:
-      path: suppliers
+      path: 'ipos/suppliers'
       model_name: supplier
       attribute_key: name
     can_filter: true
@@ -169,23 +171,25 @@ columns:
     can_sort: true
   brand_name:
     type: model
+    class_name: 'Ipos::Brand'
     excel_width: 25
     client_width: 200
     sort_key: item.merek
     input_options:
-      path: brands
+      path: 'ipos/brands'
       model_name: brand
       attribute_key: name
     can_filter: true
     filter_key: items.merek
     can_sort: true
   item_type_name:
+    class_name: 'Ipos::ItemType'
     type: model
     excel_width: 25
     client_width: 200
     sort_key: item.jenis
     input_options:
-      path: item_types
+      path: 'ipos/item_types'
       model_name: item_type
       attribute_key: name
     can_filter: true
@@ -212,6 +216,7 @@ columns:
     can_sort: true
   notransaksi:
     type: model
+    class_name: 'Ipos::PurchaseOrder'
     excel_width: 25
     client_width: 200
     sort_key: notransaksi
@@ -220,6 +225,6 @@ columns:
     filter_key: notransaksi
     can_sort: true
     input_options:
-      path: purchase_orders
+      path: 'ipos/purchase_orders'
       model_name: purchase_order
       attribute_key: code

@@ -28,3 +28,7 @@ id:
         hppdasar: "HPP"
         nobaris: "No"
         supplier1: 'Supplier'
+        purchase: 'No Faktur'
+        brand_name: 'Merek'
+        item_type_name: 'Jenis/departemen'
+        supplier_code: 'Kode Supplier'

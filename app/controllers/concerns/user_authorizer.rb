@@ -2,38 +2,43 @@ module UserAuthorizer
   extend ActiveSupport::Concern
 
   class AuthorizeChecker
-    attr_reader :role
-    def initialize(role)
-      @role = role
+    attr_reader :role_id
+
+    READ_ACTION = %w[index show]
+
+    def initialize(role_id)
+      @role_id = role_id
     end
 
-
     def has_authorize?(controller_name, action)
-      access = role_access
+      action = 'read' if READ_ACTION.include? action
+      @access ||= role_access
       Rails.logger.debug "=====check authorize: #{controller_name} #{action}"
-      return false if access[controller_name].blank?
-      Rails.logger.debug "=====list authorize on #{controller_name} #{access[controller_name]}"
-      access[controller_name].include?(action)
+      return false if @access[controller_name].blank?
+
+      Rails.logger.debug "=====list authorize on #{controller_name} #{@access[controller_name]}"
+      @access[controller_name][action] == true
     end
 
     def role_access
-      key = "role-#{role.id}-auth"
+      key = "role-#{@role_id}-auth"
       cache = Cache.get(key)
       return JSON.parse(cache) if cache.present?
+
       value = decorate_access
-      Cache.set(key,value.to_json)
-      return value
+      Cache.set(key, value.to_json)
+      value
     end
 
     private
 
     def decorate_access
       result = {}
-      role.access_authorizes
-          .group_by(&:controller)
-          .each do |controller,access|
-            result[controller] = access.map(&:action)
-          end
+      AccessAuthorize.where(role_id: @role_id)
+                     .group_by(&:controller)
+                     .each do |controller, access|
+                       result[controller] = access.map { |auth| [auth.action, true] }.to_h
+      end
       result
     end
   end
@@ -41,20 +46,13 @@ module UserAuthorizer
   class ForbiddenError < StandardError; end
   included do
     protected
-    def authorize_role!(role)
-      raise 'not a role' if !role.is_a?(Role)
-      return if role.name == Role::SUPERADMIN
-      checker = AuthorizeChecker.new(role)
-      raise ForbiddenError unless checker.has_authorize?(controller_name, action_name)
+
+    def authorize_role!(role_id)
+      raise 'not a role' if role_id.nil?
+      return if Role.superadmin?(role_id)
+
+      checker = AuthorizeChecker.new(role_id)
+      raise ForbiddenError unless checker.has_authorize?(controller_path, action_name)
     end
-
-    def allowed_columns(role, model_class)
-      role.column_authorizes
-          .where(table: model_class.name)
-          .pluck(:column)
-    end
-
-    private
-
   end
 end

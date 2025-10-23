@@ -1,5 +1,4 @@
 class PayrollReportDetail < ApplicationModel
-
   attr_accessor :main_amount,
                 :full_amount,
                 :payroll_type_name,
@@ -13,5 +12,4 @@ class PayrollReportDetail < ApplicationModel
     @payroll_type_name = row[:payroll_type_name].to_s
     @is_earning = row[:is_earning] || false
   end
-
 end

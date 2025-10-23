@@ -2,6 +2,7 @@ table_name: 'payslips'
 columns:
   employee_name:
     type: model
+    class_name: 'Employee'
     excel_width: 22
     client_width: 180
     input_options:

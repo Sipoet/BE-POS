@@ -4,6 +4,7 @@ columns:
   user:
     name: user_id
     type: model
+    class_name: 'User'
     excel_width: 25
     client_width: 200
     sort_key: user_id

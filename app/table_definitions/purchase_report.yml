@@ -2,13 +2,14 @@ table_name: purchase_reports
 columns:
   code:
     type: model
+    class_name: 'Ipos::Purchase'
     excel_width: 25
     client_width: 200
     can_filter: true
     can_sort: true
     input_options:
       model_name: purchase
-      path: purchases
+      path: 'ipos/purchases'
       attribute_key: code
   supplier:
     type: model
@@ -20,7 +21,7 @@ columns:
     sort_key: supplier_code
     input_options:
       model_name: supplier
-      path: suppliers
+      path: 'ipos/suppliers'
       attribute_key: name
   purchase_date:
     type: datetime

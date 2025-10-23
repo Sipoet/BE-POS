@@ -3,7 +3,7 @@ id:
     attributes:
       applicationrecord:
         created_at: 'Tanggal Dibuat'
-        updated_at: 'Tanggal Diperbaharui'
+        updated_at: 'Tanggal Diubah'
     errors:
       messages:
         record_invalid: 'Validasi gagal: %{errors}'

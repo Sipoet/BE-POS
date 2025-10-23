@@ -1,18 +1,34 @@
 class ColumnAuthorize < ApplicationRecord
-
   validates :table, presence: true
   validates :column, presence: true
   validate :valid_column
 
+  after_save :delete_cache
+  after_destroy :delete_cache
+
+  scope :columns_by_role, lambda { |role_id, table_name|
+    where(role_id: role_id, table: table_name).pluck(:column)
+  }
+
+  scope :by_role, lambda { |role_id|
+    where(role_id: role_id).group_by(&:table)
+  }
+
   belongs_to :role
 
   private
+
+  def delete_cache
+    Cache.delete_namespace("role-#{role_id}-")
+  end
+
   def valid_column
-    return if  table.blank?
+    return if table.blank?
+
     klass = table.classify.constantize
-    table_definitions = Datatable::DefinitionExtractor.new(klass)
-    if table_definitions.column_names.include?(column)
-      errors.add(:column,:inclusion)
-    end
+    table_definition = Datatable::DefinitionExtractor.new(klass)
+    return unless table_definition.column_names.include?(column)
+
+    errors.add(:column, :inclusion)
   end
 end

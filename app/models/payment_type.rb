@@ -1,5 +1,4 @@
 class PaymentType < ApplicationRecord
-
   validates :name, presence: true
 
   after_update do |record|

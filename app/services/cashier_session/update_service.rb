@@ -2,9 +2,10 @@ class CashierSession::UpdateService < ApplicationService
   include NestedAttributesMatchup
   def execute_service
     cashier_session = CashierSession.find(params[:id])
-    raise RecordNotFound.new(params[:id],CashierSession.model_name.human) if cashier_session.nil?
+    raise RecordNotFound.new(params[:id], CashierSession.model_name.human) if cashier_session.nil?
+
     if record_save?(cashier_session)
-      render_json(CashierSessionSerializer.new(cashier_session,{fields: @fields}))
+      render_json(CashierSessionSerializer.new(cashier_session, { fields: @fields }))
     else
       render_error_record(cashier_session)
     end
@@ -19,22 +20,22 @@ class CashierSession::UpdateService < ApplicationService
       calculate_summary(cashier_session)
       cashier_session.save!
     end
-    return true
-  rescue => e
+    true
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace
-    return false
+    false
   end
 
   private
 
   def update_attribute(cashier_session)
-    table_definitions = Datatable::DefinitionExtractor.new(CashierSession)
-    allowed_columns = table_definitions.column_names
-    @fields = {cashier_session: allowed_columns}
+    table_definition = Datatable::DefinitionExtractor.new(CashierSession)
+    allowed_columns = table_definition.column_names
+    @fields = { cashier_session: allowed_columns }
     permitted_params = params.required(:data)
-                              .required(:attributes)
-                              .permit(allowed_columns)
+                             .required(:attributes)
+                             .permit(table_definition.allowed_edit_columns)
     cashier_session.attributes = permitted_params
   end
 
@@ -49,39 +50,46 @@ class CashierSession::UpdateService < ApplicationService
 
   def update_cash_in_session_details(cashier_session)
     permitted_params = params.required(:data)
-                              .required(:relationships)
+                             .required(:relationships)
 
     return if permitted_params[:cash_in_session_details].blank?
-    table_definitions = Datatable::DefinitionExtractor.new(CashInSessionDetail)
-    allowed_columns = table_definitions.allowed_columns
+
+    table_definition = Datatable::DefinitionExtractor.new(CashInSessionDetail)
+    permitted_columns = permitted_edit_columns(CashInSessionDetail, table_definition.allowed_edit_columns)
     permitted_params = permitted_params.required(:cash_in_session_details)
-                              .permit(data:[:type,:id, attributes:allowed_columns])
+                                       .permit(data: [:type, :id,
+                                                      { attributes: permitted_columns }])
     edit_attributes(permitted_params[:data], cashier_session.cash_in_session_details)
   end
 
   def update_cash_out_session_details(cashier_session)
     permitted_params = params.required(:data)
-                              .required(:relationships)
+                             .required(:relationships)
     return if permitted_params[:cash_out_session_details].blank?
-    table_definitions = Datatable::DefinitionExtractor.new(CashOutSessionDetail)
-    allowed_columns = table_definitions.allowed_columns
+
+    table_definition = Datatable::DefinitionExtractor.new(CashOutSessionDetail)
+    permitted_columns = permitted_edit_columns(CashOutSessionDetail, table_definition.allowed_edit_columns)
     permitted_params = permitted_params.required(:cash_out_session_details)
-                              .permit(data:[:type,:id, attributes: allowed_columns])
-    return if (permitted_params.blank? || permitted_params[:data].blank?)
+                                       .permit(data: [:type, :id,
+                                                      { attributes: permitted_columns }])
+    return if permitted_params.blank? || permitted_params[:data].blank?
+
     edit_attributes(permitted_params[:data], cashier_session.cash_out_session_details)
   end
 
   def update_edc_settlement(cashier_session)
     permitted_params = params.required(:data)
-                              .required(:relationships)
+                             .required(:relationships)
     return if permitted_params[:edc_settlements].blank?
-    table_definitions = Datatable::DefinitionExtractor.new(EdcSettlement)
-    allowed_columns = table_definitions.allowed_columns
-    permitted_params = permitted_params.required(:edc_settlements)
-                              .permit(data:[:type,:id, attributes: allowed_columns+[:_destroy]-[:cashier_session_id]])
-    return if (permitted_params.blank? || permitted_params[:data].blank?)
-    edit_attributes(permitted_params[:data], cashier_session.edc_settlements)
-    cashier_session.edc_settlements.each{|edc_settlement|edc_settlement.diff_amount =0}
-  end
 
+    table_definition = Datatable::DefinitionExtractor.new(EdcSettlement)
+    permitted_columns = permitted_edit_columns(EdcSettlement, table_definition.allowed_edit_columns)
+    permitted_params = permitted_params.required(:edc_settlements)
+                                       .permit(data: [:type, :id,
+                                                      { attributes: permitted_columns + [:_destroy] - [:cashier_session_id] }])
+    return if permitted_params.blank? || permitted_params[:data].blank?
+
+    edit_attributes(permitted_params[:data], cashier_session.edc_settlements)
+    cashier_session.edc_settlements.each { |edc_settlement| edc_settlement.diff_amount = 0 }
+  end
 end

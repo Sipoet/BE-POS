@@ -8,6 +8,7 @@ columns:
     client_width: 180
   employee:
     type: model
+    class_name: 'Employee'
     client_width: 180
     filter_key: 'employee_id'
     edit_key: 'employee_id'

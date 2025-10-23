@@ -23,7 +23,7 @@ columns:
     can_sort: true
   description:
     name: description
-    type: integer
+    type: string
     excel_width: 25
     client_width: 200
     sort_key: description

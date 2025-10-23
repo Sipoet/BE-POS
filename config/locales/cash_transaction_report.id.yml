@@ -1,0 +1,13 @@
+id:
+  activerecord:
+    models:
+      cash_transaction_report: "Riwayat Aliran Kas"
+    attributes:
+      cash_transaction_report:
+        code: 'No Pembayaran'
+        description: 'Keterangan'
+        payment_amount: 'Jumlah Bayar'
+        transaction_at: 'Tanggal Bayar'
+        transaction_type: 'Tipe'
+        payment_account: 'Akun Bayar'
+        detail_account: 'Sumber Akun'

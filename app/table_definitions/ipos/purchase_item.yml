@@ -1,25 +1,41 @@
 ---
 table_name: tbl_imdt
 columns:
-  kodeitem:
+  item:
     type: model
+    alias: kodeitem
     excel_width: 25
-    client_width: 180
+    client_width: 250
     sort_key: kodeitem
+    class_name: 'Ipos::Item'
     input_options:
-      path: items
+      path: 'ipos/items'
       model_name: item
       attribute_key: name
     can_filter: true
     filter_key: kodeitem
     can_sort: true
-  item_name:
-    type: string
+  transaction_date:
+    type: datetime
+    client_width: 180
+    filter_key: 'tbl_imhd.tanggal'
+    sort_key: 'tbl_imhd.tanggal'
+    can_filter: true
+    can_sort: true
+  purchase:
+    type: model
+    class_name: 'Ipos::Purchase'
     excel_width: 25
     client_width: 200
-    attribute_key: item.namaitem
-    can_filter: false
-    can_sort: false
+    sort_key: notransaksi
+    attribute_key: notransaksi
+    can_filter: true
+    filter_key: notransaksi
+    can_sort: true
+    input_options:
+      path: 'ipos/purchases'
+      model_name: purchase
+      attribute_key: notransaksi
   jmlpesan:
     type: decimal
     excel_width: 25
@@ -32,7 +48,7 @@ columns:
   jumlah:
     type: decimal
     excel_width: 25
-    client_width: 130
+    client_width: 180
     sort_key: jumlah
     attribute_key: jumlah
     can_filter: true
@@ -41,21 +57,21 @@ columns:
   stock_left:
     type: decimal
     excel_width: 25
-    client_width: 130
+    client_width: 180
     attribute_key: stock_left
     can_filter: false
     can_sort: false
   number_of_sales:
     type: decimal
     excel_width: 25
-    client_width: 130
+    client_width: 180
     attribute_key: number_of_sales
     can_filter: false
     can_sort: false
   warehouse_stock:
     type: decimal
     excel_width: 25
-    client_width: 140
+    client_width: 180
     attribute_key: warehouse_stock
     can_filter: false
     can_sort: false
@@ -67,7 +83,7 @@ columns:
     can_filter: false
     can_sort: false
   harga:
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: harga
@@ -87,7 +103,7 @@ columns:
   satuan:
     type: string
     excel_width: 25
-    client_width: 200
+    client_width: 130
     sort_key: satuan
     attribute_key: satuan
     can_filter: true
@@ -176,11 +192,12 @@ columns:
     can_sort: true
   supplier_code:
     type: model
+    class_name: 'Ipos::Supplier'
     excel_width: 25
     client_width: 200
     sort_key: item.supplier1
     input_options:
-      path: suppliers
+      path: 'ipos/suppliers'
       attribute_key: name
       model_name: supplier
     can_filter: true
@@ -188,11 +205,12 @@ columns:
     can_sort: true
   brand_name:
     type: model
+    class_name: 'Ipos::Brand'
     excel_width: 25
     client_width: 200
     sort_key: item.merek
     input_options:
-      path: brands
+      path: 'ipos/brands'
       model_name: brand
       attribute_key: name
     can_filter: true
@@ -200,11 +218,12 @@ columns:
     can_sort: true
   item_type_name:
     type: model
+    class_name: 'Ipos::ItemType'
     excel_width: 25
     client_width: 200
     sort_key: item.jenis
     input_options:
-      path: item_types
+      path: 'ipos/item_types'
       model_name: item_type
       attribute_key: name
     can_filter: true
@@ -238,16 +257,3 @@ columns:
     can_filter: true
     filter_key: nobaris
     can_sort: true
-  notransaksi:
-    type: model
-    excel_width: 25
-    client_width: 200
-    sort_key: notransaksi
-    attribute_key: notransaksi
-    can_filter: true
-    filter_key: notransaksi
-    can_sort: true
-    input_options:
-      path: purchases
-      model_name: purchase
-      attribute_key: code

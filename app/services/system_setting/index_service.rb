@@ -1,5 +1,4 @@
 class SystemSetting::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class SystemSetting::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(SystemSettingSerializer.new(@settings,options))
+    render_json(SystemSettingSerializer.new(@settings, options))
   end
 
   def meta
@@ -18,16 +17,16 @@ class SystemSetting::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_rows: @settings.total_count,
-       total_pages: @settings.total_pages,
+      total_pages: @settings.total_pages
     }
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(Setting)
-    allowed_fields = [:setting]
-    result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+    @table_definition = Datatable::DefinitionExtractor.new(Setting)
+    allowed_includes = [:setting]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
+                                      table_definition: @table_definition)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -35,25 +34,21 @@ class SystemSetting::IndexService < ApplicationService
     @included = result.included
     @query_included = result.query_included
     @filters = result.filters
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: Setting)
   end
 
   def find_settings
     settings = Setting.all.includes(@query_included)
-      .page(@page)
-      .per(@limit)
-    if @search_text.present?
-      settings = settings.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
-    end
+                      .page(@page)
+                      .per(@limit)
+    settings = settings.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%")) if @search_text.present?
     @filters.each do |filter|
       settings = filter.add_filter_to_query(settings)
     end
     if @sort.present?
-      settings = settings.order(@sort)
+      settings.order(@sort)
     else
-      settings = settings.order(id: :asc)
+      settings.order(id: :asc)
     end
-    settings
   end
-
 end

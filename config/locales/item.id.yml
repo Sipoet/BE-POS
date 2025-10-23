@@ -1,0 +1,19 @@
+id:
+  activerecord:
+    models:
+      ipos/item: "Item"
+    attributes:
+      ipos/item:
+        code: 'Kode'
+        name: 'Nama'
+        item_type: 'Jenis/Departemen'
+        item_type_name: 'Jenis/Departemen'
+        supplier: 'Supplier'
+        supplier_code: 'Kode Supplier'
+        description: 'Keterangan'
+        brand: 'Merek'
+        brand_name: 'Merek'
+        sell_price: 'Harga Jual'
+        margin: 'Margin %'
+        cogs: 'HPP'
+        uom: 'Satuan'

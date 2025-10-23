@@ -1,5 +1,4 @@
 class PaymentProvider::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class PaymentProvider::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(PaymentProviderSerializer.new(@payment_providers,options))
+    render_json(PaymentProviderSerializer.new(@payment_providers, options))
   end
 
   def meta
@@ -18,41 +17,39 @@ class PaymentProvider::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_rows: @payment_providers.total_count,
-       total_pages: @payment_providers.total_pages,
+      total_pages: @payment_providers.total_pages
     }
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(PaymentProvider)
-    allowed_fields = [:payment_provider,:payment_provider_edcs]
-    result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+    @table_definition = Datatable::DefinitionExtractor.new(PaymentProvider)
+    allowed_includes = %i[payment_provider payment_provider_edcs]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
+                                      table_definition: @table_definition)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: PaymentProvider)
   end
 
   def find_payment_providers
     payment_providers = PaymentProvider.all.includes(@included)
-      .page(@page)
-      .per(@limit)
+                                       .page(@page)
+                                       .per(@limit)
     if @search_text.present?
-      payment_providers = payment_providers.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      payment_providers = payment_providers.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%"))
     end
     @filters.each do |filter|
       payment_providers = payment_providers.where(filter.to_query)
     end
     if @sort.present?
-      payment_providers = payment_providers.order(@sort)
+      payment_providers.order(@sort)
     else
-      payment_providers = payment_providers.order(id: :asc)
+      payment_providers.order(id: :asc)
     end
-    payment_providers
   end
-
 end

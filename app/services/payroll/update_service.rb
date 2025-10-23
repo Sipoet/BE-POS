@@ -1,10 +1,11 @@
 class Payroll::UpdateService < ApplicationService
-
+  include NestedAttributesMatchup
   def execute_service
     payroll = Payroll.find(params[:id])
-    raise RecordNotFound.new(params[:id],Payroll.model_name.human) if payroll.nil?
+    raise RecordNotFound.new(params[:id], Payroll.model_name.human) if payroll.nil?
+
     if payroll_save?(payroll)
-      render_json(PayrollSerializer.new(payroll),{status: :ok})
+      render_json(PayrollSerializer.new(payroll), { status: :ok })
     else
       render_error_record(payroll)
     end
@@ -16,38 +17,29 @@ class Payroll::UpdateService < ApplicationService
       update_attribute(payroll)
       payroll.save!
     end
-    return true
-  rescue => e
+    true
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace
-    return false
+    false
   end
 
   def build_lines(payroll)
     permitted_params = params.required(:data)
-                              .required(:relationships)
-                              .required(:payroll_lines)
-                              .permit(data:[:type,:id, attributes:[:row,:group,:payroll_type_id,:formula,
-                                      :description, :variable1, :variable2,
-                                      :variable3, :variable4, :variable5]])
-    return if (permitted_params.blank? || permitted_params[:data].blank?)
-    payroll_lines = payroll.payroll_lines.index_by(&:id)
-    permitted_params[:data].each do |line_params|
-      payroll_line = payroll_lines[line_params[:id]]
-      if payroll_line.present?
-        payroll_line.attributes = line_params[:attributes]
-        payroll_lines.delete(line_params[:id])
-      else
-        payroll_line = payroll.payroll_lines.build(line_params[:attributes])
-      end
-    end
-    payroll_lines.values.map(&:mark_for_destruction)
+                             .required(:relationships)
+                             .required(:payroll_lines)
+                             .permit(data: [:type, :id, { attributes: %i[row group payroll_type_id formula
+                                                                         description variable1 variable2
+                                                                         variable3 variable4 variable5] }])
+    return if permitted_params.blank? || permitted_params[:data].blank?
+
+    edit_attributes(permitted_params[:data], payroll.payroll_lines)
   end
 
   def update_attribute(payroll)
     permitted_params = params.required(:data)
-                              .required(:attributes)
-                              .permit(:name,:paid_time_off,:description)
+                             .required(:attributes)
+                             .permit(:name, :paid_time_off, :description)
     payroll.attributes = permitted_params
   end
 end

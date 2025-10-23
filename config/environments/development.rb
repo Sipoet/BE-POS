@@ -1,4 +1,4 @@
-require "active_support/core_ext/integer/time"
+require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -19,10 +19,10 @@ Rails.application.configure do
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
-  if Rails.root.join("tmp/caching-dev.txt").exist?
-    config.cache_store = :memory_store
+  if Rails.root.join('tmp/caching-dev.txt').exist?
+    config.cache_store = :redis_cache_store, { url: "redis://#{$REDIS_HOST}:6379/2" }
     config.public_file_server.headers = {
-      "Cache-Control" => "public, max-age=#{2.days.to_i}"
+      'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
   else
     config.action_controller.perform_caching = false
@@ -60,14 +60,14 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address              => "smtp.gmail.com",
-    :port                 => 587,
-    :domain               => "allegra.dept.store",
-    :user_name            => $APP_EMAIL || ENV['APP_EMAIL'],
-    :password             => $APP_EMAIL_PASSWORD || ENV['APP_EMAIL_PASSWORD'],
-    :authentication       => "plain",
-    :enable_starttls_auto => true
-    }
+    address: 'smtp.gmail.com',
+    port: 587,
+    domain: 'allegra.dept.store',
+    user_name: $APP_EMAIL || ENV['APP_EMAIL'],
+    password: $APP_EMAIL_PASSWORD || ENV['APP_EMAIL_PASSWORD'],
+    authentication: 'plain',
+    enable_starttls_auto: true
+  }
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

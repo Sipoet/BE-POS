@@ -1,7 +1,7 @@
 class PayslipCalculator
-
   def initialize(payslip)
     raise "should be payslip, got #{payslip.class} #{payslip} instead" unless payslip.is_a?(Payslip)
+
     @payslip = payslip
   end
 
@@ -13,12 +13,11 @@ class PayslipCalculator
     @payslip
   end
 
-
   def calculate
     result = Result.new
     payslip_lines = @payslip.payslip_lines
                             .to_a
-                            .select{|row| !row.marked_for_destruction?}
+                            .select { |row| !row.marked_for_destruction? }
     result.gross_salary = payslip_lines.sum(0.0) do |line|
       line.earning? ? line.amount : 0
     end
@@ -29,11 +28,7 @@ class PayslipCalculator
     result
   end
 
-  private
-
   class Result
     attr_accessor :gross_salary, :tax_amount, :nett_salary
   end
-
-
 end

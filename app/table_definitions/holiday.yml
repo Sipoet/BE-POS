@@ -2,14 +2,19 @@ table_name: 'holidays'
 columns:
   date:
     type: date
+    client_width: 180
   religion:
     type: enum
+    client_width: 180
   description:
     type: string
     can_sort: false
+    client_width: 250
   created_at:
     type: datetime
+    client_width: 180
     can_edit: false
   updated_at:
     type: datetime
+    client_width: 180
     can_edit: false

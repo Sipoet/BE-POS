@@ -1,10 +1,11 @@
 class BookPayslipLine::UpdateService < ApplicationService
-
   def execute_service
     book_payslip_line = BookPayslipLine.find(params[:id])
-    raise RecordNotFound.new(params[:id],BookPayslipLine.model_name.human) if book_payslip_line.nil?
+    raise RecordNotFound.new(params[:id], BookPayslipLine.model_name.human) if book_payslip_line.nil?
+
     if record_save?(book_payslip_line)
-      render_json(BookPayslipLineSerializer.new(book_payslip_line,{fields: @fields,include: [:payroll_type,:employee]}))
+      render_json(BookPayslipLineSerializer.new(book_payslip_line,
+                                                { fields: @fields, include: %i[payroll_type employee] }))
     else
       render_error_record(book_payslip_line)
     end
@@ -15,19 +16,20 @@ class BookPayslipLine::UpdateService < ApplicationService
       update_attribute(book_payslip_line)
       book_payslip_line.save!
     end
-    return true
-  rescue => e
+    true
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace
-    return false
+    false
   end
 
   def update_attribute(book_payslip_line)
-    @table_definitions = Datatable::DefinitionExtractor.new(BookPayslipLine)
-    @fields = {book_payslip_line: @table_definitions.allowed_columns}
+    @table_definition = Datatable::DefinitionExtractor.new(BookPayslipLine)
+    @fields = { book_payslip_line: permitted_column_names(BookPayslipLine, nil) }
+    permitted_columns = permitted_edit_columns(BookPayslipLine, @table_definition.allowed_edit_columns)
     permitted_params = params.required(:data)
-                              .required(:attributes)
-                              .permit(@table_definitions.allowed_edit_columns)
+                             .required(:attributes)
+                             .permit(permitted_columns)
     book_payslip_line.attributes = permitted_params
   end
 end
