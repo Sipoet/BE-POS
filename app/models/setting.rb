@@ -1,5 +1,20 @@
 class Setting < ApplicationRecord
 
+  VIEW_TABLE_LIST = {
+    purchase_report: 'PurchaseReport',
+    item_report: 'ItemReport',
+    item_sales_performance_report: [
+      'ItemSalesPerformanceReport',
+      'ItemMovement',
+      'DaySalesPerformanceReport',
+      'YearSalesPerformanceReport',
+      'MonthSalesPerformanceReport',
+      'WeekSalesPerformanceReport'
+    ],
+    monthly_expense_report: 'MonthlyExpenseReport',
+  }.freeze
+
+
   validates :key_name, presence: true
   validates :value, presence: true
   belongs_to :user, optional: true

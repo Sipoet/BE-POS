@@ -26,6 +26,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
   end
 
   def default_template(model_name, service_name)
+    klass_name = file_path.classify
     create_file "app/services/#{file_path}/#{service_name.singularize}_service.rb", <<~END
     class #{klass_name}::#{service_name.classify}Service < ApplicationService
 

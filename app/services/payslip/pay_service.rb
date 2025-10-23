@@ -10,7 +10,8 @@ class Payslip::PayService < ApplicationService
     ApplicationRecord.transaction do
       cash_out = create_cash_out_from_payslips(payslips)
       create_account_journal(cash_out)
-      send_payslip_via_email(payslips)
+      send_payslip_via_email(payslips) if @is_notify
+
       payslips.update_all(payment_time: @paid_at, status: :paid)
     end
     render_json({message:'Sukses Simpan Pembayaran'})
@@ -37,7 +38,8 @@ class Payslip::PayService < ApplicationService
   end
 
   def extract_params
-    permitted_params = params.permit(:paid_at,:description,:location,:cash_account, :start_date, :end_date, employee_ids:[])
+    permitted_params = params.permit(:paid_at,:description,:location,:cash_account, :start_date,:is_notify, :end_date, employee_ids:[])
+    @is_notify = permitted_params[:is_notify].to_s == '1'
     @employee_ids = permitted_params[:employee_ids] || []
     @start_date = Date.parse(permitted_params[:start_date]) rescue nil
     @end_date = Date.parse(permitted_params[:end_date]) rescue nil

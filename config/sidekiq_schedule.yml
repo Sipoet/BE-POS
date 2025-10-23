@@ -11,7 +11,7 @@ backup_database:
   class: "BackupDbJob"
   queue: low
 refresh_report:
-  cron: "20 */1 * * *"
+  cron: "20 */4 * * *"
   class: "RefreshReportJob"
   queue: low
 remove_expired_image:

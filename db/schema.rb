@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_17_141331) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -472,6 +472,35 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
     t.datetime "updated_at", null: false
     t.index ["key_name"], name: "index_settings_on_key_name"
     t.index ["user_id"], name: "index_settings_on_user_id"
+  end
+
+  create_table "stock_keeping_units", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.string "document_type", null: false
+    t.bigint "document_id", null: false
+    t.string "barcode", null: false
+    t.date "expired_date"
+    t.date "purchase_date"
+    t.date "production_date"
+    t.decimal "sell_price", default: "0.0", null: false
+    t.decimal "cogs", default: "0.0", null: false
+    t.string "uom"
+    t.integer "option1_id"
+    t.integer "option2_id"
+    t.integer "option3_id"
+    t.string "serial_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["document_type", "document_id"], name: "index_stock_keeping_units_on_document"
+    t.index ["product_id"], name: "index_stock_keeping_units_on_product_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.integer "parent_id"
+    t.string "value"
+    t.string "group"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tbl_acc_sa", id: false, force: :cascade do |t|
@@ -1443,8 +1472,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
     t.index ["kodeitem"], name: "kodeitem7"
   end
 
+  create_table "tbl_itemjeni_hierarchies", id: false, force: :cascade do |t|
+    t.string "ancestor_id", null: false
+    t.string "descendant_id", null: false
+    t.integer "generations", null: false
+    t.index ["ancestor_id", "descendant_id", "generations"], name: "item_type_anc_desc_idx", unique: true
+    t.index ["descendant_id"], name: "item_type_desc_idx"
+  end
+
   create_table "tbl_itemjenis", primary_key: "jenis", id: { type: :string, limit: 50 }, force: :cascade do |t|
     t.string "ketjenis", limit: 100
+    t.string "parent_id"
   end
 
   create_table "tbl_itemketerangan", primary_key: ["kodeket", "jenisket"], force: :cascade do |t|
@@ -2574,8 +2612,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_171048) do
   add_foreign_key "payslip_lines", "payslips"
   add_foreign_key "payslips", "employees"
   add_foreign_key "payslips", "payrolls"
+  add_foreign_key "products", "tbl_itemjenis", column: "item_type_id", primary_key: "jenis"
+  add_foreign_key "products", "tbl_itemmerek", column: "brand_id", primary_key: "merek"
+  add_foreign_key "products", "tbl_supel", column: "supplier_id", primary_key: "kode"
+  add_foreign_key "purchase_details", "products"
   add_foreign_key "role_work_schedules", "roles"
   add_foreign_key "settings", "users"
+  add_foreign_key "stock_keeping_units", "products"
+  add_foreign_key "stock_keeping_units", "tags", column: "option1_id"
+  add_foreign_key "stock_keeping_units", "tags", column: "option2_id"
+  add_foreign_key "stock_keeping_units", "tags", column: "option3_id"
   add_foreign_key "tbl_acc_sa", "tbl_matauang", column: "matauang", primary_key: "matauang", name: "tbl_acc_sa_matauang", on_update: :cascade
   add_foreign_key "tbl_acc_sa", "tbl_perkiraan", column: "kodeacc", primary_key: "kodeacc", name: "tbl_acc_sa_kodeacc", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tbl_accdepositdt", "tbl_accdeposithd", column: "notransaksi", primary_key: "notransaksi", name: "tbl_accdepodt_hd", on_update: :cascade
