@@ -6,7 +6,7 @@ class SystemSetting::ListTableService < ApplicationService
       render_json(cache)
       return
     end
-    tables = SystemSetting::RefreshTableService::TABLE_LIST.keys.to_a
+    tables = Setting::VIEW_TABLE_LIST.keys.to_a
     data = {
       data: tables.map do|table|
         {
@@ -17,7 +17,7 @@ class SystemSetting::ListTableService < ApplicationService
       end
     }
     render_json(data)
-    cache = Cache.set('view_table_list',data.to_json, expire: 1.hour)
+    cache = Cache.set('view_table_list',data.to_json, expire: 3.hour)
   end
 
 end

@@ -1,14 +1,10 @@
 ---
 table_name: item_reports
 columns:
-  item:
-    type: model
+  item_code:
+    type: string
     excel_width: 25
-    client_width: 200
-    input_options:
-      path: items
-      model_name: item
-      attribute_key: name
+    client_width: 150
     sort_key: item_code
     can_filter: true
     filter_key: item_code
@@ -96,7 +92,7 @@ columns:
     name: stock_left
     type: decimal
     excel_width: 25
-    client_width: 200
+    client_width: 180
     sort_key: stock_left
     attribute_key: stock_left
     can_filter: true
@@ -106,7 +102,7 @@ columns:
     name: warehouse_stock
     type: decimal
     excel_width: 25
-    client_width: 200
+    client_width: 180
     sort_key: warehouse_stock
     attribute_key: warehouse_stock
     can_filter: true
@@ -116,7 +112,7 @@ columns:
     name: store_stock
     type: decimal
     excel_width: 25
-    client_width: 200
+    client_width: 180
     sort_key: store_stock
     attribute_key: store_stock
     can_filter: true
@@ -126,7 +122,7 @@ columns:
     name: item_out
     type: integer
     excel_width: 25
-    client_width: 200
+    client_width: 180
     sort_key: item_out
     attribute_key: item_out
     can_filter: true
@@ -136,7 +132,7 @@ columns:
     name: number_of_purchase
     type: integer
     excel_width: 25
-    client_width: 200
+    client_width: 180
     sort_key: number_of_purchase
     attribute_key: number_of_purchase
     can_filter: true
@@ -146,7 +142,7 @@ columns:
     name: number_of_sales
     type: integer
     excel_width: 25
-    client_width: 200
+    client_width: 180
     sort_key: number_of_sales
     attribute_key: number_of_sales
     can_filter: true
@@ -156,7 +152,7 @@ columns:
     name: qty_return
     type: integer
     excel_width: 25
-    client_width: 200
+    client_width: 180
     sort_key: qty_return
     attribute_key: qty_return
     can_filter: true
