@@ -53,6 +53,9 @@ class ItemSalesPerformanceReport::GroupByService < ApplicationService
     if @validator.item_type_names.any?
       query = query.where(item_type_name: @validator.item_type_names)
     end
+    if @validator.item_codes.any?
+      query = query.where(item_code: @validator.item_codes)
+    end
     if @validator.last_purchase_years.any?
       query = query.where(last_purchase_year: @validator.last_purchase_years)
     end
