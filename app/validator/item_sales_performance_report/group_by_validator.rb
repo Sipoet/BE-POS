@@ -20,6 +20,7 @@ class ItemSalesPerformanceReport::GroupByValidator < ApplicationModel
   validates :end_date, presence: true
 
   validate :sales_through_rate_not_support_period
+  validate :group_by_item_must_filter_item
 
   def indicator_field
     case group_type
@@ -74,6 +75,13 @@ class ItemSalesPerformanceReport::GroupByValidator < ApplicationModel
   def sales_through_rate_not_support_period
     if group_type == 'period' && value_type == 'sales_through_rate'
       errors.add(:value_type,'kecepatan penjualan tidak bisa dipisah dalam periode')
+      return false
+    end
+  end
+
+  def group_by_item_must_filter_item
+    if group_type == 'item' && item_codes.blank?
+      errors.add(:item_codes,'Item Harus dipilih jika memilih grup berdasarkan item')
       return false
     end
   end
