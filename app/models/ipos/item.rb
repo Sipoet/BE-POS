@@ -30,5 +30,8 @@ class Ipos::Item < ApplicationRecord
   alias_attribute :updated_at, :dateupd
   alias_attribute :created_at, :tanggal_add
 
+  def consignment?
+    konsinyasi == 'Y'
+  end
 
 end
