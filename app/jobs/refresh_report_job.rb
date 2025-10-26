@@ -3,7 +3,7 @@ class RefreshReportJob < ApplicationJob
 
   def perform(table_key = nil)
     tables = if table_key.present?
-      Setting::VIEW_TABLE_LIST[table_key.to_sym] || []
+     [Setting::VIEW_TABLE_LIST[table_key.to_sym]].flatten.compact
     else
       Setting::VIEW_TABLE_LIST.values.flatten
     end
