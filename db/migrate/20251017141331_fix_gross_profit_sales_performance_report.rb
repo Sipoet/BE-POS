@@ -220,6 +220,6 @@ class FixGrossProfitSalesPerformanceReport < ActiveRecord::Migration[7.1]
       DROP MATERIALIZED VIEW IF EXISTS item_sales_performance_reports CASCADE;
     SQL
     migrator = ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths)
-    migrator.up(20251001171048)
+    migrator.up(20_251_001_171_048)
   end
 end

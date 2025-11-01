@@ -2,7 +2,7 @@ class Ipos::ItemSerializer
   include JSONAPI::Serializer
   include TextFormatter
   attributes :code, :name, :sell_price, :cogs, :code, :name, :supplier_code, :brand_name,
-              :item_type_name, :uom, :description
+             :item_type_name, :uom, :description
 
   belongs_to :supplier, set_id: :supplier1, id_method_name: :supplier1, serializer: Ipos::SupplierSerializer
   belongs_to :brand, set_id: :merek, id_method_name: :merek, serializer: Ipos::BrandSerializer

@@ -1,14 +1,14 @@
 class PayslipLine < ApplicationRecord
   include PayrollFormula
-  has_paper_trail ignore: [:id, :created_at, :updated_at]
+  has_paper_trail ignore: %i[id created_at updated_at]
   enum :group, {
     earning: 0,
-    deduction: 1,
+    deduction: 1
   }
 
-  enum :formula,PAYROLL_FORMULA_LIST
+  enum :formula, PAYROLL_FORMULA_LIST
 
-  validates :amount, presence: true, numericality:{greater_than: 0}
+  validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :group, presence: true
 
   belongs_to :payslip, inverse_of: :payslip_lines

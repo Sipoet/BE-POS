@@ -33,17 +33,27 @@ class Ipos::PurchaseOrderSerializer
               :acc_biaya_pot,
               :opsikirim
 
-
-  [:tanggal, :tanggalkirim, :dateupd].each do |key|
+  %i[tanggal tanggalkirim dateupd].each do |key|
     attribute key do |object|
       ipos_fix_date_timezone(object.send(key))
     end
   end
 
-  belongs_to :supplier, set_id: :kodesupel, id_method_name: :kodesupel, serializer: Ipos::SupplierSerializer, if: Proc.new { |record, params| params[:include].include?('supplier') rescue false }
+  belongs_to :supplier, set_id: :kodesupel, id_method_name: :kodesupel, serializer: Ipos::SupplierSerializer, if: proc { |_record, params|
+    begin
+      params[:include].include?('supplier')
+    rescue StandardError
+      false
+    end
+  }
 
-  has_many :purchase_order_items, serializer: Ipos::PurchaseOrderItemSerializer, if: Proc.new { |record, params| params[:include].include?('purchase_order_items') rescue false } do |purchase_order|
+  has_many :purchase_order_items, serializer: Ipos::PurchaseOrderItemSerializer, if: proc { |_record, params|
+    begin
+      params[:include].include?('purchase_order_items')
+    rescue StandardError
+      false
+    end
+  } do |purchase_order|
     purchase_order.purchase_order_items.includes(:item).order(nobaris: :asc)
   end
-
 end

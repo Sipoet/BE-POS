@@ -12,5 +12,4 @@ class SaleItemsController < ApplicationController
   def period_report
     run_service_default
   end
-
 end

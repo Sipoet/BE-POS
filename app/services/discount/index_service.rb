@@ -1,5 +1,4 @@
 class Discount::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class Discount::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(DiscountSerializer.new(@discounts,options))
+    render_json(DiscountSerializer.new(@discounts, options))
   end
 
   def meta
@@ -18,18 +17,18 @@ class Discount::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @discounts.total_pages,
-      total_rows: @discounts.total_count,
+      total_rows: @discounts.total_count
     }
   end
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Discount)
-    allowed_fields = [:discount, :item, :item_type, :supplier, :brand,
-                      :blacklist_brand, :blacklist_item_type, :customer_group,
-                      :blacklist_supplier]
+    allowed_fields = %i[discount item item_type supplier brand
+                        blacklist_brand blacklist_item_type customer_group
+                        blacklist_supplier]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -41,11 +40,9 @@ class Discount::IndexService < ApplicationService
 
   def find_discounts
     discounts = Discount.all.includes(@included)
-      .page(@page)
-      .per(@limit)
-    if @search_text.present?
-      discounts = discounts.where(['code ilike ? ']+ Array.new(1,"%#{@search_text}%"))
-    end
+                        .page(@page)
+                        .per(@limit)
+    discounts = discounts.where(['code ilike ? '] + Array.new(1, "%#{@search_text}%")) if @search_text.present?
     filter_discount_ids = []
     @filters.each do |filter|
       if filter.key.to_sym == :item_code
@@ -68,11 +65,9 @@ class Discount::IndexService < ApplicationService
       discounts = discounts.where(id: container_discount_ids)
     end
     if @sort.present?
-      discounts = discounts.order(@sort)
+      discounts.order(@sort)
     else
-      discounts = discounts.order(id: :asc)
+      discounts.order(id: :asc)
     end
-    discounts
   end
-
 end

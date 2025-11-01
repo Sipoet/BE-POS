@@ -3,9 +3,9 @@ class ActivityLogSerializer
   include JSONAPI::Serializer
 
   attributes :item_type,
-              :item_id,
-              :event,
-              :created_at
+             :item_id,
+             :event,
+             :created_at
 
   attribute :actor do |obj|
     obj.user.try(:username)
@@ -19,7 +19,4 @@ class ActivityLogSerializer
     end
     description.join("\n")
   end
-
-
-
 end

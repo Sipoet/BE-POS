@@ -1,5 +1,4 @@
 class ColumnAuthorize < ApplicationRecord
-
   validates :table, presence: true
   validates :column, presence: true
   validate :valid_column
@@ -7,12 +6,14 @@ class ColumnAuthorize < ApplicationRecord
   belongs_to :role
 
   private
+
   def valid_column
-    return if  table.blank?
+    return if table.blank?
+
     klass = table.classify.constantize
     table_definitions = Datatable::DefinitionExtractor.new(klass)
-    if table_definitions.column_names.include?(column)
-      errors.add(:column,:inclusion)
-    end
+    return unless table_definitions.column_names.include?(column)
+
+    errors.add(:column, :inclusion)
   end
 end

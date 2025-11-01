@@ -9,6 +9,6 @@ class CreatePayslipLines < ActiveRecord::Migration[7.1]
       t.timestamps
     end
     add_foreign_key :payslip_lines, :payslips, column: :payslip_id
-    add_index :payslip_lines, [:payslip_id,:payslip_type], name: 'emp_pay_line_idx'
+    add_index :payslip_lines, %i[payslip_id payslip_type], name: 'emp_pay_line_idx'
   end
 end

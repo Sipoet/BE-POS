@@ -1,6 +1,6 @@
 class UpdateItemReport < ActiveRecord::Migration[7.1]
   def up
-    ActiveRecord::Base.connection.execute """
+    ActiveRecord::Base.connection.execute "
     DROP VIEW IF EXISTS item_sales_percentage_reports;
     CREATE MATERIALIZED VIEW item_reports AS (
       SELECT
@@ -75,11 +75,11 @@ class UpdateItemReport < ActiveRecord::Migration[7.1]
     );
     CREATE UNIQUE INDEX u_idx_item_reports
     ON item_reports (item_code);
-    """
+    "
   end
 
   def down
-    ActiveRecord::Base.connection.execute """
+    ActiveRecord::Base.connection.execute "
     DROP INDEX IF EXISTS u_idx_item_reports;
     DROP MATERIALIZED VIEW IF EXISTS item_reports;
     CREATE VIEW item_sales_percentage_reports AS (
@@ -153,6 +153,6 @@ class UpdateItemReport < ActiveRecord::Migration[7.1]
         kodeitem
       )stok ON stok.kodeitem = tbl_item.kodeitem
     );
-    """
+    "
   end
 end

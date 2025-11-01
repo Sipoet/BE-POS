@@ -1,5 +1,4 @@
 class Holiday < ApplicationRecord
-
   enum :religion, {
     other: 0,
     catholic: 6,
@@ -7,7 +6,7 @@ class Holiday < ApplicationRecord
     buddhism: 2,
     hindu: 3,
     islam: 4,
-    khonghucu: 5,
+    khonghucu: 5
   }
 
   validates :date, presence: true

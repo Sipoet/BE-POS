@@ -5,8 +5,8 @@ class Ipos::TransferItem < ApplicationRecord
   alias_attribute :id, :iddetail
   alias_attribute :updated_at, :dateupd
 
-  belongs_to :transfer, class_name:'Ipos::Transfer',  primary_key: 'notransaksi', foreign_key: 'notransaksi'
-  belongs_to :item, class_name:'Ipos::Item', primary_key: 'kodeitem', foreign_key: 'kodeitem'
+  belongs_to :transfer, class_name: 'Ipos::Transfer', primary_key: 'notransaksi', foreign_key: 'notransaksi'
+  belongs_to :item, class_name: 'Ipos::Item', primary_key: 'kodeitem', foreign_key: 'kodeitem'
 
   def sell_price
     item.try(:hargajual1)

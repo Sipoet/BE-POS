@@ -1,5 +1,4 @@
 class CustomerGroupDiscount < ApplicationRecord
-
   enum :period_type, {
     active_period: 0,
     day_of_month: 1,
@@ -12,26 +11,26 @@ class CustomerGroupDiscount < ApplicationRecord
   validates :start_active_date, presence: true
   validates :end_active_date, presence: true
   validates :level, presence: true
-  validates :variable1, numericality: {integer: true}, allow_nil: true
-  validates :variable2, numericality: {integer: true}, allow_nil: true
-  validates :variable3, numericality: {integer: true}, allow_nil: true
-  validates :variable4, numericality: {integer: true}, allow_nil: true
-  validates :variable5, numericality: {integer: true}, allow_nil: true
-  validates :variable6, numericality: {integer: true}, allow_nil: true
-  validates :variable7, numericality: {integer: true}, allow_nil: true
+  validates :variable1, numericality: { integer: true }, allow_nil: true
+  validates :variable2, numericality: { integer: true }, allow_nil: true
+  validates :variable3, numericality: { integer: true }, allow_nil: true
+  validates :variable4, numericality: { integer: true }, allow_nil: true
+  validates :variable5, numericality: { integer: true }, allow_nil: true
+  validates :variable6, numericality: { integer: true }, allow_nil: true
+  validates :variable7, numericality: { integer: true }, allow_nil: true
   validate :end_active_date_should_valid
   validate :period_type_setting
 
   belongs_to :customer_group, class_name: 'Ipos::CustomerGroup', foreign_key: :customer_group_code, primary_key: :kgrup
 
-  scope :active_date,->(date){where("? BETWEEN start_active_date AND end_active_date",date)}
+  scope :active_date, ->(date) { where('? BETWEEN start_active_date AND end_active_date', date) }
 
   private
 
   def end_active_date_should_valid
-    if end_active_date.present? && end_active_date < start_active_date
-      errors.add(:end_active_date,:greater_than, count: start_active_date.strftime('%d/%m/%y'))
-    end
+    return unless end_active_date.present? && end_active_date < start_active_date
+
+    errors.add(:end_active_date, :greater_than, count: start_active_date.strftime('%d/%m/%y'))
   end
 
   def period_type_setting
@@ -54,25 +53,12 @@ class CustomerGroupDiscount < ApplicationRecord
       elsif !variable1.between?(min_num, max_num)
         errors.add(:variable1, :invalid)
       end
-      if variable2.present? && !variable2.between?(min_num, max_num)
-        errors.add(:variable2, :invalid)
-      end
-      if variable3.present? && !variable3.between?(min_num, max_num)
-        errors.add(:variable3, :invalid)
-      end
-      if variable4.present? && !variable4.between?(min_num, max_num)
-        errors.add(:variable4, :invalid)
-      end
-      if variable5.present? && !variable5.between?(min_num, max_num)
-        errors.add(:variable5, :invalid)
-      end
-      if variable6.present? && !variable6.between?(min_num, max_num)
-        errors.add(:variable6, :invalid)
-      end
-      if variable7.present? && !variable7.between?(min_num, max_num)
-        errors.add(:variable7, :invalid)
-      end
+      errors.add(:variable2, :invalid) if variable2.present? && !variable2.between?(min_num, max_num)
+      errors.add(:variable3, :invalid) if variable3.present? && !variable3.between?(min_num, max_num)
+      errors.add(:variable4, :invalid) if variable4.present? && !variable4.between?(min_num, max_num)
+      errors.add(:variable5, :invalid) if variable5.present? && !variable5.between?(min_num, max_num)
+      errors.add(:variable6, :invalid) if variable6.present? && !variable6.between?(min_num, max_num)
+      errors.add(:variable7, :invalid) if variable7.present? && !variable7.between?(min_num, max_num)
     end
   end
-
 end

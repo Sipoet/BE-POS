@@ -3,14 +3,12 @@ class BackgroundJob::DestroyService < ApplicationService
   def execute_service
     job = Sidekiq::ScheduledSet.new.find_job(params[:id])
     job = Sidekiq::DeadSet.new.find_job(params[:id]) if job.blank?
-    if job.blank?
-      raise ApplicationService::RecordNotFound.new(record_type: 'background job',record_id: params[:id])
-    end
+    raise ApplicationService::RecordNotFound.new(record_type: 'background job', record_id: params[:id]) if job.blank?
+
     if job.delete
-      render_json({message: "sukses hapus background job #{job.jid}"})
+      render_json({ message: "sukses hapus background job #{job.jid}" })
     else
-      render_json({message: "gagal hapus background job #{job.jid}"}, {status: :conflict})
+      render_json({ message: "gagal hapus background job #{job.jid}" }, { status: :conflict })
     end
   end
-
 end

@@ -1,5 +1,4 @@
 class Ipos::CashDetail < ApplicationRecord
-
   self.table_name = 'tbl_acckasdt'
   self.primary_key = 'iddetail'
 
@@ -8,7 +7,7 @@ class Ipos::CashDetail < ApplicationRecord
 
   validates :iddetail, presence: true
   validates :notransaksi, presence: true
-  validates :nobaris, presence: true,numericality:{greater_than: 0,integer: true}
+  validates :nobaris, presence: true, numericality: { greater_than: 0, integer: true }
   validates :kodeacc, presence: true
   validates :matauang, presence: true
   validates :rate, presence: true

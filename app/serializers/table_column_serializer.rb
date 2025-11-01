@@ -6,5 +6,4 @@ class TableColumnSerializer
 
   attributes  :name, :type, :humanize_name, :can_filter,
               :can_sort, :client_width, :input_options, :excel_width
-
 end

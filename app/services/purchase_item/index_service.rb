@@ -1,5 +1,4 @@
 class PurchaseItem::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class PurchaseItem::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(Ipos::PurchaseItemSerializer.new(@purchase_items,options))
+    render_json(Ipos::PurchaseItemSerializer.new(@purchase_items, options))
   end
 
   def meta
@@ -18,16 +17,16 @@ class PurchaseItem::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_rows: @purchase_items.total_count,
-      total_pages: @purchase_items.total_pages,
+      total_pages: @purchase_items.total_pages
     }
   end
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::PurchaseItem)
-    allowed_fields = [:purchase_item, :item]
+    allowed_fields = %i[purchase_item item]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -39,20 +38,18 @@ class PurchaseItem::IndexService < ApplicationService
 
   def find_purchase_items
     purchase_items = Ipos::PurchaseItem.all.includes(@included)
-      .page(@page)
-      .per(@limit)
+                                       .page(@page)
+                                       .per(@limit)
     if @search_text.present?
-      purchase_items = purchase_items.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      purchase_items = purchase_items.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%"))
     end
     @filters.each do |filter|
       purchase_items = purchase_items.where(filter.to_query)
     end
     if @sort.present?
-      purchase_items = purchase_items.order(@sort)
+      purchase_items.order(@sort)
     else
-      purchase_items = purchase_items.order(kodeitem: :asc)
+      purchase_items.order(kodeitem: :asc)
     end
-    purchase_items
   end
-
 end

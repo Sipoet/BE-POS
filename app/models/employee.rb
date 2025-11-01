@@ -1,8 +1,8 @@
 class Employee < ApplicationRecord
-  has_paper_trail ignore: [:id, :created_at, :updated_at]
+  has_paper_trail ignore: %i[id created_at updated_at]
 
   enum :status, {
-    inactive: 0 ,
+    inactive: 0,
     active: 1
   }
 
@@ -21,7 +21,7 @@ class Employee < ApplicationRecord
     buddhism: 2,
     hindu: 3,
     islam: 4,
-    khonghucu: 5,
+    khonghucu: 5
   }
 
   belongs_to :role
@@ -49,11 +49,12 @@ class Employee < ApplicationRecord
   end
 
   private
+
   def end_working_date_should_valid
     return if start_working_date.nil? || end_working_date.nil?
-    if end_working_date < start_working_date
-      errors.add(:end_working_date,:greater_than, count: start_working_date.strftime('%d/%m/%y'))
-    end
-  end
 
+    return unless end_working_date < start_working_date
+
+    errors.add(:end_working_date, :greater_than, count: start_working_date.strftime('%d/%m/%y'))
+  end
 end

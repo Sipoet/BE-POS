@@ -1,6 +1,6 @@
 class AddPurchaseReports < ActiveRecord::Migration[7.1]
   def up
-    ApplicationRecord.connection.execute """
+    ApplicationRecord.connection.execute "
     DROP VIEW IF EXISTS purchase_reports;
     CREATE MATERIALIZED VIEW IF NOT EXISTS purchase_reports AS (
       SELECT
@@ -106,13 +106,13 @@ class AddPurchaseReports < ActiveRecord::Migration[7.1]
     );
     CREATE UNIQUE INDEX u_idx_purchase_reports
     ON purchase_reports (code);
-    """
+    "
   end
 
   def down
-    ActiveRecord::Base.connection.execute """
+    ActiveRecord::Base.connection.execute "
     DROP INDEX IF EXISTS u_idx_purchase_reports;
     DROP MATERIALIZED VIEW IF EXISTS purchase_reports;
-    """
+    "
   end
 end

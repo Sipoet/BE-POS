@@ -1,7 +1,7 @@
 class CommissionAnalyzer
   attr_reader :start_date, :end_date
 
-  def initialize(start_date:,end_date:)
+  def initialize(start_date:, end_date:)
     @start_date = start_date
     @end_date = end_date
   end
@@ -32,7 +32,7 @@ class CommissionAnalyzer
     end
 
     sales = Ipos::Sale.where(tanggal: start_date.beginning_of_day..(@end_date.end_of_day),
-                             tipe:['KSR','JL'])
+                             tipe: %w[KSR JL])
     sales.each do |sale|
       sale_calculate_result(sale)
     end
@@ -40,8 +40,8 @@ class CommissionAnalyzer
 
   def sale_calculate_result(sale)
     employee_ids = EmployeeAttendance.where("'#{sale.tanggal}' BETWEEN start_time AND end_time")
-                                    .where(employee_id: @result_by_employee.keys)
-                                    .pluck(:employee_id)
+                                     .where(employee_id: @result_by_employee.keys)
+                                     .pluck(:employee_id)
     total_people = employee_ids.length
     cogs_total = sale.sale_items
                      .joins(:item)
@@ -59,7 +59,7 @@ class CommissionAnalyzer
   def analyze_by_date
     results = {}
     (@start_date..@end_date).each do |date|
-      sales = Ipos::Sale.where(tanggal: date.beginning_of_day..(date.end_of_day),tipe: 'KSR')
+      sales = Ipos::Sale.where(tanggal: date.beginning_of_day..(date.end_of_day), tipe: 'KSR')
       gross_sales = gross_sales_of(sales)
       cogs_total = cogs_total_of(sales)
       result = Result.new(
@@ -69,7 +69,7 @@ class CommissionAnalyzer
         date: date
       )
       insert_shift_results(result)
-      total_people_per_shift = total_people_of(date)
+      total_people_of(date)
       results[date] = result
     end
     results
@@ -90,17 +90,16 @@ class CommissionAnalyzer
       gross_sales = gross_sales_of(sales)
 
       cogs_total = cogs_total_of(sales)
-      result.add_shift(shift,{
-        total_people: total_people,
-        gross_sales: gross_sales,
-        cogs_total: cogs_total,
-        gross_profit: gross_sales - cogs_total,
-      })
+      result.add_shift(shift, {
+                         total_people: total_people,
+                         gross_sales: gross_sales,
+                         cogs_total: cogs_total,
+                         gross_profit: gross_sales - cogs_total
+                       })
     end
   end
 
-  def total_people_of(date)
-  end
+  def total_people_of(date); end
 
   def gross_sales_of(sales)
     sales.sum(:totalakhir)
@@ -118,17 +117,17 @@ class CommissionAnalyzer
                   :cogs_total,
                   :gross_profit,
                   :date
-    attr_reader  :result_per_shift
+    attr_reader :result_per_shift
 
     def initialize(options)
-      options.each do |key,value|
-        instance_variable_set("@#{key}",value)
+      options.each do |key, value|
+        instance_variable_set("@#{key}", value)
       end
       @result_per_shift ||= {}
     end
 
-    def add_shift(shift,options)
-      result= ShiftResult.new(options)
+    def add_shift(shift, options)
+      result = ShiftResult.new(options)
       result.shift = shift
       @result_per_shift[shift] = result
     end
@@ -150,7 +149,7 @@ class CommissionAnalyzer
       @cogs_total = 0
       @gross_profit = 0
     end
-end
+  end
 
   class ShiftResult
     attr_accessor :gross_sales,
@@ -160,8 +159,8 @@ end
                   :shift
 
     def initialize(options)
-      options.each do |key,value|
-        instance_variable_set("@#{key}",value)
+      options.each do |key, value|
+        instance_variable_set("@#{key}", value)
       end
     end
   end

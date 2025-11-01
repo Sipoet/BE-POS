@@ -1,5 +1,4 @@
 class Brand::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class Brand::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(Ipos::BrandSerializer.new(@brands,options))
+    render_json(Ipos::BrandSerializer.new(@brands, options))
   end
 
   def meta
@@ -18,7 +17,7 @@ class Brand::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @brands.total_pages,
-      total_rows: @brands.total_count,
+      total_rows: @brands.total_count
     }
   end
 
@@ -26,8 +25,8 @@ class Brand::IndexService < ApplicationService
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Brand)
     allowed_fields = [:brand]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -39,20 +38,16 @@ class Brand::IndexService < ApplicationService
 
   def find_brands
     brands = Ipos::Brand.all.includes(@included)
-      .page(@page)
-      .per(@limit)
-    if @search_text.present?
-      brands = brands.where(['merek ilike ? ']+ Array.new(1,"%#{@search_text}%"))
-    end
+                        .page(@page)
+                        .per(@limit)
+    brands = brands.where(['merek ilike ? '] + Array.new(1, "%#{@search_text}%")) if @search_text.present?
     @filters.each do |filter|
       brands = brands.where(filter.to_query)
     end
     if @sort.present?
-      brands = brands.order(@sort)
+      brands.order(@sort)
     else
-      brands = brands.order(merek: :asc)
+      brands.order(merek: :asc)
     end
-    brands
   end
-
 end

@@ -1,5 +1,4 @@
 class ItemType::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class ItemType::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(Ipos::ItemTypeSerializer.new(@item_types,options))
+    render_json(Ipos::ItemTypeSerializer.new(@item_types, options))
   end
 
   def meta
@@ -26,8 +25,8 @@ class ItemType::IndexService < ApplicationService
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::ItemType)
     allowed_fields = [:item_type]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -44,17 +43,15 @@ class ItemType::IndexService < ApplicationService
                              .per(@limit)
     end
     if @search_text.present?
-      item_types = item_types.where(['jenis ilike ? OR ketjenis ilike ? ']+ Array.new(2,"%#{@search_text}%"))
+      item_types = item_types.where(['jenis ilike ? OR ketjenis ilike ? '] + Array.new(2, "%#{@search_text}%"))
     end
     @filters.each do |filter|
       item_types = item_types.where(filter.to_query)
     end
     if @sort.present?
-      item_types = item_types.order(@sort)
+      item_types.order(@sort)
     else
-      item_types = item_types.order(jenis: :asc)
+      item_types.order(jenis: :asc)
     end
-    item_types
   end
-
 end

@@ -13,14 +13,19 @@ class SystemSettingSerializer
   belongs_to :user
 
   def self.value_type_of(record)
-    value_type = JSON.parse(record.value)['value_type'] rescue nil
+    value_type = begin
+      JSON.parse(record.value)['value_type']
+    rescue StandardError
+      nil
+    end
     return value_type unless value_type.nil?
+
     value = value_of(record)
     if value.is_a?(String)
       :string
     elsif value.is_a?(Numeric)
       :number
-    elsif [true,false].include?(value)
+    elsif [true, false].include?(value)
       :boolean
     else
       :json
@@ -28,6 +33,8 @@ class SystemSettingSerializer
   end
 
   def self.value_of(record)
-    JSON.parse(record.value)['data'] rescue nil
+    JSON.parse(record.value)['data']
+  rescue StandardError
+    nil
   end
 end

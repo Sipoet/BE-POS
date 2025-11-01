@@ -1,23 +1,20 @@
 class ItemReport::GroupedReportService < ApplicationService
-
-  WHITELIST_GROUP = [:brand_name,:supplier_name,:item_type_name, :last_purchase_date].freeze
+  WHITELIST_GROUP = %i[brand_name supplier_name item_type_name last_purchase_date].freeze
 
   def execute_service
     extract_params
-    if @group_names.empty?
-      render_json({message:'group by harus diisi'},{status: :conflict})
-    end
+    render_json({ message: 'group by harus diisi' }, { status: :conflict }) if @group_names.empty?
     results = execute_sql(query_sql)
     data = decorate_result(results)
     if @report_type == 'json'
       meta = {
-        filter:{
+        filter: {
           suppliers: @suppliers,
           brands: @brands,
           item_types: @item_types
         }
       }
-      render_json(SalesGroupBySupplierReportSerializer.new(data, {meta: meta}))
+      render_json(SalesGroupBySupplierReportSerializer.new(data, { meta: meta }))
     elsif @report_type == 'xlsx'
       file_excel = generate_excel(data)
       @controller.send_file file_excel.path
@@ -28,9 +25,9 @@ class ItemReport::GroupedReportService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(SalesGroupBySupplierReport)
-    permitted_params = @params.permit(:report_type,suppliers:[],
-                                      brands:[],item_types:[],
-                                      group_names:[])
+    permitted_params = @params.permit(:report_type, suppliers: [],
+                                                    brands: [], item_types: [],
+                                                    group_names: [])
     @suppliers = *permitted_params[:suppliers]
     @brands = *permitted_params[:brands]
     @items = *permitted_params[:items]
@@ -43,12 +40,12 @@ class ItemReport::GroupedReportService < ApplicationService
     generator = ExcelGenerator.new
     column_definitions = @table_definitions.column_definitions
     excluded_list = WHITELIST_GROUP.dup - @group_names
-    column_definitions.reject!{|table_def| excluded_list.include?(table_def.name)}
+    column_definitions.reject! { |table_def| excluded_list.include?(table_def.name) }
     sep_index = 0
-    column_definitions = column_definitions.sort_by do|table_def|
+    column_definitions = column_definitions.sort_by do |table_def|
       index = @group_names.index(table_def.name)
       if index.nil?
-        sep_index+=1
+        sep_index += 1
         @group_names.length + sep_index
       else
         index
@@ -57,16 +54,16 @@ class ItemReport::GroupedReportService < ApplicationService
     generator.add_column_definitions(column_definitions)
     generator.add_data(data)
     generator.add_metadata({
-      suppliers: @suppliers,
-      brands: @brands,
-      item_types: @item_types,
-      group_names: @group_names
-    })
+                             suppliers: @suppliers,
+                             brands: @brands,
+                             item_types: @item_types,
+                             group_names: @group_names
+                           })
     generator.generate('laporan-penjualan-per-grup')
   end
 
   def decorate_result(results)
-    results.to_a.map{|row|SalesGroupBySupplierReport.new(row)}
+    results.to_a.map { |row| SalesGroupBySupplierReport.new(row) }
   end
 
   def query_sql
@@ -89,16 +86,16 @@ class ItemReport::GroupedReportService < ApplicationService
 
   def group_names_select
     select_query = @group_names.join(',')
-    select_query.gsub('last_purchase_date',"DATE_TRUNC('DAY',last_purchase_date) AS last_purchase_date")
+    select_query.gsub('last_purchase_date', "DATE_TRUNC('DAY',last_purchase_date) AS last_purchase_date")
   end
 
   def group_names_field
     select_query = @group_names.join(',')
-    select_query.gsub('last_purchase_date',"DATE_TRUNC('DAY',last_purchase_date)")
+    select_query.gsub('last_purchase_date', "DATE_TRUNC('DAY',last_purchase_date)")
   end
 
   def order_query
-    @group_names.map{|column_name|"#{column_name} ASC"}.join(',')
+    @group_names.map { |column_name| "#{column_name} ASC" }.join(',')
   end
 
   def filter_query
@@ -109,22 +106,25 @@ class ItemReport::GroupedReportService < ApplicationService
     ].compact
 
     return '' if query.empty?
+
     "WHERE #{query.join(' AND ')}"
   end
 
   def filter_query_suppliers
     return if @suppliers.blank?
-    return "#{ApplicationRecord.sanitize_sql(["#{ItemReport.table_name}.supplier_code in (?)",@suppliers])}"
+
+    "#{ApplicationRecord.sanitize_sql(["#{ItemReport.table_name}.supplier_code in (?)", @suppliers])}"
   end
 
   def filter_query_item_types
     return if @item_types.blank?
-    return "#{ApplicationRecord.sanitize_sql(["#{ItemReport.table_name}.item_type_name in (?)",@item_types])}"
+
+    "#{ApplicationRecord.sanitize_sql(["#{ItemReport.table_name}.item_type_name in (?)", @item_types])}"
   end
 
   def filter_query_brands
     return if @brands.blank?
-    return "#{ApplicationRecord.sanitize_sql(["#{ItemReport.table_name}.brand_name in (?)",@brands])}"
-  end
 
+    "#{ApplicationRecord.sanitize_sql(["#{ItemReport.table_name}.brand_name in (?)", @brands])}"
+  end
 end

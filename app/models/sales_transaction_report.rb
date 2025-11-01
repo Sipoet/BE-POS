@@ -1,6 +1,4 @@
 class SalesTransactionReport < ApplicationModel
-
-
   attr_accessor :start_time,
                 :end_time,
                 :sales_total,

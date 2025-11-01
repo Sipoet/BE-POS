@@ -16,10 +16,12 @@ class CreateEmployeeDayOffs < ActiveRecord::Migration[7.1]
   end
 
   private
+
   def seed_day_off
     Employee.all.each do |employee|
       work_schedules = employee.work_schedules
       next if work_schedules.blank?
+
       odd_week = (1..7).to_a
       even_week = (1..7).to_a
       work_schedules.each do |work_schedule|
@@ -41,13 +43,13 @@ class CreateEmployeeDayOffs < ActiveRecord::Migration[7.1]
         active_week = :even_week
         day_of_week = even_week.first
       end
-      if active_week.present?
-        EmployeeDayOff.create!(
-          active_week: active_week,
-          day_of_week: day_of_week,
-          employee: employee
-        )
-      end
+      next unless active_week.present?
+
+      EmployeeDayOff.create!(
+        active_week: active_week,
+        day_of_week: day_of_week,
+        employee: employee
+      )
     end
   end
 end

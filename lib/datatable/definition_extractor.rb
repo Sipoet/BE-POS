@@ -1,11 +1,10 @@
 class Datatable::DefinitionExtractor
-
   def initialize(model_class)
     @model_class = model_class
     begin
       raw_yml = read_definition(model_class)
       @column_definitions = convert_to_column_definitions(raw_yml)
-    rescue
+    rescue StandardError
       @column_definitions = {}
     end
   end
@@ -42,7 +41,7 @@ class Datatable::DefinitionExtractor
   end
 
   def read_definition(model_class)
-    table_def = model_class.name.gsub('::','/').underscore
+    table_def = model_class.name.gsub('::', '/').underscore
     YAML.safe_load_file("#{Rails.root}/app/table_definitions/#{table_def}.yml")
         .deep_symbolize_keys!
   end

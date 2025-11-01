@@ -1,7 +1,7 @@
 class CreateEmployees < ActiveRecord::Migration[7.1]
   def change
     create_table :employees do |t|
-      t.string :code, null: false, index: { unique: true}
+      t.string :code, null: false, index: { unique: true }
       t.string :name, null: false
       t.integer :role_id, null: false
       t.decimal :debt, null: false, default: 0

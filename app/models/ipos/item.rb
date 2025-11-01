@@ -1,5 +1,4 @@
 class Ipos::Item < ApplicationRecord
-
   self.table_name = 'tbl_item'
   self.primary_key = 'kodeitem'
 
