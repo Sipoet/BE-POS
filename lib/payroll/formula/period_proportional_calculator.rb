@@ -1,5 +1,4 @@
 class Payroll::Formula::PeriodProportionalCalculator < Payroll::Formula::ApplicationCalculator
-
   # variable1 = amount of pay
   # variable2 = how many day get amount of pay
   # variable3 = include sick day? 1 is true, anything else is false
@@ -20,6 +19,7 @@ class Payroll::Formula::PeriodProportionalCalculator < Payroll::Formula::Applica
   end
 
   private
+
   def include_sick_day?(payroll_line)
     payroll_line.variable3 == 1
   end

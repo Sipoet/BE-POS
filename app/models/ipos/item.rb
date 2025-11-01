@@ -1,5 +1,4 @@
 class Ipos::Item < ApplicationRecord
-
   self.table_name = 'tbl_item'
   self.primary_key = 'kodeitem'
 
@@ -26,6 +25,4 @@ class Ipos::Item < ApplicationRecord
   alias_attribute :description, :keterangan
   alias_attribute :updated_at, :dateupd
   alias_attribute :created_at, :tanggal_add
-
-
 end

@@ -1,18 +1,18 @@
 module JsonApiDeserializer
   extend ActiveSupport::Concern
   class TableIndex
-
-    FILTER_OPERATORS = [:eq,:not,:lt,:lte,:gt,:gte,:btw,:like].freeze
+    FILTER_OPERATORS = %i[eq not lt lte gt gte btw like].freeze
 
     def initialize(params, allowed_fields, table_definitions)
       allowed_columns = table_definitions.column_names
-      filter_keys = allowed_columns.map{|name| {name => FILTER_OPERATORS}}
+      filter_keys = allowed_columns.map { |name| { name => FILTER_OPERATORS } }
       @params = params.permit(
-        :search_text,:include,:sort,
+        :search_text, :include, :sort,
         fields: allowed_fields,
         filter: filter_keys,
-        page:[:page,:limit])
-        Rails.logger.debug "filter key: #{@params[:filter]}"
+        page: %i[page limit]
+      )
+      Rails.logger.debug "filter key: #{@params[:filter]}"
       @table_definitions = table_definitions
       @allowed_columns = allowed_columns.index_by(&:to_sym)
       @allowed_fields = allowed_fields.map(&:to_s)
@@ -43,18 +43,18 @@ module JsonApiDeserializer
     def deserialize_filters(column_hash)
       filter = []
       return filter if @param_filter.blank?
-      @param_filter.to_h.each do |key,param_value|
+
+      @param_filter.to_h.each do |key, param_value|
         next unless column_hash[key.to_sym].try(:can_filter)
-        if param_value.is_a?(Hash)
-          param_value.each do |operator, value|
-            filter << Filter.new(
-              column_hash[key.to_sym].filter_key,
-              operator.to_sym,
-              value
-            )
-          end
-        else
-          raise 'filter invalid pattern'
+
+        raise 'filter invalid pattern' unless param_value.is_a?(Hash)
+
+        param_value.each do |operator, value|
+          filter << Filter.new(
+            column_hash[key.to_sym].filter_key,
+            operator.to_sym,
+            value
+          )
         end
       end
       filter
@@ -62,40 +62,39 @@ module JsonApiDeserializer
 
     def deserialize_included
       return [] if @params[:include].blank?
-      @params[:include].split(',')
 
+      @params[:include].split(',')
     end
 
     def deserialize_query_included
       return [] if @params[:include].blank?
+
       included = @params[:include].split(',')
-      included.each.with_index do |key,index|
+      included.each.with_index do |key, index|
         next unless key.include?('.')
+
         values = key.split('.')
-        included[index] = included_nested_key(included[index],values[0],values[1..-1])
+        included[index] = included_nested_key(included[index], values[0], values[1..-1])
       end
       included
     end
 
-    def included_nested_key(parent,key,values)
-      if !parent.is_a?(Hash)
-        parent = {}
-      end
-      if parent[key].nil?
-        parent[key] = []
-      end
-      if values[2].present?
-        parent[key] << included_nested_key(parent[key],values[1],values[2..-1])
-      else
-        parent[key] << values[1]
-      end
+    def included_nested_key(parent, key, values)
+      parent = {} unless parent.is_a?(Hash)
+      parent[key] = [] if parent[key].nil?
+      parent[key] << if values[2].present?
+                       included_nested_key(parent[key], values[1], values[2..-1])
+                     else
+                       values[1]
+                     end
       parent
     end
 
     def deserialize_field
       return nil if @params[:field].blank?
+
       field = {}
-      @params[:field].to_h.each do |key,value|
+      @params[:field].to_h.each do |key, value|
         puts "======|======#{value}"
         field[key] = value.split(',')
       end
@@ -104,6 +103,7 @@ module JsonApiDeserializer
 
     def deserialize_pagination
       return [nil, nil] if @params[:page].blank?
+
       page = @params[:page][:page]
       limit = @params[:page][:limit]
       page = page.to_i if page.present?
@@ -113,10 +113,11 @@ module JsonApiDeserializer
 
     def deserialize_sort(column_hash)
       return nil if @params[:sort].blank?
+
       sorts = @params[:sort].split(',')
-      sorts.each_with_object({}) do |value,obj|
-        column_name,sort_value = nil
-        if value[0]== '-'
+      sorts.each_with_object({}) do |value, obj|
+        column_name, sort_value = nil
+        if value[0] == '-'
           column_name = value[1..-1].to_sym
           sort_value = :desc
         else
@@ -125,6 +126,7 @@ module JsonApiDeserializer
         end
         next unless column_hash[column_name].try(:can_sort)
         next if @allowed_columns[column_name].blank?
+
         sort_key = column_hash[column_name].sort_key
         obj[sort_key] = sort_value
       end
@@ -142,11 +144,11 @@ module JsonApiDeserializer
 
       def set_value(val)
         values = val.split(',')
-        if values.length == 1
-          @value = ActiveRecord::Base::sanitize_sql(values[0])
-        else
-          @value = values
-        end
+        @value = if values.length == 1
+                   ActiveRecord::Base.sanitize_sql(values[0])
+                 else
+                   values
+                 end
       end
 
       def add_filter_to_query(query)
@@ -166,32 +168,29 @@ module JsonApiDeserializer
 
       def to_query
         case @operator
-        when :eq then {key => value}
+        when :eq then { key => value }
         when :not
           if value.is_a?(Array)
             ["#{key} not IN (?)", value]
           else
-            sanitize_values = value.map{|line_value| ActiveRecord::Base.sanitize_sql(line_value) }
+            sanitize_values = value.map { |line_value| ActiveRecord::Base.sanitize_sql(line_value) }
             ["#{key} != ?", sanitize_values]
           end
         when :like then ["#{key} ilike ?", "%#{ApplicationRecord.sanitize_sql_like(value)}%"]
         when :gt then ["#{key} > ?", value]
-        when :gte then {key => value..}
-        when :lt then {key => ..value}
-        when :lte then {key => ...value}
-        when :btw then {key => value[0]..value[1]}
+        when :gte then { key => value.. }
+        when :lt then { key => ..value }
+        when :lte then { key => ...value }
+        when :btw then { key => value[0]..value[1] }
         else
           raise "filter not supported operator #{operator}"
         end
       end
-
-      private
     end
   end
 
   included do
-
-    def dezerialize_table_params(params, allowed_fields:[], table_definitions:[])
+    def dezerialize_table_params(params, allowed_fields: [], table_definitions: [])
       TableIndex.new(params, allowed_fields, table_definitions)
                 .deserialize
     end

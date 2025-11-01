@@ -3,17 +3,17 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
 
-  get 'settings',to:'home#settings'
-  get 'check_update/:platform',to:'home#check_update'
-  get 'download_app/:platform',to:'home#download_app', as: :download_app
+  get 'settings', to: 'home#settings'
+  get 'check_update/:platform', to: 'home#check_update'
+  get 'download_app/:platform', to: 'home#download_app', as: :download_app
 
   devise_for :users, path: '', path_names: {
-    sign_in: 'login',
-    sign_out: 'logout'
-  },
-  controllers: {
-    sessions: 'users/sessions'
-  }
+                                 sign_in: 'login',
+                                 sign_out: 'logout'
+                               },
+                     controllers: {
+                       sessions: 'users/sessions'
+                     }
   mount Rswag::Api::Engine => 'api-docs'
   mount Rswag::Ui::Engine => 'api-blueprint', at: 'api-blueprint'
   root to: redirect { '/api-blueprint' }
@@ -22,11 +22,10 @@ Rails.application.routes.draw do
     get :by_user, on: :collection
   end
 
-
-  resources :users, param: :username, only: [:index, :show, :destroy, :update, :create] do
+  resources :users, param: :username, only: %i[index show destroy update create] do
     post :unlock_access, on: :member
   end
-  resources :background_jobs, only:[:index, :show, :destroy] do
+  resources :background_jobs, only: %i[index show destroy] do
     post :retry, on: :member
     post :cancel, on: :member
   end
@@ -36,18 +35,18 @@ Rails.application.routes.draw do
     get :grouped_report, on: :collection
   end
 
-  resources :items, param: :code, only: [:index, :show, :update] do
+  resources :items, param: :code, only: %i[index show update] do
     get :with_discount, on: :collection
     get :download, on: :collection
   end
 
-  resources :suppliers,param: :code, only: [:index, :show]
+  resources :suppliers, param: :code, only: %i[index show]
 
-  resources :item_types,param: :code, only: [:index, :show]
+  resources :item_types, param: :code, only: %i[index show]
 
-  resources :brands,param: :code, only: [:index, :show]
+  resources :brands, param: :code, only: %i[index show]
 
-  resources :discounts, only: [:index, :show, :create, :show, :update, :destroy] do
+  resources :discounts, only: %i[index show create show update destroy] do
     post :refresh_active_promotion, on: :collection
     post :refresh_all_promotion, on: :collection
     post :refresh_promotion, on: :member
@@ -58,49 +57,49 @@ Rails.application.routes.draw do
     get :download_active_items, on: :collection
   end
 
-  resources :sales, only:[:index, :show] do
+  resources :sales, only: %i[index show] do
     get :transaction_report, on: :collection
     get :daily_transaction_report, on: :collection
     get :report, on: :collection
   end
 
-  resources :purchases, only:[:index,:show] do
+  resources :purchases, only: %i[index show] do
     get :report, on: :collection
     post :refresh_report, on: :collection
     post :update_price, on: :member
   end
 
-  resources :purchase_orders, only:[:index,:show] do
+  resources :purchase_orders, only: %i[index show] do
     post :update_price, on: :member
   end
 
-  resources :consignment_ins, only:[:index,:show] do
+  resources :consignment_ins, only: %i[index show] do
     post :update_price, on: :member
   end
 
-  resources :consignment_in_orders, only:[:index,:show] do
+  resources :consignment_in_orders, only: %i[index show] do
     post :update_price, on: :member
   end
 
-  resources :purchase_returns, only:[:index,:show]
+  resources :purchase_returns, only: %i[index show]
 
-  resources :purchase_items, only:[:index]
+  resources :purchase_items, only: [:index]
 
-  resources :transfers, only:[:index, :show]
-  resources :locations, only:[:index, :show]
-  resources :transfer_items, only:[:index]
+  resources :transfers, only: %i[index show]
+  resources :locations, only: %i[index show]
+  resources :transfer_items, only: [:index]
 
-  resources :sale_items, only:[:index] do
+  resources :sale_items, only: [:index] do
     get :transaction_report, on: :collection
     get :period_report, on: :collection
   end
 
-  resources :employee_attendances, only: [:index, :create, :destroy, :update] do
+  resources :employee_attendances, only: %i[index create destroy update] do
     post :mass_upload, on: :collection
     post :mass_update_allow_overtime, on: :collection
   end
 
-  resources :payslips, only:[:index, :show, :update, :destroy] do
+  resources :payslips, only: %i[index show update destroy] do
     post :generate_payslip, on: :collection
     post :confirm, on: :member
     post :cancel, on: :member
@@ -110,44 +109,44 @@ Rails.application.routes.draw do
     get :send_email, on: :member
   end
 
-  resources :assets, param: :code, only: [:show, :create]
+  resources :assets, param: :code, only: %i[show create]
 
-  resources :employees, only:[:index, :show, :create,:update] do
+  resources :employees, only: %i[index show create update] do
     post :activate, on: :member
     post :deactivate, on: :member
   end
 
-  resources :roles, only: [:index,:show, :create, :update, :destroy] do
+  resources :roles, only: %i[index show create update destroy] do
     get :controller_names, on: :collection
     get :action_names, on: :collection
     get :table_names, on: :collection
     get :column_names, on: :collection
   end
-  resources :payrolls, only: [:index, :show, :create, :update, :destroy] do
+  resources :payrolls, only: %i[index show create update destroy] do
     get :report, on: :collection
   end
-  resources :employee_leaves, only: [:index, :show, :create, :update, :destroy]
-  resources :cashier_sessions, only: [:index, :show, :create, :update] do
+  resources :employee_leaves, only: %i[index show create update destroy]
+  resources :cashier_sessions, only: %i[index show create update] do
     resources :edc_settlements, only: [:index] do
       get :check_edc, on: :collection
     end
   end
-  resources :edc_settlements, only: [:create, :update, :destroy]
-  resources :payment_providers, only: [:index, :show,:create, :update, :destroy]
-  resources :payment_types, only: [:create, :update, :index]
-  resources :payment_provider_edcs, only: [:create, :update, :index, :destroy]
-  resources :payment_methods, only: [:index, :destroy, :create, :update]
+  resources :edc_settlements, only: %i[create update destroy]
+  resources :payment_providers, only: %i[index show create update destroy]
+  resources :payment_types, only: %i[create update index]
+  resources :payment_provider_edcs, only: %i[create update index destroy]
+  resources :payment_methods, only: %i[index destroy create update]
   resources :banks, only: [:index]
-  resources :customer_groups, only:[:index]
-  resources :customer_group_discounts, only:[:index,:create,:update,:destroy] do
+  resources :customer_groups, only: [:index]
+  resources :customer_group_discounts, only: %i[index create update destroy] do
     post :toggle_discount, on: :collection
   end
-  resources :payroll_types, only:[:index,:create,:update,:destroy]
-  resources :holidays, only:[:index,:create,:update,:destroy]
-  resources :book_payslip_lines, only:[:index,:create,:update,:destroy]
-  resources :book_employee_attendances, only:[:index,:create,:update,:destroy]
-  resources :accounts, only:[:index, :show]
-  resources :system_settings, only:[:index, :show, :update] do
+  resources :payroll_types, only: %i[index create update destroy]
+  resources :holidays, only: %i[index create update destroy]
+  resources :book_payslip_lines, only: %i[index create update destroy]
+  resources :book_employee_attendances, only: %i[index create update destroy]
+  resources :accounts, only: %i[index show]
+  resources :system_settings, only: %i[index show update] do
     post :refresh_table, on: :collection
     get :list_tables, on: :collection
   end

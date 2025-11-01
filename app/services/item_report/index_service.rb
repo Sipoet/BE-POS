@@ -3,7 +3,7 @@
 class ItemReport::IndexService < ApplicationService
   require 'write_xlsx'
   include JsonApiDeserializer
-  PER_LIMIT = 1000.freeze
+  PER_LIMIT = 1000
 
   def execute_service
     extract_params
@@ -18,11 +18,11 @@ class ItemReport::IndexService < ApplicationService
           filter: @filter,
           page: @page,
           limit: @limit,
-           total_pages: reports.total_pages,
-          total_rows: reports.total_count,
+          total_pages: reports.total_pages,
+          total_rows: reports.total_count
         },
         fields: @fields,
-        params:{include: @included},
+        params: { include: @included },
         include: @included
       }
       render_json(ItemReportSerializer.new(reports, options))
@@ -33,10 +33,10 @@ class ItemReport::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(ItemReport)
-    allowed_fields = [:item, :item_type, :supplier, :brand]
+    allowed_fields = %i[item item_type supplier brand]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -49,18 +49,15 @@ class ItemReport::IndexService < ApplicationService
 
   def find_reports
     reports = ItemReport.all.includes(@included)
-    if @report_type == 'json'
-      reports = reports.page(@page).per(@limit)
-    end
+    reports = reports.page(@page).per(@limit) if @report_type == 'json'
     @filters.each do |filter|
       reports = filter.add_filter_to_query(reports)
     end
     if @sort.present?
-      reports = reports.order(@sort)
+      reports.order(@sort)
     else
-      reports = reports.order(item_code: :asc)
+      reports.order(item_code: :asc)
     end
-    reports
   end
 
   def generate_excel(rows)
@@ -70,6 +67,4 @@ class ItemReport::IndexService < ApplicationService
     generator.add_metadata(@filter || {})
     generator.generate('laporan-item')
   end
-
-
 end

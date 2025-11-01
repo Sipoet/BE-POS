@@ -1,11 +1,11 @@
 class RoleWorkSchedule < ApplicationRecord
-  LAST_END_DATE = Date.new(99999,12,31).freeze
-  has_paper_trail ignore: [:id, :created_at, :updated_at]
+  LAST_END_DATE = Date.new(99_999, 12, 31).freeze
+  has_paper_trail ignore: %i[id created_at updated_at]
   validates :begin_work, presence: true
   validates :end_work, presence: true
-  validates :day_of_week, presence: true, numericality: {greater_than:0, less_than: 8, integer: true}
+  validates :day_of_week, presence: true, numericality: { greater_than: 0, less_than: 8, integer: true }
   validate :end_work_must_valid
-  validates :shift, presence: true, numericality: {greater_than: 0}
+  validates :shift, presence: true, numericality: { greater_than: 0 }
   validates :begin_active_at, presence: true
   validates :end_active_at, presence: true
   validates :group_name, presence: true
@@ -16,12 +16,12 @@ class RoleWorkSchedule < ApplicationRecord
 
   def end_work_must_valid
     today = Date.today
-    if schedule_of(today, begin_work) > schedule_of(today, end_work)
-      errors.add(:end_work,:greater_than, count: begin_work)
-    end
+    return unless schedule_of(today, begin_work) > schedule_of(today, end_work)
+
+    errors.add(:end_work, :greater_than, count: begin_work)
   end
 
-  def schedule_of(date,time)
+  def schedule_of(date, time)
     DateTime.parse("#{date.iso8601} #{time}")
   end
 end

@@ -1,15 +1,13 @@
 class CashInSessionDetail < ApplicationRecord
-
-
-  enum :status,{
+  enum :status, {
     draft: 0,
-    verified: 1,
+    verified: 1
   }
 
   validates :start_time, presence: true
   validates :end_time, presence: true
-  validates :begin_cash, numericality: {greater_than_or_equal_to: 0}, presence: true
-  validates :cash_in, numericality: {greater_than_or_equal_to: 0}, presence: true
+  validates :begin_cash, numericality: { greater_than_or_equal_to: 0 }, presence: true
+  validates :cash_in, numericality: { greater_than_or_equal_to: 0 }, presence: true
   validates :status, presence: true
   validate :end_time_should_valid
 
@@ -23,8 +21,8 @@ class CashInSessionDetail < ApplicationRecord
   private
 
   def end_time_should_valid
-    if end_time.present? && end_time < start_time
-      errors.add(:end_time,:greater_than, count: start_time.strftime('%d/%m/%y %H:%M'))
-    end
+    return unless end_time.present? && end_time < start_time
+
+    errors.add(:end_time, :greater_than, count: start_time.strftime('%d/%m/%y %H:%M'))
   end
 end

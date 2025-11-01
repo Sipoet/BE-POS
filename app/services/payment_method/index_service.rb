@@ -1,5 +1,4 @@
 class PaymentMethod::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class PaymentMethod::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(PaymentMethodSerializer.new(@payment_methods,options))
+    render_json(PaymentMethodSerializer.new(@payment_methods, options))
   end
 
   def meta
@@ -18,16 +17,16 @@ class PaymentMethod::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @payment_methods.total_pages,
-      total_rows: @payment_methods.total_count,
+      total_rows: @payment_methods.total_count
     }
   end
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(PaymentMethod)
-    allowed_fields = [:payment_method,:provider]
+    allowed_fields = %i[payment_method provider]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -39,20 +38,18 @@ class PaymentMethod::IndexService < ApplicationService
 
   def find_payment_methods
     payment_methods = PaymentMethod.all.includes(@included)
-      .page(@page)
-      .per(@limit)
+                                   .page(@page)
+                                   .per(@limit)
     if @search_text.present?
-      payment_methods = payment_methods.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      payment_methods = payment_methods.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%"))
     end
     @filters.each do |filter|
       payment_methods = payment_methods.where(filter.to_query)
     end
     if @sort.present?
-      payment_methods = payment_methods.order(@sort)
+      payment_methods.order(@sort)
     else
-      payment_methods = payment_methods.order(id: :asc)
+      payment_methods.order(id: :asc)
     end
-    payment_methods
   end
-
 end

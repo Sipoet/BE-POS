@@ -3,6 +3,8 @@ class AccessAuthorizeSerializer
   attributes :controller
 
   attribute :action do |record|
-    record.action.split(',') rescue []
+    record.action.split(',')
+  rescue StandardError
+    []
   end
 end

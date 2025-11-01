@@ -1,5 +1,4 @@
 class CustomerGroup::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class CustomerGroup::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(CustomerGroupSerializer.new(@customer_groups,options))
+    render_json(CustomerGroupSerializer.new(@customer_groups, options))
   end
 
   def meta
@@ -18,7 +17,7 @@ class CustomerGroup::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_rows: @customer_groups.total_count,
-       total_pages: @customer_groups.total_pages,
+      total_pages: @customer_groups.total_pages
     }
   end
 
@@ -26,8 +25,8 @@ class CustomerGroup::IndexService < ApplicationService
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::CustomerGroup)
     allowed_fields = [:customer_group]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -39,20 +38,18 @@ class CustomerGroup::IndexService < ApplicationService
 
   def find_customer_groups
     customer_groups = Ipos::CustomerGroup.all.includes(@included)
-      .page(@page)
-      .per(@limit)
+                                         .page(@page)
+                                         .per(@limit)
     if @search_text.present?
-      customer_groups = customer_groups.where(['grup ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      customer_groups = customer_groups.where(['grup ilike ? '] + Array.new(1, "%#{@search_text}%"))
     end
     @filters.each do |filter|
       customer_groups = customer_groups.where(filter.to_query)
     end
     if @sort.present?
-      customer_groups = customer_groups.order(@sort)
+      customer_groups.order(@sort)
     else
-      customer_groups = customer_groups.order(id: :asc)
+      customer_groups.order(id: :asc)
     end
-    customer_groups
   end
-
 end

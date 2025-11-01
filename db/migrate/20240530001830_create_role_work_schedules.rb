@@ -13,6 +13,6 @@ class CreateRoleWorkSchedules < ActiveRecord::Migration[7.1]
       t.timestamps
     end
     add_foreign_key :role_work_schedules, :roles, column: :role_id
-    add_index :role_work_schedules, [:role_id, :level, :day_of_week, :shift]
+    add_index :role_work_schedules, %i[role_id level day_of_week shift]
   end
 end

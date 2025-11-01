@@ -1,5 +1,4 @@
 class Ipos::Supplier < Ipos::Supel
-
   def self.sti_name
     'SU'
   end
@@ -7,5 +6,4 @@ class Ipos::Supplier < Ipos::Supel
   after_update do |record|
     Cache.delete("supplier-serializer:ipos/suppliers/#{record.id}")
   end
-
 end

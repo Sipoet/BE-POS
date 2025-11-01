@@ -1,5 +1,4 @@
 class ConsignmentIn::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class ConsignmentIn::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(Ipos::ConsignmentInSerializer.new(@consignment_ins,options))
+    render_json(Ipos::ConsignmentInSerializer.new(@consignment_ins, options))
   end
 
   def meta
@@ -18,16 +17,16 @@ class ConsignmentIn::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_rows: @consignment_ins.total_count,
-       total_pages: @consignment_ins.total_pages,
+      total_pages: @consignment_ins.total_pages
     }
   end
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::ConsignmentIn)
-    allowed_fields = [:consignment_in,:purchase_items, :supplier, :consignment_in_order]
+    allowed_fields = %i[consignment_in purchase_items supplier consignment_in_order]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -40,20 +39,18 @@ class ConsignmentIn::IndexService < ApplicationService
 
   def find_consignment_ins
     consignment_ins = Ipos::ConsignmentIn.all.includes(@query_included)
-      .page(@page)
-      .per(@limit)
+                                         .page(@page)
+                                         .per(@limit)
     if @search_text.present?
-      consignment_ins = consignment_ins.where(['notransaksi ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      consignment_ins = consignment_ins.where(['notransaksi ilike ? '] + Array.new(1, "%#{@search_text}%"))
     end
     @filters.each do |filter|
       consignment_ins = filter.add_filter_to_query(consignment_ins)
     end
     if @sort.present?
-      consignment_ins = consignment_ins.order(@sort)
+      consignment_ins.order(@sort)
     else
-      consignment_ins = consignment_ins.order(tanggal: :desc)
+      consignment_ins.order(tanggal: :desc)
     end
-    consignment_ins
   end
-
 end

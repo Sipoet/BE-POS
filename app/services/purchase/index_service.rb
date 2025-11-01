@@ -1,5 +1,4 @@
 class Purchase::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class Purchase::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(Ipos::PurchaseSerializer.new(@purchases,options))
+    render_json(Ipos::PurchaseSerializer.new(@purchases, options))
   end
 
   def meta
@@ -18,16 +17,16 @@ class Purchase::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @purchases.total_pages,
-      total_rows: @purchases.total_count,
+      total_rows: @purchases.total_count
     }
   end
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Purchase)
-    allowed_fields = [:purchase, :purchase_items, :supplier, :purchase_order]
+    allowed_fields = %i[purchase purchase_items supplier purchase_order]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -39,20 +38,16 @@ class Purchase::IndexService < ApplicationService
 
   def find_purchases
     purchases = Ipos::Purchase.all.includes(@included)
-      .page(@page)
-      .per(@limit)
-    if @search_text.present?
-      purchases = purchases.where(['notransaksi ilike ? ']+ Array.new(1,"%#{@search_text}%"))
-    end
+                              .page(@page)
+                              .per(@limit)
+    purchases = purchases.where(['notransaksi ilike ? '] + Array.new(1, "%#{@search_text}%")) if @search_text.present?
     @filters.each do |filter|
       purchases = purchases.where(filter.to_query)
     end
     if @sort.present?
-      purchases = purchases.order(@sort)
+      purchases.order(@sort)
     else
-      purchases = purchases.order(tanggal: :desc)
+      purchases.order(tanggal: :desc)
     end
-    purchases
   end
-
 end

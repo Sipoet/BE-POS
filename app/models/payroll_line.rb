@@ -1,6 +1,6 @@
 class PayrollLine < ApplicationRecord
   include PayrollFormula
-  has_paper_trail ignore: [:id, :created_at, :updated_at]
+  has_paper_trail ignore: %i[id created_at updated_at]
 
   belongs_to :payroll, inverse_of: :payroll_lines
   belongs_to :payroll_type
@@ -11,13 +11,12 @@ class PayrollLine < ApplicationRecord
   validates :row, presence: true
   validates :description, presence: true
 
-
-  enum :group,{
+  enum :group, {
     earning: 0,
     deduction: 1
   }
 
-  enum :formula,PAYROLL_FORMULA_LIST
+  enum :formula, PAYROLL_FORMULA_LIST
 
   belongs_to :payroll_type, optional: true
 end

@@ -1,17 +1,16 @@
 class SaleItem::TransactionReportService < ApplicationService
-
   def execute_service
     find_key!
     find_range
     limit = @params.fetch(:limit, 10).to_i
     results = execute_sql(query_report(limit))
     render_json({
-      data: results.map { |row| decorate_row(row) },
-      meta: {
-        group_key: @group_key,
-        limit: limit
-      }
-    })
+                  data: results.map { |row| decorate_row(row) },
+                  meta: {
+                    group_key: @group_key,
+                    limit: limit
+                  }
+                })
   end
 
   private
@@ -26,14 +25,13 @@ class SaleItem::TransactionReportService < ApplicationService
   end
 
   def find_range
-    @start_time = @params.fetch(:start_time,Time.now.utc.beginning_of_day).try(:to_time)
-    @end_time = @params.fetch(:end_time,Time.now.utc.end_of_day).try(:to_time)
+    @start_time = @params.fetch(:start_time, Time.now.utc.beginning_of_day).try(:to_time)
+    @end_time = @params.fetch(:end_time, Time.now.utc.end_of_day).try(:to_time)
   end
 
   def find_key!
     @group_key = @params[:group_key].to_s.try(:downcase)
-    raise 'group key invalid' unless %w{brand supplier item_type}.include?(@group_key)
-
+    raise 'group key invalid' unless %w[brand supplier item_type].include?(@group_key)
   end
 
   def key_item_of(key)
@@ -46,20 +44,20 @@ class SaleItem::TransactionReportService < ApplicationService
 
   def query_report(limit)
     <<~SQL
-    SELECT
-      #{Ipos::Item.table_name}.#{key_item_of(@group_key)} AS identifier,
-      COALESCE(SUM(#{Ipos::SaleItem.table_name}.harga * #{Ipos::SaleItem.table_name}.jumlah),0) AS subtotal,
-      SUM(#{Ipos::SaleItem.table_name}.jumlah) AS quantity,
-      SUM(#{Ipos::SaleItem.table_name}.total) AS sales_total
-    FROM #{Ipos::SaleItem.table_name}
-    INNER JOIN #{Ipos::Item.table_name} on #{Ipos::Item.table_name}.kodeitem = #{Ipos::SaleItem.table_name}.kodeitem
-    INNER JOIN #{Ipos::Sale.table_name} on #{Ipos::Sale.table_name}.notransaksi = #{Ipos::SaleItem.table_name}.notransaksi AND
-    #{Ipos::Sale.table_name}.tipe IN ('KSR','JL')
-    WHERE #{Ipos::Sale.table_name}.tanggal between '#{@start_time}' and '#{@end_time}'
-    GROUP BY
-      #{Ipos::Item.table_name}.#{key_item_of(@group_key)}
-    ORDER BY sales_total DESC
-    limit #{limit}
+      SELECT
+        #{Ipos::Item.table_name}.#{key_item_of(@group_key)} AS identifier,
+        COALESCE(SUM(#{Ipos::SaleItem.table_name}.harga * #{Ipos::SaleItem.table_name}.jumlah),0) AS subtotal,
+        SUM(#{Ipos::SaleItem.table_name}.jumlah) AS quantity,
+        SUM(#{Ipos::SaleItem.table_name}.total) AS sales_total
+      FROM #{Ipos::SaleItem.table_name}
+      INNER JOIN #{Ipos::Item.table_name} on #{Ipos::Item.table_name}.kodeitem = #{Ipos::SaleItem.table_name}.kodeitem
+      INNER JOIN #{Ipos::Sale.table_name} on #{Ipos::Sale.table_name}.notransaksi = #{Ipos::SaleItem.table_name}.notransaksi AND
+      #{Ipos::Sale.table_name}.tipe IN ('KSR','JL')
+      WHERE #{Ipos::Sale.table_name}.tanggal between '#{@start_time}' and '#{@end_time}'
+      GROUP BY
+        #{Ipos::Item.table_name}.#{key_item_of(@group_key)}
+      ORDER BY sales_total DESC
+      limit #{limit}
     SQL
   end
 

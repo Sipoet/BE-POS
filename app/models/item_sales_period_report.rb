@@ -1,5 +1,4 @@
 class ItemSalesPeriodReport < ApplicationModel
-
   attr_accessor :item_code,
                 :item_name,
                 :supplier_code,
@@ -13,6 +12,7 @@ class ItemSalesPeriodReport < ApplicationModel
                 :discount_amount,
                 :is_consignment,
                 :subtotal
+
   def initialize(row)
     @item_code = row['item_code']
     @item_name = row['item_name']

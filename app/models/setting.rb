@@ -1,19 +1,17 @@
 class Setting < ApplicationRecord
-
   VIEW_TABLE_LIST = {
     purchase_report: 'PurchaseReport',
     item_report: 'ItemReport',
-    item_sales_performance_report: [
-      'ItemSalesPerformanceReport',
-      'ItemMovement',
-      'DaySalesPerformanceReport',
-      'YearSalesPerformanceReport',
-      'MonthSalesPerformanceReport',
-      'WeekSalesPerformanceReport'
+    item_sales_performance_report: %w[
+      ItemSalesPerformanceReport
+      ItemMovement
+      DaySalesPerformanceReport
+      YearSalesPerformanceReport
+      MonthSalesPerformanceReport
+      WeekSalesPerformanceReport
     ],
-    monthly_expense_report: 'MonthlyExpenseReport',
+    monthly_expense_report: 'MonthlyExpenseReport'
   }.freeze
-
 
   validates :key_name, presence: true
   validates :value, presence: true
@@ -21,29 +19,29 @@ class Setting < ApplicationRecord
 
   after_save :delete_cache
   after_destroy :delete_cache
+
   private
 
   def delete_cache
-    if user_id.present?
-      Cache.delete("setting-#{user_id}-#{key_name}")
-    end
+    Cache.delete("setting-#{user_id}-#{key_name}") if user_id.present?
     Cache.delete("setting-#{key_name}")
   end
 
   class << self
-
     def get(key_name, user_id: nil)
-      cache_key = ['setting',key_name,user_id].compact.join('-')
+      cache_key = ['setting', key_name, user_id].compact.join('-')
       cache_data = Cache.get(cache_key)
       return JSON.parse(cache_data)['data'] if cache_data.present?
-      setting =  self.find_by(key_name: key_name, user_id: user_id)
+
+      setting =  find_by(key_name: key_name, user_id: user_id)
       return nil if setting.nil?
-      Cache.set(cache_key,setting.value)
-      return JSON.parse(setting.value)['data']
+
+      Cache.set(cache_key, setting.value)
+      JSON.parse(setting.value)['data']
     end
 
-    def set!(key_name, value, user_id: nil,value_type:nil)
-      setting = self.find_or_initialize_by(key_name:key_name, user_id: user_id)
+    def set!(key_name, value, user_id: nil, value_type: nil)
+      setting = find_or_initialize_by(key_name: key_name, user_id: user_id)
       setting.value = {
         data: value,
         value_type: value_type || get_value_type(value)
@@ -59,7 +57,7 @@ class Setting < ApplicationRecord
         'datetime'
       elsif value.is_a? Date
         'date'
-      elsif [true,false].include? value
+      elsif [true, false].include? value
         'boolean'
       elsif value.is_a? String
         'string'
@@ -68,5 +66,4 @@ class Setting < ApplicationRecord
       end
     end
   end
-
 end

@@ -1,10 +1,9 @@
 class Payslip::PayService < ApplicationService
-
   def execute_service
     extract_params
     payslips = find_payslips
     if payslips.blank?
-      render_json({message:'payslip tidak valid'},{status: :conflict})
+      render_json({ message: 'payslip tidak valid' }, { status: :conflict })
       return
     end
     ApplicationRecord.transaction do
@@ -14,7 +13,7 @@ class Payslip::PayService < ApplicationService
 
       payslips.update_all(payment_time: @paid_at, status: :paid)
     end
-    render_json({message:'Sukses Simpan Pembayaran'})
+    render_json({ message: 'Sukses Simpan Pembayaran' })
   end
 
   private
@@ -29,20 +28,27 @@ class Payslip::PayService < ApplicationService
   end
 
   def find_payslips
-    query = Payslip.where(start_date: @start_date,end_date: @end_date)
-           .where.not(status: :paid)
-    if @employee_ids.present?
-      query = query.where(employee_id: @employee_ids)
-    end
+    query = Payslip.where(start_date: @start_date, end_date: @end_date)
+                   .where.not(status: :paid)
+    query = query.where(employee_id: @employee_ids) if @employee_ids.present?
     query
   end
 
   def extract_params
-    permitted_params = params.permit(:paid_at,:description,:location,:cash_account, :start_date,:is_notify, :end_date, employee_ids:[])
+    permitted_params = params.permit(:paid_at, :description, :location, :cash_account, :start_date, :is_notify, :end_date,
+                                     employee_ids: [])
     @is_notify = permitted_params[:is_notify].to_s == '1'
     @employee_ids = permitted_params[:employee_ids] || []
-    @start_date = Date.parse(permitted_params[:start_date]) rescue nil
-    @end_date = Date.parse(permitted_params[:end_date]) rescue nil
+    @start_date = begin
+      Date.parse(permitted_params[:start_date])
+    rescue StandardError
+      nil
+    end
+    @end_date = begin
+      Date.parse(permitted_params[:end_date])
+    rescue StandardError
+      nil
+    end
 
     @payslip_ids = permitted_params[:payslip_ids]
     @paid_at = DateTime.parse(permitted_params[:paid_at])
@@ -55,7 +61,7 @@ class Payslip::PayService < ApplicationService
     total = payslips.sum(:nett_salary)
     office_code = @location&.id
     date_stamp = Date.today.strftime('%m%y')
-    rand_numb =Array.new(4){SecureRandom.random_number(9)}.join
+    rand_numb = Array.new(4) { SecureRandom.random_number(9) }.join
     cash_out = Ipos::CashOut.build(
       notransaksi: "#{rand_numb}/PAYSLIP/#{office_code}/#{date_stamp}",
       tanggal: @paid_at,
@@ -68,12 +74,12 @@ class Payslip::PayService < ApplicationService
       jumlah: total,
       subtotal: total,
       bc_trf_sts: false,
-      user1: 'ADMIN',
+      user1: 'ADMIN'
     )
     payslips.includes(:employee).each_with_index do |payslip, index|
       employee = payslip.employee
       cash_out.cash_details.build(
-        iddetail: "#{cash_out.notransaksi}-#{cash_out.kodekantor}-#{salary_account.id}-#{index+1}",
+        iddetail: "#{cash_out.notransaksi}-#{cash_out.kodekantor}-#{salary_account.id}-#{index + 1}",
         nobaris: index + 1,
         notransaksi: cash_out.notransaksi,
         kodeacc: salary_account.id,
@@ -92,34 +98,34 @@ class Payslip::PayService < ApplicationService
     Ipos::AccountJournal.create!(
       iddetail: "#{cash_out.notransaksi}-#{cash_out.kodeacc}-1",
       nourut: 1,
-      jenis:'Jurnal',
+      jenis: 'Jurnal',
       keterangan: cash_out.keterangan,
       matauang: cash_out.matauang,
       rate: cash_out.rate,
       jumlah: cash_out.subtotal,
-      posisi:'K',
+      posisi: 'K',
       debet: 0,
       kredit: cash_out.subtotal,
-      tipeinput:'R',
+      tipeinput: 'R',
       notransaksi: cash_out.notransaksi,
       tanggal: cash_out.tanggal,
       kodeacc: cash_out.kodeacc,
       kantor: cash_out.kodekantor,
       modul: 'KAS'
     )
-    cash_out.cash_details.each_with_index do |cash_detail,index|
+    cash_out.cash_details.each_with_index do |cash_detail, index|
       Ipos::AccountJournal.create!(
         iddetail: "#{cash_detail.notransaksi}-#{cash_detail.kodeacc}-#{index + 2}",
         nourut: index + 2,
-        jenis:'Jurnal',
+        jenis: 'Jurnal',
         keterangan: cash_detail.keterangan,
         matauang: cash_detail.matauang,
         rate: cash_detail.rate,
         jumlah: cash_detail.jumlah,
-        posisi:'D',
+        posisi: 'D',
         debet: cash_detail.jumlah,
         kredit: 0,
-        tipeinput:'R',
+        tipeinput: 'R',
         notransaksi: cash_out.notransaksi,
         tanggal: cash_out.tanggal,
         kodeacc: cash_detail.kodeacc,
@@ -132,5 +138,4 @@ class Payslip::PayService < ApplicationService
   def salary_account
     @salary_account ||= Ipos::Account.find_by("namaacc ilike '%gaji pegawai%' OR namaacc ilike '%gaji karyawan%'")
   end
-
 end

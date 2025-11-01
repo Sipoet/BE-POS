@@ -1,5 +1,4 @@
 class Sale::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class Sale::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(Ipos::SaleSerializer.new(@sales,options))
+    render_json(Ipos::SaleSerializer.new(@sales, options))
   end
 
   def meta
@@ -18,16 +17,16 @@ class Sale::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @sales.total_pages,
-      total_rows: @sales.total_count,
+      total_rows: @sales.total_count
     }
   end
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Sale)
-    allowed_fields = [:sale, :sale_items]
+    allowed_fields = %i[sale sale_items]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -39,20 +38,16 @@ class Sale::IndexService < ApplicationService
 
   def find_sales
     sales = Ipos::Sale.all.includes(@included)
-      .page(@page)
-      .per(@limit)
-    if @search_text.present?
-      sales = sales.where(['notransaksi ilike ? ']+ Array.new(1,"%#{@search_text}%"))
-    end
+                      .page(@page)
+                      .per(@limit)
+    sales = sales.where(['notransaksi ilike ? '] + Array.new(1, "%#{@search_text}%")) if @search_text.present?
     @filters.each do |filter|
       sales = sales.where(filter.to_query)
     end
     if @sort.present?
-      sales = sales.order(@sort)
+      sales.order(@sort)
     else
-      sales = sales.order(tanggal: :desc)
+      sales.order(tanggal: :desc)
     end
-    sales
   end
-
 end

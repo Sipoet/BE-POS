@@ -5,16 +5,16 @@ class Ipos::ItemOutHeader < ApplicationRecord
 
   alias_attribute :id, :notransaksi
 
-  @@list={
-    'KSR'=> 'Ipos::Sale',
-    'KSRP'=> 'Ipos::Sale',
-    'JL'=> 'Ipos::Sale',
-    'IK'=> 'Ipos::ItemOut',
-    'RJ' => 'Ipos::SaleReturn',
+  @@list = {
+    'KSR' => 'Ipos::Sale',
+    'KSRP' => 'Ipos::Sale',
+    'JL' => 'Ipos::Sale',
+    'IK' => 'Ipos::ItemOut',
+    'RJ' => 'Ipos::SaleReturn'
   }
   def self.find_sti_class(obj_type)
     @@list[obj_type].constantize
-  rescue => e
+  rescue StandardError => e
     raise e
   end
 end

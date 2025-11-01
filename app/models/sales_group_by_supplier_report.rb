@@ -1,5 +1,4 @@
 class SalesGroupBySupplierReport < ApplicationModel
-
   attr_accessor :supplier_code,
                 :supplier_name,
                 :item_type_name,
@@ -10,6 +9,7 @@ class SalesGroupBySupplierReport < ApplicationModel
                 :gross_profit,
                 :brand_name,
                 :last_purchase_date
+
   def initialize(row)
     @supplier_code = row['supplier_code']
     @supplier_name = row['supplier_name']
@@ -33,6 +33,7 @@ class SalesGroupBySupplierReport < ApplicationModel
 
   def sales_percentage
     return 0 if number_of_purchase == 0
-    (number_of_sales.to_d/number_of_purchase.to_d).round(2)
+
+    (number_of_sales.to_d / number_of_purchase.to_d).round(2)
   end
 end

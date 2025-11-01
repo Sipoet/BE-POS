@@ -5,8 +5,7 @@ class RefreshPromotionJob < ApplicationJob
     check_if_cancelled!
     discount = Discount.find(id)
     Discount::RefreshPromotion.new(discount).refresh!
-  rescue JobCancelled => e
+  rescue JobCancelled
     debug_log "job #{jid} cancelled safely"
   end
-
 end

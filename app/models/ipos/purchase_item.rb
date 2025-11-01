@@ -2,12 +2,11 @@ class Ipos::PurchaseItem < ApplicationRecord
   self.table_name = 'tbl_imdt'
   self.primary_key = 'iddetail'
 
-
   alias_attribute :id, :iddetail
   alias_attribute :updated_at, :dateupd
 
-  belongs_to :purchase, class_name:'Ipos::ItemInHeader',  primary_key: 'notransaksi', foreign_key: 'notransaksi'
-  belongs_to :item, class_name:'Ipos::Item', primary_key: 'kodeitem', foreign_key: 'kodeitem'
+  belongs_to :purchase, class_name: 'Ipos::ItemInHeader',  primary_key: 'notransaksi', foreign_key: 'notransaksi'
+  belongs_to :item, class_name: 'Ipos::Item', primary_key: 'kodeitem', foreign_key: 'kodeitem'
 
   has_one :item_report, through: :item
 

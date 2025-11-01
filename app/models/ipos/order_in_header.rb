@@ -6,11 +6,12 @@ class Ipos::OrderInHeader < ApplicationRecord
   alias_attribute :id, :notransaksi
 
   belongs_to :supplier, optional: true, foreign_key: :kodesupel, primary_key: :kode
-  has_many :purchase_order_items, class_name:'Ipos::PurchaseOrderItem',  foreign_key: 'notransaksi', primary_key: 'notransaksi',dependent: :destroy
+  has_many :purchase_order_items, class_name: 'Ipos::PurchaseOrderItem', foreign_key: 'notransaksi',
+                                  primary_key: 'notransaksi', dependent: :destroy
 
-  @@list={
-    'OB'=> 'Ipos::PurchaseOrder',
-    'OKI'=> 'Ipos::ConsignmentInOrder',
+  @@list = {
+    'OB' => 'Ipos::PurchaseOrder',
+    'OKI' => 'Ipos::ConsignmentInOrder',
     'OJ' => 'Ipos::SalesOrder'
   }
   def self.find_sti_class(obj_type)
