@@ -70,7 +70,6 @@ class EmployeeAttendance::MassUploadService < ApplicationService
   end
 
   def extract_time_attendance(row_containers, selected_employee, range)
-    Rails.logger.debug "==================row container #{row_containers}" if selected_employee.code == 'zahwa'
     first_row = row_containers.first
     time_attendances = []
     finder = WorkScheduleFinder.new(selected_employee.role_id)

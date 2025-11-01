@@ -63,7 +63,6 @@ class AttendanceAnalyzer
       grouped_employee_attendances.each.with_index do |employee_attendance, index|
         work_schedule = work_schedules[index]
         allow_overtime ||= employee_attendance.allow_overtime
-
         if work_schedule.present? && !flexible?(work_schedule, date)
           work_hours += work_hours_of(employee_attendance, work_schedule)
           scheduled_begin_at = schedule_of(date, work_schedule.begin_work)

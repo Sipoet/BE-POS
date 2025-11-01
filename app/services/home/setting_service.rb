@@ -13,7 +13,7 @@ class Home::SettingService < ApplicationService
     checker = UserAuthorizer::AuthorizeChecker.new(role_id)
     checker.role_access
            .each_with_object({}) do |(controller, values), obj|
-             obj[controller] = values.keys.map { |action| action.camelize(:lower) }
+      obj[controller] = values.keys.map { |action| action.camelize(:lower) }
     end
   end
 
@@ -31,14 +31,14 @@ class Home::SettingService < ApplicationService
     end
     Rails.application.routes.routes.group_by { |route| route.defaults[:controller] }
          .each_with_object({}) do |(controller, routes), obj|
-           next if controller.blank?
-           next unless allowed_controllers[controller]
+      next if controller.blank?
+      next unless allowed_controllers[controller]
 
-           obj[controller] = routes.map do |route|
-             action = route.defaults[:action].strip
-             action = 'read' if UserAuthorizer::AuthorizeChecker::READ_ACTION.include? action
-             action.camelize(:lower)
-           end.uniq
+      obj[controller] = routes.map do |route|
+        action = route.defaults[:action].strip
+        action = 'read' if UserAuthorizer::AuthorizeChecker::READ_ACTION.include? action
+        action.camelize(:lower)
+      end.uniq
     end
   end
 

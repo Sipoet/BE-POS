@@ -13,6 +13,7 @@ class Ipos::SaleItemSerializer
              :potongan4,
              :pajak,
              :total,
+             :updated_at,
              :sistemhargajual,
              :tipepromo,
              :jmlgratis,

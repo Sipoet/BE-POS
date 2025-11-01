@@ -90,7 +90,6 @@ Rails.application.routes.draw do
   resources :payment_types, only: %i[create update index]
   resources :payment_provider_edcs, only: %i[create update index destroy]
   resources :payment_methods, only: %i[index destroy create update]
-
   resources :customer_group_discounts, only: %i[index create update destroy] do
     post :toggle_discount, on: :collection
   end
@@ -98,7 +97,6 @@ Rails.application.routes.draw do
   resources :holidays, only: %i[index create update destroy]
   resources :book_payslip_lines, only: %i[index create update destroy]
   resources :book_employee_attendances, only: %i[index create update destroy]
-
   resources :system_settings, only: %i[index show update] do
     post :refresh_table, on: :collection
     get :list_tables, on: :collection

@@ -8,7 +8,7 @@ class Ipos::Brand::OldIndexService < ApplicationService
                    .per(per)
                    .pluck(:merek)
                    .map do |brand_name|
-                     { id: brand_name, name: brand_name }
+      { id: brand_name, name: brand_name }
     end
     @controller.render json: { data: brands }, status: 200
   end

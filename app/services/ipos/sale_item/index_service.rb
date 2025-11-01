@@ -55,6 +55,7 @@ class Ipos::SaleItem::IndexService < ApplicationService
 
   def find_sale_items
     sale_items = Ipos::SaleItem.all.includes(@included)
+                               .joins(:sale)
     sale_items = if @report_type == 'json'
                    sale_items.page(@page)
                              .per(@limit)

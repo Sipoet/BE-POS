@@ -8,7 +8,7 @@ class Ipos::Supplier::OldIndexService < ApplicationService
                          .per(per)
                          .pluck(:kode, :nama)
                          .map do |(code, name)|
-                           { id: code, name: name }
+      { id: code, name: name }
     end
     @controller.render json: { data: suppliers }, status: 200
   end

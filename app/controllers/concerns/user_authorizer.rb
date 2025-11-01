@@ -37,7 +37,7 @@ module UserAuthorizer
       AccessAuthorize.where(role_id: @role_id)
                      .group_by(&:controller)
                      .each do |controller, access|
-                       result[controller] = access.map { |auth| [auth.action, true] }.to_h
+        result[controller] = access.map { |auth| [auth.action, true] }.to_h
       end
       result
     end
