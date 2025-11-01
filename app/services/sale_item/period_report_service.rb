@@ -1,9 +1,8 @@
 class SaleItem::PeriodReportService < ApplicationService
-
   def execute_service
     extract_params
-    if !valid?
-      render_json({message: @error_message},{status: :conflict})
+    unless valid?
+      render_json({ message: @error_message }, { status: :conflict })
       return
     end
     query = execute_sql(query_report)
@@ -14,7 +13,7 @@ class SaleItem::PeriodReportService < ApplicationService
         sales_total: data.sum(&:sales_total),
         subtotal: data.sum(&:subtotal),
         discount_total: data.sum(&:discount_total),
-        filter:{
+        filter: {
           start_time: @start_time,
           end_time: @end_time,
           discount_code: @discount_code,
@@ -24,7 +23,7 @@ class SaleItem::PeriodReportService < ApplicationService
           item_types: @item_types
         }
       }
-      render_json(ItemSalesPeriodReportSerializer.new(data, {meta: meta}))
+      render_json(ItemSalesPeriodReportSerializer.new(data, { meta: meta }))
     elsif @report_type == 'xlsx'
       file_excel = generate_excel(data)
       @controller.send_file file_excel.path
@@ -110,43 +109,50 @@ class SaleItem::PeriodReportService < ApplicationService
 
   def filter_query_suppliers
     return if @suppliers.blank?
-    return "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.supplier1 in (?)",@suppliers])}"
+
+    "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.supplier1 in (?)", @suppliers])}"
   end
 
   def filter_query_item_types
     return if @item_types.blank?
-    return "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.jenis in (?)",@item_types])}"
+
+    "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.jenis in (?)", @item_types])}"
   end
 
   def filter_query_brands
     return if @brands.blank?
-    return "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.merek in (?)",@brands])}"
+
+    "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.merek in (?)", @brands])}"
   end
 
   def filter_query_items
     return if @items.blank?
-    return "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.kodeitem in (?)",@items])}"
+
+    "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.kodeitem in (?)", @items])}"
   end
 
   def filter_query_discount
     return if @discount_code.blank?
-    return "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Sale.table_name}.kode ilike '%?%'",@discount_code])}"
+
+    "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Sale.table_name}.kode ilike '%?%'", @discount_code])}"
   end
 
   def filter_consignment
     return if @is_consignment.nil?
+
     value = @is_consignment.try(:downcase) == 'true' ? 'Y' : 'N'
-    return "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.konsinyasi = ?",value])}"
+    "AND #{ApplicationRecord.sanitize_sql(["#{Ipos::Item.table_name}.konsinyasi = ?", value])}"
   end
 
   def decorate_result(query)
-    query.to_a.map{ |row| ItemSalesPeriodReport.new(row)}
+    query.to_a.map { |row| ItemSalesPeriodReport.new(row) }
   end
 
   def extract_params
-    permitted_params = @params.permit(:start_time,:end_time,:discount_code,:report_type,:is_consignment,suppliers:[],brands:[],item_types:[],items:[])
-    @start_time = permitted_params.fetch(:start_time,Time.now.utc.beginning_of_day).try(:to_time)
-    @end_time = permitted_params.fetch(:end_time,Time.now.utc.end_of_day).try(:to_time)
+    permitted_params = @params.permit(:start_time, :end_time, :discount_code, :report_type, :is_consignment, suppliers: [],
+                                                                                                             brands: [], item_types: [], items: [])
+    @start_time = permitted_params.fetch(:start_time, Time.now.utc.beginning_of_day).try(:to_time)
+    @end_time = permitted_params.fetch(:end_time, Time.now.utc.end_of_day).try(:to_time)
     @discount_code = permitted_params[:discount_code]
     @suppliers = *permitted_params[:suppliers]
     @brands = *permitted_params[:brands]

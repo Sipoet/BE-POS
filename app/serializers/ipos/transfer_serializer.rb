@@ -18,7 +18,13 @@ class Ipos::TransferSerializer
     ipos_fix_date_timezone(object.updated_at)
   end
 
-  has_many :transfer_items, serializer: Ipos::TransferItemSerializer, if: Proc.new { |record, params| params[:include].include?('transfer_items') rescue false } do |transfer|
+  has_many :transfer_items, serializer: Ipos::TransferItemSerializer, if: proc { |_record, params|
+    begin
+      params[:include].include?('transfer_items')
+    rescue StandardError
+      false
+    end
+  } do |transfer|
     transfer.transfer_items.order(nobaris: :asc)
   end
 end

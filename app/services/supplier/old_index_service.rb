@@ -1,16 +1,16 @@
 class Supplier::OldIndexService < ApplicationService
   def execute_service
     text_search = @params[:search_text].to_s
-    page = @params.fetch(:page,1)
-    per =@params.fetch(:per,10)
+    page = @params.fetch(:page, 1)
+    per = @params.fetch(:per, 10)
     suppliers = search_data(text_search)
     suppliers = suppliers.page(page)
-                          .per(per)
-                        .pluck(:kode,:nama)
-                          .map do|(code,name)|
-      {id: code, name: name}
+                         .per(per)
+                         .pluck(:kode, :nama)
+                         .map do |(code, name)|
+      { id: code, name: name }
     end
-    @controller.render json: {data: suppliers}, status: 200
+    @controller.render json: { data: suppliers }, status: 200
   end
 
   private

@@ -1,10 +1,8 @@
 class CashierSession < ApplicationRecord
-
-
-  enum :status,{
+  enum :status, {
     draft: 0,
     current_active: 1,
-    verified: 2,
+    verified: 2
   }
 
   validates :date, presence: true
@@ -12,13 +10,12 @@ class CashierSession < ApplicationRecord
   validates :total_out, presence: true
   validates :status, presence: true
 
-
   has_many :cash_in_session_details, inverse_of: :cashier_session, dependent: :destroy
   has_many :cash_out_session_details, inverse_of: :cashier_session, dependent: :destroy
   has_many :edc_settlements, inverse_of: :cashier_session, dependent: :destroy
 
-  accepts_nested_attributes_for :cash_in_session_details, :cash_out_session_details, :edc_settlements, allow_destroy: true
-
+  accepts_nested_attributes_for :cash_in_session_details, :cash_out_session_details, :edc_settlements,
+                                allow_destroy: true
 
   def self.today_session
     sep_hour = Setting.get('day_separator_at') || '07:00'
@@ -37,5 +34,4 @@ class CashierSession < ApplicationRecord
   def end_time
     cash_in_session_details.maximum(:end_time)
   end
-
 end

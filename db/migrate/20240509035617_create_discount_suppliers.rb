@@ -11,7 +11,10 @@ class CreateDiscountSuppliers < ActiveRecord::Migration[7.1]
     ApplicationRecord.transaction do
       Discount.where('supplier_code is not null or blacklist_supplier_code is not null').each do |discount|
         discount.discount_suppliers.build(supplier_code: discount.supplier_code) if discount.supplier_code.present?
-        discount.discount_suppliers.build(is_exclude: true, supplier_code: discount.blacklist_supplier_code) if discount.blacklist_supplier_code.present?
+        if discount.blacklist_supplier_code.present?
+          discount.discount_suppliers.build(is_exclude: true,
+                                            supplier_code: discount.blacklist_supplier_code)
+        end
         discount.save!
       end
     end

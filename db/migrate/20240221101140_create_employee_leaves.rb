@@ -10,6 +10,6 @@ class CreateEmployeeLeaves < ActiveRecord::Migration[7.1]
       t.timestamps
     end
     add_foreign_key :employee_leaves, :employees, column: :employee_id
-    add_index :employee_leaves, [:employee_id, :date], unique: true
+    add_index :employee_leaves, %i[employee_id date], unique: true
   end
 end

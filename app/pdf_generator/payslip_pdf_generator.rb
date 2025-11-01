@@ -5,17 +5,19 @@ class PayslipPdfGenerator
   include ActionView::Helpers::NumberHelper
   WARNING_TEXT = 'Peringatan! dokumen ini bersifat rahasia dan tidak boleh disebarluaskan dan hanya boleh dilihat oleh pemilik slip gaji dan pemilik perusahaan. Bagi yang melanggar akan dikenakan sanksi dan dituntut sesuai UU ITE yang berlaku.'.freeze
   FONT_FAMILY = 'Times-Roman'.freeze
-  def self.run!(payslip, options={})
-    self.new(payslip).generate(options)
+  def self.run!(payslip, options = {})
+    new(payslip).generate(options)
   end
 
   def initialize(payslip)
     @payslip = payslip
-    @payslip_lines = payslip.payslip_lines.includes(:payroll_type).to_a.sort_by{|line|line.payroll_type.try(:order) || 9999}
+    @payslip_lines = payslip.payslip_lines.includes(:payroll_type).to_a.sort_by do |line|
+      line.payroll_type.try(:order) || 9999
+    end
   end
 
   def generate(options = {})
-    file_path = options[:file_path] || Tempfile.new(['Slip gaji','.pdf']).path
+    file_path = options[:file_path] || Tempfile.new(['Slip gaji', '.pdf']).path
     file_margin = options[:file_margin] || 30
     file_size = options[:file_size] || 'A4'
     @document = Prawn::Document.new(page_size: file_size, margin: file_margin)
@@ -29,7 +31,7 @@ class PayslipPdfGenerator
 
   private
 
-  def add_permission(options ={})
+  def add_permission(options = {})
     encrypt_document(
       user_password: options[:file_password],
       owner_password: :random,
@@ -37,22 +39,22 @@ class PayslipPdfGenerator
         print_document: false,
         modify_contents: false,
         copy_contents: false,
-        modify_annotations: false,
-      },
+        modify_annotations: false
+      }
     )
   end
 
   def add_header
-    grid([0,0],[0,5]).bounding_box do
-      text "Slip Gaji",align: :center, size: 22
-      text WARNING_TEXT, size: 12,color: 'FF0000'
+    grid([0, 0], [0, 5]).bounding_box do
+      text 'Slip Gaji', align: :center, size: 22
+      text WARNING_TEXT, size: 12, color: 'FF0000'
       stroke { line [0, 0], [550, 0] }
     end
   end
 
   def add_body
     font FONT_FAMILY, style: :bold do
-      grid([1,0],[4,1]).bounding_box do
+      grid([1, 0], [4, 1]).bounding_box do
         text 'Periode'
         text 'Nama Karyawan'
         text 'Hari Kerja'
@@ -69,7 +71,7 @@ class PayslipPdfGenerator
         text 'Keterangan'
       end
     end
-    grid([1,2],[4,6]).bounding_box do
+    grid([1, 2], [4, 6]).bounding_box do
       text ": #{date_format(@payslip.start_date)} - #{date_format(@payslip.end_date)}"
       move_down 0.5
       text ": #{@payslip.employee.name}"
@@ -88,7 +90,7 @@ class PayslipPdfGenerator
       move_down 0.5
       text ": #{@payslip.unknown_absence} Hari"
       @payslip_lines.each do |payslip_line|
-        text ": #{money_format(payslip_line.amount)}",color: payslip_line.earning? ? '000000': 'FF0000'
+        text ": #{money_format(payslip_line.amount)}", color: payslip_line.earning? ? '000000' : 'FF0000'
         move_down 0.5
       end
       text ": #{money_format(@payslip.nett_salary)}"

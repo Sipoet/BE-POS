@@ -21,7 +21,7 @@ class Ipos::PurchaseItemSerializer
             :brand_name,
             :notransaksi
 
-  [:updated_at, :tglexp].each do |key|
+  %i[updated_at tglexp].each do |key|
     attribute key do |object|
       ipos_fix_date_timezone(object.send(key))
     end

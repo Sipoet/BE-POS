@@ -1,5 +1,4 @@
 class PaymentProviderEdc::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class PaymentProviderEdc::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(PaymentProviderEdcSerializer.new(@payment_provider_edcs,options))
+    render_json(PaymentProviderEdcSerializer.new(@payment_provider_edcs, options))
   end
 
   def meta
@@ -18,7 +17,7 @@ class PaymentProviderEdc::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_rows: @payment_provider_edcs.total_count,
-       total_pages: @payment_provider_edcs.total_pages,
+      total_pages: @payment_provider_edcs.total_pages
     }
   end
 
@@ -26,8 +25,8 @@ class PaymentProviderEdc::IndexService < ApplicationService
     @table_definitions = Datatable::DefinitionExtractor.new(PaymentProviderEdc)
     allowed_fields = [:payment_provider_edc]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -39,20 +38,19 @@ class PaymentProviderEdc::IndexService < ApplicationService
 
   def find_payment_provider_edcs
     payment_provider_edcs = PaymentProviderEdc.all.includes(@included)
-      .page(@page)
-      .per(@limit)
+                                              .page(@page)
+                                              .per(@limit)
     if @search_text.present?
-      payment_provider_edcs = payment_provider_edcs.where(['terminal_id ilike ? OR merchant_id ilike ?']+ Array.new(2,"%#{@search_text}%"))
+      payment_provider_edcs = payment_provider_edcs.where(['terminal_id ilike ? OR merchant_id ilike ?'] + Array.new(2,
+                                                                                                                     "%#{@search_text}%"))
     end
     @filters.each do |filter|
       payment_provider_edcs = payment_provider_edcs.where(filter.to_query)
     end
     if @sort.present?
-      payment_provider_edcs = payment_provider_edcs.order(@sort)
+      payment_provider_edcs.order(@sort)
     else
-      payment_provider_edcs = payment_provider_edcs.order(id: :asc)
+      payment_provider_edcs.order(id: :asc)
     end
-    payment_provider_edcs
   end
-
 end

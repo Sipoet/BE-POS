@@ -1,13 +1,11 @@
 class PayslipReport < ApplicationModel
-
   attr_accessor :start_date, :end_date, :employee_id, :employee_name,
-                :employee_start_working_date, :debt,:late,
+                :employee_start_working_date, :debt, :late,
                 :total_day, :work_days, :sick_leave, :overtime_hour,
                 :known_absence, :unknown_absence, :nett_salary,
                 :payslip_id, :bank, :bank_account, :payslip_status,
                 :employee_status,
                 :bank_register_name, :description, :payroll_type_amounts
-
 
   def employee
     @employee ||= (employee_id.nil? ? nil : Employee.find(employee_id))
@@ -23,7 +21,8 @@ class PayslipReport < ApplicationModel
 
   def [](key)
     key = key.to_s
-    return self.try(key) if self.respond_to?(key)
+    return try(key) if respond_to?(key)
+
     @payroll_type_amounts[key]
   end
 end

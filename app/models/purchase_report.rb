@@ -1,12 +1,10 @@
 class PurchaseReport < ApplicationRecord
-
   self.table_name = 'purchase_reports'
   self.primary_key = 'code'
   include MaterializedView
 
-
-  belongs_to :supplier, foreign_key: :supplier_code, primary_key: :kode, class_name:'Ipos::Supplier'
-  belongs_to :purchase, foreign_key: :code, primary_key: :notransaksi, class_name:'Ipos::Purchase'
+  belongs_to :supplier, foreign_key: :supplier_code, primary_key: :kode, class_name: 'Ipos::Supplier'
+  belongs_to :purchase, foreign_key: :code, primary_key: :notransaksi, class_name: 'Ipos::Purchase'
 
   alias_attribute :id, :code
 
@@ -14,12 +12,12 @@ class PurchaseReport < ApplicationRecord
     attributes['due_date'].utc.to_date
   end
 
-  [:purchase_date, :order_date, :shipping_date, :last_paid_date].each do |key|
+  %i[purchase_date order_date shipping_date last_paid_date].each do |key|
     define_method(key) do
-      datetime = self.attributes[key.to_s]
+      datetime = attributes[key.to_s]
       return datetime if datetime.nil?
-      Time.zone.parse(datetime.utc.iso8601.gsub('Z',''))
+
+      Time.zone.parse(datetime.utc.iso8601.gsub('Z', ''))
     end
   end
-
 end

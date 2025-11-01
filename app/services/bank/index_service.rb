@@ -1,5 +1,4 @@
 class Bank::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class Bank::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(BankSerializer.new(@banks,options))
+    render_json(BankSerializer.new(@banks, options))
   end
 
   def meta
@@ -18,7 +17,7 @@ class Bank::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @banks.total_pages,
-      total_rows: @banks.total_count,
+      total_rows: @banks.total_count
     }
   end
 
@@ -26,8 +25,8 @@ class Bank::IndexService < ApplicationService
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Bank)
     allowed_fields = [:bank]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -39,20 +38,18 @@ class Bank::IndexService < ApplicationService
 
   def find_banks
     banks = Ipos::Bank.all.includes(@included)
-      .page(@page)
-      .per(@limit)
+                      .page(@page)
+                      .per(@limit)
     if @search_text.present?
-      banks = banks.where(['kodebank ilike ?  or namabank ilike ?']+ Array.new(2,"%#{@search_text}%"))
+      banks = banks.where(['kodebank ilike ?  or namabank ilike ?'] + Array.new(2, "%#{@search_text}%"))
     end
     @filters.each do |filter|
       banks = banks.where(filter.to_query)
     end
     if @sort.present?
-      banks = banks.order(@sort)
+      banks.order(@sort)
     else
-      banks = banks.order(kodebank: :asc)
+      banks.order(kodebank: :asc)
     end
-    banks
   end
-
 end

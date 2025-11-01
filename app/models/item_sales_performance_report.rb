@@ -3,5 +3,5 @@ class ItemSalesPerformanceReport < ApplicationRecord
   self.primary_key = 'pk_code'
   include MaterializedView
 
-  belongs_to :item, foreign_key: :item_code, primary_key: :kodeitem, class_name:'Ipos::Item'
+  belongs_to :item, foreign_key: :item_code, primary_key: :kodeitem, class_name: 'Ipos::Item'
 end

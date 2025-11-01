@@ -1,22 +1,22 @@
 require 'rails_helper'
 
-RSpec.describe "Users", type: :request do
-  let(:user){create(:admin)}
+RSpec.describe 'Users', type: :request do
+  let(:user) { create(:admin) }
   context 'CRUD' do
     before :each do
       superadmin = create(:superadmin)
       @headers = login(superadmin)
     end
 
-    describe "GET /index" do
-      it "should success" do
+    describe 'GET /index' do
+      it 'should success' do
         get users_path, headers: @headers
         expect(response).to have_http_status(:success)
       end
     end
 
-    describe "GET /show" do
-      it "should display user" do
+    describe 'GET /show' do
+      it 'should display user' do
         get user_path(user.username), headers: @headers
         expect(response).to have_http_status(:success)
         result = JSON.parse(response.body, symbolize_names: true)
@@ -26,19 +26,18 @@ RSpec.describe "Users", type: :request do
         attributes = data[:attributes]
         expect(attributes[:username]).to eq(user.username)
         expect(attributes[:email]).to eq(user.email)
-
       end
     end
 
-    describe "POST /users" do
-      it "should create user" do
-        post users_path, headers: @headers, params: {user:{
+    describe 'POST /users' do
+      it 'should create user' do
+        post users_path, headers: @headers, params: { user: {
           username: 'user1',
-          email:'user1@example.com',
+          email: 'user1@example.com',
           password: 'password',
           role: 'admin',
-          password_confirmation: 'password',
-        }}.to_json
+          password_confirmation: 'password'
+        } }.to_json
         expect(response).to have_http_status(:created)
         result = JSON.parse(response.body, symbolize_names: true)
         data = result[:data]
@@ -50,17 +49,17 @@ RSpec.describe "Users", type: :request do
       end
     end
 
-    describe "PUT /users/:username" do
-      it "should update user" do
+    describe 'PUT /users/:username' do
+      it 'should update user' do
         user = create(:admin)
         old_username = user.username
-        patch user_path(user.username), headers: @headers, params:{user:{
+        patch user_path(user.username), headers: @headers, params: { user: {
           username: 'user2',
           role: 'admin',
-          email:'user2@example.com',
+          email: 'user2@example.com',
           password: 'password',
-          password_confirmation: 'password',
-        }}.to_json
+          password_confirmation: 'password'
+        } }.to_json
         expect(response).to have_http_status(:success)
         result = JSON.parse(response.body, symbolize_names: true)
         data = result[:data]
@@ -73,7 +72,7 @@ RSpec.describe "Users", type: :request do
       end
     end
 
-    it "should delete user" do
+    it 'should delete user' do
       user = create(:admin)
       delete user_path(user.username), headers: @headers
       expect(response).to have_http_status(:success), response.body
@@ -106,15 +105,14 @@ RSpec.describe "Users", type: :request do
   end
 
   def login(user)
-    post user_session_path, params: {"user":{
+    post user_session_path, params: { "user": {
       "username": user.username,
       "password": user.password
-    }}
+    } }
     authorization = response.headers['Authorization']
     {
       'Authorization' => authorization,
       'Content-Type' => 'application/json'
     }
   end
-
 end

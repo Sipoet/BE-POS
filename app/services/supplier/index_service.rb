@@ -1,5 +1,4 @@
 class Supplier::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class Supplier::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(Ipos::SupplierSerializer.new(@suppliers,options))
+    render_json(Ipos::SupplierSerializer.new(@suppliers, options))
   end
 
   def meta
@@ -18,7 +17,7 @@ class Supplier::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @suppliers.total_pages,
-      total_rows: @suppliers.total_count,
+      total_rows: @suppliers.total_count
     }
   end
 
@@ -26,8 +25,8 @@ class Supplier::IndexService < ApplicationService
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Supplier)
     allowed_fields = [:supplier]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -39,20 +38,19 @@ class Supplier::IndexService < ApplicationService
 
   def find_suppliers
     suppliers = Ipos::Supplier.all.includes(@included)
-      .page(@page)
-      .per(@limit)
+                              .page(@page)
+                              .per(@limit)
     if @search_text.present?
-      suppliers = suppliers.where(['kode ilike ? OR nama ilike ? OR keterangan ilike ? OR alamat ilike ?']+ Array.new(4,"%#{@search_text}%"))
+      suppliers = suppliers.where(['kode ilike ? OR nama ilike ? OR keterangan ilike ? OR alamat ilike ?'] + Array.new(4,
+                                                                                                                       "%#{@search_text}%"))
     end
     @filters.each do |filter|
       suppliers = suppliers.where(filter.to_query)
     end
     if @sort.present?
-      suppliers = suppliers.order(@sort)
+      suppliers.order(@sort)
     else
-      suppliers = suppliers.order(kode: :asc)
+      suppliers.order(kode: :asc)
     end
-    suppliers
   end
-
 end

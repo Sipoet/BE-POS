@@ -5,12 +5,12 @@ class Ipos::ItemInHeader < ApplicationRecord
 
   alias_attribute :id, :notransaksi
 
-  @@list={
-    'BL'=> 'Ipos::Purchase',
-    'KI'=> 'Ipos::ConsignmentIn',
-    'IM'=> 'Ipos::ItemIn',
-    'RB'=> 'Ipos::PurchaseReturn',
-    'RKI' => 'Ipos::ConsignmentInReturn',
+  @@list = {
+    'BL' => 'Ipos::Purchase',
+    'KI' => 'Ipos::ConsignmentIn',
+    'IM' => 'Ipos::ItemIn',
+    'RB' => 'Ipos::PurchaseReturn',
+    'RKI' => 'Ipos::ConsignmentInReturn'
   }
   def self.find_sti_class(obj_type)
     @@list[obj_type].constantize

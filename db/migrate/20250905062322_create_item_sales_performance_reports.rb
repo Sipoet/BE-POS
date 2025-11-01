@@ -1,6 +1,6 @@
 class CreateItemSalesPerformanceReports < ActiveRecord::Migration[7.1]
   def up
-     first_fiscal_year = 2023
+    first_fiscal_year = 2023
     ActiveRecord::Base.connection.execute <<-SQL
       CREATE MATERIALIZED VIEW item_sales_performance_reports AS (
         SELECT

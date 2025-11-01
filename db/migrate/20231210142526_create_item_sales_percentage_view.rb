@@ -1,6 +1,6 @@
 class CreateItemSalesPercentageView < ActiveRecord::Migration[7.1]
   def up
-    ActiveRecord::Base.connection.execute """
+    ActiveRecord::Base.connection.execute "
     DROP VIEW IF EXISTS item_sales_percentage_reports;
     CREATE VIEW item_sales_percentage_reports AS (
       SELECT
@@ -73,10 +73,10 @@ class CreateItemSalesPercentageView < ActiveRecord::Migration[7.1]
         kodeitem
       )stok ON stok.kodeitem = tbl_item.kodeitem
     )
-    """
+    "
   end
 
   def down
-    ActiveRecord::Base.connection.execute "DROP VIEW IF EXISTS item_sales_percentage_reports"
+    ActiveRecord::Base.connection.execute 'DROP VIEW IF EXISTS item_sales_percentage_reports'
   end
 end

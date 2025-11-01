@@ -29,7 +29,7 @@ RSpec.configure do |config|
             default_host: {
               default: 'localhost'
             },
-            default_port:{
+            default_port: {
               default: '3000'
             }
           }
@@ -40,7 +40,7 @@ RSpec.configure do |config|
           bearer_auth: {
             type: :http,
             scheme: :bearer
-          },
+          }
         }
       }
     }

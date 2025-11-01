@@ -1,6 +1,4 @@
 class PaymentProvider < ApplicationRecord
-
-
   enum :status, {
     inactive: 0,
     active: 1
@@ -15,11 +13,13 @@ class PaymentProvider < ApplicationRecord
 
   has_many :payment_provider_edcs, dependent: :destroy, inverse_of: :payment_provider
   accepts_nested_attributes_for :payment_provider_edcs
+
   private
 
   def valid_swift_code
     return if swift_code.blank?
     return if swift_code.strip.match?(/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/i)
+
     errors.add(:swift_code, :invalid)
   end
 end

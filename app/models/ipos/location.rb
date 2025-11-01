@@ -5,5 +5,4 @@ class Ipos::Location < ApplicationRecord
   alias_attribute :id, :kodekantor
   alias_attribute :code, :kodekantor
   alias_attribute :name, :namakantor
-
 end

@@ -1,6 +1,6 @@
 class UpdateItemSalesPerformanceReport < ActiveRecord::Migration[7.1]
   def up
-     first_fiscal_year = 2023
+    first_fiscal_year = 2023
     ActiveRecord::Base.connection.execute <<-SQL
       DROP MATERIALIZED VIEW IF EXISTS item_sales_performance_reports CASCADE;
       CREATE MATERIALIZED VIEW item_sales_performance_reports AS (
@@ -218,11 +218,11 @@ class UpdateItemSalesPerformanceReport < ActiveRecord::Migration[7.1]
       DROP MATERIALIZED VIEW IF EXISTS item_sales_performance_reports CASCADE;
     SQL
     migrator = ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths)
-    migrator.up(20250905062322)
-    migrator.up(20250905070641)
-    migrator.up(20250905071808)
-    migrator.up(20250905071825)
-    migrator.up(20250905071840)
-    migrator.up(20250905073859)
+    migrator.up(20_250_905_062_322)
+    migrator.up(20_250_905_070_641)
+    migrator.up(20_250_905_071_808)
+    migrator.up(20_250_905_071_825)
+    migrator.up(20_250_905_071_840)
+    migrator.up(20_250_905_073_859)
   end
 end

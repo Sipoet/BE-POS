@@ -21,7 +21,5 @@ class PurchaseReportSerializer
               :debt_amount,
               :status
 
-
   belongs_to :supplier, serializer: Ipos::SupplierSerializer, set_id: :supplier_code, id_method_name: :supplier_code
-
 end

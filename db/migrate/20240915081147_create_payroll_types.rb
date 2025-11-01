@@ -15,13 +15,13 @@ class CreatePayrollTypes < ActiveRecord::Migration[7.1]
   end
 
   private
-    def seed_payroll_type
-      PayrollLine.all.group_by(&:description).each do |name,payroll_lines|
-        payroll_type = PayrollType.find_or_create_by!(name: name.strip.capitalize)
-        PayrollLine.where(id: payroll_lines.pluck(:id))
-                   .update_all(payroll_type_id: payroll_type.id)
-        PayslipLine.where(description: name).update_all(payroll_type_id: payroll_type.id)
-      end
-    end
 
+  def seed_payroll_type
+    PayrollLine.all.group_by(&:description).each do |name, payroll_lines|
+      payroll_type = PayrollType.find_or_create_by!(name: name.strip.capitalize)
+      PayrollLine.where(id: payroll_lines.pluck(:id))
+                 .update_all(payroll_type_id: payroll_type.id)
+      PayslipLine.where(description: name).update_all(payroll_type_id: payroll_type.id)
+    end
+  end
 end

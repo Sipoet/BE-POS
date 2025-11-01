@@ -1,20 +1,16 @@
 class Home::DownloadAppService < ApplicationService
-
-  APP_EXT  = {
+  APP_EXT = {
     'android' => 'apk',
-    'windows' => 'exe',
+    'windows' => 'exe'
   }.freeze
 
   def execute_service
     permitted_params = params.permit(:platform)
     platform = permitted_params[:platform].to_s
-    if !['android','windows'].include? platform
-      render_json({message:'not supported platform'},{status: :unprocessed_entity})
+    if !%w[android windows].include? platform
+      render_json({ message: 'not supported platform' }, { status: :unprocessed_entity })
     else
       @controller.redirect_to "https://raw.githubusercontent.com/Sipoet/FE-POS/main/src/#{platform}/Output/allegra-pos.#{APP_EXT[platform]}"
     end
-
-
   end
-
 end

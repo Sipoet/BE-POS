@@ -1,5 +1,5 @@
 class EmployeeLeave < ApplicationRecord
-  has_paper_trail ignore: [:id, :created_at, :updated_at]
+  has_paper_trail ignore: %i[id created_at updated_at]
 
   enum :leave_type, {
     sick_leave: 0,
@@ -16,22 +16,14 @@ class EmployeeLeave < ApplicationRecord
   belongs_to :employee
 
   private
+
   def change_day_valid
     if change_day?
-      if change_date.blank?
-        errors.add(:change_date, :blank)
-      end
-      if change_shift.blank?
-        errors.add(:change_shift, :blank)
-      end
+      errors.add(:change_date, :blank) if change_date.blank?
+      errors.add(:change_shift, :blank) if change_shift.blank?
     else
-      if change_date.present?
-        errors.add(:change_date, :present)
-      end
-      if change_shift.present?
-        errors.add(:change_shift, :present)
-      end
+      errors.add(:change_date, :present) if change_date.present?
+      errors.add(:change_shift, :present) if change_shift.present?
     end
-
   end
 end

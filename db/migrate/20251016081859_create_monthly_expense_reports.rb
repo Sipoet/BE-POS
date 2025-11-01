@@ -1,6 +1,6 @@
 class CreateMonthlyExpenseReports < ActiveRecord::Migration[7.1]
   def up
-     ActiveRecord::Base.connection.execute <<-SQL
+    ActiveRecord::Base.connection.execute <<-SQL
       CREATE MATERIALIZED VIEW monthly_expense_reports AS (
         SELECT
           CONCAT(year,'-',month,'-1')::DATE AS date_pk,
@@ -26,7 +26,7 @@ class CreateMonthlyExpenseReports < ActiveRecord::Migration[7.1]
   end
 
   def down
-     ActiveRecord::Base.connection.execute <<-SQL
+    ActiveRecord::Base.connection.execute <<-SQL
       DROP MATERIALIZED VIEW IF EXISTS monthly_expense_reports CASCADE;
     SQL
   end

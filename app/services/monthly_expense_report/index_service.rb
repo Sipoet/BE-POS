@@ -1,5 +1,4 @@
 class MonthlyExpenseReport::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -7,10 +6,10 @@ class MonthlyExpenseReport::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(MonthlyExpenseReportSerializer.new(@monthly_expense_reports,options))
+    render_json(MonthlyExpenseReportSerializer.new(@monthly_expense_reports, options))
   end
 
   def meta
@@ -18,7 +17,7 @@ class MonthlyExpenseReport::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_rows: @monthly_expense_reports.total_count,
-       total_pages: @monthly_expense_reports.total_pages,
+      total_pages: @monthly_expense_reports.total_pages
     }
   end
 
@@ -26,8 +25,8 @@ class MonthlyExpenseReport::IndexService < ApplicationService
     @table_definitions = Datatable::DefinitionExtractor.new(MonthlyExpenseReport)
     allowed_fields = [:monthly_expense_report]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -40,20 +39,18 @@ class MonthlyExpenseReport::IndexService < ApplicationService
 
   def find_monthly_expense_reports
     monthly_expense_reports = MonthlyExpenseReport.all.includes(@query_included)
-      .page(@page)
-      .per(@limit)
+                                                  .page(@page)
+                                                  .per(@limit)
     if @search_text.present?
-      monthly_expense_reports = monthly_expense_reports.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      monthly_expense_reports = monthly_expense_reports.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%"))
     end
     @filters.each do |filter|
       monthly_expense_reports = filter.add_filter_to_query(monthly_expense_reports)
     end
     if @sort.present?
-      monthly_expense_reports = monthly_expense_reports.order(@sort)
+      monthly_expense_reports.order(@sort)
     else
-      monthly_expense_reports = monthly_expense_reports.order(id: :asc)
+      monthly_expense_reports.order(id: :asc)
     end
-    monthly_expense_reports
   end
-
 end

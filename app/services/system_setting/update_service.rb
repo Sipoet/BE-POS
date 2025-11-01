@@ -1,10 +1,10 @@
 class SystemSetting::UpdateService < ApplicationService
-
   def execute_service
     setting = Setting.find(params[:id])
-    raise RecordNotFound.new(params[:id],Setting.model_name.human) if setting.nil?
+    raise RecordNotFound.new(params[:id], Setting.model_name.human) if setting.nil?
+
     if record_save?(setting)
-      render_json(SystemSettingSerializer.new(setting,{fields: @fields}))
+      render_json(SystemSettingSerializer.new(setting, { fields: @fields }))
     else
       render_error_record(setting)
     end
@@ -15,19 +15,19 @@ class SystemSetting::UpdateService < ApplicationService
       update_attribute(setting)
       setting.save!
     end
-    return true
-  rescue => e
+    true
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace
-    return false
+    false
   end
 
   def update_attribute(setting)
     @table_definitions = Datatable::DefinitionExtractor.new(Setting)
-    @fields = {setting: @table_definitions.allowed_columns}
+    @fields = { setting: @table_definitions.allowed_columns }
     permitted_params = params.required(:data)
-                              .required(:attributes)
-                              .permit(:value,:user_id,:value_type)
+                             .required(:attributes)
+                             .permit(:value, :user_id, :value_type)
     setting.user_id = permitted_params[:user_id]
     setting.value = {
       data: permitted_params[:value],
@@ -40,7 +40,7 @@ class SystemSetting::UpdateService < ApplicationService
       :string
     elsif value.is_a?(Numeric)
       :number
-    elsif [true,false].include?(value)
+    elsif [true, false].include?(value)
       :boolean
     elsif value.is_a?(Array)
       :array

@@ -1,6 +1,6 @@
 class Ipos::User < ApplicationRecord
-  self.table_name = "tbl_user"
-  self.primary_key = "userid"
+  self.table_name = 'tbl_user'
+  self.primary_key = 'userid'
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

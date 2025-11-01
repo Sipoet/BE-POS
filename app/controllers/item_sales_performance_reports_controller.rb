@@ -8,5 +8,4 @@ class ItemSalesPerformanceReportsController < ApplicationController
   def group_by
     run_service_default
   end
-
 end

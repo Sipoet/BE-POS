@@ -2,15 +2,16 @@ class User::ShowService < ApplicationService
   include JsonApiDeserializer
   def execute_service
     extract_params
-    user = if @params[:username] =='current_user'
-      current_user
-    else
-     User.find_by(username: @params[:username])
-    end
-    raise ApplicationService::RecordNotFound.new(@params[:username],User.name) if user.nil?
+    user = if @params[:username] == 'current_user'
+             current_user
+           else
+             User.find_by(username: @params[:username])
+           end
+    raise ApplicationService::RecordNotFound.new(@params[:username], User.name) if user.nil?
+
     options = {
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
     render_json(UserSerializer.new(user, options))
@@ -20,10 +21,10 @@ class User::ShowService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(User)
-    allowed_fields = [:user, :role]
+    allowed_fields = %i[user role]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @included = result.included
     @fields = result.fields
   end

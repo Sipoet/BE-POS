@@ -12,7 +12,8 @@ class EdcSettlement::CheckEdcService < ApplicationService
         payment_type_name: payment_type.name,
         payment_type_id: payment_type.id,
         total_in_input: total_in_inputs[payment_type] || 0,
-        total_in_system: amount)
+        total_in_system: amount
+      )
     end
     render_json EdcSummarySerializer.new(results)
   end
@@ -21,30 +22,30 @@ class EdcSettlement::CheckEdcService < ApplicationService
 
   def grouped_edc_settlement_amount(edc_settlements)
     edc_settlements.group_by(&:payment_type)
-                    .each_with_object({}) do |(payment_type, values),obj|
-                      obj[payment_type] = values.sum(&:amount)
-                    end
+                   .each_with_object({}) do |(payment_type, values), obj|
+      obj[payment_type] = values.sum(&:amount)
+    end
   end
 
   def grouped_system_amount(date)
     start_time = DateTime.parse("#{date.iso8601}T07:00:00Z")
     end_time = DateTime.parse("#{date.tomorrow.iso8601}T06:59:59Z")
-    sales_transaction_report = summary_sales_transaction(start_time:start_time,end_time: end_time)
-    PaymentType.all.each_with_object({}) do |payment_type,obj|
+    sales_transaction_report = summary_sales_transaction(start_time: start_time, end_time: end_time)
+    PaymentType.all.each_with_object({}) do |payment_type, obj|
       amount = case payment_type.name
-      when /(tunai|cash)/i
-        sales_transaction_report.cash_total
-      when /debit/i
-        sales_transaction_report.debit_total
-      when /(kredit|credit)/i
-        sales_transaction_report.credit_total
-      when /qris/i
-        sales_transaction_report.qris_total
-      when /(online|transfer)/i
-        sales_transaction_report.online_total
-      else
-        0
-      end
+               when /(tunai|cash)/i
+                 sales_transaction_report.cash_total
+               when /debit/i
+                 sales_transaction_report.debit_total
+               when /(kredit|credit)/i
+                 sales_transaction_report.credit_total
+               when /qris/i
+                 sales_transaction_report.qris_total
+               when /(online|transfer)/i
+                 sales_transaction_report.online_total
+               else
+                 0
+               end
       obj[payment_type] = amount
     end
   end
@@ -54,9 +55,10 @@ class EdcSettlement::CheckEdcService < ApplicationService
                   :payment_type_id,
                   :total_in_input,
                   :total_in_system
+
     def initialize(options)
-      options.each do |key,value|
-        instance_variable_set("@#{key}",value)
+      options.each do |key, value|
+        instance_variable_set("@#{key}", value)
       end
     end
 

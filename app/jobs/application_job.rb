@@ -4,11 +4,10 @@ class ApplicationJob
   def dont_run_in_parallel!
     lock_key = self.class.to_s
     lock = Cache.get(lock_key)
-    if lock.nil?
-      Cache.set(lock_key,'1')
-    else
-      raise PreventRunParallelError.new(lock_key)
-    end
+    raise PreventRunParallelError.new(lock_key) unless lock.nil?
+
+    Cache.set(lock_key, '1')
+
     begin
       yield
     ensure
@@ -28,12 +27,13 @@ class ApplicationJob
   def check_if_cancelled!
     raise JobCancelled if cancelled?
   end
+
   protected
 
   def debug_log(message)
     Sidekiq.logger.debug message
   end
 
-  class JobCancelled < StandardError;end
-  class PreventRunParallelError < StandardError;end
+  class JobCancelled < StandardError; end
+  class PreventRunParallelError < StandardError; end
 end

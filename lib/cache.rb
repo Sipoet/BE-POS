@@ -3,13 +3,13 @@ class Cache
   def self.get(key)
     @@redis.get(key)
   end
-  def self.set(key, value,option = {})
+
+  def self.set(key, value, option = {})
     if option[:expire].present?
-      @@redis.setex(key, option[:expire],value)
+      @@redis.setex(key, option[:expire], value)
     else
       @@redis.set(key, value)
     end
-
   end
 
   def self.keys(namespace)

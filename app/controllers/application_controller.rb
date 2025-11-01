@@ -1,11 +1,10 @@
 class ApplicationController < ActionController::API
   include UserAuthorizer
 
-
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-  rescue_from 'ForbiddenError' do |exception|
-    render json:{message: '401 Unauthorized'}, status: :unauthorized
+  rescue_from 'ForbiddenError' do |_exception|
+    render json: { message: '401 Unauthorized' }, status: :unauthorized
   end
 
   protected
@@ -34,14 +33,15 @@ class ApplicationController < ActionController::API
     rescue StandardError => e
       Rails.logger.error e.message
       Rails.logger.error e.backtrace.to_s
-      render_error("Internal Server Error")
+      render_error('Internal Server Error')
     end
   end
 
   private
 
   def render_error(message)
-    render json: {message: message}, status: 500
+    render json: { message: message }, status: 500
   end
 end
+
 class ForbiddenError < StandardError; end

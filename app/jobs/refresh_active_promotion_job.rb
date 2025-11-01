@@ -4,16 +4,15 @@ class RefreshActivePromotionJob < ApplicationJob
   def perform
     check_if_cancelled!
     debug_log 'refresh active promotion start'
-    last_updated = Ipos::Item.where(kodeitem: active_promotion_item_codes)
-                .maximum(:tanggal_add)
+    Ipos::Item.where(kodeitem: active_promotion_item_codes)
+              .maximum(:tanggal_add)
     items = Ipos::Item.where('dateupd > ? OR tanggal_add >?', 1.hours.ago, 1.hours.ago)
     item_codes = items.pluck(:kodeitem)
     supplier_codes = items.select(:supplier1).distinct
     brand_names = items.select(:merek).distinct
     item_type_names = items.select(:jenis).distinct
-    grouped_items = items.group_by{|item|[item.supplier1,item.jenis,item.merek]}
-    discounts = discount_based_item(supplier_codes,item_type_names,brand_names, item_codes)
-
+    items.group_by { |item| [item.supplier1, item.jenis, item.merek] }
+    discounts = discount_based_item(supplier_codes, item_type_names, brand_names, item_codes)
 
     ActiveRecord::Base.transaction do
       check_active_promotion
@@ -23,7 +22,7 @@ class RefreshActivePromotionJob < ApplicationJob
       end
     end
     debug_log 'refresh active promotion done'
-  rescue JobCancelled => e
+  rescue JobCancelled
     debug_log "job #{jid} cancelled safely"
   end
 
@@ -32,10 +31,8 @@ class RefreshActivePromotionJob < ApplicationJob
   def check_active_promotion
     today = Time.now
     Ipos::Promotion.where(tglsampai: ...today)
-             .update_all(stsact: false)
+                   .update_all(stsact: false)
   end
-
-
 
   def active_promotion_item_codes
     ids = Ipos::Promotion.active_today
@@ -45,11 +42,8 @@ class RefreshActivePromotionJob < ApplicationJob
   end
 
   def discount_based_item(supplier_codes, item_type_names, brand_names, item_codes)
-    discounts = Discount.active_today
-                        .where('item_code IN (?) OR item_type_name IN (?) OR brand_name IN (?) OR supplier_code IN (?)', item_codes,item_type_names,brand_names, supplier_codes)
-                        .to_a
-
+    Discount.active_today
+            .where('item_code IN (?) OR item_type_name IN (?) OR brand_name IN (?) OR supplier_code IN (?)', item_codes, item_type_names, brand_names, supplier_codes)
+            .to_a
   end
-
-
 end

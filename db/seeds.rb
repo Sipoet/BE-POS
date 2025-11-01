@@ -20,17 +20,17 @@ ApplicationRecord.transaction do
   Role.find_or_create_by!(name: 'HUMAN RESOURCE')
   puts 'seed roles DONE'
   puts 'seed user superadmin'
-  User.find_or_create_by!(name: 'superadmin', role: Role.find_by(name:'SUPERADMIN'), password: Rails.env['ADMIN_PASSWORD'], password_confirmation: Rails.env['ADMIN_PASSWORD'])
+  User.find_or_create_by!(name: 'superadmin', role: Role.find_by(name: 'SUPERADMIN'),
+                          password: Rails.env['ADMIN_PASSWORD'], password_confirmation: Rails.env['ADMIN_PASSWORD'])
   puts 'seed user superadmin DONE'
   puts 'seed payment type superadmin DONE'
-  ['debit_card',
-    'credit_card',
-    'qris',
-    'emoney',
-    'tap',
-    'transfer',
-    'other',
-  ].each do |payment_type_name|
+  %w[debit_card
+     credit_card
+     qris
+     emoney
+     tap
+     transfer
+     other].each do |payment_type_name|
     PaymentType.find_or_create_by!(name: payment_type_name)
   end
 end

@@ -13,5 +13,4 @@ class ItemSalesPeriodReportSerializer
               :discount_total,
               :sales_total,
               :is_consignment
-
 end

@@ -10,12 +10,13 @@ class UpdateIposPromotion < ActiveRecord::Migration[7.1]
   end
 
   private
+
   def seed_discount_id
     puts 'seed discount id begin'
     Discount.all.order(weight: :asc).each do |discount|
       Ipos::Promotion
-      .where('iddiskon ilike ?', "%_#{discount.code}%")
-      .update_all(discount_id: discount.id)
+        .where('iddiskon ilike ?', "%_#{discount.code}%")
+        .update_all(discount_id: discount.id)
     end
     puts 'seed discount id done'
   end

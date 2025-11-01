@@ -1,5 +1,4 @@
 class SaleItem::IndexService < ApplicationService
-
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -12,10 +11,10 @@ class SaleItem::IndexService < ApplicationService
       options = {
         meta: meta,
         fields: @fields,
-        params:{include: @included},
+        params: { include: @included },
         include: @included
       }
-      render_json(Ipos::SaleItemSerializer.new(@sale_items,options))
+      render_json(Ipos::SaleItemSerializer.new(@sale_items, options))
     end
   end
 
@@ -24,7 +23,7 @@ class SaleItem::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_rows: @sale_items.total_count,
-      total_pages: @sale_items.total_pages,
+      total_pages: @sale_items.total_pages
     }
   end
 
@@ -39,10 +38,10 @@ class SaleItem::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::SaleItem)
-    allowed_fields = [:sale_item,:item,:sale]
+    allowed_fields = %i[sale_item item sale]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 5_000
     @search_text = result.search_text
@@ -55,25 +54,21 @@ class SaleItem::IndexService < ApplicationService
 
   def find_sale_items
     sale_items = Ipos::SaleItem.all.includes(@included)
-    if @report_type == 'json'
-      sale_items = sale_items.page(@page)
-                              .per(@limit)
-    else
-      sale_items = sale_items.page(1)
-                              .per(@limit)
-    end
-    if @search_text.present?
-      sale_items = sale_items.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
-    end
+    sale_items = if @report_type == 'json'
+                   sale_items.page(@page)
+                             .per(@limit)
+                 else
+                   sale_items.page(1)
+                             .per(@limit)
+                 end
+    sale_items = sale_items.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%")) if @search_text.present?
     @filters.each do |filter|
       sale_items = sale_items.where(filter.to_query)
     end
     if @sort.present?
-      sale_items = sale_items.order(@sort)
+      sale_items.order(@sort)
     else
-      sale_items = sale_items.order(id: :asc)
+      sale_items.order(id: :asc)
     end
-    sale_items
   end
-
 end

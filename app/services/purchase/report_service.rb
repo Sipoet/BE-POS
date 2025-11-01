@@ -1,5 +1,5 @@
 class Purchase::ReportService < ApplicationService
-  LIMIT_ROWS_PER_REQUEST = 2_000.freeze
+  LIMIT_ROWS_PER_REQUEST = 2_000
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -14,16 +14,15 @@ class Purchase::ReportService < ApplicationService
           filter: @filter,
           page: @page,
           limit: @limit,
-           total_pages: @purchase_report.total_pages,
-          total_rows: @purchase_report.total_count,
+          total_pages: @purchase_report.total_pages,
+          total_rows: @purchase_report.total_count
         },
         fields: @fields,
-        params:{include: @included},
+        params: { include: @included },
         include: @included
       }
       render_json(PurchaseReportSerializer.new(@purchase_report, options))
     end
-
   end
 
   def meta
@@ -31,16 +30,16 @@ class Purchase::ReportService < ApplicationService
       page: @page,
       limit: @limit,
       total_pages: @purchase_report.total_pages,
-      total_rows: @purchase_report.total_count,
+      total_rows: @purchase_report.total_count
     }
   end
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(PurchaseReport)
-    allowed_fields = [:purchase, :supplier]
+    allowed_fields = %i[purchase supplier]
     result = dezerialize_table_params(params,
-      allowed_fields: allowed_fields,
-      table_definitions: @table_definitions)
+                                      allowed_fields: allowed_fields,
+                                      table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -53,25 +52,24 @@ class Purchase::ReportService < ApplicationService
 
   def find_purchase_reports
     purchase_reports = PurchaseReport.all.includes(@included)
-    if @report_type == 'json'
-      purchase_reports = purchase_reports.page(@page)
+    purchase_reports = if @report_type == 'json'
+                         purchase_reports.page(@page)
                                          .per(@limit)
-    else
-      purchase_reports = purchase_reports.page(1)
+                       else
+                         purchase_reports.page(1)
                                          .per(LIMIT_ROWS_PER_REQUEST)
-    end
+                       end
     if @search_text.present?
-      purchase_reports = purchase_reports.where(['code ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      purchase_reports = purchase_reports.where(['code ilike ? '] + Array.new(1, "%#{@search_text}%"))
     end
     @filters.each do |filter|
       purchase_reports = purchase_reports.where(filter.to_query)
     end
     if @sort.present?
-      purchase_reports = purchase_reports.order(@sort)
+      purchase_reports.order(@sort)
     else
-      purchase_reports = purchase_reports.order(purchase_date: :desc)
+      purchase_reports.order(purchase_date: :desc)
     end
-    purchase_reports
   end
 
   def generate_excel(rows)
@@ -81,5 +79,4 @@ class Purchase::ReportService < ApplicationService
     generator.add_metadata(@filter || {})
     generator.generate('laporan-pembelian')
   end
-
 end

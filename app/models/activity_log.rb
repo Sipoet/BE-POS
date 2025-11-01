@@ -1,14 +1,16 @@
 class ActivityLog < ApplicationModel
-
-
   attr_accessor :item_type, :item_id, :event, :id,
                 :user_id, :description, :created_at
 
   def user
     return nil if user_id.nil?
-    @user ||= User.find(user_id.to_i) rescue nil
-  end
 
+    @user ||= begin
+      User.find(user_id.to_i)
+    rescue StandardError
+      nil
+    end
+  end
 
   def user=(value)
     @user = value

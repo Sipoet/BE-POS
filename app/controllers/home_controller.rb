@@ -17,5 +17,4 @@ class HomeController < ApplicationController
   def download_app
     run_service_default
   end
-
 end

@@ -1,5 +1,4 @@
 class CreateWorkSchedules < ActiveRecord::Migration[7.1]
-
   def change
     create_table :work_schedules do |t|
       t.integer :payroll_id, null: false, index: true
@@ -12,5 +11,4 @@ class CreateWorkSchedules < ActiveRecord::Migration[7.1]
     end
     add_foreign_key :work_schedules, :payrolls, column: :payroll_id
   end
-
 end

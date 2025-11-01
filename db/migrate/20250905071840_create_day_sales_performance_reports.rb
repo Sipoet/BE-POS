@@ -34,5 +34,4 @@ class CreateDaySalesPerformanceReports < ActiveRecord::Migration[7.1]
       DROP MATERIALIZED VIEW IF EXISTS day_sales_performance_reports;
     SQL
   end
-
 end

@@ -1,6 +1,5 @@
 class AttendanceAnalyzer
-
-  def initialize(payroll:,employee:,start_date:,end_date:)
+  def initialize(payroll:, employee:, start_date:, end_date:)
     @employee = employee
     @payroll = payroll
     @start_date = start_date
@@ -10,24 +9,25 @@ class AttendanceAnalyzer
   def analyze
     @work_schedules = find_employee_work_schedules
     @employee_leaves = EmployeeLeave.where(employee_id: @employee.id,
-                                          date: @start_date..@end_date)
+                                           date: @start_date..@end_date)
                                     .index_by(&:date)
     @changed_employee_leaves = EmployeeLeave.where(employee_id: @employee.id,
-                                    change_date: @start_date..@end_date)
-                              .index_by(&:change_date)
+                                                   change_date: @start_date..@end_date)
+                                            .index_by(&:change_date)
     @employee_day_offs = EmployeeDayOff.where(employee: @employee)
                                        .group_by(&:day_of_week)
     @holidays = Holiday.where(date: @start_date..@end_date)
-                      .index_by(&:date)
+                       .index_by(&:date)
     @employee_attendances = find_attendances
     @finder = WorkScheduleFinder.new(@employee.role_id)
     result = Result.new
     result.paid_time_off = BigDecimal(@payroll.paid_time_off)
-    result.is_first_work = @employee.start_working_date.between?(@start_date,@end_date)
-    result.is_last_work = @employee.end_working_date.present? && @employee.end_working_date.between?(@start_date,@end_date)
+    result.is_first_work = @employee.start_working_date.between?(@start_date, @end_date)
+    result.is_last_work = @employee.end_working_date.present? && @employee.end_working_date.between?(@start_date,
+                                                                                                     @end_date)
 
     (@start_date..@end_date).each do |date|
-      analyze_date(date,result)
+      analyze_date(date, result)
     end
 
     if result.total_day < 26
@@ -40,12 +40,11 @@ class AttendanceAnalyzer
 
   private
 
-  def analyze_date(date,result)
+  def analyze_date(date, result)
     is_scheduled_work = scheduled_work?(date)
-    if is_scheduled_work
-      result.total_day += 1
-    end
+    result.total_day += 1 if is_scheduled_work
     return unless employee_still_working?(date)
+
     grouped_employee_attendances = @employee_attendances[date] || []
 
     work_hours = 0
@@ -55,16 +54,16 @@ class AttendanceAnalyzer
       work_schedules = @finder.work_schedules_based_attendances(grouped_employee_attendances)
       shift = grouped_employee_attendances.first.try(:shift)
       if work_schedules.empty?
-        work_schedules = @work_schedules.values.first.select{|work_schedule|work_schedule.shift == shift}
+        work_schedules = @work_schedules.values.first.select { |work_schedule| work_schedule.shift == shift }
       end
       scheduled_work_hours = work_schedules.to_a.sum do |work_schedule|
         schedule_work_hours(work_schedule)
       end
       is_late = false
-      grouped_employee_attendances.each.with_index do |employee_attendance,index|
+      grouped_employee_attendances.each.with_index do |employee_attendance, index|
         work_schedule = work_schedules[index]
         allow_overtime ||= employee_attendance.allow_overtime
-        if work_schedule.present? &&  !flexible?(work_schedule, date)
+        if work_schedule.present? && !flexible?(work_schedule, date)
           work_hours += work_hours_of(employee_attendance, work_schedule)
           scheduled_begin_at = schedule_of(date, work_schedule.begin_work)
           is_late ||= employee_attendance.is_late
@@ -72,7 +71,7 @@ class AttendanceAnalyzer
             Rails.logger.debug "#{@employee.name} #{employee_attendance.start_time.iso8601} schedule: #{scheduled_begin_at.iso8601}"
           end
         else
-          work_hours += difference_hour(employee_attendance.start_time,employee_attendance.end_time)
+          work_hours += difference_hour(employee_attendance.start_time, employee_attendance.end_time)
         end
       end
     end
@@ -95,34 +94,37 @@ class AttendanceAnalyzer
     book_employee_attendance = BookEmployeeAttendance.find_by(
       start_date: ..date,
       end_date: date..,
-      employee_id:[nil,@employee.id]
+      employee_id: [nil, @employee.id]
     )
     return book_employee_attendance.is_flexible if book_employee_attendance.present?
+
     work_schedule.is_flexible
   end
+
   def schedule_work_hours(work_schedule)
     date1 = Date.today
     date2 = work_schedule.begin_work > work_schedule.end_work ? Date.tomorrow : Date.today
-    difference_hour(schedule_of(date1,work_schedule.begin_work),schedule_of(date2,work_schedule.end_work))
+    difference_hour(schedule_of(date1, work_schedule.begin_work), schedule_of(date2, work_schedule.end_work))
   end
 
   def find_employee_work_schedules
     @employee.role
-            .role_work_schedules
-            .where(begin_active_at: ..@end_date, end_active_at: @start_date..)
-            .group_by(&:day_of_week)
+             .role_work_schedules
+             .where(begin_active_at: ..@end_date, end_active_at: @start_date..)
+             .group_by(&:day_of_week)
   end
 
   def employee_still_working?(date)
     return false if @employee.start_working_date > date
-    return !(@employee.end_working_date.present? && @employee.end_working_date < date)
+
+    !(@employee.end_working_date.present? && @employee.end_working_date < date)
   end
 
   def add_leave(result, date)
     employee_leave = @employee_leaves[date]
     Rails.logger.debug "======================= Date: #{date} emp leave #{employee_leave}"
     if employee_leave.blank?
-      Rails.logger.debug"===#{@employee.name} ALPHA tgl #{date}"
+      Rails.logger.debug "===#{@employee.name} ALPHA tgl #{date}"
       result.add_unknown_leave(date)
     elsif employee_leave.sick_leave?
       result.add_sick_leave(date)
@@ -134,6 +136,7 @@ class AttendanceAnalyzer
   def scheduled_work?(date)
     return false unless employee_still_working?(date)
     return true if @changed_employee_leaves[date].present?
+
     if @holidays[date].present?
       is_holiday = logic_holiday(@holidays[date])
       return false if is_holiday
@@ -141,27 +144,21 @@ class AttendanceAnalyzer
     day_offs = @employee_day_offs[date.cwday] || []
     day_offs.each do |employee_day_off|
       return false if employee_day_off.all_week?
-      if employee_day_off.odd_week? == date.cweek.odd?
-        return false
-      end
-      if employee_day_off.even_week? == date.cweek.even?
-        return false
-      end
-      if date.prev_week.end_of_week.month < date.month && employee_day_off.first_week_of_month?
-        return false
-      end
-      if date.next_week.month > date.month && employee_day_off.last_week_of_month?
-        return false
-      end
+      return false if employee_day_off.odd_week? == date.cweek.odd?
+      return false if employee_day_off.even_week? == date.cweek.even?
+      return false if date.prev_week.end_of_week.month < date.month && employee_day_off.first_week_of_month?
+      return false if date.next_week.month > date.month && employee_day_off.last_week_of_month?
     end
     employee_leave = @employee_leaves[date]
     return false if employee_leave.present? && employee_leave.change_day?
+
     @work_schedules[date.cwday].present?
   end
 
   def logic_holiday(holiday)
     return true if holiday.religion.nil?
-    return holiday.religion == @employee.religion
+
+    holiday.religion == @employee.religion
   end
 
   def find_attendances
@@ -174,15 +171,15 @@ class AttendanceAnalyzer
     schedule_start_time = schedule_of(employee_attendance.date, work_schedule.begin_work)
     start_time = [schedule_start_time, employee_attendance.start_time].max
     end_time = if employee_attendance.allow_overtime
-      employee_attendance.end_time
-    else
-      [employee_attendance.end_time, schedule_of(employee_attendance.date, work_schedule.end_work)].min
-    end
+                 employee_attendance.end_time
+               else
+                 [employee_attendance.end_time, schedule_of(employee_attendance.date, work_schedule.end_work)].min
+               end
     difference_hour(start_time, end_time)
   end
 
   def difference_hour(time_a, time_b)
-    BigDecimal(((time_a.to_time - time_b.to_time)/1.hour).round(1).abs.to_s)
+    BigDecimal(((time_a.to_time - time_b.to_time) / 1.hour).round(1).abs.to_s)
   end
 
   def schedule_of(date, time)
@@ -207,7 +204,7 @@ class AttendanceAnalyzer
       @details = []
     end
 
-    def add_detail(date:, is_late: false, allow_overtime: false,work_hours: 0,scheduled_work_hours: 0, shift: 1)
+    def add_detail(date:, is_late: false, allow_overtime: false, work_hours: 0, scheduled_work_hours: 0, shift: 1)
       @details << ResultDetail.new(
         date: date,
         is_late: is_late,
@@ -224,6 +221,7 @@ class AttendanceAnalyzer
         is_sick: true
       )
     end
+
     def add_known_leave(date)
       @details << ResultDetail.new(
         date: date,
@@ -269,14 +267,15 @@ class AttendanceAnalyzer
     def work_hours
       details.map(&:work_hours)
     end
-
   end
 
   class ResultDetail
     attr_accessor :date, :is_worked, :is_late, :work_hours,
                   :is_sick, :is_known_leave, :is_unknown_leave,
                   :scheduled_work_hours, :allow_overtime, :shift
-    def initialize(date:, is_late: false, allow_overtime: false,work_hours: 0,scheduled_work_hours: 0, is_sick: false, is_known_leave: false, is_unknown_leave: false, shift: 1)
+
+    def initialize(date:, is_late: false, allow_overtime: false, work_hours: 0, scheduled_work_hours: 0, is_sick: false,
+                   is_known_leave: false, is_unknown_leave: false, shift: 1)
       @date = date
       @is_late = is_late
       @work_hours = work_hours
