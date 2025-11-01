@@ -32,7 +32,7 @@ class AttendanceAnalyzer
 
     if result.total_day < 26
       result.total_day = 26
-    elsif result.total_day > 29
+    elsif (@start_date..@end_date).to_a.length > 31
       result.total_day = 29
     end
     result
@@ -84,7 +84,7 @@ class AttendanceAnalyzer
         shift: shift,
         scheduled_work_hours: scheduled_work_hours,
         is_late: is_late,
-        allow_overtime:
+        allow_overtime: allow_overtime
       )
     elsif is_scheduled_work
       add_leave(result, date)
@@ -120,13 +120,14 @@ class AttendanceAnalyzer
 
   def add_leave(result, date)
     employee_leave = @employee_leaves[date]
+    Rails.logger.debug "======================= Date: #{date} emp leave #{employee_leave}"
     if employee_leave.blank?
       Rails.logger.debug"===#{@employee.name} ALPHA tgl #{date}"
-      result.add_detail(date: date, is_unknown_leave: true)
+      result.add_unknown_leave(date)
     elsif employee_leave.sick_leave?
-      result.add_detail(date: date, is_sick: true)
+      result.add_sick_leave(date)
     elsif !employee_leave.change_day?
-      result.add_detail(date: date, is_known_leave: true)
+      result.add_known_leave(date)
     end
   end
 
@@ -206,17 +207,34 @@ class AttendanceAnalyzer
       @details = []
     end
 
-    def add_detail(date:, is_late: false, allow_overtime: false,work_hours: 0,scheduled_work_hours: 0, is_sick: false, is_known_leave: false, is_unknown_leave: false, shift: 1)
+    def add_detail(date:, is_late: false, allow_overtime: false,work_hours: 0,scheduled_work_hours: 0, shift: 1)
       @details << ResultDetail.new(
         date: date,
         is_late: is_late,
         work_hours: work_hours,
         shift: shift,
         scheduled_work_hours: scheduled_work_hours,
-        is_sick: is_sick,
-        is_known_leave: is_known_leave,
-        is_unknown_leave: is_unknown_leave,
         allow_overtime: allow_overtime
+      )
+    end
+
+    def add_sick_leave(date)
+      @details << ResultDetail.new(
+        date: date,
+        is_sick: true
+      )
+    end
+    def add_known_leave(date)
+      @details << ResultDetail.new(
+        date: date,
+        is_known_leave: true
+      )
+    end
+
+    def add_unknown_leave(date)
+      @details << ResultDetail.new(
+        date: date,
+        is_unknown_leave: true
       )
     end
 
@@ -258,7 +276,7 @@ class AttendanceAnalyzer
     attr_accessor :date, :is_worked, :is_late, :work_hours,
                   :is_sick, :is_known_leave, :is_unknown_leave,
                   :scheduled_work_hours, :allow_overtime, :shift
-    def initialize(date:, is_late:, work_hours:,allow_overtime:, is_sick:, is_known_leave: , is_unknown_leave:, scheduled_work_hours:, shift:)
+    def initialize(date:, is_late: false, allow_overtime: false,work_hours: 0,scheduled_work_hours: 0, is_sick: false, is_known_leave: false, is_unknown_leave: false, shift: 1)
       @date = date
       @is_late = is_late
       @work_hours = work_hours

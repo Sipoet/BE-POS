@@ -9,5 +9,6 @@ class EmployeeDayOff < ApplicationRecord
   }
 
   validates :active_week, presence: true
+  validates :day_of_week, presence: true
   belongs_to :employee
 end
