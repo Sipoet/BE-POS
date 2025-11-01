@@ -40,9 +40,9 @@ class CashierSession::IndexService < ApplicationService
     cashier_sessions = CashierSession.all.includes(@included)
                                      .page(@page)
                                      .per(@limit)
-    # if @search_text.present?
-    #   cashier_sessions = cashier_sessions.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%"))
-    # end
+    if @search_text.present?
+      cashier_sessions = cashier_sessions.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%"))
+    end
     @filters.each do |filter|
       cashier_sessions = cashier_sessions.where(filter.to_query)
     end

@@ -1,11 +1,9 @@
 class PurchaseReport < ApplicationRecord
-
   self.table_name = 'purchase_reports'
   self.primary_key = 'code'
 
-
-  belongs_to :supplier, foreign_key: :supplier_code, primary_key: :kode, class_name:'Ipos::Supplier'
-  belongs_to :purchase, foreign_key: :code, primary_key: :notransaksi, class_name:'Ipos::Purchase'
+  belongs_to :supplier, foreign_key: :supplier_code, primary_key: :kode, class_name: 'Ipos::Supplier'
+  belongs_to :purchase, foreign_key: :code, primary_key: :notransaksi, class_name: 'Ipos::Purchase'
 
   alias_attribute :id, :code
 

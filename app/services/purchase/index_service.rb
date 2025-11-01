@@ -38,10 +38,10 @@ class Purchase::IndexService < ApplicationService
 
   def find_purchases
     purchases = Ipos::Purchase.all.includes(@included)
-      .page(@page)
-      .per(@limit)
+                              .page(@page)
+                              .per(@limit)
     if @search_text.present?
-      purchases = purchases.where(['notransaksi ilike ? or keterangan ilike ?']+ Array.new(2,"%#{@search_text}%"))
+      purchases = purchases.where(['notransaksi ilike ? or keterangan ilike ?'] + Array.new(2, "%#{@search_text}%"))
     end
     @filters.each do |filter|
       purchases = purchases.where(filter.to_query)

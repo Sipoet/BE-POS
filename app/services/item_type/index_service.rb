@@ -16,8 +16,8 @@ class ItemType::IndexService < ApplicationService
     {
       page: @page,
       limit: @limit,
-      total_pages: @page.present? ? @item_types.total_pages : 1,
-      total_rows: @page.present? ? @item_types.total_count : @item_types.count,
+      total_pages: @item_types.total_pages,
+      total_rows: @item_types.total_count
     }
   end
 

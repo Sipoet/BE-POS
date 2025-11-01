@@ -42,7 +42,7 @@ class PurchaseReturn::IndexService < ApplicationService
                                            .page(@page)
                                            .per(@limit)
     if @search_text.present?
-      purchase_returns = purchase_returns.where(['notransaksi ilike ? ']+ Array.new(1,"%#{@search_text}%"))
+      purchase_returns = purchase_returns.where(['notransaksi ilike ? '] + Array.new(1, "%#{@search_text}%"))
     end
     @filters.each do |filter|
       purchase_returns = purchase_returns.where(filter.to_query)

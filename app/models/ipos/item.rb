@@ -32,5 +32,4 @@ class Ipos::Item < ApplicationRecord
   def consignment?
     konsinyasi == 'Y'
   end
-
 end

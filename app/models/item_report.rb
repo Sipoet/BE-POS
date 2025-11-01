@@ -12,5 +12,4 @@ class ItemReport < ApplicationRecord
 
   has_many :discount_group_items, foreign_key: :item_code
   has_many :discount_rules, through: :discount_group_items
-
 end
