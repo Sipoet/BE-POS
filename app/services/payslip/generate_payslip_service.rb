@@ -98,12 +98,6 @@ class Payslip::GeneratePayslipService < ApplicationService
     book_payslip_lines
   end
 
-  def commission_summary
-    CommisionAnalyzer.new(start_date: @start_date,
-                          end_date: @end_date)
-                     .analyze
-  end
-
   def calculate_payslip(payslip)
     PayslipCalculator.new(payslip).calculate_and_filled
   end

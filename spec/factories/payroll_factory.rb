@@ -5,7 +5,7 @@ FactoryBot.define do
     description {''}
     paid_time_off {0}
     after(:build) do |record|
-      payroll_line = FactoryBot.build(:payroll_line)
+      payroll_line = FactoryBot.build(:payroll_line, payroll_type: FactoryBot.create(:payroll_type))
       record.payroll_lines.build(payroll_line.attributes)
     end
   end

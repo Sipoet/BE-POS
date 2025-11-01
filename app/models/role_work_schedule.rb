@@ -8,6 +8,7 @@ class RoleWorkSchedule < ApplicationRecord
   validates :shift, presence: true, numericality: {greater_than: 0}
   validates :begin_active_at, presence: true
   validates :end_active_at, presence: true
+  validates :group_name, presence: true
 
   belongs_to :role
 

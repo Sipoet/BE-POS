@@ -6,10 +6,10 @@ FactoryBot.define do
     association :payroll, factory: :payroll
     start_working_date {Date.new(2023,2,23)}
     end_working_date {1.year.from_now}
-    status {[1,2].sample}
+    status {[:active,:inactive].sample}
     factory :active_employee do
       transient do
-        status {1}
+        status {:active}
       end
     end
     description {''}
