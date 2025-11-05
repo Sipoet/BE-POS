@@ -40,8 +40,6 @@ gem 'write_xlsx', '~> 1.11.1'
 # gem 'image_processing', '~> 1.2'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'closure_tree', '~> 7.4.0'
-gem 'dotenv'
 gem 'paper_trail', '~> 16.0.0'
 gem 'paper_trail-association_tracking'
 gem 'prawn', '~> 2.5.0'
