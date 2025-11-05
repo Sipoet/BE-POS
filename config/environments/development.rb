@@ -62,7 +62,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'smtp.gmail.com',
     port: 587,
-    domain: ENV['APP_EMAIL_DOMAIN'],'allegra.dept.store'
+    domain: ENV['APP_EMAIL_DOMAIN'],
     user_name: $APP_EMAIL || ENV['APP_EMAIL'],
     password: $APP_EMAIL_PASSWORD || ENV['APP_EMAIL_PASSWORD'],
     authentication: 'plain',
