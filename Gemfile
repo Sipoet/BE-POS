@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.4.7'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.1.2'
+gem 'rails', '~> 7.2.3'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
@@ -38,7 +38,7 @@ gem 'write_xlsx', '~> 1.11.1'
 # gem 'image_processing', '~> 1.2'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'paper_trail', '~> 15.1.0'
+gem 'paper_trail', '~> 16.0.0'
 gem 'paper_trail-association_tracking'
 gem 'prawn', '~> 2.5.0'
 gem 'closure_tree', '~> 7.4.0'
@@ -63,7 +63,8 @@ group :development do
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
-  # gem 'brakeman', require: false
+  gem 'ruby-lsp-brakeman', require: false
+  gem 'solargraph'
 
 end
 
