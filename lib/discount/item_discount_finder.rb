@@ -11,9 +11,7 @@ class Discount::ItemDiscountFinder
   private
 
   def active_discount_rules(transaction_date)
-    DiscountRule.where("'#{transaction_date}' BETWEEN start_time AND end_time")
-
-
+    DiscountRule.where(ApplicationRecord.sanitize_sql_array(["? BETWEEN start_time AND end_time",transaction_date]))
   end
 
 end

@@ -39,7 +39,7 @@ class CommissionAnalyzer
   end
 
   def sale_calculate_result(sale)
-    employee_ids = EmployeeAttendance.where("'#{sale.tanggal}' BETWEEN start_time AND end_time")
+    employee_ids = EmployeeAttendance.where(ApplicationRecord.sanitize_sql_array(["? BETWEEN start_time AND end_time",sale.tanggal]))
                                      .where(employee_id: @result_by_employee.keys)
                                      .pluck(:employee_id)
     total_people = employee_ids.length

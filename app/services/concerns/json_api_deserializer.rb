@@ -155,8 +155,8 @@ module JsonApiDeserializer
         case @operator
         when :eq then query.where(key => value)
         when :not then query.where.not(key => value)
-        when :like then query.where(["#{key} ilike ?", "%#{ApplicationRecord.sanitize_sql_like(value)}%"])
-        when :gt then query.where(["#{key} > ?", value])
+        when :like then query.where(ApplicationRecord.sanitize_sql_array(["#{key} ilike ?", "%#{ApplicationRecord.sanitize_sql_like(value)}%"]))
+        when :gt then query.where(ApplicationRecord.sanitize_sql_array(["#{key} > ?", value]))
         when :gte then query.where(key => value..)
         when :lt then query.where(key => ..value)
         when :lte then query.where(key => ...value)
