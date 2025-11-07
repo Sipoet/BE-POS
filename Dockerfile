@@ -3,7 +3,7 @@ FROM ruby:3.4.7-slim
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client build-essential apt-utils libpq-dev libyaml-dev
 WORKDIR /myapp
 COPY . /myapp
-RUN rm -r /myapp/.gemset
+RUN rm -rf /myapp/.gemset
 RUN  bundle config set --local path '.gemset'
 RUN  bundle install
 
