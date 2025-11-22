@@ -1,0 +1,57 @@
+services:
+  # backend:
+  #   build: .
+  #   image: allegra-pos/backend
+  #   command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+  #   container_name: backend-pos
+  #   volumes:
+  #     - .:/myapp
+  #   ports:
+  #     - "${SERVER_PORT}:3000"
+  #   stdin_open: true
+  #   tty: true
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   environment:
+  #     - HOST=${HOST}
+  #     - DATABASE_USERNAME=${DATABASE_USERNAME}
+  #     - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+  #     - RAILS_ENV=${RAILS_ENV}
+  #     - PRODUCTION_DATABASE_NAME=${PRODUCTION_DATABASE_NAME}
+
+  # sidekiq:
+  #   image: allegra-pos/backend
+  #   command: bundle exec sidekiq -C config/sidekiq.yml
+  #   volumes:
+  #     - .:/myapp
+  #   stdin_open: true
+  #   tty: true
+  #   depends_on:
+  #     - redis
+  #     - backend
+  #   environment:
+  #     - HOST=${HOST}
+  #     - DATABASE_USERNAME=${DATABASE_USERNAME}
+  #     - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+  #     - RAILS_ENV=${RAILS_ENV}
+  #     - PRODUCTION_DATABASE_NAME=${PRODUCTION_DATABASE_NAME}
+  db:
+    image: postgres:9.6.24
+    restart: always
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+      - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  redis:
+    image: redis:7.2.3
+    restart: always
+    ports:
+      - "6379:6379"
+    # volumes:
+    #   - /var/lib/redis/data:/data
+volumes:
+  pgdata:
