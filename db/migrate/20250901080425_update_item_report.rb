@@ -35,7 +35,7 @@ class UpdateItemReport < ActiveRecord::Migration[7.1]
       INNER JOIN tbl_itemjenis ON tbl_itemjenis.jenis = tbl_item.jenis
       LEFT OUTER JOIN(
         SELECT kodeitem,
-        SUM(CASE WHEN tbl_ikhd.tipe IN('KSR','JL') then tbl_ikdt.jumlah WHEN tbl_ikhd.tipe ='RJ' then tbl_ikdt.jumlah * -1  ELSE 0 END) AS number_of_sales,
+        SUM(CASE WHEN tbl_ikhd.tipe IN('KSR','JL') then tbl_ikdt.jumlah * tbl_ikdt.jmlkonversi WHEN tbl_ikhd.tipe ='RJ' then tbl_ikdt.jumlah * tbl_ikdt.jmlkonversi * -1  ELSE 0 END) AS number_of_sales,
         SUM(CASE WHEN tbl_ikhd.tipe IN('KSR','JL') then tbl_ikdt.total - (tbl_ikdt.total/tbl_ikhd.subtotal*tbl_ikhd.potnomfaktur) ELSE 0 END) AS sales_total,
         SUM(CASE WHEN tbl_ikhd.tipe = 'IK' then tbl_ikdt.jumlah ELSE 0 END) AS item_out,
         SUM(CASE WHEN tbl_ikhd.tipe = 'RJ' then tbl_ikdt.jumlah ELSE 0 END) AS qty_return
@@ -46,7 +46,7 @@ class UpdateItemReport < ActiveRecord::Migration[7.1]
       LEFT OUTER JOIN (
         SELECT kodeitem,
         MAX(tbl_imhd.tanggal) as last_purchase_date,
-        SUM(tbl_imdt.jumlah) AS number_of_purchase,
+        SUM(tbl_imdt.jumlah * tbl_imdt.jmlkonversi) AS number_of_purchase,
         AVG((tbl_imdt.total / COALESCE(NULLIF(tbl_imdt.jumlah, 0), 1)) - (tbl_imdt.total * tbl_imhd.potnomfaktur / COALESCE(NULLIF(tbl_imhd.subtotal, 0), 1))) AS avg_buy_price,
         SUM(tbl_imdt.total) AS purchase_total
         FROM tbl_imdt
@@ -56,7 +56,7 @@ class UpdateItemReport < ActiveRecord::Migration[7.1]
       )purchase ON purchase.kodeitem = tbl_item.kodeitem AND purchase.number_of_purchase > 0
       LEFT OUTER JOIN (
         SELECT kodeitem,
-          SUM(tbl_item_sa.jumlah) AS number_of_purchase,
+          SUM(tbl_item_sa.jumlah * tbl_item_sa.jmlkonversi) AS number_of_purchase,
           AVG(tbl_item_sa.harga) AS avg_buy_price,
           SUM(tbl_item_sa.total) AS purchase_total
           FROM tbl_item_sa

@@ -44,7 +44,7 @@ class ItemReport::IndexService < ApplicationService
     @included = result.included
     @filters = result.filters
     @fields = result.fields
-    @report_type = @params[:report_type].to_s
+    @report_type = params.fetch(:report_type, 'json')
   end
 
   def find_reports
@@ -54,7 +54,9 @@ class ItemReport::IndexService < ApplicationService
       reports = filter.add_filter_to_query(reports)
     end
     if @search_text.present?
-      reports = reports.where(['item_code ilike ? OR item_name ilike ? OR brand_name ilike ? OR item_type_name ilike ? OR supplier_code ilike ?']+ Array.new(5,"%#{@search_text}%"))
+      reports = reports.where(['item_code ilike ? OR item_name ilike ? OR brand_name ilike ? OR item_type_name ilike ? OR supplier_code ilike ?'] + Array.new(
+        5, "%#{@search_text}%"
+      ))
     end
     if @sort.present?
       reports.order(@sort)

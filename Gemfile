@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -38,20 +40,21 @@ gem 'write_xlsx', '~> 1.11.1'
 # gem 'image_processing', '~> 1.2'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
+gem 'closure_tree', '~> 7.4.0'
+gem 'dotenv'
 gem 'paper_trail', '~> 16.0.0'
 gem 'paper_trail-association_tracking'
 gem 'prawn', '~> 2.5.0'
-gem 'closure_tree', '~> 7.4.0'
 gem 'rack-cors'
 gem 'rswag'
 gem 'sidekiq', '~> 7.2'
 gem 'sidekiq-cron', '~>1.12.0'
 gem 'xsv', '~> 1.3.0'
-
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'byebug'
   gem 'debug'
+
   gem 'pry'
   gem 'rspec-rails'
 end
@@ -65,7 +68,6 @@ group :development do
   gem 'rubocop-rails', require: false
   gem 'ruby-lsp-brakeman', require: false
   gem 'solargraph'
-
 end
 
 group :test do

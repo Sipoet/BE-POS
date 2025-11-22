@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RefreshPromotionJob < ApplicationJob
   sidekiq_options queue: 'default', retry: 2
 

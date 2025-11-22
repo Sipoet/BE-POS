@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -156,7 +158,8 @@ Rails.application.routes.draw do
     get :group_by, on: :collection
   end
 
-  resources :products, only: [:index, :show, :create, :update, :destroy]
+  resources :products, only: %i[index show create update destroy]
+  resources :stock_keeping_units, only: %i[index show create update destroy]
   resources :monthly_expense_reports, only: [:index] do
     get :group_by, on: :collection
   end

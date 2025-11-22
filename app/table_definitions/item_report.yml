@@ -9,6 +9,14 @@ columns:
     can_filter: true
     filter_key: item_code
     can_sort: true
+  item_name:
+    type: string
+    excel_width: 25
+    client_width: 150
+    sort_key: item_name
+    can_filter: true
+    filter_key: item_name
+    can_sort: true
   item_type:
     name: item_type_name
     type: model
