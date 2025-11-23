@@ -23,7 +23,7 @@ class BookEmployeeAttendance::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(BookEmployeeAttendance)
-    allowed_fields = [:book_employee_attendance]
+    allowed_fields = %i[book_employee_attendance employee]
     result = dezerialize_table_params(params,
                                       allowed_fields: allowed_fields,
                                       table_definitions: @table_definitions)

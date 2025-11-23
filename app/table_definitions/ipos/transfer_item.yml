@@ -141,6 +141,10 @@ columns:
     can_filter: true
     filter_key: item.jenis
     can_sort: true
+    input_options:
+      path: item_types
+      model_name: 'item_type'
+      attribute_key: name
   updated_at:
     name: updated_at
     type: datetime
