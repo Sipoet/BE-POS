@@ -27,7 +27,7 @@ gem 'redis', '~> 4.8'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'rubyzip'
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem 'tzinfo-data'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
 gem 'devise', '~>4.9.0'
@@ -46,13 +46,14 @@ gem 'rswag'
 gem 'sidekiq', '~> 7.2'
 gem 'sidekiq-cron', '~>1.12.0'
 gem 'xsv', '~> 1.3.0'
-
+gem 'dotenv', require: 'dotenv/load'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'byebug'
-  gem 'debug', platforms: %i[mri mingw x64_mingw]
+  gem 'debug'
   gem 'pry'
   gem 'rspec-rails'
+
 end
 
 group :development do
