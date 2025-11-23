@@ -47,3 +47,4 @@ lib/tasks/data_modifier.rake
 config/database.yml
 
 compose.yml
+deploy_image_prod.sh
