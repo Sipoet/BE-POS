@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'purchase_payment_histories/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -163,6 +164,8 @@ Rails.application.routes.draw do
   resources :monthly_expense_reports, only: [:index] do
     get :group_by, on: :collection
   end
+
+  resources :purchase_payment_histories, only: [:index]
 
   scope :ipos do
     resources :users, controller: 'ipos/users', only: [:index]

@@ -1,0 +1,76 @@
+table_name: 'purchase_payment_histories'
+columns:
+  supplier:
+    type: model
+    excel_width: 22
+    client_width: 180
+    input_options:
+      path: suppliers
+      model_name: supplier
+      attribute_key: name
+    filter_key: 'supplier_code'
+    sort_key: 'supplier_code'
+  purchase_code:
+    type: model
+    excel_width: 22
+    client_width: 180
+    input_options:
+      path: 'purchases'
+      model_name: purchase
+      attribute_key: 'notransaksi'
+    filter_key: 'purchase_code'
+    sort_key: 'purchase_code'
+  transaction_at:
+    excel_width: 22
+    client_width: 180
+    type: datetime
+  invoiced_at:
+    excel_width: 22
+    client_width: 180
+    type: datetime
+  stock_arrived_at:
+    excel_width: 22
+    client_width: 180
+    type: datetime
+  grand_total:
+    excel_width: 22
+    client_width: 180
+    type: money
+  debt_total:
+    excel_width: 22
+    client_width: 180
+    type: money
+  discount_amount:
+    excel_width: 22
+    client_width: 180
+    type: money
+  payment_amount:
+    excel_width: 22
+    client_width: 180
+    type: money
+  debt_left:
+    excel_width: 22
+    client_width: 180
+    type: money
+  payment_account:
+    excel_width: 22
+    client_width: 180
+    type: string
+  description:
+    excel_width: 22
+    client_width: 200
+    type: string
+  purchase_order_code:
+    type: model
+    excel_width: 22
+    client_width: 180
+    input_options:
+      path: 'purchase_orders'
+      model_name: purchase_order
+      attribute_key: 'notransaksi'
+    filter_key: 'purchase_order_code'
+    sort_key: 'purchase_order_code'
+  code:
+    excel_width: 22
+    client_width: 180
+    type: string
