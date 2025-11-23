@@ -10,7 +10,7 @@ id:
         discount_amount: 'Jumlah Diskon'
         payment_amount: 'Jumlah Bayar'
         transaction_at: 'Tanggal Bayar'
-        invoiced_at: 'Tanggal Invoice'
+        invoiced_at: 'Tanggal Faktur'
         stock_arrived_at: 'Tanggal Barang Datang'
         supplier_code: 'Kode Supplier'
         purchase_code: 'Nota Pembelian'
