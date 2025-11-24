@@ -46,14 +46,14 @@ gem 'rswag'
 gem 'sidekiq', '~> 7.2'
 gem 'sidekiq-cron', '~>1.12.0'
 gem 'xsv', '~> 1.3.0'
-gem 'dotenv', require: 'dotenv/load'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'byebug'
   gem 'debug'
+  gem 'dotenv', require: 'dotenv/load'
   gem 'pry'
   gem 'rspec-rails'
-
 end
 
 group :development do
