@@ -1,9 +1,9 @@
 id:
   activerecord:
     models:
-      purchase_payment_history: "Riwayat Aliran Kas"
+      cash_transaction_report: "Riwayat Aliran Kas"
     attributes:
-      purchase_payment_history:
+      cash_transaction_report:
         code: 'No Pembayaran'
         description: 'Keterangan'
         payment_amount: 'Jumlah Bayar'
