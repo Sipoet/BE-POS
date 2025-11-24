@@ -55,7 +55,13 @@ columns:
   payment_account:
     excel_width: 22
     client_width: 180
-    type: string
+    type: model
+    input_options:
+      path: 'accounts'
+      model_name: account
+      attribute_key: 'name'
+    filter_key: 'payment_account_code'
+    sort_key: 'payment_account_code'
   description:
     excel_width: 22
     client_width: 200

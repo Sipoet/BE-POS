@@ -41,7 +41,10 @@ class Account::IndexService < ApplicationService
     accounts = Ipos::Account.all.includes(@query_included)
                             .page(@page)
                             .per(@limit)
-    accounts = accounts.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%")) if @search_text.present?
+    if @search_text.present?
+      accounts = accounts.where(['kodeacc ilike ? OR namaacc ilike ? '] + Array.new(2,
+                                                                                    "%#{@search_text}%"))
+    end
     @filters.each do |filter|
       accounts = filter.add_filter_to_query(accounts)
     end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'cash_transaction_reports/index'
   get 'purchase_payment_histories/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -166,6 +167,7 @@ Rails.application.routes.draw do
   end
 
   resources :purchase_payment_histories, only: [:index]
+  resources :cash_transaction_reports, only: [:index]
 
   scope :ipos do
     resources :users, controller: 'ipos/users', only: [:index]

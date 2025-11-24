@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Ipos::CashOut < Ipos::AccountCash
   def self.sti_name
     'KASO'

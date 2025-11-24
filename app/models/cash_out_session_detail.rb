@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CashOutSessionDetail < ApplicationRecord
   enum :status, {
     draft: 0,

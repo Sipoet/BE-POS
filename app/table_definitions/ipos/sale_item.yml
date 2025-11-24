@@ -4,38 +4,64 @@ columns:
     type: model
     path: 'items'
     attribute_key: 'item.namaitem'
+    client_width: 180
     input_options:
       path: items
       model_name: item
       attribute_key: name
   item_name:
     type: string
+    client_width: 180
     filter_key: 'tbl_item.namaitem'
     can_sort: false
+  transaction_date:
+    type: datetime
+    client_width: 180
+    filter_key: 'tbl_ikhd.tanggal'
+    sort_key: 'tbl_ikhd.tanggal'
+    can_filter: true
+    can_sort: true
   notransaksi:
     type: string
+    client_width: 180
+  sale_type:
+    type: string
+    client_width: 120
+    can_filter: false
+    can_sort: false
   jumlah:
+    client_width: 180
     type: decimal
   harga:
     type: decimal
+    client_width: 180
   satuan:
     type: string
+    client_width: 180
   subtotal:
     type: money
+    client_width: 180
   potongan:
     type: decimal
+    client_width: 180
   potongan2:
     type: percentage
+    client_width: 180
   potongan3:
     type: percentage
+    client_width: 180
   potongan4:
     type: percentage
+    client_width: 180
   pajak:
     type: decimal
+    client_width: 180
   total:
     type: money
+    client_width: 180
   supplier_code:
     type: model
+    client_width: 180
     filter_key: 'tbl_item.supplier1'
     sort_key: 'tbl_item.supplier1'
     input_options:
@@ -44,6 +70,7 @@ columns:
       attribute_key: code
   brand_name:
     type: model
+    client_width: 180
     filter_key: 'tbl_item.merek'
     input_options:
       path: 'brands'
@@ -51,31 +78,35 @@ columns:
       attribute_key: name
   item_type_name:
     type: model
+    client_width: 180
     filter_key: 'tbl_item.jenis'
     input_options:
       path: 'item_types'
       model_name: item_type
       attribute_key: name
   updated_at:
+    client_width: 180
     type: datetime
     can_edit: false
   sistemhargajual:
+    client_width: 180
     type: string
   tipepromo:
+    client_width: 180
     type: string
   jmlgratis:
+    client_width: 180
     type: float
   itempromo:
+    client_width: 180
     type: string
   satuanpromo:
+    client_width: 180
     type: string
   hppdasar:
+    client_width: 180
     type: decimal
   nobaris:
+    client_width: 180
     type: integer
-  transaction_date:
-    type: datetime
-    filter_key: 'tbl_ikhd.tanggal'
-    sort_key: 'tbl_ikhd.tanggal'
-    can_filter: true
-    can_sort: true
+
