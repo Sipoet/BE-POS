@@ -1,0 +1,47 @@
+table_name: 'cash_transaction_reports'
+columns:
+  transaction_at:
+    excel_width: 22
+    client_width: 180
+    type: datetime
+  detail_account:
+    excel_width: 22
+    client_width: 180
+    type: model
+    input_options:
+      path: 'accounts'
+      model_name: account
+      attribute_key: 'name'
+    filter_key: 'detail_account_code'
+    sort_key: 'detail_account_code'
+  transaction_type:
+    excel_width: 22
+    client_width: 180
+    type: enum
+  description:
+    excel_width: 22
+    client_width: 200
+    type: string
+  payment_amount:
+    excel_width: 22
+    client_width: 180
+    type: money
+  payment_account:
+    excel_width: 22
+    client_width: 180
+    type: model
+    input_options:
+      path: 'accounts'
+      model_name: account
+      attribute_key: 'name'
+    filter_key: 'payment_account_code'
+    sort_key: 'payment_account_code'
+  code:
+    excel_width: 22
+    client_width: 180
+    type: string
+  updated_at:
+    excel_width: 22
+    client_width: 120
+    type: datetime
+    can_filter: false
