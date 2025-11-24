@@ -11,7 +11,7 @@ class CreatePurchasePaymentHistories < ActiveRecord::Migration[7.1]
           tbl_pesanhd.tanggal AS invoiced_at,
           tbl_byrhutanghd.keterangan AS description,
           tbl_byrhutanghd.kodesupel AS supplier_code,
-          tbl_byrhutanghd.acc_bayar AS payment_account,
+          tbl_byrhutanghd.acc_bayar AS payment_account_code,
           tbl_byrhutangdt.notransaksi AS code,
           tbl_byrhutangdt.krd_jml_byr AS payment_amount,
           tbl_byrhutangdt.krd_jml_pot AS discount_amount,

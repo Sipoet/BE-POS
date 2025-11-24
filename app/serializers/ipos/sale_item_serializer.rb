@@ -26,6 +26,19 @@ class Ipos::SaleItemSerializer
              :notransaksi,
              :transaction_date
 
+  attribute :sale_type do |object|
+    case object.sale_type
+    when 'KSR', 'JL'
+      'paid'
+    when 'KSRP'
+      'pending'
+    when 'RJ'
+      'return'
+    when 'IK'
+      'item_out'
+    end
+  end
+
   belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: Ipos::ItemSerializer
   belongs_to :sale, if: proc { |_record, _params| false }
 end

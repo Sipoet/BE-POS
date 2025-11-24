@@ -23,7 +23,7 @@ class PurchasePaymentHistory::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(PurchasePaymentHistory)
-    allowed_fields = %i[purchase_payment_history supplier purchase purchase_order]
+    allowed_fields = %i[purchase_payment_history supplier purchase purchase_order payment_account]
     result = dezerialize_table_params(params,
                                       allowed_fields: allowed_fields,
                                       table_definitions: @table_definitions)
@@ -42,8 +42,12 @@ class PurchasePaymentHistory::IndexService < ApplicationService
                                                        .page(@page)
                                                        .per(@limit)
     if @search_text.present?
-      purchase_payment_histories = purchase_payment_histories.where(['name ilike ? '] + Array.new(1,
-                                                                                                  "%#{@search_text}%"))
+      query_search_arr = ['purchase_code ilike ?', 'code ilike ?',
+                          'purchase_order_code ilike ?',
+                          'description ilike ?',
+                          'supplier_code ilike ?', 'tbl_supel.nama ilike ?']
+      purchase_payment_histories = purchase_payment_histories.left_outer_joins(:supplier).where([query_search_arr.join(' OR ')] + Array.new(6,
+                                                                                                                                            "%#{@search_text}%"))
     end
     @filters.each do |filter|
       purchase_payment_histories = filter.add_filter_to_query(purchase_payment_histories)

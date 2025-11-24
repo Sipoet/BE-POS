@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Ipos::AccountCash < ApplicationRecord
   self.table_name = 'tbl_acckashd'
   self.primary_key = 'notransaksi'

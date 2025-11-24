@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Ipos::ItemOutHeader < ApplicationRecord
   self.table_name = 'tbl_ikhd'
   self.inheritance_column = :tipe
