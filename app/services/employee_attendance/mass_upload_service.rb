@@ -61,10 +61,16 @@ class EmployeeAttendance::MassUploadService < ApplicationService
 
       row_containers << rows
     end
+    if selected_employee.present? && row_containers.present?
+      employee_attendances += extract_time_attendance(row_containers, selected_employee, range)
+      selected_employee = nil
+      row_containers = []
+    end
     employee_attendances
   end
 
   def extract_time_attendance(row_containers, selected_employee, range)
+    Rails.logger.debug "==================row container #{row_containers}" if selected_employee.code == 'zahwa'
     first_row = row_containers.first
     time_attendances = []
     finder = WorkScheduleFinder.new(selected_employee.role_id)
@@ -74,13 +80,15 @@ class EmployeeAttendance::MassUploadService < ApplicationService
 
       attendances = row_containers.map do |rows|
         rows[index]&.split("\r\n")
-                   &.map { |hour| parse_time(date, hour) }
+                   &.map { |hour| parse_time(date, hour.strip) }
       end.flatten.compact
 
       if first_row[index + 1].present?
         next_attendances = first_row[index + 1].split("\r\n")
         next_attendances.each do |hour|
-          attendances << parse_time(date.tomorrow, hour)
+          next if hour.strip.blank?
+
+          attendances << parse_time(date.tomorrow, hour.strip)
         end
       end
       attendances.select! do |datetime|
@@ -162,13 +170,16 @@ class EmployeeAttendance::MassUploadService < ApplicationService
   end
 
   def find_employee(rows)
-    employee_code = rows[11].try(:downcase)
+    employee_code = rows[11]
     return nil if employee_code.nil?
 
+    employee_code = employee_code.downcase&.strip
     Employee.find_by(code: employee_code, status: :active) || Employee.find_by(code: employee_code)
   end
 
   def parse_time(date, hour)
+    return nil if hour.blank?
+
     Time.zone.parse("#{date.iso8601} #{hour}")
   end
 
@@ -177,9 +188,6 @@ class EmployeeAttendance::MassUploadService < ApplicationService
   end
 
   def extract_period(sheet)
-    sheet.to_a.each.with_index(0) do |row, index|
-      Rails.logger.debug "index #{index} : #{row.map.with_index { |text, index2| "#{index2}: #{text}" }.join('|')}"
-    end
     period_text = sheet[2][25]
     period_text = period_text.to_s.split(':').last.split('~')
     Rails.logger.debug "period text #{period_text.first} #{period_text.last}"
