@@ -24,7 +24,6 @@ columns:
     filter_key: date
     can_sort: true
   start_time:
-    name: start_time
     type: time
     excel_width: 25
     client_width: 200
@@ -34,7 +33,6 @@ columns:
     filter_key: start_time
     can_sort: true
   end_time:
-    name: end_time
     type: time
     excel_width: 25
     client_width: 200

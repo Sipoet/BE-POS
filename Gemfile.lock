@@ -224,9 +224,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pdf-core (0.10.0)
-    pg (1.6.2-x64-mingw-ucrt)
-    pg (1.6.2-x86_64-linux)
-    pg (1.6.2-x86_64-linux-musl)
+    pg (1.5.9)
     pp (0.6.3)
       prettyprint
     prawn (2.5.0)
@@ -476,7 +474,7 @@ DEPENDENCIES
   kaminari (~> 1.2.2)
   paper_trail (~> 16.0.0)
   paper_trail-association_tracking
-  pg (~> 1.1)
+  pg (~> 1.5.9)
   prawn (~> 2.5.0)
   pry
   puma (~> 6.3)
