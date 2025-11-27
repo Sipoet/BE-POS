@@ -119,8 +119,7 @@ class Payroll::ReportService < ApplicationService
     full_amount = 0
     payroll_lines.each do |payroll_line|
       formula_calculator_class = Payroll::Calculator.calculator_class(payroll_line)
-      payroll_line = payroll_line_from_date(payroll_line)
-      next if payroll_line.nil?
+      payroll_line = payroll_line_from_date(payroll_line) if Date.today > @date
 
       main_amount += formula_calculator_class.main_amount(payroll_line)
       amount = formula_calculator_class.full_amount(payroll_line)
@@ -136,7 +135,7 @@ class Payroll::ReportService < ApplicationService
   end
 
   def payroll_line_from_date(payroll_line)
-    payroll_line.paper_trail.version_at(@date)
+    payroll_line.paper_trail.version_at(@date.end_of_day)
   end
 
   def find_payroll_types
