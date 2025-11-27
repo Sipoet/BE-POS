@@ -1,4 +1,5 @@
 class Payroll::UpdateService < ApplicationService
+  include NestedAttributesMatchup
   def execute_service
     payroll = Payroll.find(params[:id])
     raise RecordNotFound.new(params[:id], Payroll.model_name.human) if payroll.nil?
@@ -32,17 +33,7 @@ class Payroll::UpdateService < ApplicationService
                                                                          variable3 variable4 variable5] }])
     return if permitted_params.blank? || permitted_params[:data].blank?
 
-    payroll_lines = payroll.payroll_lines.index_by(&:id)
-    permitted_params[:data].each do |line_params|
-      payroll_line = payroll_lines[line_params[:id]]
-      if payroll_line.present?
-        payroll_line.attributes = line_params[:attributes]
-        payroll_lines.delete(line_params[:id])
-      else
-        payroll.payroll_lines.build(line_params[:attributes])
-      end
-    end
-    payroll_lines.values.map(&:mark_for_destruction)
+    edit_attributes(permitted_params[:data], payroll.payroll_lines)
   end
 
   def update_attribute(payroll)
