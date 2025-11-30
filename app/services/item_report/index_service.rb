@@ -44,7 +44,7 @@ class ItemReport::IndexService < ApplicationService
     @included = result.included
     @filters = result.filters
     @fields = result.fields
-    @report_type = @params[:report_type].to_s
+    @report_type = @params.fetch(:report_type, 'json').to_s
   end
 
   def find_reports
