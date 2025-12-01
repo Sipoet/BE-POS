@@ -48,3 +48,4 @@ lib/tasks/data_modifier.rake
 # Ignore config yml
 config/database.yml
 compose.yml
+deploy_image_prod.sh
