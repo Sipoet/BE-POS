@@ -74,7 +74,7 @@ class WorkScheduleFinder
   end
 
   def schedule_of(date, time)
-    Time.parse("#{date.iso8601} #{time}")
+    Time.zone.parse("#{date.iso8601} #{time}")
   end
 
   def difference_hour(time_a, time_b)

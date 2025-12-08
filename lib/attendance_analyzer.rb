@@ -63,6 +63,7 @@ class AttendanceAnalyzer
       grouped_employee_attendances.each.with_index do |employee_attendance, index|
         work_schedule = work_schedules[index]
         allow_overtime ||= employee_attendance.allow_overtime
+
         if work_schedule.present? && !flexible?(work_schedule, date)
           work_hours += work_hours_of(employee_attendance, work_schedule)
           scheduled_begin_at = schedule_of(date, work_schedule.begin_work)
@@ -77,6 +78,7 @@ class AttendanceAnalyzer
     end
 
     if work_hours > 0
+
       result.add_detail(
         date: date,
         work_hours: work_hours,
@@ -183,7 +185,7 @@ class AttendanceAnalyzer
   end
 
   def schedule_of(date, time)
-    Time.parse("#{date.iso8601} #{time}")
+    Time.zone.parse("#{date.iso8601} #{time}")
   end
 
   class Result
@@ -211,7 +213,7 @@ class AttendanceAnalyzer
         work_hours: work_hours,
         shift: shift,
         scheduled_work_hours: scheduled_work_hours,
-        allow_overtime: allow_overtime
+        is_allow_overtime: allow_overtime
       )
     end
 
@@ -272,9 +274,10 @@ class AttendanceAnalyzer
   class ResultDetail
     attr_accessor :date, :is_worked, :is_late, :work_hours,
                   :is_sick, :is_known_leave, :is_unknown_leave,
-                  :scheduled_work_hours, :allow_overtime, :shift
+                  :scheduled_work_hours, :shift
+    attr_writer :is_allow_overtime
 
-    def initialize(date:, is_late: false, allow_overtime: false, work_hours: 0, scheduled_work_hours: 0, is_sick: false,
+    def initialize(date:, is_late: false, is_allow_overtime: false, work_hours: 0, scheduled_work_hours: 0, is_sick: false,
                    is_known_leave: false, is_unknown_leave: false, shift: 1)
       @date = date
       @is_late = is_late
@@ -283,8 +286,12 @@ class AttendanceAnalyzer
       @is_known_leave = is_known_leave
       @is_unknown_leave = is_unknown_leave
       @scheduled_work_hours = scheduled_work_hours
-      @allow_overtime = allow_overtime
+      @is_allow_overtime = is_allow_overtime
       @shift = shift
+    end
+
+    def allow_overtime?
+      @is_allow_overtime
     end
 
     def work_in?

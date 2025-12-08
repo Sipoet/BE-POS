@@ -17,7 +17,7 @@ class Payroll::Formula::OvertimeHourCalculator < Payroll::Formula::ApplicationCa
       }
     end
     attendance_summary.details.each do |detail|
-      next unless detail.allow_overtime
+      next unless detail.allow_overtime?
 
       min_work_hour = min_work_calc.call(detail)
       if detail.work_hours >= min_work_hour + offset

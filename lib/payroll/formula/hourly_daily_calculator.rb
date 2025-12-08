@@ -36,7 +36,11 @@ class Payroll::Formula::HourlyDailyCalculator < Payroll::Formula::ApplicationCal
       next if detail.work_hours.zero?
 
       min_work = min_work_calc.call(detail)
-      work_hours = [detail.work_hours, min_work].min.to_d
+      work_hours = if detail.allow_overtime?
+                     detail.work_hours.to_d
+                   else
+                     [detail.work_hours, min_work].min.to_d
+                   end
       work_days += (work_hours / min_work)
       Rails.logger.debug "#{@employee.name} #{detail.date} kerja #{work_hours} jam. min work #{min_work} total work days #{work_days}"
     end
