@@ -52,6 +52,13 @@ columns:
       path: 'brands'
       model_name: brand
       attribute_key: name
+  blacklist_item_code:
+    type: model
+    client_width: 180
+    input_options:
+      path: 'items'
+      model_name: 'item'
+      attribute_key: 'code'
   customer_group:
     type: model
     client_width: 180
