@@ -59,6 +59,8 @@ columns:
       path: 'items'
       model_name: 'item'
       attribute_key: 'code'
+    can_filter: false
+    can_sort: false
   customer_group:
     type: model
     client_width: 180
