@@ -54,7 +54,7 @@ class Discount::UpdateService < ApplicationService
     permitted_params = params.required(:data)
                              .required(:relationships)
                              .required(:discount_items)
-                             .permit(data: [:type, :id, { attributes: [:item_code] }])
+                             .permit(data: [:type, :id, { attributes: %i[item_code is_exclude] }])
     return if permitted_params.blank? || permitted_params[:data].blank?
 
     discount_items = discount.discount_items.index_by(&:id)
