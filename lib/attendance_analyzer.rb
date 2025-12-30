@@ -125,7 +125,9 @@ class AttendanceAnalyzer
   def add_leave(result, date)
     employee_leave = @employee_leaves[date]
     Rails.logger.debug "======================= Date: #{date} emp leave #{employee_leave}"
-    if employee_leave.blank?
+    if employee_holiday?(date)
+      result.add_paid_leave(date)
+    elsif employee_leave.blank?
       Rails.logger.debug "===#{@employee.name} ALPHA tgl #{date}"
       result.add_unknown_leave(date)
     elsif employee_leave.sick_leave?
@@ -139,10 +141,8 @@ class AttendanceAnalyzer
     return false unless employee_still_working?(date)
     return true if @changed_employee_leaves[date].present?
 
-    if @holidays[date].present?
-      is_holiday = logic_holiday(@holidays[date])
-      return false if is_holiday
-    end
+    return false if employee_holiday?(date)
+
     day_offs = @employee_day_offs[date.cwday] || []
     day_offs.each do |employee_day_off|
       return false if employee_day_off.all_week?
@@ -157,7 +157,9 @@ class AttendanceAnalyzer
     @work_schedules[date.cwday].present?
   end
 
-  def logic_holiday(holiday)
+  def employee_holiday?(date)
+    holiday = @holidays[date]
+    return false if holiday.nil?
     return true if holiday.religion.nil?
 
     holiday.religion == @employee.religion
@@ -231,6 +233,13 @@ class AttendanceAnalyzer
       )
     end
 
+    def add_paid_leave(date)
+      @details << ResultDetail.new(
+        date: date,
+        is_paid_leave: true
+      )
+    end
+
     def add_unknown_leave(date)
       @details << ResultDetail.new(
         date: date,
@@ -248,6 +257,10 @@ class AttendanceAnalyzer
 
     def sick_leave
       details.count(&:is_sick)
+    end
+
+    def paid_leave
+      details.count(&:is_paid_leave)
     end
 
     def late
@@ -274,11 +287,11 @@ class AttendanceAnalyzer
   class ResultDetail
     attr_accessor :date, :is_worked, :is_late, :work_hours,
                   :is_sick, :is_known_leave, :is_unknown_leave,
-                  :scheduled_work_hours, :shift
+                  :scheduled_work_hours, :shift, :is_paid_leave
     attr_writer :is_allow_overtime
 
     def initialize(date:, is_late: false, is_allow_overtime: false, work_hours: 0, scheduled_work_hours: 0, is_sick: false,
-                   is_known_leave: false, is_unknown_leave: false, shift: 1)
+                   is_known_leave: false, is_unknown_leave: false, shift: 1, is_paid_leave: false)
       @date = date
       @is_late = is_late
       @work_hours = work_hours
@@ -288,6 +301,7 @@ class AttendanceAnalyzer
       @scheduled_work_hours = scheduled_work_hours
       @is_allow_overtime = is_allow_overtime
       @shift = shift
+      @is_paid_leave = is_paid_leave
     end
 
     def allow_overtime?

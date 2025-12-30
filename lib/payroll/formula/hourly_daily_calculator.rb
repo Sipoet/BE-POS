@@ -48,7 +48,7 @@ class Payroll::Formula::HourlyDailyCalculator < Payroll::Formula::ApplicationCal
   end
 
   def fraction_of(separator)
-    result = attendance_summary.total_full_work_days.to_d
+    result = attendance_summary.total_full_work_days.to_d + attendance_summary.paid_leave
     if include_sick_day?
       max_leave_covered = Setting.get('sick_leave_covered_day') || 31
       result += [attendance_summary.sick_leave, max_leave_covered].min

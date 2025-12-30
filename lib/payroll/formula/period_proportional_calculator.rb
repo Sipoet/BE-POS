@@ -6,7 +6,7 @@ class Payroll::Formula::PeriodProportionalCalculator < Payroll::Formula::Applica
   # variable3 = include sick day? 1 is true, anything else is false
 
   def calculate
-    fraction = attendance_summary.work_days.to_d
+    fraction = attendance_summary.work_days.to_d + attendance_summary.paid_leave
     if include_sick_day?
       max_leave_covered = Setting.get('sick_leave_covered_day') || 31
       fraction += [attendance_summary.sick_leave, max_leave_covered].min
