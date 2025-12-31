@@ -87,6 +87,8 @@ class AttendanceAnalyzer
         is_late: is_late,
         allow_overtime: allow_overtime
       )
+    elsif employee_holiday?(date)
+      result.add_paid_leave(date)
     elsif is_scheduled_work
       add_leave(result, date)
     end
@@ -125,9 +127,7 @@ class AttendanceAnalyzer
   def add_leave(result, date)
     employee_leave = @employee_leaves[date]
     Rails.logger.debug "======================= Date: #{date} emp leave #{employee_leave}"
-    if employee_holiday?(date)
-      result.add_paid_leave(date)
-    elsif employee_leave.blank?
+    if employee_leave.blank?
       Rails.logger.debug "===#{@employee.name} ALPHA tgl #{date}"
       result.add_unknown_leave(date)
     elsif employee_leave.sick_leave?
