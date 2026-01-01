@@ -6,6 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 $HOST = ENV['HOST'].split(' ')
+$REDIS_HOST = ENV['REDIS_HOST']
 $APP_EMAIL = ENV['APP_EMAIL']
 $APP_EMAIL_PASSWORD = ENV['APP_EMAIL_PASSWORD']
 module Myapp

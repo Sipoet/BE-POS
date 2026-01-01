@@ -1,4 +1,3 @@
-$REDIS_HOST = ENV['REDIS_HOST']
 Sidekiq.configure_server do |config|
   config.redis = { url: "redis://#{$REDIS_HOST}:6379/0" }
   config.logger.level = Rails.logger.level

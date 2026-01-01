@@ -38,6 +38,20 @@ RSpec.describe AttendanceAnalyzer, type: :model do
       end
     end
 
+    context 'paid leave' do
+      it 'should identify only in range' do
+        Holiday.create!(date: Date.new(2025, 9, 29), description: 'Holiday')
+        Holiday.create!(date: Date.new(2025, 7, 29), description: 'Holiday')
+        result = default_params_analyze
+        expect(result.paid_leave).to eq(1)
+      end
+
+      it 'should identify no paid leave' do
+        result = default_params_analyze
+        expect(result.paid_leave).to eq(0)
+      end
+    end
+
     context 'unknown leave' do
       it 'should identify only in range' do
         (start_date..end_date).each do |date|
@@ -55,6 +69,16 @@ RSpec.describe AttendanceAnalyzer, type: :model do
         end
         EmployeeLeave.create!(employee: employee, leave_type: :unpaid_leave, date: leave_date)
         EmployeeLeave.create!(employee: employee, leave_type: :sick_leave, date: sick_date)
+        result = default_params_analyze
+        expect(result.unknown_absence).to eq(0)
+      end
+
+      it 'shouldnt describe unknown leave if day off' do
+        edoff = employee.employee_day_offs.build(active_week: :odd_week, day_of_week: 1)
+        edoff.save!
+        (start_date..end_date).each do |date|
+          create_default_attendance(date) unless date.cweek.odd? && date.cwday == 1
+        end
         result = default_params_analyze
         expect(result.unknown_absence).to eq(0)
       end
@@ -83,7 +107,7 @@ RSpec.describe AttendanceAnalyzer, type: :model do
     end
 
     context 'total employee work days' do
-      it 'sohuld be 28 if day off every 2 week' do
+      it 'sohuld not count if employee absence/leave' do
         sick_date = Date.new(2025, 9, 30)
         leave_date = Date.new(2025, 9, 29)
         (start_date..end_date).each do |date|
@@ -93,6 +117,27 @@ RSpec.describe AttendanceAnalyzer, type: :model do
         EmployeeLeave.create!(employee: employee, leave_type: :sick_leave, date: sick_date)
         result = default_params_analyze
         expect(result.work_days).to eq(28)
+      end
+
+      it 'sohuld be 28 if day off every 2 week on total day 30' do
+        edoff = employee.employee_day_offs.build(active_week: :odd_week, day_of_week: 1)
+        edoff.save!
+        (start_date..end_date).each do |date|
+          create_default_attendance(date) unless date.cweek.odd? && date.cwday == 1
+        end
+
+        result = default_params_analyze
+        expect(result.work_days).to eq(28)
+      end
+
+      it 'should count even on day off' do
+        edoff = employee.employee_day_offs.build(active_week: :odd_week, day_of_week: 1)
+        edoff.save!
+        (start_date..end_date).each do |date|
+          create_default_attendance(date)
+        end
+        result = default_params_analyze
+        expect(result.work_days).to eq(30)
       end
 
       it 'sohuld be 30' do

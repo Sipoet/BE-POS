@@ -96,7 +96,7 @@ RSpec.configure do |config|
     DatabaseCleaner[:active_record].strategy = :transaction
     DatabaseCleaner[:active_record].clean_with(:truncation)
     DatabaseCleaner[:redis].strategy = :deletion
-    DatabaseCleaner[:redis].db = 'redis://redis:6379/1'
+    DatabaseCleaner[:redis].db = "redis://#{$REDIS_HOST}/1"
   end
 
   config.around(:each) do |example|
