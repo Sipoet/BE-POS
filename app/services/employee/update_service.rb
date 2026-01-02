@@ -1,4 +1,5 @@
 class Employee::UpdateService < ApplicationService
+  include NestedAttributesMatchup
   def execute_service
     permitted_column = permitted_column_names(Employee)
     if permitted_column == ALL_COLUMN
@@ -45,17 +46,7 @@ class Employee::UpdateService < ApplicationService
                                      }])
     return if permitted_params.blank? || permitted_params[:data].blank?
 
-    work_schedules = employee.work_schedules.index_by(&:id)
-    permitted_params[:data].each do |line_params|
-      work_schedule = work_schedules[line_params[:id].to_i]
-      if work_schedule.present?
-        work_schedule.attributes = line_params[:attributes]
-        work_schedules.delete(line_params[:id])
-      else
-        employee.work_schedules.build(line_params[:attributes])
-      end
-    end
-    work_schedules.values.map(&:mark_for_destruction)
+    edit_attributes(permitted_params[:data], employee.work_schedules)
   end
 
   def build_day_offs(employee)
@@ -63,18 +54,9 @@ class Employee::UpdateService < ApplicationService
                              .required(:relationships)
                              .required(:employee_day_offs)
                              .permit(data: [:type, :id, { attributes: %i[day_of_week active_week] }])
+
     return if permitted_params.blank? || permitted_params[:data].blank?
 
-    employee_day_offs = employee.employee_day_offs.index_by(&:id)
-    permitted_params[:data].each do |line_params|
-      employee_day_off = employee_day_offs[line_params[:id].to_i]
-      if employee_day_off.present?
-        employee_day_off.attributes = line_params[:attributes]
-        employee_day_offs.delete(line_params[:id])
-      else
-        employee.employee_day_offs.build(line_params[:attributes])
-      end
-    end
-    employee_day_offs.values.map(&:mark_for_destruction)
+    edit_attributes(permitted_params[:data], employee.employee_day_offs)
   end
 end

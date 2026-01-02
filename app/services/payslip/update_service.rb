@@ -1,4 +1,5 @@
 class Payslip::UpdateService < ApplicationService
+  include NestedAttributesMatchup
   def execute_service
     payslip = Payslip.find(params[:id])
     raise RecordNotFound.new(params[:id], Payslip.model_name.human) if payslip.nil?
@@ -36,17 +37,7 @@ class Payslip::UpdateService < ApplicationService
                                                                          amount] }])
     return if permitted_params.blank? || permitted_params[:data].blank?
 
-    payslip_lines = payslip.payslip_lines.index_by(&:id)
-    permitted_params[:data].each do |line_params|
-      payslip_line = payslip_lines[line_params[:id]]
-      if payslip_line.present?
-        payslip_line.attributes = line_params[:attributes]
-        payslip_lines.delete(line_params[:id])
-      else
-        payslip.payslip_lines.build(line_params[:attributes])
-      end
-    end
-    payslip_lines.values.map(&:mark_for_destruction)
+    edit_attributes(permitted_params[:data], payslip.payslip_lines)
   end
 
   def update_attribute(payslip)

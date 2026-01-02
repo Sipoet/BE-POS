@@ -1,4 +1,5 @@
 class Role::UpdateService < ApplicationService
+  include NestedAttributesMatchup
   def execute_service
     role = Role.find(params[:id])
     raise RecordNotFound.new(params[:id], Role.model_name.human) if role.nil?
@@ -64,17 +65,7 @@ class Role::UpdateService < ApplicationService
                                                                          is_flexible day_of_week] }])
     return if permitted_params.blank? || permitted_params[:data].blank?
 
-    role_work_schedules = role.role_work_schedules.index_by(&:id)
-    permitted_params[:data].each do |line_params|
-      work_schedule = role_work_schedules[line_params[:id].to_i]
-      if work_schedule.present?
-        work_schedule.attributes = line_params[:attributes]
-        role_work_schedules.delete(line_params[:id])
-      else
-        role.role_work_schedules.build(line_params[:attributes])
-      end
-    end
-    role_work_schedules.values.map(&:mark_for_destruction)
+    edit_attributes(permitted_params[:data], role.role_work_schedules)
   end
 
   def update_column_authorizes(role)

@@ -1,5 +1,6 @@
 require 'sidekiq/api'
 class Discount::UpdateService < ApplicationService
+  include NestedAttributesMatchup
   def execute_service
     permitted_params = @params.required(:data)
                               .required(:attributes)
@@ -57,17 +58,7 @@ class Discount::UpdateService < ApplicationService
                              .permit(data: [:type, :id, { attributes: %i[item_code is_exclude] }])
     return if permitted_params.blank? || permitted_params[:data].blank?
 
-    discount_items = discount.discount_items.index_by(&:id)
-    permitted_params[:data].each do |line_params|
-      discount_item = discount_items[line_params[:id].to_i]
-      if discount_item.present?
-        discount_item.attributes = line_params[:attributes]
-        discount_items.delete(line_params[:id])
-      else
-        discount.discount_items.build(line_params[:attributes])
-      end
-    end
-    discount_items.values.map(&:mark_for_destruction)
+    edit_attributes(permitted_params[:data], discount.discount_items)
   end
 
   def build_discount_item_types(discount)
@@ -77,17 +68,7 @@ class Discount::UpdateService < ApplicationService
                              .permit(data: [:type, :id, { attributes: %i[item_type_name is_exclude] }])
     return if permitted_params.blank? || permitted_params[:data].blank?
 
-    discount_item_types = discount.discount_item_types.index_by(&:id)
-    permitted_params[:data].each do |line_params|
-      discount_item_type = discount_item_types[line_params[:id].to_i]
-      if discount_item_type.present?
-        discount_item_type.attributes = line_params[:attributes]
-        discount_item_types.delete(line_params[:id])
-      else
-        discount.discount_item_types.build(line_params[:attributes])
-      end
-    end
-    discount_item_types.values.map(&:mark_for_destruction)
+    edit_attributes(permitted_params[:data], discount.discount_item_types)
   end
 
   def build_discount_brands(discount)
@@ -98,16 +79,7 @@ class Discount::UpdateService < ApplicationService
     return if permitted_params.blank? || permitted_params[:data].blank?
 
     discount_brands = discount.discount_brands.index_by(&:id)
-    permitted_params[:data].each do |line_params|
-      discount_brand = discount_brands[line_params[:id].to_i]
-      if discount_brand.present?
-        discount_brand.attributes = line_params[:attributes]
-        discount_brands.delete(line_params[:id])
-      else
-        discount.discount_brands.build(line_params[:attributes])
-      end
-    end
-    discount_brands.values.map(&:mark_for_destruction)
+    edit_attributes(permitted_params[:data], discount.discount_brands)
   end
 
   def build_discount_suppliers(discount)
@@ -117,16 +89,6 @@ class Discount::UpdateService < ApplicationService
                              .permit(data: [:type, :id, { attributes: %i[supplier_code is_exclude] }])
     return if permitted_params.blank? || permitted_params[:data].blank?
 
-    discount_suppliers = discount.discount_suppliers.index_by(&:id)
-    permitted_params[:data].each do |line_params|
-      discount_supplier = discount_suppliers[line_params[:id].to_i]
-      if discount_supplier.present?
-        discount_supplier.attributes = line_params[:attributes]
-        discount_suppliers.delete(line_params[:id])
-      else
-        discount.discount_suppliers.build(line_params[:attributes])
-      end
-    end
-    discount_suppliers.values.map(&:mark_for_destruction)
+    edit_attributes(permitted_params[:data], discount.discount_suppliers)
   end
 end
