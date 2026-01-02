@@ -78,7 +78,6 @@ class Discount::UpdateService < ApplicationService
                              .permit(data: [:type, :id, { attributes: %i[brand_name is_exclude] }])
     return if permitted_params.blank? || permitted_params[:data].blank?
 
-    discount_brands = discount.discount_brands.index_by(&:id)
     edit_attributes(permitted_params[:data], discount.discount_brands)
   end
 
