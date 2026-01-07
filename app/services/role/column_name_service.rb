@@ -29,11 +29,12 @@ class Role::ColumnNameService < ApplicationService
   def find_table_columns
     return [] if @table_name.blank?
 
-    klass = @table_name.classify.constantize
+    klass = @table_name.classify.try(:constantize)
     table_definitions = Datatable::DefinitionExtractor.new(klass)
     column_names = table_definitions.column_names
     return column_names if @search_text.blank?
 
-    column_names.select { |column_name| column_name.to_s.include?(@search_text) }
+    downcase_text = @search_text.downcase
+    column_names.select { |column_name| column_name.to_s.downcase.include?(downcase_text) }
   end
 end

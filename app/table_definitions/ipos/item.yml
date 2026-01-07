@@ -9,6 +9,7 @@ columns:
     filter_key: kodeitem
     can_filter: true
     can_sort: true
+    can_edit: false
   name:
     type: string
     excel_width: 25
@@ -53,6 +54,13 @@ columns:
       path: brands
       model_name: 'brand'
       attribute_key: name
+  description:
+    type: string
+    excel_width: 25
+    client_width: 200
+    filter_key: keterangan
+    can_filter: true
+    can_sort: false
   uom:
     type: string
     excel_width: 25
@@ -62,6 +70,7 @@ columns:
     attribute_key: satuan
     can_filter: true
     can_sort: true
+    can_edit: false
   cogs:
     type: money
     excel_width: 25

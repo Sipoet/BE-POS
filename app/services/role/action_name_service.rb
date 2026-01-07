@@ -31,10 +31,12 @@ class Role::ActionNameService < ApplicationService
 
     actions = []
     Rails.application.routes.routes.each do |route|
-      actions << route.defaults[:action] if route.defaults[:controller] == @controller_name
+      actions << route.defaults[:action].strip.downcase if route.defaults[:controller] == @controller_name
     end
+    actions.uniq!
     return actions if @search_text.blank?
 
-    actions.select { |action| action.include?(@search_text) }
+    downcased_text = @search_text.downcase
+    actions.select { |action| action.include?(downcased_text) }
   end
 end
