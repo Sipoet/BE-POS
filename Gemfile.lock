@@ -301,7 +301,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.3.1)
-    rbs (3.10.0)
+    rbs (3.10.2)
       logger
     rdoc (6.15.1)
       erb
@@ -395,7 +395,7 @@ GEM
       fugit (~> 1.8)
       globalid (>= 1.0.1)
       sidekiq (>= 6)
-    solargraph (0.58.0)
+    solargraph (0.58.1)
       ast (~> 2.4.3)
       backport (~> 1.2)
       benchmark (~> 0.4)
@@ -420,7 +420,7 @@ GEM
       yard-solargraph (~> 0.1)
     spring (4.4.0)
     stringio (3.1.8)
-    thor (1.4.0)
+    thor (1.5.0)
     tilt (2.6.1)
     timecop (0.9.10)
     timeout (0.4.4)

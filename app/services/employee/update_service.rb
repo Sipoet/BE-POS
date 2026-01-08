@@ -1,14 +1,12 @@
 class Employee::UpdateService < ApplicationService
   include NestedAttributesMatchup
   def execute_service
-    permitted_column = permitted_column_names(Employee)
-    if permitted_column == ALL_COLUMN
-      permitted_column = %i[code name role_id start_working_date
-                            end_working_date description payroll_id user_code
-                            id_number contact_number address bank_register_name
-                            marital_status tax_number religion email
-                            bank bank_account status image_code]
-    end
+    permitted_column = permitted_column_names(Employee, %i[code name role_id start_working_date
+                                                           end_working_date description payroll_id user_code
+                                                           id_number contact_number address bank_register_name
+                                                           marital_status tax_number religion email
+                                                           bank bank_account status image_code])
+
     permitted_params = @params.required(:data)
                               .required(:attributes)
                               .permit(*permitted_column)

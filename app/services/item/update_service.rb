@@ -24,13 +24,15 @@ class Item::UpdateService < ApplicationService
   def update_attribute!(item)
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Item)
     @fields = { item: @table_definitions.column_names }
-    permitted_column = permitted_column_names(Ipos::Item)
-    if permitted_column == ALL_COLUMN
-      permitted_column = %i[code name description cogs sell_price supplier_code item_type_name brand_name]
-    end
+    permitted_columns = permitted_column_names(Ipos::Item,
+                                               %i[name description cogs sell_price supplier_code item_type_name
+                                                  brand_name])
+    @fields[:item] << 'supplier' if permitted_columns.include?(:supplier_code)
+    @fields[:item] << 'brand' if permitted_columns.include?(:brand_name)
+    @fields[:item] << 'item_type' if permitted_columns.include?(:item_type_name)
     permitted_params = params.required(:data)
                              .required(:attributes)
-                             .permit(*permitted_column)
+                             .permit(*permitted_columns)
     item.update!(permitted_params)
   end
 end

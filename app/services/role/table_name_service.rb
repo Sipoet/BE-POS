@@ -26,9 +26,10 @@ class Role::TableNameService < ApplicationService
 
       next if %w[application_record application_model].include?(table_name)
 
-      klass = "Ipos::#{table_name.classify}".constantize
+      table_name = "Ipos::#{table_name.classify}"
+      klass = table_name.constantize
       humanize_name = klass.model_name.human
-      table_names << Result.new(id: "Ipos::#{table_name.classify}", name: humanize_name) if include_table?(
+      table_names << Result.new(id: table_name, name: humanize_name) if include_table?(
         @search_text, humanize_name
       )
     end

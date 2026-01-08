@@ -5,8 +5,6 @@ columns:
     type: string
     excel_width: 25
     client_width: 200
-    sort_key: kodeitem
-    filter_key: kodeitem
     can_filter: true
     can_sort: true
     can_edit: false
@@ -14,40 +12,32 @@ columns:
     type: string
     excel_width: 25
     client_width: 200
-    sort_key: namaitem
-    filter_key: namaitem
     can_filter: true
     can_sort: true
-  supplier:
+  supplier_code:
     type: model
     excel_width: 25
     client_width: 200
-    sort_key: supplier1
-    filter_key: supplier1
     can_filter: true
     can_sort: true
     input_options:
       path: suppliers
       model_name: 'supplier'
       attribute_key: name
-  item_type:
+  item_type_name:
     type: model
     excel_width: 25
     client_width: 200
-    sort_key: jenis
-    filter_key: jenis
     can_filter: true
     can_sort: true
     input_options:
       path: item_types
       model_name: 'item_type'
       attribute_key: name
-  brand:
+  brand_name:
     type: model
     excel_width: 25
     client_width: 200
-    sort_key: merek
-    filter_key: merek
     can_filter: true
     can_sort: true
     input_options:
@@ -58,7 +48,6 @@ columns:
     type: string
     excel_width: 25
     client_width: 200
-    filter_key: keterangan
     can_filter: true
     can_sort: false
   uom:

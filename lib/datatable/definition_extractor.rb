@@ -26,7 +26,7 @@ class Datatable::DefinitionExtractor
   end
 
   def allowed_edit_columns
-    @column_definitions.values.select(&:can_edit).map(&:edit_key)
+    @column_definitions.values.select(&:can_edit).map { |column| column.edit_key&.to_sym }
   end
 
   private
