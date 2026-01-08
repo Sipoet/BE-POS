@@ -15,5 +15,5 @@ class Ipos::ItemSerializer
   attribute :updated_at do |object|
     ipos_fix_date_timezone(object.updated_at)
   end
-  cache_options store: Rails.cache, namespace: 'item-serializer', expires_in: 1.hour
+  cache_options store: Rails.cache, namespace: 'serializer', expires_in: 1.hour
 end

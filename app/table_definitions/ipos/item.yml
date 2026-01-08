@@ -5,6 +5,7 @@ columns:
     type: string
     excel_width: 25
     client_width: 200
+    filter_key: 'kodeitem'
     can_filter: true
     can_sort: true
     can_edit: false
@@ -12,6 +13,7 @@ columns:
     type: string
     excel_width: 25
     client_width: 200
+    filter_key: 'namaitem'
     can_filter: true
     can_sort: true
   supplier_code:
@@ -48,6 +50,7 @@ columns:
     type: string
     excel_width: 25
     client_width: 200
+    filter_key: keterangan
     can_filter: true
     can_sort: false
   uom:

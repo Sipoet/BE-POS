@@ -17,4 +17,12 @@ class User < ApplicationRecord
   def role_name
     role&.name
   end
+
+  after_update do |record|
+    Cache.delete("serializer:user/#{record.id}")
+  end
+
+  after_destroy do |record|
+    Cache.delete("serializer:user/#{record.id}")
+  end
 end
