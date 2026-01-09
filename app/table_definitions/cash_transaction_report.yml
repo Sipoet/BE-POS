@@ -8,6 +8,7 @@ columns:
     excel_width: 22
     client_width: 180
     type: model
+    class_name: 'Ipos::Account'
     input_options:
       path: 'accounts'
       model_name: account
@@ -30,6 +31,7 @@ columns:
     excel_width: 22
     client_width: 180
     type: model
+    class_name: 'Ipos::Account'
     input_options:
       path: 'accounts'
       model_name: account

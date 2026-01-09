@@ -3,6 +3,10 @@ class ColumnAuthorize < ApplicationRecord
   validates :column, presence: true
   validate :valid_column
 
+  scope :columns_by_role, lambda { |role_id, table_name|
+    where(role_id: role_id, table: table_name).pluck(:column)
+  }
+
   belongs_to :role
 
   private

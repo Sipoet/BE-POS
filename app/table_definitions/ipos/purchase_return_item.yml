@@ -6,6 +6,7 @@ columns:
     excel_width: 25
     client_width: 200
     sort_key: kodeitem
+    class_name: 'Ipos::Item'
     input_options:
       path: items
       attribute_key: name
@@ -121,6 +122,7 @@ columns:
     can_sort: true
   supplier_code:
     type: model
+    class_name: 'Ipos::Supplier'
     excel_width: 25
     client_width: 200
     sort_key: item.supplier1
@@ -133,6 +135,7 @@ columns:
     can_sort: true
   brand_name:
     type: model
+    class_name: 'Ipos::Brand'
     excel_width: 25
     client_width: 200
     sort_key: item.merek
@@ -145,6 +148,7 @@ columns:
     can_sort: true
   item_type_name:
     type: model
+    class_name: 'Ipos::ItemType'
     excel_width: 25
     client_width: 200
     sort_key: item.jenis

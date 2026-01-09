@@ -14,6 +14,7 @@ columns:
   kodesupel:
     name: kodesupel
     type: model
+    class_name: 'Ipos::Supplier'
     excel_width: 25
     client_width: 200
     path: suppliers

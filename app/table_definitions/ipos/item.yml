@@ -18,26 +18,32 @@ columns:
     can_sort: true
   supplier_code:
     type: model
+    alias: supplier
     excel_width: 25
     client_width: 200
     can_filter: true
     can_sort: true
+    class_name: 'Ipos::Supplier'
     input_options:
       path: suppliers
       model_name: 'supplier'
       attribute_key: name
   item_type_name:
     type: model
+    alias: item_type
     excel_width: 25
     client_width: 200
     can_filter: true
     can_sort: true
+    class_name: 'Ipos::ItemType'
     input_options:
       path: item_types
       model_name: 'item_type'
       attribute_key: name
   brand_name:
     type: model
+    alias: brand
+    class_name: 'Ipos::Brand'
     excel_width: 25
     client_width: 200
     can_filter: true

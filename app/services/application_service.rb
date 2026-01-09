@@ -53,16 +53,65 @@ class ApplicationService
     ActiveRecord::Base.connection.execute(query)
   end
 
-  def permitted_column_names(record_class, whitelist_columns)
-    return whitelist_columns if current_user.role.name == Role::SUPERADMIN
+  def superadmin?
+    current_user.role_id == Role.superadmin_id
+  end
 
-    table_definitions = Datatable::DefinitionExtractor.new(record_class)
-    column_names = ColumnAuthorize.where(role_id: current_user.role_id, table: record_class.to_s)
-                                  .pluck(:column)
-                                  .map { |column_name| table_definitions.column_of(column_name).try(:filter_key).try(:to_sym) }
-                                  .compact
-    Rails.logger.debug "===whitelist_columns #{whitelist_columns} column_names #{column_names}"
+  def permitted_edit_columns(record_class, whitelist_columns)
+    table_definition = Datatable::DefinitionExtractor.new(record_class)
+    return whitelist_columns if superadmin?
+
+    column_names = ColumnAuthorize.columns_by_role(current_user.role_id, record_class.to_s)
+                                  .map do |column_name|
+                                    column_definition = table_definition.column_of(column_name)
+                                    if column_definition.blank? || !column_definition.can_edit
+                                      nil
+                                    else
+                                      column_definition.name.try(:to_sym)
+                                    end
+                                  end
+    column_names.compact!
+    Rails.logger.debug "===EDIT COLUMN=== whitelist_columns #{whitelist_columns} column_names #{column_names}"
     whitelist_columns & column_names
+  end
+
+  def permitted_column_names(record_class, whitelist_columns)
+    table_definition = Datatable::DefinitionExtractor.new(record_class)
+    whitelist_columns = table_definition.column_names if whitelist_columns.blank?
+    return whitelist_columns if superadmin?
+
+    column_names = []
+    ColumnAuthorize.columns_by_role(current_user.role_id, record_class.to_s)
+                   .each do |column_name|
+                     column_definition = table_definition.column_of(column_name)
+                     next if column_definition.nil?
+
+                     column_names << column_definition.name.to_sym
+                     column_names << column_definition.alias_name.to_sym if column_definition.alias_name.present?
+    end
+
+    Rails.logger.debug "===#{record_class}===whitelist_columns #{whitelist_columns} column_names #{column_names}"
+    whitelist_columns & column_names
+  end
+
+  def filter_authorize_fields(record_class:, fields: {})
+    if superadmin?
+      return nil if fields.values.map(&:empty?).all?
+
+      return fields
+    end
+
+    authorized_fields = {}
+    table_definition = Datatable::DefinitionExtractor.new(record_class)
+    fields.each do |key, values|
+      column_definition = table_definition.column_of(key)
+      authorized_fields[key] = if column_definition.present?
+                                 permitted_column_names(column_definition.relation_class, values)
+                               else
+                                 permitted_column_names(record_class, values)
+                               end
+    end
+    authorized_fields
   end
 
   class RecordNotFound < StandardError

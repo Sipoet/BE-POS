@@ -11,10 +11,10 @@ class Payslip::ShowService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Payslip)
-    allowed_fields = ['payslip', 'payroll', 'employee', 'payslip_lines', { payslip_lines: [:payroll_type] }]
-    permitted_params = params.permit(:include, fields: allowed_fields)
+    allowed_includes = ['payslip', 'payroll', 'employee', 'payslip_lines', { payslip_lines: [:payroll_type] }]
+    permitted_params = params.permit(:include, fields: allowed_includes)
     if permitted_params[:fields].present?
-      @fields = allowed_fields.each_with_object({}) do |key, fields|
+      @fields = allowed_includes.each_with_object({}) do |key, fields|
         if permitted_params[:fields][key].present?
           fields[key] = permitted_params[:fields][key].split(',') & allowed_columns
         end

@@ -23,9 +23,9 @@ class PayrollType::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(PayrollType)
-    allowed_fields = [:payroll_type]
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
+    allowed_includes = [:payroll_type]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
                                       table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
@@ -33,7 +33,7 @@ class PayrollType::IndexService < ApplicationService
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: PayrollType)
   end
 
   def find_payroll_types

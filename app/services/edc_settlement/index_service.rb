@@ -22,9 +22,9 @@ class EdcSettlement::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(EdcSettlement)
-    allowed_fields = %i[edc_settlement payment_provider payment_type cashier_session]
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
+    allowed_includes = %i[edc_settlement payment_provider payment_type cashier_session]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
                                       table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
@@ -32,7 +32,7 @@ class EdcSettlement::IndexService < ApplicationService
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: EdcSettlement)
   end
 
   def find_edc_settlements

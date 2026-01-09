@@ -3,19 +3,19 @@ module JsonApiDeserializer
   class TableIndex
     FILTER_OPERATORS = %i[eq not lt lte gt gte btw like].freeze
 
-    def initialize(params, allowed_fields, table_definitions)
+    def initialize(params, allowed_includes, table_definitions)
       allowed_columns = table_definitions.column_names
-      filter_keys = allowed_columns.map { |name| { name => FILTER_OPERATORS } }
+      filter_keys = table_definitions.allowed_filter_columns.map { |name| { name => FILTER_OPERATORS } }
       @params = params.permit(
         :search_text, :include, :sort,
-        fields: allowed_fields,
+        fields: allowed_includes,
         filter: filter_keys,
         page: %i[page limit]
       )
       Rails.logger.debug "filter key: #{@params[:filter]}"
       @table_definitions = table_definitions
       @allowed_columns = allowed_columns.index_by(&:to_sym)
-      @allowed_fields = allowed_fields.map(&:to_s)
+      @allowed_includes = allowed_includes.map(&:to_s)
       @param_filter = allowed_columns.present? ? @params[:filter] : params[:filter]
     end
 
@@ -27,7 +27,7 @@ module JsonApiDeserializer
       result.sort = deserialize_sort(column_hash)
       result.page, result.limit = deserialize_pagination
       result.fields = deserialize_field
-      result.included = deserialize_included & @allowed_fields
+      result.included = deserialize_included & @allowed_includes
       result.query_included = deserialize_query_included
       result
     end
@@ -91,12 +91,11 @@ module JsonApiDeserializer
     end
 
     def deserialize_field
-      return nil if @params[:field].blank?
+      field = Hash[@allowed_includes.collect { |i| [i, []] }]
+      return field if @params[:field].blank?
 
-      field = {}
       @params[:field].to_h.each do |key, value|
-        puts "======|======#{value}"
-        field[key] = value.split(',')
+        field[key] = value.split(',').map(&:to_sym)
       end
       field
     end
@@ -190,8 +189,8 @@ module JsonApiDeserializer
   end
 
   included do
-    def dezerialize_table_params(params, allowed_fields: [], table_definitions: [])
-      TableIndex.new(params, allowed_fields, table_definitions)
+    def deserialize_table_params(params, allowed_includes: [], table_definitions: [])
+      TableIndex.new(params, allowed_includes, table_definitions)
                 .deserialize
     end
   end

@@ -34,9 +34,9 @@ class Item::WithDiscountService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Item)
-    allowed_fields = %i[item discount]
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
+    allowed_includes = %i[item discount]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
                                       table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20

@@ -23,9 +23,9 @@ class PurchaseOrder::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::PurchaseOrder)
-    allowed_fields = %i[purchase_order purchase_order_items supplier]
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
+    allowed_includes = %i[purchase_order purchase_order_items supplier]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
                                       table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
@@ -34,7 +34,7 @@ class PurchaseOrder::IndexService < ApplicationService
     @included = result.included
     @query_included = result.query_included
     @filters = result.filters
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: Ipos::PurchaseOrder)
   end
 
   def find_purchase_orders

@@ -15,12 +15,13 @@ class ConsignmentIn::ShowService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Purchase)
-    allowed_fields = [:consignment_in, :purchase_items, 'purchase_items.item', :supplier, 'purchase_items.item_report']
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
+    allowed_includes = [:consignment_in, :purchase_items, 'purchase_items.item', :supplier,
+                        'purchase_items.item_report']
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
                                       table_definitions: @table_definitions)
     @included = result.included
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: Ipos::Purchase)
     @code = CGI.unescape(params[:code])
   end
 end

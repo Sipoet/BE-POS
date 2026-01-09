@@ -23,9 +23,9 @@ class Role::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Role)
-    allowed_fields = [:role]
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
+    allowed_includes = [:role]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
                                       table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
@@ -33,7 +33,7 @@ class Role::IndexService < ApplicationService
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @field = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: Role)
   end
 
   def find_roles

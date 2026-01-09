@@ -23,9 +23,9 @@ class ActivityLog::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(ActivityLog)
-    allowed_fields = %i[activity_log user]
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
+    allowed_includes = %i[activity_log user]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
                                       table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
@@ -33,7 +33,7 @@ class ActivityLog::IndexService < ApplicationService
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: ActivityLog)
   end
 
   def find_activity_logs

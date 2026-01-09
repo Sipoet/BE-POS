@@ -4,6 +4,7 @@ columns:
   customer_group_code:
     name: customer_group_code
     type: model
+    class_name: 'CustomerGroup'
     excel_width: 25
     client_width: 200
     sort_key: customer_group_code

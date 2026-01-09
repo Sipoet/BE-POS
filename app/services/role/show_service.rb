@@ -15,11 +15,11 @@ class Role::ShowService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Role)
-    allowed_fields = %i[role column_authorizes access_authorizes role_work_schedules]
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
+    allowed_includes = %i[role column_authorizes access_authorizes role_work_schedules]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
                                       table_definitions: @table_definitions)
     @included = result.included
-    @field = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: Role)
   end
 end

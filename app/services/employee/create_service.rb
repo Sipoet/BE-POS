@@ -1,6 +1,6 @@
 class Employee::CreateService < ApplicationService
   def execute_service
-    permitted_column = permitted_column_names(Employee, %i[code name role_id start_working_date
+    permitted_column = permitted_edit_columns(Employee, %i[code name role_id start_working_date
                                                            end_working_date description payroll_id religion
                                                            id_number contact_number address bank_register_name
                                                            marital_status tax_number email user_code

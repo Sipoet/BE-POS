@@ -5,6 +5,7 @@ columns:
     client_width: 180
   supplier_code:
     type: model
+    class_name: 'Ipos::Supplier'
     client_width: 180
     input_options:
       model_name: supplier
@@ -12,6 +13,7 @@ columns:
       attribute_key: 'name'
   item_type_name:
     type: model
+    class_name: 'Ipos::ItemType'
     client_width: 180
     input_options:
       path: 'item_types'
@@ -19,6 +21,7 @@ columns:
       attribute_key: 'description'
   brand_name:
     type: model
+    class_name: 'Ipos::Brand'
     client_width: 180
     input_options:
       path: 'brands'
@@ -26,6 +29,7 @@ columns:
       attribute_key: description
   item_code:
     type: model
+    class_name: 'Ipos::Item'
     client_width: 180
     input_options:
       path: 'items'
@@ -33,6 +37,7 @@ columns:
       attribute_key: 'code'
   blacklist_supplier_code:
     type: model
+    class_name: 'Ipos::Supplier'
     client_width: 180
     input_options:
       model_name: supplier
@@ -40,6 +45,7 @@ columns:
       attribute_key: 'code'
   blacklist_item_type_name:
     type: model
+    class_name: 'Ipos::ItemType'
     client_width: 180
     input_options:
       path: 'item_types'
@@ -47,6 +53,7 @@ columns:
       attribute_key: 'name'
   blacklist_brand_name:
     type: model
+    class_name: 'Ipos::Brand'
     client_width: 180
     input_options:
       path: 'brands'
@@ -54,6 +61,7 @@ columns:
       attribute_key: name
   blacklist_item_code:
     type: model
+    class_name: 'Ipos::Item'
     client_width: 180
     input_options:
       path: 'items'

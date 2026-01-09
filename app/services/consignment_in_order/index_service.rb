@@ -23,9 +23,9 @@ class ConsignmentInOrder::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::ConsignmentInOrder)
-    allowed_fields = [:consignment_in_order]
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
+    allowed_includes = [:consignment_in_order]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
                                       table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
@@ -34,7 +34,7 @@ class ConsignmentInOrder::IndexService < ApplicationService
     @included = result.included
     @query_included = result.query_included
     @filters = result.filters
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: Ipos::ConsignmentInOrder)
   end
 
   def find_consignment_in_orders

@@ -23,9 +23,9 @@ class CustomerGroupDiscount::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(CustomerGroupDiscount)
-    allowed_fields = %i[customer_group_discount customer_group]
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
+    allowed_includes = %i[customer_group_discount customer_group]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
                                       table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
@@ -33,7 +33,7 @@ class CustomerGroupDiscount::IndexService < ApplicationService
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: CustomerGroupDiscount)
   end
 
   def find_customer_group_discounts

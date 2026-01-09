@@ -47,7 +47,7 @@ class Home::SettingService < ApplicationService
       table_name = table_name.gsub(/(\w+)\.rb/, '\1')
       next if %w[application_record application_model].include?(table_name)
 
-      table_names << table_name
+      table_names << table_name.classify
     end
 
     Dir["#{Rails.root}/app/models/ipos/*.rb"].each do |path|
@@ -59,13 +59,13 @@ class Home::SettingService < ApplicationService
     end
     allowed_columns = role.column_authorizes.group_by(&:table)
     table_names.each_with_object({}) do |table_name, obj|
-      klass = table_name.classify.constantize
+      klass = table_name.constantize
       table_key = table_name.camelize(:lower)
       if role.name == Role::SUPERADMIN
         obj[table_key] = TableColumnSerializer.new(Datatable::DefinitionExtractor.new(klass).column_definitions).as_json
         next
       end
-      columns = allowed_columns[table_name]
+      columns = allowed_columns[klass.to_s]
       next if columns.blank?
 
       columns = columns.index_by(&:column)

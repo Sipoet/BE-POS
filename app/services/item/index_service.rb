@@ -9,6 +9,7 @@ class Item::IndexService < ApplicationService
       params: { include: @included },
       include: @included
     }
+    Rails.logger.debug "=====options: #{options}"
     render_json(Ipos::ItemSerializer.new(@items, options))
   end
 
@@ -22,18 +23,18 @@ class Item::IndexService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Item)
-    allowed_fields = %i[item supplier brand item_type]
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
-                                      table_definitions: @table_definitions)
+    @table_definition = Datatable::DefinitionExtractor.new(Ipos::Item)
+    allowed_includes = %i[item supplier brand item_type]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
+                                      table_definitions: @table_definition)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
     @sort = result.sort
     @included = result.included
     @filters = result.filters
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: Ipos::Item)
   end
 
   def find_items

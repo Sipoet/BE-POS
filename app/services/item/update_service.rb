@@ -24,7 +24,7 @@ class Item::UpdateService < ApplicationService
   def update_attribute!(item)
     @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Item)
     @fields = { item: @table_definitions.column_names }
-    permitted_columns = permitted_column_names(Ipos::Item,
+    permitted_columns = permitted_edit_columns(Ipos::Item,
                                                %i[name description cogs sell_price supplier_code item_type_name
                                                   brand_name])
     @fields[:item] << 'supplier' if permitted_columns.include?(:supplier_code)

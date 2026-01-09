@@ -2,7 +2,7 @@ table_name: 'tbl_ikdt'
 columns:
   kodeitem:
     type: model
-    path: 'items'
+    class_name: 'Ipos::Item'
     attribute_key: 'item.namaitem'
     client_width: 180
     input_options:
@@ -61,6 +61,7 @@ columns:
     client_width: 180
   supplier_code:
     type: model
+    class_name: 'Ipos::Supplier'
     client_width: 180
     filter_key: 'tbl_item.supplier1'
     sort_key: 'tbl_item.supplier1'
@@ -70,6 +71,7 @@ columns:
       attribute_key: code
   brand_name:
     type: model
+    class_name: 'Ipos::Brand'
     client_width: 180
     filter_key: 'tbl_item.merek'
     input_options:
@@ -78,6 +80,7 @@ columns:
       attribute_key: name
   item_type_name:
     type: model
+    class_name: 'Ipos::ItemType'
     client_width: 180
     filter_key: 'tbl_item.jenis'
     input_options:

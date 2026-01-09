@@ -4,6 +4,7 @@ columns:
   kodeitem:
     name: kodeitem
     type: model
+    class_name: 'Ipos::Item'
     excel_width: 25
     client_width: 200
     sort_key: kodeitem
@@ -104,8 +105,9 @@ columns:
     can_filter: true
     filter_key: nobaris
     can_sort: true
-  item.supplier1:
+  supplier:
     name: item.supplier1
+    class_name: 'Ipos::Supplier'
     type: model
     excel_width: 25
     client_width: 200
@@ -117,9 +119,10 @@ columns:
       path: suppliers
       model_name: 'supplier'
       attribute_key: name
-  item.merek:
+  brand:
     name: item.merek
     type: model
+    class_name: 'Ipos::Brand'
     excel_width: 25
     client_width: 200
     sort_key: item.merek
@@ -130,9 +133,10 @@ columns:
       path: brands
       model_name: 'brand'
       attribute_key: name
-  item.jenis:
+  item_type:
     name: item.jenis
     type: model
+    class_name: 'Ipos::ItemType'
     excel_width: 25
     client_width: 200
     path: item_types

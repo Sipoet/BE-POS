@@ -81,7 +81,7 @@ class CashierSession::UpdateService < ApplicationService
     return if permitted_params[:edc_settlements].blank?
 
     table_definitions = Datatable::DefinitionExtractor.new(EdcSettlement)
-    allowed_columns = table_definitions.allowed_columns
+    allowed_columns = table_definitions.allowed_edit_columns
     permitted_params = permitted_params.required(:edc_settlements)
                                        .permit(data: [:type, :id,
                                                       { attributes: allowed_columns + [:_destroy] - [:cashier_session_id] }])

@@ -4,6 +4,7 @@ columns:
     type: model
     excel_width: 22
     client_width: 180
+    class_name: 'Ipos::Supplier'
     input_options:
       path: suppliers
       model_name: supplier
@@ -12,6 +13,7 @@ columns:
     sort_key: 'supplier_code'
   purchase_code:
     type: model
+    class_name: 'Ipos::Purchase'
     excel_width: 22
     client_width: 180
     input_options:
@@ -56,6 +58,7 @@ columns:
     excel_width: 22
     client_width: 180
     type: model
+    class_name: 'Ipos::Account'
     input_options:
       path: 'accounts'
       model_name: account
@@ -68,6 +71,7 @@ columns:
     type: string
   purchase_order_code:
     type: model
+    class_name: 'Ipos::PurchaseOrder'
     excel_width: 22
     client_width: 180
     input_options:

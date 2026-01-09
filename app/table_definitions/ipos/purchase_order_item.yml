@@ -3,6 +3,7 @@ table_name: tbl_pesandt
 columns:
   kodeitem:
     type: model
+    class_name: 'Ipos::Item'
     excel_width: 25
     client_width: 200
     sort_key: kodeitem
@@ -148,6 +149,7 @@ columns:
     can_sort: true
   supplier_code:
     type: model
+    class_name: 'Ipos::Supplier'
     excel_width: 25
     client_width: 200
     sort_key: item.supplier1
@@ -160,6 +162,7 @@ columns:
     can_sort: true
   brand_name:
     type: model
+    class_name: 'Ipos::Brand'
     excel_width: 25
     client_width: 200
     sort_key: item.merek
@@ -171,6 +174,7 @@ columns:
     filter_key: items.merek
     can_sort: true
   item_type_name:
+    class_name: 'Ipos::ItemType'
     type: model
     excel_width: 25
     client_width: 200
@@ -212,6 +216,7 @@ columns:
     can_sort: true
   notransaksi:
     type: model
+    class_name: 'Ipos::PurchaseOrder'
     excel_width: 25
     client_width: 200
     sort_key: notransaksi

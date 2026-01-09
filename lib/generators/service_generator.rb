@@ -68,9 +68,9 @@ class ServiceGenerator < Rails::Generators::NamedBase
 
         def extract_params
           @table_definitions = Datatable::DefinitionExtractor.new(#{klass_name})
-          allowed_fields = [:#{model_name}]
-          result = dezerialize_table_params(params,
-            allowed_fields: allowed_fields,
+          allowed_includes = [:#{model_name}]
+          result = deserialize_table_params(params,
+            allowed_includes: allowed_includes,
             table_definitions: @table_definitions)
           @page = result.page || 1
           @limit = result.limit || 20
@@ -79,7 +79,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
           @included = result.included
           @query_included = result.query_included
           @filters = result.filters
-          @fields = result.fields
+          @fields = filter_authorize_fields(fields: result.fields, record_class: #{klass_name})
         end
 
         def find_#{plural_name}
@@ -125,12 +125,12 @@ class ServiceGenerator < Rails::Generators::NamedBase
 
         def extract_params
           @table_definitions = Datatable::DefinitionExtractor.new(#{klass_name})
-          allowed_fields = [:#{model_name}]
-          result = dezerialize_table_params(params,
-            allowed_fields: allowed_fields,
+          allowed_includes = [:#{model_name}]
+          result = deserialize_table_params(params,
+            allowed_includes: allowed_includes,
             table_definitions: @table_definitions)
           @included = result.included
-          @fields = result.fields
+          @fields = filter_authorize_fields(fields: result.fields, record_class: #{klass_name})
         end
 
       end
@@ -167,7 +167,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         def update_attribute(#{model_name})
           @table_definitions = Datatable::DefinitionExtractor.new(#{klass_name})
           @fields = {#{model_name}: @table_definitions.allowed_columns}
-          permitted_columns = permitted_column_names(#{klass_name},@table_definitions.allowed_edit_columns)
+          permitted_columns = permitted_edit_columns(#{klass_name},@table_definitions.allowed_edit_columns)
           permitted_params = params.required(:data)
                                     .required(:attributes)
                                     .permit(permitted_columns)
@@ -208,7 +208,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
         def update_attribute(#{model_name})
           @table_definitions = Datatable::DefinitionExtractor.new(#{klass_name})
           @fields = {#{model_name}: @table_definitions.allowed_columns}
-          permitted_columns = permitted_column_names(#{klass_name},@table_definitions.allowed_edit_columns)
+          permitted_columns = permitted_edit_columns(#{klass_name},@table_definitions.allowed_edit_columns)
           permitted_params = params.required(:data)
                                     .required(:attributes)
                                     .permit(permitted_columns)

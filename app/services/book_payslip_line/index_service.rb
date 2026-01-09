@@ -23,9 +23,9 @@ class BookPayslipLine::IndexService < ApplicationService
 
   def extract_params
     @table_definitions = Datatable::DefinitionExtractor.new(BookPayslipLine)
-    allowed_fields = %i[book_payslip_line employee payroll_type]
-    result = dezerialize_table_params(params,
-                                      allowed_fields: allowed_fields,
+    allowed_includes = %i[book_payslip_line employee payroll_type]
+    result = deserialize_table_params(params,
+                                      allowed_includes: allowed_includes,
                                       table_definitions: @table_definitions)
     @page = result.page || 1
     @limit = result.limit || 20
@@ -34,7 +34,7 @@ class BookPayslipLine::IndexService < ApplicationService
     @included = result.included
     @query_included = result.query_included
     @filters = result.filters
-    @fields = result.fields
+    @fields = filter_authorize_fields(fields: result.fields, record_class: BookPayslipLine)
   end
 
   def find_book_payslip_lines

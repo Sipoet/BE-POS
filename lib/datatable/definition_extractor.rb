@@ -21,8 +21,12 @@ class Datatable::DefinitionExtractor
     @column_definitions[key.to_sym]
   end
 
-  def allowed_columns
+  def allowed_filter_columns
     @column_definitions.values.select(&:can_edit).map(&:filter_key)
+  end
+
+  def allowed_sort_columns
+    @column_definitions.values.select(&:can_sort).map(&:sort_key)
   end
 
   def allowed_edit_columns
@@ -36,6 +40,8 @@ class Datatable::DefinitionExtractor
     raw_yml[:columns].map do |key, options|
       options[:humanize_name] = @model_class.human_attribute_name(key)
       result[key] = Datatable::TableColumn.new(key, options)
+      column_alias = options[:alias]
+      result[column_alias.to_sym] = Datatable::TableColumn.new(key, options) if column_alias.present?
     end
     result
   end

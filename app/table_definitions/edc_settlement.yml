@@ -12,8 +12,9 @@ columns:
     filter_key: cashier_session_id
     can_sort: true
   payment_provider_id:
-    name: payment_provider_id
+    name: payment_provider
     type: model
+    class_name: 'PaymentProvider'
     excel_width: 25
     client_width: 200
     sort_key: payment_provider_id
@@ -25,8 +26,9 @@ columns:
       model_name: payment_provider
       attribute_key: name
   payment_type_id:
-    name: payment_type_id
+    name: payment_type
     type: model
+    class_name: 'PaymentType'
     excel_width: 25
     client_width: 200
     sort_key: payment_type_id

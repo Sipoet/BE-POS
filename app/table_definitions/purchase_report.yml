@@ -2,6 +2,7 @@ table_name: purchase_reports
 columns:
   code:
     type: model
+    class_name: 'Ipos::Purchase'
     excel_width: 25
     client_width: 200
     can_filter: true

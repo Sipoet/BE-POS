@@ -2,11 +2,13 @@ class Datatable::TableColumn
   attr_reader :name, :type, :humanize_name, :excel_width,
               :input_options, :can_edit, :edit_key,
               :path, :attribute_key, :can_filter, :can_sort, :filter_key,
-              :sort_key, :client_width
+              :sort_key, :client_width, :alias_name
 
   def initialize(name, options = {})
     @name = name
     @type = options[:type] || :string
+    @class_name = options[:class_name] || name.to_s.classify if @type == 'model'
+    @alias_name = options[:alias]
     @humanize_name = options[:humanize_name] || name
     @excel_width = options[:excel_width] || 25
     # client front end UI table width in pixel
@@ -19,7 +21,6 @@ class Datatable::TableColumn
     @input_options = options[:input_options]
     @can_sort = options[:can_sort].nil? || options[:can_sort]
     @sort_key = options[:sort_key] || name if @can_sort
-
     @can_edit = options[:can_edit].nil? ? @can_filter : options[:can_edit]
     return unless @can_edit
 
@@ -28,5 +29,9 @@ class Datatable::TableColumn
 
   def id
     @name
+  end
+
+  def relation_class
+    @class_name.constantize
   end
 end
