@@ -19,7 +19,7 @@ class CashierSession < ApplicationRecord
 
   def self.today_session
     sep_hour = Setting.get('day_separator_at') || '07:00'
-    sep_time = DateTime.parse("#{Date.today.iso8601} #{sep_hour}")
+    sep_time = Time.zone.parse("#{Date.today.iso8601} #{sep_hour}")
     if DateTime.now >= sep_time
       CashierSession.find_by(date: Date.today)
     else
