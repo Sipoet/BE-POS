@@ -2,7 +2,7 @@
 table_name: edc_settlements
 columns:
   cashier_session_id:
-    name: cashier_session_id
+    alias: cashier_session_id
     type: integer
     excel_width: 25
     client_width: 200
@@ -12,7 +12,7 @@ columns:
     filter_key: cashier_session_id
     can_sort: true
   payment_provider_id:
-    name: payment_provider
+    alias: payment_provider
     type: model
     class_name: 'PaymentProvider'
     excel_width: 25
@@ -26,7 +26,7 @@ columns:
       model_name: payment_provider
       attribute_key: name
   payment_type_id:
-    name: payment_type
+    alias: payment_type
     type: model
     class_name: 'PaymentType'
     excel_width: 25
