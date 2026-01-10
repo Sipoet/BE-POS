@@ -7,6 +7,10 @@ class ColumnAuthorize < ApplicationRecord
     where(role_id: role_id, table: table_name).pluck(:column)
   }
 
+  scope :by_role, lambda { |role_id|
+    where(role_id: role_id).group_by(&:table)
+  }
+
   belongs_to :role
 
   private

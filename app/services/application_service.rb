@@ -1,5 +1,6 @@
 class ApplicationService
-  attr_reader :params, :current_user
+  include Authorizer
+  attr_reader :params, :current_user, :authorizer
 
   def self.run(controller)
     service = new(controller: controller, current_user: controller.current_user, params: controller.params)
@@ -10,6 +11,7 @@ class ApplicationService
     @params = params
     @controller = controller
     @current_user = current_user
+    @authorizer = ColumnAuthorizer.by_role(current_user.role_id)
   end
 
   def execute_service
@@ -54,22 +56,18 @@ class ApplicationService
   end
 
   def superadmin?
-    current_user.role_id == Role.superadmin_id
+    authorizer.superadmin?
   end
 
   def permitted_edit_columns(record_class, whitelist_columns)
     table_definition = Datatable::DefinitionExtractor.new(record_class)
     return whitelist_columns if superadmin?
 
-    column_names = ColumnAuthorize.columns_by_role(current_user.role_id, record_class.to_s)
-                                  .map do |column_name|
-                                    column_definition = table_definition.column_of(column_name)
-                                    if column_definition.blank? || !column_definition.can_edit
-                                      nil
-                                    else
-                                      column_definition.name.try(:to_sym)
-                                    end
-                                  end
+    column_names = authorizer.columns_of_klass(record_class)
+                             .each_with_object([]) do |column_name, obj|
+                               column_definition = table_definition.column_of(column_name)
+                               obj << column_definition.name.try(:to_sym) if column_definition&.can_edit
+    end
     column_names.compact!
     Rails.logger.debug "===EDIT COLUMN=== whitelist_columns #{whitelist_columns} column_names #{column_names}"
     whitelist_columns & column_names
@@ -80,14 +78,13 @@ class ApplicationService
     whitelist_columns = table_definition.column_names if whitelist_columns.blank?
     return whitelist_columns if superadmin?
 
-    column_names = []
-    ColumnAuthorize.columns_by_role(current_user.role_id, record_class.to_s)
-                   .each do |column_name|
-                     column_definition = table_definition.column_of(column_name)
-                     next if column_definition.nil?
+    column_names = authorizer.columns_of_klass(record_class)
+                             .each_with_object([]) do |column_name, obj|
+                               column_definition = table_definition.column_of(column_name)
+                               next if column_definition.nil?
 
-                     column_names << column_definition.name.to_sym
-                     column_names << column_definition.alias_name.to_sym if column_definition.alias_name.present?
+                               obj << column_definition.name.to_sym
+                               obj << column_definition.alias_name.to_sym if column_definition.alias_name.present?
     end
 
     Rails.logger.debug "===#{record_class}===whitelist_columns #{whitelist_columns} column_names #{column_names}"
