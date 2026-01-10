@@ -10,7 +10,6 @@ columns:
     filter_key: item_code
     can_sort: true
   item_name:
-    name: item_name
     type: string
     excel_width: 25
     client_width: 200
@@ -20,7 +19,7 @@ columns:
     filter_key: item_name
     can_sort: true
   item_type:
-    name: item_type_name
+    alias: item_type_name
     type: model
     excel_width: 25
     client_width: 200
@@ -33,7 +32,7 @@ columns:
       model_name: 'item_type'
       attribute_key: description
   supplier:
-    name: supplier_code
+    alias: supplier_code
     type: model
     excel_width: 25
     client_width: 200
@@ -56,7 +55,7 @@ columns:
     filter_key: supplier_name
     can_sort: true
   brand:
-    name: brand_name
+    alias: brand_name
     type: model
     excel_width: 25
     client_width: 200

@@ -21,12 +21,12 @@ class Datatable::DefinitionExtractor
     @column_definitions[key.to_sym]
   end
 
-  def allowed_filter_columns
-    @column_definitions.values.select(&:can_edit).map(&:filter_key)
+  def allowed_filter_column_names
+    @column_definitions.values.select(&:can_edit).map(&:name)
   end
 
   def allowed_sort_columns
-    @column_definitions.values.select(&:can_sort).map(&:sort_key)
+    @column_definitions.values.select(&:can_sort).map(&:name)
   end
 
   def allowed_edit_columns

@@ -5,7 +5,7 @@ module JsonApiDeserializer
 
     def initialize(params, allowed_includes, table_definitions)
       allowed_columns = table_definitions.column_names
-      filter_keys = table_definitions.allowed_filter_columns.map { |name| { name => FILTER_OPERATORS } }
+      filter_keys = table_definitions.allowed_filter_column_names.map { |name| { name => FILTER_OPERATORS } }
       @params = params.permit(
         :search_text, :include, :sort,
         fields: allowed_includes,
@@ -124,7 +124,6 @@ module JsonApiDeserializer
           sort_value = :asc
         end
         next unless column_hash[column_name].try(:can_sort)
-        next if @allowed_columns[column_name].blank?
 
         sort_key = column_hash[column_name].sort_key
         obj[sort_key] = sort_value
