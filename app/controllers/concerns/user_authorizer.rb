@@ -51,11 +51,5 @@ module UserAuthorizer
       checker = AuthorizeChecker.new(role)
       raise ForbiddenError unless checker.has_authorize?(controller_name, action_name)
     end
-
-    def allowed_columns(role, model_class)
-      role.column_authorizes
-          .where(table: model_class.name)
-          .pluck(:column)
-    end
   end
 end
