@@ -10,7 +10,7 @@ class Payslip::ShowService < ApplicationService
   private
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(Payslip)
+    @table_definition = Datatable::DefinitionExtractor.new(Payslip)
     allowed_includes = ['payslip', 'payroll', 'employee', 'payslip_lines', { payslip_lines: [:payroll_type] }]
     permitted_params = params.permit(:include, fields: allowed_includes)
     if permitted_params[:fields].present?

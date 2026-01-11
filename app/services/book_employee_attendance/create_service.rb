@@ -22,11 +22,12 @@ class BookEmployeeAttendance::CreateService < ApplicationService
   end
 
   def update_attribute(book_employee_attendance)
-    @table_definitions = Datatable::DefinitionExtractor.new(BookEmployeeAttendance)
-    @fields = { book_employee_attendance: @table_definitions.allowed_columns }
+    @table_definition = Datatable::DefinitionExtractor.new(BookEmployeeAttendance)
+    @fields = { book_employee_attendance: permitted_column_names(BookEmployeeAttendance, nil) }
+    permitted_columns = permitted_edit_columns(BookEmployeeAttendance, @table_definition.allowed_edit_columns)
     permitted_params = params.required(:data)
                              .required(:attributes)
-                             .permit(@table_definitions.allowed_edit_columns)
+                             .permit(permitted_columns)
     book_employee_attendance.attributes = permitted_params
   end
 end

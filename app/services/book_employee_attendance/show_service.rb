@@ -14,11 +14,11 @@ class BookEmployeeAttendance::ShowService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(BookEmployeeAttendance)
+    @table_definition = Datatable::DefinitionExtractor.new(BookEmployeeAttendance)
     allowed_includes = [:book_employee_attendance]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
-                                      table_definitions: @table_definitions)
+                                      table_definition: @table_definition)
     @included = result.included
     @fields = filter_authorize_fields(fields: result.fields, record_class: BookEmployeeAttendance)
   end

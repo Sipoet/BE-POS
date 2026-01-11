@@ -14,11 +14,11 @@ class Purchase::ShowService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Purchase)
+    @table_definition = Datatable::DefinitionExtractor.new(Ipos::Purchase)
     allowed_includes = [:purchase, :purchase_items, 'purchase_items.item', :supplier, 'purchase_items.item_report']
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
-                                      table_definitions: @table_definitions)
+                                      table_definition: @table_definition)
     @included = result.included
     @fields = filter_authorize_fields(fields: result.fields, record_class: Ipos::Purchase)
     @code = CGI.unescape(params[:code])

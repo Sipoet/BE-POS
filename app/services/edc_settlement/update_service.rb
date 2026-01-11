@@ -28,8 +28,8 @@ class EdcSettlement::UpdateService < ApplicationService
   end
 
   def update_attribute(edc_settlement)
-    table_definitions = Datatable::DefinitionExtractor.new(EdcSettlement)
-    allowed_columns = table_definitions.column_names(+%i[payment_provider payment_type cashier_session])
+    table_definition = Datatable::DefinitionExtractor.new(EdcSettlement)
+    allowed_columns = table_definition.column_names(+%i[payment_provider payment_type cashier_session])
     @fields = { edc_settlement: allowed_columns }
     permitted_params = params.required(:data)
                              .required(:attributes)

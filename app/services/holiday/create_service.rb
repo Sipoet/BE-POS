@@ -21,11 +21,12 @@ class Holiday::CreateService < ApplicationService
   end
 
   def update_attribute(holiday)
-    @table_definitions = Datatable::DefinitionExtractor.new(Holiday)
-    @fields = { holiday: @table_definitions.allowed_columns }
+    @table_definition = Datatable::DefinitionExtractor.new(Holiday)
+    @fields = { holiday: permitted_column_names(Holiday, nil) }
+    permitted_columns = permitted_edit_columns(Holiday, @table_definition.allowed_edit_columns)
     permitted_params = params.required(:data)
                              .required(:attributes)
-                             .permit(@table_definitions.allowed_columns)
+                             .permit(permitted_columns)
     holiday.attributes = permitted_params
   end
 end

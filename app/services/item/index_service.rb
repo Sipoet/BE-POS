@@ -27,7 +27,7 @@ class Item::IndexService < ApplicationService
     allowed_includes = %i[item supplier brand item_type]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
-                                      table_definitions: @table_definition)
+                                      table_definition: @table_definition)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text

@@ -14,11 +14,11 @@ class Location::ShowService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Location)
+    @table_definition = Datatable::DefinitionExtractor.new(Ipos::Location)
     allowed_includes = [:location]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
-                                      table_definitions: @table_definitions)
+                                      table_definition: @table_definition)
     @included = result.included
     @fields = filter_authorize_fields(fields: result.fields, record_class: Ipos::Location)
   end

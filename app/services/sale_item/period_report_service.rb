@@ -54,7 +54,7 @@ class SaleItem::PeriodReportService < ApplicationService
       'Item types': @item_types
     }
     generator = ExcelGenerator.new
-    generator.add_column_definitions(@table_definitions.column_definitions)
+    generator.add_column_definitions(@table_definition.column_definitions)
     generator.add_data(data)
     generator.add_metadata(filter)
     generator.generate(filename)
@@ -160,6 +160,6 @@ class SaleItem::PeriodReportService < ApplicationService
     @item_types = *permitted_params[:item_types]
     @report_type = permitted_params[:report_type]
     @is_consignment = permitted_params[:is_consignment]
-    @table_definitions = Datatable::DefinitionExtractor.new(ItemSalesPeriodReport)
+    @table_definition = Datatable::DefinitionExtractor.new(ItemSalesPeriodReport)
   end
 end

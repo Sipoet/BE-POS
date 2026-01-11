@@ -26,8 +26,8 @@ class CustomerGroupDiscount::CreateService < ApplicationService
   end
 
   def update_attribute(customer_group_discount)
-    table_definitions = Datatable::DefinitionExtractor.new(CustomerGroupDiscount)
-    allowed_columns = table_definitions.column_names
+    table_definition = Datatable::DefinitionExtractor.new(CustomerGroupDiscount)
+    allowed_columns = table_definition.column_names
     @fields = { customer_group_discount: allowed_columns }
     permitted_params = params.required(:data)
                              .required(:attributes)

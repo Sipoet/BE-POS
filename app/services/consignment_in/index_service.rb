@@ -22,11 +22,11 @@ class ConsignmentIn::IndexService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::ConsignmentIn)
+    @table_definition = Datatable::DefinitionExtractor.new(Ipos::ConsignmentIn)
     allowed_includes = %i[consignment_in purchase_items supplier consignment_in_order]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
-                                      table_definitions: @table_definitions)
+                                      table_definition: @table_definition)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text

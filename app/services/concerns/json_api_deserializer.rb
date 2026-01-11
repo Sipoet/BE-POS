@@ -3,9 +3,9 @@ module JsonApiDeserializer
   class TableIndex
     FILTER_OPERATORS = %i[eq not lt lte gt gte btw like].freeze
 
-    def initialize(params, allowed_includes, table_definitions)
-      allowed_columns = table_definitions.column_names
-      filter_keys = table_definitions.allowed_filter_column_names.map { |name| { name => FILTER_OPERATORS } }
+    def initialize(params, allowed_includes, table_definition)
+      allowed_columns = table_definition.column_names
+      filter_keys = table_definition.allowed_filter_column_names.map { |name| { name => FILTER_OPERATORS } }
       @params = params.permit(
         :search_text, :include, :sort,
         fields: allowed_includes,
@@ -13,14 +13,14 @@ module JsonApiDeserializer
         page: %i[page limit]
       )
       Rails.logger.debug "filter key: #{@params[:filter]}"
-      @table_definitions = table_definitions
+      @table_definition = table_definition
       @allowed_columns = allowed_columns.index_by(&:to_sym)
       @allowed_includes = allowed_includes.map(&:to_s)
       @param_filter = allowed_columns.present? ? @params[:filter] : params[:filter]
     end
 
     def deserialize
-      column_hash = @table_definitions.column_definitions.index_by(&:name)
+      column_hash = @table_definition.column_definitions.index_by(&:name)
       result = Result.new
       result.search_text = ApplicationRecord.sanitize_sql_like(@params[:search_text].to_s)
       result.filters = deserialize_filters(column_hash)
@@ -188,8 +188,8 @@ module JsonApiDeserializer
   end
 
   included do
-    def deserialize_table_params(params, allowed_includes: [], table_definitions: [])
-      TableIndex.new(params, allowed_includes, table_definitions)
+    def deserialize_table_params(params, allowed_includes: [], table_definition: [])
+      TableIndex.new(params, allowed_includes, table_definition)
                 .deserialize
     end
   end

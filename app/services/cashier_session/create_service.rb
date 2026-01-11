@@ -30,8 +30,8 @@ class CashierSession::CreateService < ApplicationService
   private
 
   def add_attribute(cashier_session)
-    table_definitions = Datatable::DefinitionExtractor.new(CashierSession)
-    allowed_columns = table_definitions.column_names
+    table_definition = Datatable::DefinitionExtractor.new(CashierSession)
+    allowed_columns = table_definition.column_names
     @fields = { cashier_session: allowed_columns }
     permitted_params = params.required(:data)
                              .required(:attributes)

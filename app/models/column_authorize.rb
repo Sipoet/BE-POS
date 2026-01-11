@@ -19,8 +19,8 @@ class ColumnAuthorize < ApplicationRecord
     return if table.blank?
 
     klass = table.classify.constantize
-    table_definitions = Datatable::DefinitionExtractor.new(klass)
-    return unless table_definitions.column_names.include?(column)
+    table_definition = Datatable::DefinitionExtractor.new(klass)
+    return unless table_definition.column_names.include?(column)
 
     errors.add(:column, :inclusion)
   end

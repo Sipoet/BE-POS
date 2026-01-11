@@ -32,11 +32,11 @@ class ItemReport::IndexService < ApplicationService
   private
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(ItemReport)
+    @table_definition = Datatable::DefinitionExtractor.new(ItemReport)
     allowed_includes = %i[item item_type supplier brand]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
-                                      table_definitions: @table_definitions)
+                                      table_definition: @table_definition)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -62,7 +62,7 @@ class ItemReport::IndexService < ApplicationService
 
   def generate_excel(rows)
     generator = ExcelGenerator.new
-    generator.add_column_definitions(@table_definitions.column_definitions)
+    generator.add_column_definitions(@table_definition.column_definitions)
     generator.add_data(rows)
     generator.add_metadata(@filter || {})
     generator.generate('laporan-item')

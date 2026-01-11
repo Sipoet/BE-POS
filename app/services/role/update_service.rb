@@ -92,8 +92,8 @@ class Role::UpdateService < ApplicationService
   end
 
   def update_attribute(role)
-    table_definitions = Datatable::DefinitionExtractor.new(Role)
-    allowed_columns = table_definitions.column_names
+    table_definition = Datatable::DefinitionExtractor.new(Role)
+    allowed_columns = table_definition.column_names
     permitted_params = params.required(:data)
                              .required(:attributes)
                              .permit(allowed_columns)

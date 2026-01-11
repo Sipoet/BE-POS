@@ -29,7 +29,7 @@ class SaleItem::IndexService < ApplicationService
 
   def generate_excel(rows)
     generator = ExcelGenerator.new
-    column_definitions = @table_definitions.column_definitions
+    column_definitions = @table_definition.column_definitions
     generator.add_column_definitions(column_definitions)
     generator.add_data(rows)
     generator.add_metadata(@filter || {})
@@ -37,11 +37,11 @@ class SaleItem::IndexService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::SaleItem)
+    @table_definition = Datatable::DefinitionExtractor.new(Ipos::SaleItem)
     allowed_includes = %i[sale_item item sale]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
-                                      table_definitions: @table_definitions)
+                                      table_definition: @table_definition)
     @page = result.page || 1
     @limit = result.limit || 5_000
     @search_text = result.search_text

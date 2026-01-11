@@ -23,8 +23,8 @@ class SystemSetting::UpdateService < ApplicationService
   end
 
   def update_attribute(setting)
-    @table_definitions = Datatable::DefinitionExtractor.new(Setting)
-    @fields = { setting: @table_definitions.allowed_columns }
+    @table_definition = Datatable::DefinitionExtractor.new(Setting)
+    @fields = { setting: permitted_column_names(Setting, nil) }
     permitted_params = params.required(:data)
                              .required(:attributes)
                              .permit(:value, :user_id, :value_type)

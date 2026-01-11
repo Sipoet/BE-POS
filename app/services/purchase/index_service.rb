@@ -22,11 +22,11 @@ class Purchase::IndexService < ApplicationService
   end
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(Ipos::Purchase)
+    @table_definition = Datatable::DefinitionExtractor.new(Ipos::Purchase)
     allowed_includes = %i[purchase purchase_items supplier purchase_order]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
-                                      table_definitions: @table_definitions)
+                                      table_definition: @table_definition)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text

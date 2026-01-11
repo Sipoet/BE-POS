@@ -30,8 +30,8 @@ class Role::ColumnNameService < ApplicationService
     return [] if @table_name.blank?
 
     klass = @table_name.classify.try(:constantize)
-    table_definitions = Datatable::DefinitionExtractor.new(klass)
-    column_names = table_definitions.column_names
+    table_definition = Datatable::DefinitionExtractor.new(klass)
+    column_names = table_definition.column_names
     return column_names if @search_text.blank?
 
     downcase_text = @search_text.downcase

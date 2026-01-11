@@ -21,8 +21,8 @@ class PaymentMethod::CreateService < ApplicationService
   end
 
   def update_attribute(payment_method)
-    table_definitions = Datatable::DefinitionExtractor.new(PaymentMethod)
-    allowed_columns = table_definitions.column_names
+    table_definition = Datatable::DefinitionExtractor.new(PaymentMethod)
+    allowed_columns = table_definition.column_names
     @fields = { payment_method: allowed_columns }
     permitted_params = params.required(:data)
                              .required(:attributes)

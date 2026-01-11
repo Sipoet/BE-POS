@@ -24,7 +24,7 @@ class ItemReport::GroupedReportService < ApplicationService
   private
 
   def extract_params
-    @table_definitions = Datatable::DefinitionExtractor.new(SalesGroupBySupplierReport)
+    @table_definition = Datatable::DefinitionExtractor.new(SalesGroupBySupplierReport)
     permitted_params = @params.permit(:report_type, suppliers: [],
                                                     brands: [], item_types: [],
                                                     group_names: [])
@@ -38,7 +38,7 @@ class ItemReport::GroupedReportService < ApplicationService
 
   def generate_excel(data)
     generator = ExcelGenerator.new
-    column_definitions = @table_definitions.column_definitions
+    column_definitions = @table_definition.column_definitions
     excluded_list = WHITELIST_GROUP.dup - @group_names
     column_definitions.reject! { |table_def| excluded_list.include?(table_def.name) }
     sep_index = 0

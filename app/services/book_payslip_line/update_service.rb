@@ -24,11 +24,12 @@ class BookPayslipLine::UpdateService < ApplicationService
   end
 
   def update_attribute(book_payslip_line)
-    @table_definitions = Datatable::DefinitionExtractor.new(BookPayslipLine)
-    @fields = { book_payslip_line: @table_definitions.allowed_columns }
+    @table_definition = Datatable::DefinitionExtractor.new(BookPayslipLine)
+    @fields = { book_payslip_line: permitted_column_names(BookPayslipLine, nil) }
+    permitted_columns = permitted_edit_columns(BookPayslipLine, @table_definition.allowed_edit_columns)
     permitted_params = params.required(:data)
                              .required(:attributes)
-                             .permit(@table_definitions.allowed_edit_columns)
+                             .permit(permitted_columns)
     book_payslip_line.attributes = permitted_params
   end
 end

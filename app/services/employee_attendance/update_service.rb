@@ -23,8 +23,8 @@ class EmployeeAttendance::UpdateService < ApplicationService
   end
 
   def update_attribute(employee_attendance)
-    table_definitions = Datatable::DefinitionExtractor.new(EmployeeAttendance)
-    allowed_columns = table_definitions.column_names
+    table_definition = Datatable::DefinitionExtractor.new(EmployeeAttendance)
+    allowed_columns = table_definition.column_names
     @fields = { employee_attendance: allowed_columns }
     permitted_params = params.required(:data)
                              .required(:attributes)
