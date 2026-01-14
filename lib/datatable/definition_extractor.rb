@@ -22,7 +22,7 @@ class Datatable::DefinitionExtractor
   end
 
   def allowed_filter_column_names
-    @column_definitions.values.select(&:can_edit).map(&:name)
+    @column_definitions.values.select(&:can_filter).map(&:name)
   end
 
   def allowed_sort_columns
