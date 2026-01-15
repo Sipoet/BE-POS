@@ -1,5 +1,4 @@
 class Role::ActionNameService < ApplicationService
-  READ_ACTION = %w[index show]
   def execute_service
     extract_params
     actions = find_controller_actions
@@ -35,7 +34,7 @@ class Role::ActionNameService < ApplicationService
       next unless route.defaults[:controller] == @controller_name
 
       action = route.defaults[:action].strip.downcase
-      action = 'read' if READ_ACTION.include? action
+      action = 'read' if UserAuthorizer::AuthorizeChecker::READ_ACTION.include? action
       actions << action
     end
     actions.uniq!

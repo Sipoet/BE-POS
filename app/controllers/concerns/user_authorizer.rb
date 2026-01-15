@@ -48,7 +48,7 @@ module UserAuthorizer
     protected
 
     def authorize_role!(role_id)
-      raise 'not a role' unless role_id.nil?
+      raise 'not a role' if role_id.nil?
       return if Role.superadmin?(role_id)
 
       checker = AuthorizeChecker.new(role_id)

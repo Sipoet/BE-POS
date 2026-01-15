@@ -1,76 +1,74 @@
 class Home::SettingService < ApplicationService
   def execute_service
-    menus = find_menus(@current_user.role)
-    table_columns = find_table_columns(@current_user.role)
+    menus = find_menus(@current_user.role_id)
+    table_columns = find_table_columns(@current_user.role_id)
 
     render_json({ menus: menus, table_columns: table_columns }.as_json)
   end
 
   private
 
-  def find_menus(role)
-    return all_menus if role.name == Role::SUPERADMIN
+  def find_menus(role_id)
+    return all_menus if Role.superadmin?(role_id)
 
-    role.access_authorizes
-        .group_by(&:controller)
-        .each_with_object({}) do |(controller, values), obj|
-          obj[controller.singularize.camelize(:lower)] = values.map { |access| access.action.camelize(:lower) }
-        end
+    checker = UserAuthorizer::AuthorizeChecker.new(role_id)
+    checker.role_access
+           .each_with_object({}) do |(controller, values), obj|
+             obj[controller.singularize.camelize(:lower)] = values.keys.map { |action| action.camelize(:lower) }
+    end
   end
 
   def all_menus
-    controller_names = []
-    Dir["#{Rails.root}/app/controllers/*_controller.rb"].each do |path|
-      controller_name = path.split('/').last
-      controller_name = controller_name.gsub(/(\w+)_controller\.rb/, '\1')
-      next if %w[application assets].include?(controller_name)
+    allowed_controllers = {}
+    Dir["#{Rails.root}/app/controllers/**/*_controller.rb"].each do |path|
+      filename, dir = path.split('app/controllers/').last.split('/').reverse
+      next if %w[concerns action_mailbox rails active_storage].include? dir
 
-      controller_names << controller_name
+      controller_name = filename.gsub(/(\w+)_controller\.rb/, '\1')
+      next if %w[application assets mailers].include?(controller_name)
+
+      controller_name = [dir, controller_name].compact.join('/')
+      allowed_controllers[controller_name] = true
     end
-    controller_names.uniq!
     Rails.application.routes.routes.group_by { |route| route.defaults[:controller] }
          .each_with_object({}) do |(controller, routes), obj|
            next if controller.blank?
-           next unless controller_names.include?(controller)
+           next unless allowed_controllers[controller]
 
-           obj[controller.singularize.camelize(:lower)] = routes.map do |route|
-             route.defaults[:action].strip.camelize(:lower)
-           end
-                                                                .uniq
+           obj[controller] = routes.map do |route|
+             action = route.defaults[:action].strip
+             action = 'read' if UserAuthorizer::AuthorizeChecker::READ_ACTION.include? action
+             action.camelize(:lower)
+           end.uniq
     end
   end
 
-  def find_table_columns(role)
+  def find_table_columns(role_id)
     table_names = []
-    Dir["#{Rails.root}/app/models/*.rb"].each do |path|
-      table_name = path.split('/').last
-      table_name = table_name.gsub(/(\w+)\.rb/, '\1')
-      next if %w[application_record application_model].include?(table_name)
 
-      table_names << table_name.classify
+    Dir["#{Rails.root}/app/models/**/*.rb"].each do |path|
+      filename, dir = path.split('app/models/').last.split('/').reverse
+      next if dir == 'concerns'
+
+      filename = filename.gsub(/(\w+)\.rb/, '\1')
+      table_name = [dir&.capitalize, filename.classify].compact.join('::')
+      next if ['ApplicationRecord', 'ApplicationModel', 'Ipos::ActivityLog'].include?(table_name)
+
+      table_names << table_name
     end
-
-    Dir["#{Rails.root}/app/models/ipos/*.rb"].each do |path|
-      table_name = path.split('/').last
-      table_name = table_name.gsub(/(\w+)\.rb/, '\1')
-      next if ['activity_log'].include?(table_name)
-
-      table_names << "Ipos::#{table_name.classify}"
-    end
-    allowed_columns = role.column_authorizes.group_by(&:table)
+    column_authorizer = Authorizer::ColumnAuthorizer.by_role(role_id)
     table_names.each_with_object({}) do |table_name, obj|
       klass = table_name.constantize
       table_key = table_name.camelize(:lower)
-      if role.name == Role::SUPERADMIN
-        obj[table_key] = TableColumnSerializer.new(Datatable::DefinitionExtractor.new(klass).column_definitions).as_json
+      table_def = Datatable::DefinitionExtractor.new(klass)
+      if Role.superadmin?(role_id)
+        obj[table_key] = TableColumnSerializer.new(table_def.column_definitions)
         next
       end
-      columns = allowed_columns[klass.to_s]
+      columns = column_authorizer.columns_of_klass(klass)
       next if columns.blank?
 
-      columns = columns.index_by(&:column)
-      table_def = Datatable::DefinitionExtractor.new(klass).column_definitions
-      selected_columns = table_def.select { |table_column| columns[table_column.name.to_s].present? }
+      selected_columns = columns.map { |column_name| table_def.column_of(column_name) }
       obj[table_key] = TableColumnSerializer.new(selected_columns)
     end
   end
