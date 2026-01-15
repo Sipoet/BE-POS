@@ -12,7 +12,7 @@ module JsonApiDeserializer
         filter: filter_keys,
         page: %i[page limit]
       )
-      Rails.logger.debug "filter key: #{@params[:filter]}"
+      Rails.logger.debug "filter key: #{filter_keys}  filter: #{@params[:filter]}"
       @table_definition = table_definition
       @allowed_columns = allowed_columns.index_by(&:to_sym)
       @allowed_includes = allowed_includes.map(&:to_s)

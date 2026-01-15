@@ -17,7 +17,7 @@ class ApplicationController < ActionController::API
   def authorize_user!
     authenticate_user!
     set_paper_trail_whodunnit
-    authorize_role!(current_user.role)
+    authorize_role!(current_user.role_id)
   end
 
   def run_service(service_klass = nil)

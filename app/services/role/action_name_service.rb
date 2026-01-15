@@ -1,10 +1,11 @@
 class Role::ActionNameService < ApplicationService
+  READ_ACTION = %w[index show]
   def execute_service
     extract_params
     actions = find_controller_actions
     if @page == 1
       render_json({
-                    data: actions.map { |action| { id: action, name: action } }
+                    data: actions.map { |action| { id: action, name: action.capitalize } }
                   })
     else
       render_json({
@@ -31,7 +32,11 @@ class Role::ActionNameService < ApplicationService
 
     actions = []
     Rails.application.routes.routes.each do |route|
-      actions << route.defaults[:action].strip.downcase if route.defaults[:controller] == @controller_name
+      next unless route.defaults[:controller] == @controller_name
+
+      action = route.defaults[:action].strip.downcase
+      action = 'read' if READ_ACTION.include? action
+      actions << action
     end
     actions.uniq!
     return actions if @search_text.blank?

@@ -1,10 +1,12 @@
 class Role::ColumnNameService < ApplicationService
   def execute_service
     extract_params
-    column_names = find_table_columns
+    column_definitions = find_table_columns
     if @page == 1
       render_json({
-                    data: column_names.map { |column_name| { id: column_name, name: column_name } }
+                    data: column_definitions.map do |column_name|
+                      { id: column_name.name, name: column_name.humanize_name }
+                    end
                   })
     else
       render_json({ data: [] })
@@ -31,10 +33,12 @@ class Role::ColumnNameService < ApplicationService
 
     klass = @table_name.classify.try(:constantize)
     table_definition = Datatable::DefinitionExtractor.new(klass)
-    column_names = table_definition.column_names
-    return column_names if @search_text.blank?
+    column_definitions = table_definition.column_definitions
+    return column_definitions if @search_text.blank?
 
     downcase_text = @search_text.downcase
-    column_names.select { |column_name| column_name.to_s.downcase.include?(downcase_text) }
+    column_definitions.select do |column_definition|
+      column_definition.humanize_name&.downcase&.include?(downcase_text)
+    end
   end
 end

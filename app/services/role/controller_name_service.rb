@@ -4,7 +4,9 @@ class Role::ControllerNameService < ApplicationService
     controller_names = find_controllers
     if @page == 1
       render_json({
-                    data: controller_names.map { |controller| { id: controller, name: controller } }
+                    data: controller_names.map do |controller|
+                      { id: controller, name: decorate_name(controller) }
+                    end
                   })
     else
       render_json({
@@ -14,6 +16,10 @@ class Role::ControllerNameService < ApplicationService
   end
 
   private
+
+  def decorate_name(controller)
+    controller.gsub('_', ' ').capitalize
+  end
 
   def extract_params
     permitted_params = params.permit(:search_text, page: %i[page limit])

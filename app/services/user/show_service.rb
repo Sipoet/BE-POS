@@ -3,6 +3,7 @@ class User::ShowService < ApplicationService
   def execute_service
     extract_params
     user = if @params[:username] == 'current_user'
+             @fields = nil
              current_user
            else
              User.find_by(username: @params[:username])

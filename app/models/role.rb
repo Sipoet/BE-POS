@@ -14,17 +14,23 @@ class Role < ApplicationRecord
   private
 
   def delete_cache
-    Cache.delete_namespace("role-#{id}")
-    Cache.delete("column-authorizer-#{id}")
+    Cache.delete_namespace("role-#{id}-")
   end
 
   def self.superadmin_id
-    (Cache.get('superadmin_id') || find_superadmin_id).to_i
+    cache = Cache.get('role-superadmin_id')
+    return cache.to_i if cache.present?
+
+    id = find_by(name: SUPERADMIN).id
+    Cache.set('role-superadmin_id', id.to_s)
+    id
   end
 
-  def self.find_superadmin_id
-    id = find_by(name: SUPERADMIN).id
-    Cache.set('superadmin_id', id.to_s)
-    id
+  def self.superadmin?(val)
+    if val.is_a?(Role)
+      val.name == SUPERADMIN
+    else
+      val == superadmin_id
+    end
   end
 end

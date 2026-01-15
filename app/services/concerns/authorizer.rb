@@ -3,13 +3,13 @@ module Authorizer
     attr_reader :model_names
 
     def self.by_role(role_id)
-      cache = Cache.get("column-authorizer-#{role_id}")
+      cache = Cache.get("role-#{role_id}-column-auth")
       if cache.nil?
         cache = ColumnAuthorize.by_role(role_id)
         cache = cache.each_with_object({}) do |(table, columns), obj|
           obj[table] = columns.map(&:column)
         end
-        Cache.set("column-authorizer-#{role_id}", cache.to_json)
+        Cache.set("role-#{role_id}-column-auth", cache.to_json)
       else
         cache = JSON.parse(cache)
       end
