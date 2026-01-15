@@ -37,17 +37,6 @@ Rails.application.routes.draw do
     get :grouped_report, on: :collection
   end
 
-  resources :items, param: :code, only: %i[index show update] do
-    get :with_discount, on: :collection
-    get :download, on: :collection
-  end
-
-  resources :suppliers, param: :code, only: %i[index show]
-
-  resources :item_types, param: :code, only: %i[index show]
-
-  resources :brands, param: :code, only: %i[index show]
-
   resources :discounts, only: %i[index show create show update destroy] do
     post :refresh_active_promotion, on: :collection
     post :refresh_all_promotion, on: :collection
@@ -57,43 +46,6 @@ Rails.application.routes.draw do
     get :template_mass_upload_excel, on: :collection
     get :download_items, on: :member
     get :download_active_items, on: :collection
-  end
-
-  resources :sales, only: %i[index show] do
-    get :transaction_report, on: :collection
-    get :daily_transaction_report, on: :collection
-    get :report, on: :collection
-  end
-
-  resources :purchases, only: %i[index show] do
-    get :report, on: :collection
-    post :refresh_report, on: :collection
-    post :update_price, on: :member
-  end
-
-  resources :purchase_orders, only: %i[index show] do
-    post :update_price, on: :member
-  end
-
-  resources :consignment_ins, only: %i[index show] do
-    post :update_price, on: :member
-  end
-
-  resources :consignment_in_orders, only: %i[index show] do
-    post :update_price, on: :member
-  end
-
-  resources :purchase_returns, only: %i[index show]
-
-  resources :purchase_items, only: [:index]
-
-  resources :transfers, only: %i[index show]
-  resources :locations, only: %i[index show]
-  resources :transfer_items, only: [:index]
-
-  resources :sale_items, only: [:index] do
-    get :transaction_report, on: :collection
-    get :period_report, on: :collection
   end
 
   resources :employee_attendances, only: %i[index create destroy update] do
@@ -138,8 +90,7 @@ Rails.application.routes.draw do
   resources :payment_types, only: %i[create update index]
   resources :payment_provider_edcs, only: %i[create update index destroy]
   resources :payment_methods, only: %i[index destroy create update]
-  resources :banks, only: [:index]
-  resources :customer_groups, only: [:index]
+
   resources :customer_group_discounts, only: %i[index create update destroy] do
     post :toggle_discount, on: :collection
   end
@@ -147,7 +98,7 @@ Rails.application.routes.draw do
   resources :holidays, only: %i[index create update destroy]
   resources :book_payslip_lines, only: %i[index create update destroy]
   resources :book_employee_attendances, only: %i[index create update destroy]
-  resources :accounts, only: %i[index show]
+
   resources :system_settings, only: %i[index show update] do
     post :refresh_table, on: :collection
     get :list_tables, on: :collection
@@ -164,7 +115,56 @@ Rails.application.routes.draw do
   resources :purchase_payment_histories, only: [:index]
   resources :cash_transaction_reports, only: [:index]
 
-  scope :ipos do
-    resources :users, controller: 'ipos/users', only: [:index]
+  namespace :ipos do
+    resources :users, only: [:index]
+    resources :items, param: :code, only: %i[index show update] do
+      get :with_discount, on: :collection
+      get :download, on: :collection
+    end
+    resources :banks, only: [:index]
+    resources :customer_groups, only: [:index]
+    resources :suppliers, param: :code, only: %i[index show]
+
+    resources :item_types, param: :code, only: %i[index show]
+
+    resources :brands, param: :code, only: %i[index show]
+    resources :sales, only: %i[index show] do
+      get :transaction_report, on: :collection
+      get :daily_transaction_report, on: :collection
+      get :report, on: :collection
+    end
+
+    resources :purchases, only: %i[index show] do
+      get :report, on: :collection
+      post :refresh_report, on: :collection
+      post :update_price, on: :member
+    end
+
+    resources :purchase_orders, only: %i[index show] do
+      post :update_price, on: :member
+    end
+
+    resources :consignment_ins, only: %i[index show] do
+      post :update_price, on: :member
+    end
+
+    resources :consignment_in_orders, only: %i[index show] do
+      post :update_price, on: :member
+    end
+
+    resources :purchase_returns, only: %i[index show]
+
+    resources :purchase_items, only: [:index]
+
+    resources :transfers, only: %i[index show]
+    resources :locations, only: %i[index show]
+    resources :transfer_items, only: [:index]
+
+    resources :sale_items, only: [:index] do
+      get :transaction_report, on: :collection
+      get :period_report, on: :collection
+    end
+
+    resources :accounts, only: %i[index show]
   end
 end
