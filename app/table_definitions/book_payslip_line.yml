@@ -17,9 +17,6 @@ columns:
   group:
     type: enum
     client_width: 180
-    enum_list:
-      - earning
-      - deduction
   payroll_type:
     type: model
     client_width: 180

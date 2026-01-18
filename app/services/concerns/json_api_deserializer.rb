@@ -12,7 +12,7 @@ module JsonApiDeserializer
         filter: filter_keys,
         page: %i[page limit]
       )
-      Rails.logger.debug "filter key: #{filter_keys}  filter: #{@params[:filter]}"
+      Rails.logger.debug "filter key: #{filter_keys}  ====== filter: #{@params[:filter]}"
       @table_definition = table_definition
       @allowed_columns = allowed_columns.index_by(&:to_sym)
       @allowed_includes = allowed_includes.map(&:to_s)
@@ -20,11 +20,10 @@ module JsonApiDeserializer
     end
 
     def deserialize
-      column_hash = @table_definition.column_definitions.index_by(&:name)
       result = Result.new
       result.search_text = ApplicationRecord.sanitize_sql_like(@params[:search_text].to_s)
-      result.filters = deserialize_filters(column_hash)
-      result.sort = deserialize_sort(column_hash)
+      result.filters = deserialize_filters
+      result.sort = deserialize_sort
       result.page, result.limit = deserialize_pagination
       result.fields = deserialize_field
       result.included = deserialize_included & @allowed_includes
@@ -40,18 +39,17 @@ module JsonApiDeserializer
                     :query_included
     end
 
-    def deserialize_filters(column_hash)
+    def deserialize_filters
       filter = []
       return filter if @param_filter.blank?
 
       @param_filter.to_h.each do |key, param_value|
-        next unless column_hash[key.to_sym].try(:can_filter)
-
         raise 'filter invalid pattern' unless param_value.is_a?(Hash)
 
         param_value.each do |operator, value|
+          column = @table_definition.column_of(key)
           filter << Filter.new(
-            column_hash[key.to_sym].filter_key,
+            column.filter_key,
             operator.to_sym,
             value
           )
@@ -110,7 +108,7 @@ module JsonApiDeserializer
       [page, limit]
     end
 
-    def deserialize_sort(column_hash)
+    def deserialize_sort
       return nil if @params[:sort].blank?
 
       sorts = @params[:sort].split(',')
@@ -123,9 +121,10 @@ module JsonApiDeserializer
           column_name = value.to_sym
           sort_value = :asc
         end
-        next unless column_hash[column_name].try(:can_sort)
+        column = @table_definition.column_of(column_name)
+        next unless column.try(:can_sort)
 
-        sort_key = column_hash[column_name].sort_key
+        sort_key = column.sort_key
         obj[sort_key] = sort_value
       end
     end

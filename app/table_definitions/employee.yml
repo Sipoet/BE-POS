@@ -74,14 +74,6 @@ columns:
     can_filter: true
     filter_key: religion
     can_sort: true
-    input_options:
-      enums:
-        - buddhism
-        - catholic
-        - christian
-        - hindu
-        - islam
-        - khonghucu
   email:
     type: string
     excel_width: 20
