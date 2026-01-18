@@ -67,7 +67,7 @@ class Ipos::Item::WithDiscountService < ApplicationService
     Ipos::ItemPromotion.find_by(kodeitem: item_code, promotion: Ipos::Promotion.active_today)&.discount
   end
 
-  class Ipos::Result
+  class Result
     attr_accessor :item_code, :item_name,
                   :sell_price, :uom, :discount,
                   :store_stock, :warehouse_stock

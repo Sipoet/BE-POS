@@ -61,7 +61,7 @@ class Ipos::SaleItem::TransactionReportService < ApplicationService
     SQL
   end
 
-  class Ipos::Result
+  class Result
     attr_reader :quantity, :sales_total, :discount_total, :identifier
 
     def initialize(quantity:, sales_total:, discount_total:, identifier:)
