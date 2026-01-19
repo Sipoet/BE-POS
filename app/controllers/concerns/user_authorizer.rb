@@ -52,7 +52,7 @@ module UserAuthorizer
       return if Role.superadmin?(role_id)
 
       checker = AuthorizeChecker.new(role_id)
-      raise ForbiddenError unless checker.has_authorize?(controller_name, action_name)
+      raise ForbiddenError unless checker.has_authorize?(controller_path, action_name)
     end
   end
 end

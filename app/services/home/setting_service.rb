@@ -14,7 +14,7 @@ class Home::SettingService < ApplicationService
     checker = UserAuthorizer::AuthorizeChecker.new(role_id)
     checker.role_access
            .each_with_object({}) do |(controller, values), obj|
-             obj[controller.singularize.camelize(:lower)] = values.keys.map { |action| action.camelize(:lower) }
+             obj[controller] = values.keys.map { |action| action.camelize(:lower) }
     end
   end
 
