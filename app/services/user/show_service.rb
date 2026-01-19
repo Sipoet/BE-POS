@@ -2,19 +2,20 @@ class User::ShowService < ApplicationService
   include JsonApiDeserializer
   def execute_service
     extract_params
-    user = if @params[:username] == 'current_user'
-             @fields = nil
-             current_user
-           else
-             User.find_by(username: @params[:username])
-           end
+    user = User.find_by(username: @params[:username])
     raise ApplicationService::RecordNotFound.new(@params[:username], User.name) if user.nil?
 
+    if current_user.id == user.id && !@fields.nil?
+      @fields[:user] ||= []
+      @fields[:user] += %i[username email]
+      @fields[:user].uniq!
+    end
     options = {
       fields: @fields,
       params: { include: @included },
       include: @included
     }
+    Rails.logger.debug "===options #{options}"
     render_json(UserSerializer.new(user, options))
   end
 
