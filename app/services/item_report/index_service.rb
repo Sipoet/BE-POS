@@ -50,6 +50,11 @@ class ItemReport::IndexService < ApplicationService
   def find_reports
     reports = ItemReport.all.includes(@included)
     reports = reports.page(@page).per(@limit) if @report_type == 'json'
+    if @search_text.present?
+      reports = reports.where(['item_code ilike ? OR item_name ilike ? OR item_type_name ilike ? OR brand_name ilike ? OR supplier_name ilike ? OR supplier_code ilike ?'] + Array.new(
+        6, "%#{@search_text}%"
+      ))
+    end
     @filters.each do |filter|
       reports = filter.add_filter_to_query(reports)
     end

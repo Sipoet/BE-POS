@@ -12,7 +12,7 @@ columns:
     filter_key: kodeitem
     can_sort: true
     input_options:
-      path: items
+      path: 'ipos/items'
       model_name: 'item'
       attribute_key: code
   jumlah:
@@ -116,7 +116,7 @@ columns:
     filter_key: item.supplier1
     can_sort: true
     input_options:
-      path: suppliers
+      path: 'ipos/suppliers'
       model_name: 'supplier'
       attribute_key: name
   brand:
@@ -130,7 +130,7 @@ columns:
     filter_key: item.merek
     can_sort: true
     input_options:
-      path: brands
+      path: 'ipos/brands'
       model_name: 'brand'
       attribute_key: name
   item_type:
@@ -139,14 +139,14 @@ columns:
     class_name: 'Ipos::ItemType'
     excel_width: 25
     client_width: 200
-    path: item_types
+    path: 'ipos/item_types'
     sort_key: item.jenis
     attribute_key: item_type.jenis
     can_filter: true
     filter_key: item.jenis
     can_sort: true
     input_options:
-      path: item_types
+      path: 'ipos/item_types'
       model_name: 'item_type'
       attribute_key: name
   updated_at:

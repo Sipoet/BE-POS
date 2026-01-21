@@ -26,7 +26,7 @@ module JsonApiDeserializer
       result.sort = deserialize_sort
       result.page, result.limit = deserialize_pagination
       result.fields = deserialize_field
-      result.included = deserialize_included & @allowed_includes
+      result.included = deserialize_included
       result.query_included = deserialize_query_included
       result
     end
@@ -61,13 +61,13 @@ module JsonApiDeserializer
     def deserialize_included
       return [] if @params[:include].blank?
 
-      @params[:include].split(',')
+      @params[:include].split(',') & @allowed_includes
     end
 
     def deserialize_query_included
-      return [] if @params[:include].blank?
+      included = deserialize_included
+      return [] if included.blank?
 
-      included = @params[:include].split(',')
       included.each.with_index do |key, index|
         next unless key.include?('.')
 

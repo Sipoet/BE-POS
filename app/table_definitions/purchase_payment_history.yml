@@ -6,7 +6,7 @@ columns:
     client_width: 180
     class_name: 'Ipos::Supplier'
     input_options:
-      path: suppliers
+      path: 'ipos/suppliers'
       model_name: supplier
       attribute_key: name
     filter_key: 'supplier_code'

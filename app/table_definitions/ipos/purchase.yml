@@ -11,25 +11,26 @@ columns:
     can_filter: true
     filter_key: notransaksi
     can_sort: true
-  kodesupel:
-    name: kodesupel
+  supplier:
+    alias: kodesupel
     type: model
     class_name: 'Ipos::Supplier'
     excel_width: 25
     client_width: 200
-    path: suppliers
+    path: 'ipos/suppliers'
     sort_key: kodesupel
     attribute_key: supplier.nama
     can_filter: true
     filter_key: kodesupel
     can_sort: true
     input_options:
-      path: suppliers
+      path: 'ipos/suppliers'
       model_name: supplier
       attribute_key: name
-  notrsorder:
-    name: notrsorder
-    type: string
+  purchase_order:
+    alias: notrsorder
+    type: model
+    class_name: 'Ipos::PurchaseOrder'
     excel_width: 25
     client_width: 200
     sort_key: notrsorder
@@ -37,6 +38,10 @@ columns:
     can_filter: true
     filter_key: notrsorder
     can_sort: true
+    input_options:
+      path: 'ipos/purchase_orders'
+      model_name: purchase_order
+      attribute_key: notransaksi
   note_date:
     type: datetime
     excel_width: 25

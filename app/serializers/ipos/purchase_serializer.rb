@@ -19,8 +19,10 @@ class Ipos::PurchaseSerializer
              :pajak,
              :kodesupel
 
-  attribute :tanggal do |object|
-    ipos_fix_date_timezone(object.tanggal)
+  %i[tanggal byr_krd_jt dateupd].each do |key|
+    attribute key do |object|
+      ipos_fix_date_timezone(object.send(key))
+    end
   end
 
   belongs_to :supplier, set_id: :kodesupel, id_method_name: :kodesupel, serializer: Ipos::SupplierSerializer, if: proc { |_record, params|

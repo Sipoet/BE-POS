@@ -1,12 +1,13 @@
 table_name: 'tbl_ikdt'
 columns:
-  kodeitem:
+  item:
     type: model
+    alias: kodeitem
     class_name: 'Ipos::Item'
     attribute_key: 'item.namaitem'
     client_width: 180
     input_options:
-      path: items
+      path: 'ipos/items'
       model_name: item
       attribute_key: name
   item_name:
@@ -66,7 +67,7 @@ columns:
     filter_key: 'tbl_item.supplier1'
     sort_key: 'tbl_item.supplier1'
     input_options:
-      path: suppliers
+      path: 'ipos/suppliers'
       model_name: supplier
       attribute_key: code
   brand_name:

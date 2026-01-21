@@ -25,7 +25,7 @@ columns:
     can_sort: true
     class_name: 'Ipos::Supplier'
     input_options:
-      path: suppliers
+      path: 'ipos/suppliers'
       model_name: 'supplier'
       attribute_key: name
   item_type_name:
@@ -37,7 +37,7 @@ columns:
     can_sort: true
     class_name: 'Ipos::ItemType'
     input_options:
-      path: item_types
+      path: 'ipos/item_types'
       model_name: 'item_type'
       attribute_key: name
   brand_name:
@@ -49,7 +49,7 @@ columns:
     can_filter: true
     can_sort: true
     input_options:
-      path: brands
+      path: 'ipos/brands'
       model_name: 'brand'
       attribute_key: name
   description:

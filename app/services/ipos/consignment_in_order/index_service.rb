@@ -23,7 +23,7 @@ class Ipos::ConsignmentInOrder::IndexService < ApplicationService
 
   def extract_params
     @table_definition = Datatable::DefinitionExtractor.new(Ipos::ConsignmentInOrder)
-    allowed_includes = [:consignment_in_order]
+    allowed_includes = %i[consignment_in_order consignment_in supplier]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
                                       table_definition: @table_definition)

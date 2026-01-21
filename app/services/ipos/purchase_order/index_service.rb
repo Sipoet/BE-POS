@@ -23,7 +23,7 @@ class Ipos::PurchaseOrder::IndexService < ApplicationService
 
   def extract_params
     @table_definition = Datatable::DefinitionExtractor.new(Ipos::PurchaseOrder)
-    allowed_includes = %i[purchase_order purchase_order_items supplier]
+    allowed_includes = %i[purchase_order purchase_order_items supplier purchase]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
                                       table_definition: @table_definition)

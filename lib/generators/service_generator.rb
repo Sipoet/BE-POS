@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ServiceGenerator < Rails::Generators::NamedBase
   def create_initializer_file
     raise 'service must be filled' if args.blank?

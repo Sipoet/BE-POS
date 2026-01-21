@@ -47,6 +47,14 @@ class Ipos::ConsignmentInOrderSerializer
     end
   }
 
+  has_one :consignment_in, serializer: Ipos::ConsignmentInSerializer, if: proc { |_record, params|
+    begin
+      params[:include].include?('consignment_in')
+    rescue StandardError
+      false
+    end
+  }
+
   has_many :purchase_order_items, serializer: Ipos::PurchaseOrderItemSerializer, if: proc { |_record, params|
     begin
       params[:include].include?('purchase_order_items')

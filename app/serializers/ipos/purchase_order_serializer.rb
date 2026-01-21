@@ -47,6 +47,14 @@ class Ipos::PurchaseOrderSerializer
     end
   }
 
+  has_one :purchase, serializer: Ipos::PurchaseSerializer, if: proc { |_record, params|
+    begin
+      params[:include].include?('purchase')
+    rescue StandardError
+      false
+    end
+  }
+
   has_many :purchase_order_items, serializer: Ipos::PurchaseOrderItemSerializer, if: proc { |_record, params|
     begin
       params[:include].include?('purchase_order_items')

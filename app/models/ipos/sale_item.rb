@@ -7,6 +7,7 @@ class Ipos::SaleItem < ApplicationRecord
 
   alias_attribute :id, :iddetail
   alias_attribute :updated_at, :dateupd
+  alias_attribute :item_code, :kodeitem
 
   def subtotal
     jumlah * harga
