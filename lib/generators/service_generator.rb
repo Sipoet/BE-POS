@@ -28,6 +28,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
   def default_template(_model_name, service_name)
     klass_name = file_path.classify
     create_file "app/services/#{file_path}/#{service_name.singularize}_service.rb", <<~END
+      # frozen_string_literal: true
       class #{klass_name}::#{service_name.classify}Service < ApplicationService
 
         def execute_service
@@ -42,6 +43,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
     plural_name = file_name.underscore.pluralize
     klass_name = file_path.classify
     create_file "app/services/#{file_path}/index_service.rb", <<~END
+      # frozen_string_literal: true
       class #{klass_name}::IndexService < ApplicationService
 
         include JsonApiDeserializer
@@ -108,6 +110,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
     file_name.underscore.pluralize
     klass_name = file_path.classify
     create_file "app/services/#{file_path}/show_service.rb", <<~END
+      # frozen_string_literal: true
       class #{klass_name}::ShowService < ApplicationService
 
         include JsonApiDeserializer
@@ -141,6 +144,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
     file_name.underscore.pluralize
     klass_name = file_path.classify
     create_file "app/services/#{file_path}/create_service.rb", <<~END
+      # frozen_string_literal: true
       class #{klass_name}::CreateService < ApplicationService
 
         def execute_service
@@ -181,6 +185,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
     file_name.underscore.pluralize
     klass_name = file_path.classify
     create_file "app/services/#{file_path}/update_service.rb", <<~END
+      # frozen_string_literal: true
       class #{klass_name}::UpdateService < ApplicationService
 
         def execute_service
@@ -222,6 +227,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
     file_name.underscore.pluralize
     klass_name = file_path.classify
     create_file "app/services/#{file_path}/destroy_service.rb", <<~END
+      # frozen_string_literal: true
       class #{klass_name}::DestroyService < ApplicationService
 
         def execute_service
