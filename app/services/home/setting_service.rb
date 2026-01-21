@@ -2,7 +2,6 @@ class Home::SettingService < ApplicationService
   def execute_service
     menus = find_menus(@current_user.role_id)
     table_columns = find_table_columns(@current_user.role_id)
-
     render_json({ menus: menus, table_columns: table_columns }.as_json)
   end
 
@@ -69,6 +68,7 @@ class Home::SettingService < ApplicationService
       next if columns.blank?
 
       selected_columns = columns.map { |column_name| table_def.column_of(column_name) }
+                                .compact
       obj[table_key] = TableColumnSerializer.new(selected_columns)
     end
   end
