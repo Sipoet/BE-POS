@@ -3,6 +3,8 @@ columns:
   item:
     type: model
     alias: kodeitem
+    sort_key: kodeitem
+    filter_key: kodeitem
     class_name: 'Ipos::Item'
     attribute_key: 'item.namaitem'
     client_width: 180
