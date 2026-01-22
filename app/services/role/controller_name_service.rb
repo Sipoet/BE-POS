@@ -33,16 +33,18 @@ class Role::ControllerNameService < ApplicationService
 
   def find_controllers
     controller_names = []
+    Dir["#{Rails.root}/app/controllers/**/*_controller.rb"].each do |path|
+      filename, dir = path.split('app/controllers/').last.split('/').reverse
+      next if %w[concerns action_mailbox rails active_storage].include? dir
 
-    Dir["#{Rails.root}/app/controllers/*_controller.rb"].each do |path|
-      controller_name = path.split('/').last
-      controller_name = controller_name.gsub(/(\w+)_controller\.rb/, '\1')
-      next if %w[application assets].include?(controller_name)
+      controller_name = filename.gsub(/(\w+)_controller\.rb/, '\1')
+      next if %w[application assets mailers].include?(controller_name)
 
+      controller_name = [dir, controller_name].compact.join('/')
       controller_names << controller_name
     end
     return controller_names if @search_text.blank?
 
-    controller_names.select { |controller_name| controller_name.include?(@search_text) }
+    controller_names.select { |controller_name| controller_name.downcase.include?(@search_text.downcase) }
   end
 end

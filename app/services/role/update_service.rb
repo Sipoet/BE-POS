@@ -37,16 +37,13 @@ class Role::UpdateService < ApplicationService
     permitted_params = params.required(:data)
                              .required(:relationships)
                              .required(:access_authorizes)
-                             .permit(data: [:type, :id, { attributes: %i[controller action] }])
+                             .permit(data: [:type, :id, { attributes: [:controller, { action: [] }] }])
     return if permitted_params.blank? || permitted_params[:data].blank?
 
     role.access_authorizes.map(&:mark_for_destruction)
     permitted_params[:data].each do |line_params|
-      actions = begin
-        line_params[:attributes][:action].split(',')
-      rescue StandardError
-        []
-      end
+      actions = line_params.dig(:attributes, :action) || []
+
       actions.each do |action|
         role.access_authorizes.build(
           controller: line_params[:attributes][:controller],
