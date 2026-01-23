@@ -75,7 +75,7 @@ class ApplicationService
 
   def permitted_column_names(record_class, whitelist_columns)
     table_definition = Datatable::DefinitionExtractor.new(record_class)
-    whitelist_columns = table_definition.column_names if whitelist_columns.blank?
+    whitelist_columns = table_definition.column_names_with_alias if whitelist_columns.blank?
     return whitelist_columns if superadmin?
 
     column_names = authorizer.columns_of_klass(record_class)

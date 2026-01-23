@@ -2,7 +2,6 @@
 table_name: edc_settlements
 columns:
   cashier_session_id:
-    alias: cashier_session_id
     type: integer
     excel_width: 25
     client_width: 200

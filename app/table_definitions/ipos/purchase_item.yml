@@ -68,7 +68,7 @@ columns:
     can_filter: false
     can_sort: false
   harga:
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: harga

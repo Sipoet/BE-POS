@@ -18,6 +18,10 @@ class Datatable::DefinitionExtractor
     @column_definitions.values
   end
 
+  def column_names_with_alias
+    @column_definitions.keys
+  end
+
   def column_of(key)
     @column_definitions[key.to_sym]
   end
