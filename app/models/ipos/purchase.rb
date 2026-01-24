@@ -7,4 +7,8 @@ class Ipos::Purchase < Ipos::ItemInHeader
   def self.sti_name
     'BL'
   end
+
+  def supplier_name
+    supplier&.name
+  end
 end

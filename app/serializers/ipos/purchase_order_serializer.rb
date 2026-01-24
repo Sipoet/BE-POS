@@ -31,7 +31,8 @@ class Ipos::PurchaseOrderSerializer
               :bc_trf_sts,
               :prpotfaktur,
               :acc_biaya_pot,
-              :opsikirim
+              :opsikirim,
+              :supplier_name
 
   %i[tanggal tanggalkirim dateupd].each do |key|
     attribute key do |object|

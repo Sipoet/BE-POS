@@ -17,7 +17,8 @@ class Ipos::PurchaseSerializer
              :notrsorder,
              :ppn,
              :pajak,
-             :kodesupel
+             :kodesupel,
+             :supplier_name
 
   %i[tanggal byr_krd_jt dateupd].each do |key|
     attribute key do |object|

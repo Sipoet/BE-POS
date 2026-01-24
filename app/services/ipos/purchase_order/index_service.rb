@@ -42,7 +42,8 @@ class Ipos::PurchaseOrder::IndexService < ApplicationService
                                          .page(@page)
                                          .per(@limit)
     if @search_text.present?
-      purchase_orders = purchase_orders.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%"))
+      purchase_orders = purchase_orders.where(['notransaksi ilike ? OR kodesupel ilike ? '] + Array.new(2,
+                                                                                                        "%#{@search_text}%"))
     end
     @filters.each do |filter|
       purchase_orders = purchase_orders.where(filter.to_query)

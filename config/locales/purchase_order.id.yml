@@ -4,7 +4,8 @@ id:
       ipos/purchase_order: "Pesanan Pembelian"
     attributes:
       ipos/purchase_order:
-        notransaksi: "No Faktur"
+        notransaksi: "No Pesan"
+        purchase: 'No Faktur'
         tanggal: "Tanggal Faktur"
         kantortujuan: "Lokasi"
         totalitem: "Total Item"
@@ -13,7 +14,10 @@ id:
         biayalain: "Biaya Lain"
         ppn: "Tipe Pajak"
         pajak: "Biaya Pajak"
-        totalakhir: "Total Akhir"
+        totalakhir: "Grand Total"
         keterangan: "Keterangan"
         user1: "User"
         kodesupel: 'Supplier'
+        supplier: 'Supplier'
+        supplier_code: 'Kode Supplier'
+        supplier_name: 'Nama Supplier'

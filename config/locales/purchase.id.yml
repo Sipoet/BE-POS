@@ -4,7 +4,8 @@ id:
       ipos/purchase: "Pembelian"
     attributes:
       ipos/purchase:
-        notransaksi: "No Transaksi"
+        notransaksi: "No Faktur"
+        purchase_order: 'Nota Pesanan'
         tanggal: "Tanggal Barang Datang"
         note_date: "Tanggal Faktur"
         kantortujuan: "Lokasi"
@@ -22,3 +23,6 @@ id:
         jmldeposit: "Bayar deposit"
         notrsorder: "Nota Pesanan"
         kodesupel: 'Supplier'
+        supplier: 'Supplier'
+        supplier_code: 'Kode Supplier'
+        supplier_name: 'Nama Supplier'

@@ -11,22 +11,12 @@ columns:
     can_filter: true
     filter_key: notransaksi
     can_sort: true
-  supplier:
-    alias: kodesupel
-    type: model
-    class_name: 'Ipos::Supplier'
+  supplier_name:
+    type: string
     excel_width: 25
     client_width: 200
-    path: 'ipos/suppliers'
-    sort_key: kodesupel
-    attribute_key: supplier.nama
-    can_filter: true
-    filter_key: kodesupel
-    can_sort: true
-    input_options:
-      path: 'ipos/suppliers'
-      model_name: supplier
-      attribute_key: name
+    can_filter: false
+    can_sort: false
   tanggal:
     name: tanggal
     type: datetime
@@ -48,6 +38,26 @@ columns:
       path: 'ipos/purchases'
       model_name: purchase
       attribute_key: notransaksi
+  totalakhir:
+    name: totalakhir
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: totalakhir
+    attribute_key: totalakhir
+    can_filter: true
+    filter_key: totalakhir
+    can_sort: true
+  keterangan:
+    name: keterangan
+    type: string
+    excel_width: 25
+    client_width: 200
+    sort_key: keterangan
+    attribute_key: keterangan
+    can_filter: true
+    filter_key: keterangan
+    can_sort: true
   kantortujuan:
     name: kantortujuan
     type: string
@@ -80,7 +90,7 @@ columns:
     can_sort: true
   potnomfaktur:
     name: potnomfaktur
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: potnomfaktur
@@ -90,7 +100,7 @@ columns:
     can_sort: true
   biayalain:
     name: biayalain
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: biayalain
@@ -110,33 +120,13 @@ columns:
     can_sort: true
   pajak:
     name: pajak
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: pajak
     attribute_key: pajak
     can_filter: true
     filter_key: pajak
-    can_sort: true
-  totalakhir:
-    name: totalakhir
-    type: decimal
-    excel_width: 25
-    client_width: 200
-    sort_key: totalakhir
-    attribute_key: totalakhir
-    can_filter: true
-    filter_key: totalakhir
-    can_sort: true
-  keterangan:
-    name: keterangan
-    type: string
-    excel_width: 25
-    client_width: 200
-    sort_key: keterangan
-    attribute_key: keterangan
-    can_filter: true
-    filter_key: keterangan
     can_sort: true
   user1:
     name: user1
@@ -150,7 +140,7 @@ columns:
     can_sort: true
   jmltunai:
     name: jmltunai
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: jmltunai
@@ -160,7 +150,7 @@ columns:
     can_sort: true
   jmlkredit:
     name: jmlkredit
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: jmlkredit
@@ -170,7 +160,7 @@ columns:
     can_sort: true
   jmldeposit:
     name: jmldeposit
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: jmldeposit
@@ -178,3 +168,19 @@ columns:
     can_filter: true
     filter_key: jmldeposit
     can_sort: true
+  supplier:
+    alias: kodesupel
+    type: model
+    class_name: 'Ipos::Supplier'
+    excel_width: 25
+    client_width: 200
+    path: 'ipos/suppliers'
+    sort_key: kodesupel
+    attribute_key: supplier.nama
+    can_filter: true
+    filter_key: kodesupel
+    can_sort: true
+    input_options:
+      path: 'ipos/suppliers'
+      model_name: supplier
+      attribute_key: name

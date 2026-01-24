@@ -5,4 +5,8 @@ class Ipos::PurchaseOrder < Ipos::OrderInHeader
   def self.sti_name
     'OB'
   end
+
+  def supplier_name
+    supplier&.name
+  end
 end
