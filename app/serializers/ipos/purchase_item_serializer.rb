@@ -20,9 +20,10 @@ class Ipos::PurchaseItemSerializer
              :item_type_name,
              :supplier_code,
              :brand_name,
-             :notransaksi
+             :notransaksi,
+             :purchase_type
 
-  %i[updated_at tglexp].each do |key|
+  %i[updated_at tglexp transaction_date].each do |key|
     attribute key do |object|
       ipos_fix_date_timezone(object.send(key))
     end
@@ -43,5 +44,35 @@ class Ipos::PurchaseItemSerializer
     object.item_report&.number_of_sales
   end
 
-  belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: Ipos::ItemSerializer
+  belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: Ipos::ItemSerializer, if: proc { |record, params|
+    begin
+      params[:include].include?('item')
+    rescue StandardError
+      false
+    end
+  }
+
+  belongs_to :purchase, set_id: :notransaksi, id_method_name: :notransaksi, serializer: Ipos::PurchaseSerializer, if: proc { |record, params|
+    begin
+      params[:include].include?('purchase') && record.purchase.is_a?(Ipos::Purchase)
+    rescue StandardError
+      false
+    end
+  }
+
+  belongs_to :purchase_return, set_id: :notransaksi, id_method_name: :notransaksi, serializer: Ipos::PurchaseReturnSerializer, if: proc { |record, params|
+    begin
+      params[:include].include?('purchase') && record.purchase.is_a?(Ipos::PurchaseReturn)
+    rescue StandardError
+      false
+    end
+  }
+
+  belongs_to :consignment_in, set_id: :notransaksi, id_method_name: :notransaksi, serializer: Ipos::ConsignmentInSerializer, if: proc { |record, params|
+    begin
+      params[:include].include?('purchase') && record.purchase.is_a?(Ipos::ConsignmentIn)
+    rescue StandardError
+      false
+    end
+  }
 end

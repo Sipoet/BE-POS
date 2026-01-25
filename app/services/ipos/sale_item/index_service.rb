@@ -43,13 +43,14 @@ class Ipos::SaleItem::IndexService < ApplicationService
                                       allowed_includes: allowed_includes,
                                       table_definition: @table_definition)
     @page = result.page || 1
-    @limit = result.limit || 5_000
+    @limit = result.limit || 20
     @search_text = result.search_text
     @sort = result.sort
     @included = result.included
     @filters = result.filters
     @fields = filter_authorize_fields(fields: result.fields, record_class: Ipos::SaleItem)
     @report_type = (@params[:report_type] || 'json').to_s
+    @limit = 5000 if @report_type == 'xlsx'
   end
 
   def find_sale_items
@@ -61,14 +62,25 @@ class Ipos::SaleItem::IndexService < ApplicationService
                    sale_items.page(1)
                              .per(@limit)
                  end
-    sale_items = sale_items.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%")) if @search_text.present?
+    if @search_text.present?
+      search_query_arr = [
+        'tbl_item.kodeitem ilike ?',
+        'tbl_item.namaitem ilike ?',
+        'tbl_item.merek ilike ?',
+        'tbl_item.jenis ilike ?',
+        'tbl_item.supplier1 ilike ?'
+      ]
+      sale_items = sale_items.where([search_query_arr.join(' OR ')] + Array.new(search_query_arr.length,
+                                                                                "%#{@search_text}%"))
+                             .left_outer_joins(:item)
+    end
     @filters.each do |filter|
       sale_items = sale_items.where(filter.to_query)
     end
     if @sort.present?
       sale_items.order(@sort)
     else
-      sale_items.order(id: :asc)
+      sale_items.order(item_code: :asc)
     end
   end
 end

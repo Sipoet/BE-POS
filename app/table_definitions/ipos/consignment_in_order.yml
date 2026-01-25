@@ -11,6 +11,16 @@ columns:
     can_filter: true
     filter_key: notransaksi
     can_sort: true
+  tanggal:
+    name: tanggal
+    type: datetime
+    excel_width: 25
+    client_width: 200
+    sort_key: tanggal
+    attribute_key: tanggal
+    can_filter: true
+    filter_key: tanggal
+    can_sort: true
   supplier:
     alias: kodesupel
     type: model
@@ -27,16 +37,17 @@ columns:
       path: 'ipos/suppliers'
       model_name: supplier
       attribute_key: name
-  tanggal:
-    name: tanggal
-    type: datetime
+  consignment_in:
+    type: model
+    class_name: 'Ipos::ConsignmentIn'
     excel_width: 25
     client_width: 200
-    sort_key: tanggal
-    attribute_key: tanggal
-    can_filter: true
-    filter_key: tanggal
-    can_sort: true
+    can_filter: false
+    can_sort: false
+    input_options:
+      path: 'ipos/consignment_ins'
+      model_name: consignment_in
+      attribute_key: notransaksi
   kantortujuan:
     name: kantortujuan
     type: string

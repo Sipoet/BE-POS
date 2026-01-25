@@ -11,12 +11,22 @@ columns:
     can_filter: true
     filter_key: notransaksi
     can_sort: true
-  supplier_name:
-    type: string
+  supplier:
+    alias: kodesupel
+    type: model
+    class_name: 'Ipos::Supplier'
     excel_width: 25
     client_width: 200
-    can_filter: false
-    can_sort: false
+    path: 'ipos/suppliers'
+    sort_key: kodesupel
+    attribute_key: supplier.nama
+    can_filter: true
+    filter_key: kodesupel
+    can_sort: true
+    input_options:
+      path: 'ipos/suppliers'
+      model_name: supplier
+      attribute_key: name
   tanggal:
     name: tanggal
     type: datetime
@@ -168,19 +178,3 @@ columns:
     can_filter: true
     filter_key: jmldeposit
     can_sort: true
-  supplier:
-    alias: kodesupel
-    type: model
-    class_name: 'Ipos::Supplier'
-    excel_width: 25
-    client_width: 200
-    path: 'ipos/suppliers'
-    sort_key: kodesupel
-    attribute_key: supplier.nama
-    can_filter: true
-    filter_key: kodesupel
-    can_sort: true
-    input_options:
-      path: 'ipos/suppliers'
-      model_name: supplier
-      attribute_key: name

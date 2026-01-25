@@ -5,13 +5,18 @@ class Ipos::PurchaseItem < ApplicationRecord
   alias_attribute :id, :iddetail
   alias_attribute :updated_at, :dateupd
 
-  belongs_to :purchase, class_name: 'Ipos::ItemInHeader',  primary_key: 'notransaksi', foreign_key: 'notransaksi'
+  belongs_to :purchase, class_name: 'Ipos::ItemInHeader', primary_key: 'notransaksi',
+                        foreign_key: 'notransaksi'
   belongs_to :item, class_name: 'Ipos::Item', primary_key: 'kodeitem', foreign_key: 'kodeitem'
 
   has_one :item_report, through: :item
 
   def sell_price
     item.try(:hargajual1)
+  end
+
+  def purchase_type
+    purchase&.tipe
   end
 
   def subtotal
@@ -28,5 +33,9 @@ class Ipos::PurchaseItem < ApplicationRecord
 
   def brand_name
     item.merek
+  end
+
+  def transaction_date
+    purchase&.tanggal
   end
 end

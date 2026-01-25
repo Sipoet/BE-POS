@@ -23,7 +23,7 @@ class Ipos::PurchaseItem::IndexService < ApplicationService
 
   def extract_params
     @table_definition = Datatable::DefinitionExtractor.new(Ipos::PurchaseItem)
-    allowed_includes = %i[purchase_item item]
+    allowed_includes = %i[purchase_item item purchase]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
                                       table_definition: @table_definition)
@@ -41,7 +41,18 @@ class Ipos::PurchaseItem::IndexService < ApplicationService
                                        .page(@page)
                                        .per(@limit)
     if @search_text.present?
-      purchase_items = purchase_items.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%"))
+      search_query_arr = [
+        'tbl_item.kodeitem ilike ?',
+        'tbl_item.namaitem ilike ?',
+        'tbl_imhd.notransaksi ilike ?',
+        'tbl_item.supplier1 ilike ?',
+        'tbl_item.jenis ilike ?',
+        'tbl_item.merek ilike ?'
+      ]
+      purchase_items = purchase_items.where([search_query_arr.join(' OR ')] + Array.new(search_query_arr.length,
+                                                                                        "%#{@search_text}%"))
+                                     .left_outer_joins(:item, :purchase)
+
     end
     @filters.each do |filter|
       purchase_items = purchase_items.where(filter.to_query)

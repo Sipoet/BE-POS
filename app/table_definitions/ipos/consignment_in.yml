@@ -27,6 +27,21 @@ columns:
       path: 'ipos/suppliers'
       model_name: supplier
       attribute_key: name
+  purchase_order:
+    alias: notrsorder
+    type: model
+    class_name: 'Ipos::PurchaseOrder'
+    excel_width: 25
+    client_width: 200
+    sort_key: notrsorder
+    attribute_key: notrsorder
+    can_filter: true
+    filter_key: notrsorder
+    can_sort: true
+    input_options:
+      path: 'ipos/purchase_orders'
+      model_name: purchase_order
+      attribute_key: notransaksi
   consignment_in_order:
     alias: notrsorder
     type: model

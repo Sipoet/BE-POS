@@ -30,7 +30,7 @@ class Ipos::SaleItem < ApplicationRecord
   end
 
   def transaction_date
-    sale.tanggal
+    sale&.tanggal
   end
 
   def sale_type

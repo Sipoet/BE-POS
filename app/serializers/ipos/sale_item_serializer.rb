@@ -1,5 +1,6 @@
 class Ipos::SaleItemSerializer
   include JSONAPI::Serializer
+  include TextFormatter
   attributes :kodeitem,
              :nobaris,
              :jumlah,
@@ -12,7 +13,6 @@ class Ipos::SaleItemSerializer
              :potongan4,
              :pajak,
              :total,
-             :updated_at,
              :sistemhargajual,
              :tipepromo,
              :jmlgratis,
@@ -23,8 +23,13 @@ class Ipos::SaleItemSerializer
              :supplier_code,
              :brand_name,
              :item_name,
-             :notransaksi,
-             :transaction_date
+             :notransaksi
+
+  %i[updated_at transaction_date].each do |key|
+    attribute key do |object|
+      ipos_fix_date_timezone(object.send(key))
+    end
+  end
 
   attribute :sale_type do |object|
     case object.sale_type
@@ -40,5 +45,11 @@ class Ipos::SaleItemSerializer
   end
 
   belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: Ipos::ItemSerializer
-  belongs_to :sale, if: proc { |_record, _params| false }
+  belongs_to :sale, set_id: :notransaksi, id_method_name: :notransaksi, if: proc { |_record, _params|
+    begin
+      params[:include].include?('sale')
+    rescue StandardError
+      false
+    end
+  }
 end

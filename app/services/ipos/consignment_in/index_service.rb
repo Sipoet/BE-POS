@@ -42,7 +42,15 @@ class Ipos::ConsignmentIn::IndexService < ApplicationService
                                          .page(@page)
                                          .per(@limit)
     if @search_text.present?
-      consignment_ins = consignment_ins.where(['notransaksi ilike ? '] + Array.new(1, "%#{@search_text}%"))
+      search_query_arr = [
+        'tbl_imhd.notransaksi ilike ?',
+        'tbl_imhd.kodesupel ilike ?',
+        'tbl_imhd.notrsorder ilike ?',
+        'tbl_supel.nama ilike ?'
+      ]
+      consignment_ins = consignment_ins.where([search_query_arr.join(' OR ')] + Array.new(search_query_arr.length,
+                                                                                          "%#{@search_text}%"))
+                                       .left_outer_joins(:supplier)
     end
     @filters.each do |filter|
       consignment_ins = filter.add_filter_to_query(consignment_ins)

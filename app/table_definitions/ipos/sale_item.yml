@@ -12,11 +12,6 @@ columns:
       path: 'ipos/items'
       model_name: item
       attribute_key: name
-  item_name:
-    type: string
-    client_width: 180
-    filter_key: 'tbl_item.namaitem'
-    can_sort: false
   transaction_date:
     type: datetime
     client_width: 180
@@ -24,8 +19,13 @@ columns:
     sort_key: 'tbl_ikhd.tanggal'
     can_filter: true
     can_sort: true
-  notransaksi:
-    type: string
+  sale:
+    type: model
+    alias: notransaksi
+    class_name: 'Ipos::Sale'
+    client_width: 180
+    sort_key: notransaksi
+    filter_key: notransaksi
     client_width: 180
   sale_type:
     type: string

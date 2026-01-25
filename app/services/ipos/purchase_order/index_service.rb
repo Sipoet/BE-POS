@@ -42,8 +42,15 @@ class Ipos::PurchaseOrder::IndexService < ApplicationService
                                          .page(@page)
                                          .per(@limit)
     if @search_text.present?
-      purchase_orders = purchase_orders.where(['notransaksi ilike ? OR kodesupel ilike ? '] + Array.new(2,
-                                                                                                        "%#{@search_text}%"))
+      search_query_arr = [
+        'tbl_pesanhd.notransaksi ilike ?',
+        'tbl_pesanhd.kodesupel ilike ?',
+        'tbl_imhd.notransaksi ilike ?',
+        'tbl_supel.nama ilike ?'
+      ]
+      purchase_orders = purchase_orders.where([search_query_arr.join(' OR ')] + Array.new(search_query_arr.length,
+                                                                                          "%#{@search_text}%"))
+                                       .left_outer_joins(:supplier, :purchase)
     end
     @filters.each do |filter|
       purchase_orders = purchase_orders.where(filter.to_query)
