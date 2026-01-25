@@ -48,6 +48,16 @@ columns:
       path: 'ipos/consignment_ins'
       model_name: consignment_in
       attribute_key: notransaksi
+  totalakhir:
+    name: totalakhir
+    type: money
+    excel_width: 25
+    client_width: 200
+    sort_key: totalakhir
+    attribute_key: totalakhir
+    can_filter: true
+    filter_key: totalakhir
+    can_sort: true
   kantortujuan:
     name: kantortujuan
     type: string
@@ -80,7 +90,7 @@ columns:
     can_sort: true
   potnomfaktur:
     name: potnomfaktur
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: potnomfaktur
@@ -90,7 +100,7 @@ columns:
     can_sort: true
   biayalain:
     name: biayalain
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: biayalain
@@ -118,16 +128,6 @@ columns:
     can_filter: true
     filter_key: pajak
     can_sort: true
-  totalakhir:
-    name: totalakhir
-    type: decimal
-    excel_width: 25
-    client_width: 200
-    sort_key: totalakhir
-    attribute_key: totalakhir
-    can_filter: true
-    filter_key: totalakhir
-    can_sort: true
   keterangan:
     name: keterangan
     type: string
@@ -150,7 +150,7 @@ columns:
     can_sort: true
   jmltunai:
     name: jmltunai
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: jmltunai
@@ -160,7 +160,7 @@ columns:
     can_sort: true
   jmlkredit:
     name: jmlkredit
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: jmlkredit
@@ -170,7 +170,7 @@ columns:
     can_sort: true
   jmldeposit:
     name: jmldeposit
-    type: decimal
+    type: money
     excel_width: 25
     client_width: 200
     sort_key: jmldeposit

@@ -4,7 +4,8 @@ id:
       ipos/consignment_in_order: "Pesanan Konsinyasi Masuk"
     attributes:
       ipos/consignment_in_order:
-        notransaksi: "No Faktur"
+        notransaksi: "No Pesanan"
+        consignment_in: 'No Faktur'
         tanggal: "Tanggal Faktur"
         kantortujuan: "Lokasi"
         totalitem: "Total Item"
@@ -17,3 +18,4 @@ id:
         keterangan: "Keterangan"
         user1: "User"
         kodesupel: 'Supplier'
+        supplier: 'Supplier'
