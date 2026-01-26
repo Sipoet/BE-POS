@@ -20,6 +20,6 @@ class Ipos::Item::ShowService < ApplicationService
                                       allowed_includes: allowed_includes,
                                       table_definition: @table_definition)
     @included = result.included
-    @fields = authorize_fields(fields: result.fields, record_class: Ipos::Item)
+    @fields = filter_authorize_fields(fields: result.fields, record_class: Ipos::Item)
   end
 end
