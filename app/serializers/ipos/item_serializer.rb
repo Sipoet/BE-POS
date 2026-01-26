@@ -9,7 +9,7 @@ class Ipos::ItemSerializer
   belongs_to :item_type, set_id: :jenis, id_method_name: :jenis
 
   attribute :barcode do |object|
-    object.code
+    object.item_sell_uoms.first&.barcode || object.code
   end
 
   attribute :updated_at do |object|

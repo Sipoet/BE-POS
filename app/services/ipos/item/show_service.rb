@@ -2,7 +2,11 @@ class Ipos::Item::ShowService < ApplicationService
   include JsonApiDeserializer
   def execute_service
     extract_params
-    item = Ipos::Item.find(params[:code])
+    item = Ipos::Item.find_by(code: params[:code])
+    if item.nil?
+      item_code = Ipos::ItemSellUom.find_by(barcode: params[:code])&.item_code
+      item = Ipos::Item.find_by(code: item_code) if item_code.present?
+    end
     raise RecordNotFound.new(params[:code], Ipos::Item.model_name.human) if item.nil?
 
     options = {
