@@ -35,7 +35,7 @@ class CashierSession::UpdateService < ApplicationService
     @fields = { cashier_session: allowed_columns }
     permitted_params = params.required(:data)
                              .required(:attributes)
-                             .permit(allowed_columns)
+                             .permit(table_definition.allowed_edit_columns)
     cashier_session.attributes = permitted_params
   end
 

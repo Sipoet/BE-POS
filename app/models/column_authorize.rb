@@ -3,6 +3,9 @@ class ColumnAuthorize < ApplicationRecord
   validates :column, presence: true
   validate :valid_column
 
+  after_save :delete_cache
+  after_destroy :delete_cache
+
   scope :columns_by_role, lambda { |role_id, table_name|
     where(role_id: role_id, table: table_name).pluck(:column)
   }
@@ -14,6 +17,10 @@ class ColumnAuthorize < ApplicationRecord
   belongs_to :role
 
   private
+
+  def delete_cache
+    Cache.delete_namespace("role-#{role_id}-")
+  end
 
   def valid_column
     return if table.blank?
