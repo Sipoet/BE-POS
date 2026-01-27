@@ -66,7 +66,7 @@ class ApplicationService
     column_names = authorizer.columns_of_klass(record_class)
                              .each_with_object([]) do |column_name, obj|
                                column_definition = table_definition.column_of(column_name)
-                               obj << column_definition.name.try(:to_sym) if column_definition&.can_edit
+                               obj << column_definition.edit_key.try(:to_sym) if column_definition&.can_edit
     end
     column_names.compact!
     Rails.logger.debug "===EDIT COLUMN=== whitelist_columns #{whitelist_columns} column_names #{column_names}"
