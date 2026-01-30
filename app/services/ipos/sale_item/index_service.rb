@@ -72,7 +72,7 @@ class Ipos::SaleItem::IndexService < ApplicationService
       ]
       sale_items = sale_items.where([search_query_arr.join(' OR ')] + Array.new(search_query_arr.length,
                                                                                 "%#{@search_text}%"))
-                             .left_outer_joins(:item)
+                             .left_outer_joins(:item, :sale)
     end
     @filters.each do |filter|
       sale_items = sale_items.where(filter.to_query)
