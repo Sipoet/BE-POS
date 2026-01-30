@@ -114,7 +114,7 @@ columns:
     can_sort: true
   contact_number:
     name: contact_number
-    type: string
+    type: tel
     excel_width: 25
     client_width: 200
     sort_key: contact_number

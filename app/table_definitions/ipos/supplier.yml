@@ -33,7 +33,7 @@ columns:
     can_sort: true
   contact:
     name: kontak
-    type: string
+    type: tel
     excel_width: 25
     client_width: 200
     sort_key: kontak
