@@ -3,7 +3,7 @@ class Ipos::PurchaseReturn::ShowService < ApplicationService
   def execute_service
     extract_params
     purchase_return = Ipos::PurchaseReturn.find(@code)
-    raise RecordNotFound.new(@code, PurchaseReturn.model_name.human) if purchase_return.nil?
+    raise RecordNotFound.new(@code, Ipos::PurchaseReturn.model_name.human) if purchase_return.nil?
 
     options = {
       fields: @fields,
@@ -14,13 +14,13 @@ class Ipos::PurchaseReturn::ShowService < ApplicationService
   end
 
   def extract_params
-    @table_definition = Datatable::DefinitionExtractor.new(PurchaseReturn)
+    @table_definition = Datatable::DefinitionExtractor.new(Ipos::PurchaseReturn)
     allowed_includes = [:purchase_return, :purchase_return_items, 'purchase_return_items.item', :supplier]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
                                       table_definition: @table_definition)
     @included = result.included
-    @fields = filter_authorize_fields(fields: result.fields, record_class: PurchaseReturn)
+    @fields = filter_authorize_fields(fields: result.fields, record_class: Ipos::PurchaseReturn)
     @code = CGI.unescape(params[:code])
   end
 end

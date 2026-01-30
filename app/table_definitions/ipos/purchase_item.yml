@@ -48,7 +48,7 @@ columns:
   jumlah:
     type: decimal
     excel_width: 25
-    client_width: 130
+    client_width: 180
     sort_key: jumlah
     attribute_key: jumlah
     can_filter: true
@@ -57,21 +57,21 @@ columns:
   stock_left:
     type: decimal
     excel_width: 25
-    client_width: 130
+    client_width: 180
     attribute_key: stock_left
     can_filter: false
     can_sort: false
   number_of_sales:
     type: decimal
     excel_width: 25
-    client_width: 130
+    client_width: 180
     attribute_key: number_of_sales
     can_filter: false
     can_sort: false
   warehouse_stock:
     type: decimal
     excel_width: 25
-    client_width: 140
+    client_width: 180
     attribute_key: warehouse_stock
     can_filter: false
     can_sort: false
@@ -103,7 +103,7 @@ columns:
   satuan:
     type: string
     excel_width: 25
-    client_width: 200
+    client_width: 130
     sort_key: satuan
     attribute_key: satuan
     can_filter: true

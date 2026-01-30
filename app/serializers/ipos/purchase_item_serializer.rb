@@ -46,7 +46,7 @@ class Ipos::PurchaseItemSerializer
 
   belongs_to :item, set_id: :kodeitem, id_method_name: :kodeitem, serializer: Ipos::ItemSerializer, if: proc { |record, params|
     begin
-      params[:include].include?('item')
+      params[:include].include?('item') || params[:include].include?('purchase_items.item')
     rescue StandardError
       false
     end
