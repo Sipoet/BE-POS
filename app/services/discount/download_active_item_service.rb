@@ -73,9 +73,10 @@ class Discount::DownloadActiveItemService < ApplicationService
                                                        .select { |column| WHITELIST_COLUMN.include?(column.name) }
 
     column_definitions += [
-      Datatable::TableColumn.new(:discount, { humanize_name: 'Diskon' }),
-      Datatable::TableColumn.new(:sell_price_after_discount, { humanize_name: 'Harga Setelah Diskon', type: 'money' }),
-      Datatable::TableColumn.new(:discount_code, { humanize_name: 'Kode Promo' })
+      Datatable::TableColumn.new(:discount, { humanize_name: 'Diskon' }, Discount),
+      Datatable::TableColumn.new(:sell_price_after_discount, { humanize_name: 'Harga Setelah Diskon', type: 'money' },
+                                 Discount),
+      Datatable::TableColumn.new(:discount_code, { humanize_name: 'Kode Promo' }, Discount)
     ]
     generator = ExcelGenerator.new
     generator.add_column_definitions(column_definitions)

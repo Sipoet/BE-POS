@@ -41,7 +41,7 @@ class Payroll::ReportService < ApplicationService
           excel_width: 25,
           client_width: 200
 
-        }
+        }, PayrollReport
       ),
       Datatable::TableColumn.new(
         :start_working_date,
@@ -51,7 +51,7 @@ class Payroll::ReportService < ApplicationService
           name: :start_working_date,
           excel_width: 25,
           client_width: 200
-        }
+        }, PayrollReport
       ),
       Datatable::TableColumn.new(
         :salary_total,
@@ -61,7 +61,7 @@ class Payroll::ReportService < ApplicationService
           name: :salary_total,
           excel_width: 25,
           client_width: 200
-        }
+        }, PayrollReport
       )
     ]
     columns += payroll_types.map do |payroll_type|
@@ -73,7 +73,7 @@ class Payroll::ReportService < ApplicationService
           name: payroll_type.id.to_s,
           excel_width: 25,
           client_width: 200
-        }
+        }, PayrollReport
       )
     end
     columns

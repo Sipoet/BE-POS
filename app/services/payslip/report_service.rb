@@ -45,6 +45,7 @@ class Payslip::ReportService < ApplicationService
         {
           humanize_name: PayslipReport.human_attribute_name(:employee_name),
           type: :model,
+          class_name: 'Employee',
           client_width: 180,
           input_options: {
             path: 'employees',
@@ -52,7 +53,8 @@ class Payslip::ReportService < ApplicationService
             attribute_key: 'employee_name'
           },
           sort_key: 'employee_name'
-        }
+        },
+        PayslipReport
       ),
       Datatable::TableColumn.new(
         :employee_status,
@@ -64,7 +66,8 @@ class Payslip::ReportService < ApplicationService
           input_options: {
             enums: Employee.statuses.keys
           }
-        }
+        },
+        PayslipReport
       ),
       Datatable::TableColumn.new(
         :employee_start_working_date,
@@ -73,7 +76,8 @@ class Payslip::ReportService < ApplicationService
           type: :date,
           client_width: 180,
           excel_width: 14
-        }
+        },
+        PayslipReport
       ),
       Datatable::TableColumn.new(
         :start_date,
@@ -82,7 +86,7 @@ class Payslip::ReportService < ApplicationService
           type: :date,
           client_width: 180,
           excel_width: 14
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :end_date,
@@ -91,7 +95,7 @@ class Payslip::ReportService < ApplicationService
           type: :date,
           client_width: 180,
           excel_width: 15
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :payslip_status,
@@ -103,7 +107,7 @@ class Payslip::ReportService < ApplicationService
           input_options: {
             enums: Payslip.statuses.keys
           }
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :work_days,
@@ -112,7 +116,7 @@ class Payslip::ReportService < ApplicationService
           type: :decimal,
           client_width: 150,
           excel_width: 10
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :total_day,
@@ -121,7 +125,7 @@ class Payslip::ReportService < ApplicationService
           type: :integer,
           client_width: 150,
           excel_width: 10
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :overtime_hour,
@@ -130,7 +134,7 @@ class Payslip::ReportService < ApplicationService
           type: :integer,
           client_width: 150,
           excel_width: 10
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :late,
@@ -139,7 +143,7 @@ class Payslip::ReportService < ApplicationService
           type: :integer,
           client_width: 150,
           excel_width: 5
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :sick_leave,
@@ -148,7 +152,7 @@ class Payslip::ReportService < ApplicationService
           type: :integer,
           client_width: 150,
           excel_width: 5
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :known_absence,
@@ -157,7 +161,7 @@ class Payslip::ReportService < ApplicationService
           type: :integer,
           client_width: 150,
           excel_width: 4
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :unknown_absence,
@@ -166,7 +170,7 @@ class Payslip::ReportService < ApplicationService
           type: :integer,
           client_width: 150,
           excel_width: 5
-        }
+        }, PayslipReport
       )
     ]
     result += @payroll_types.map do |payroll_type|
@@ -176,7 +180,7 @@ class Payslip::ReportService < ApplicationService
           type: :money,
           client_width: 160,
           excel_width: 12
-        }
+        }, PayslipReport
       )
     end
     result += [
@@ -187,7 +191,7 @@ class Payslip::ReportService < ApplicationService
           type: :money,
           client_width: 160,
           excel_width: 12
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :description,
@@ -196,7 +200,7 @@ class Payslip::ReportService < ApplicationService
           type: :string,
           client_width: 180,
           excel_width: 17
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :bank,
@@ -205,7 +209,7 @@ class Payslip::ReportService < ApplicationService
           type: :string,
           client_width: 160,
           excel_width: 6
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :bank_account,
@@ -214,7 +218,7 @@ class Payslip::ReportService < ApplicationService
           type: :string,
           client_width: 180,
           excel_width: 20
-        }
+        }, PayslipReport
       ),
       Datatable::TableColumn.new(
         :bank_register_name,
@@ -223,7 +227,7 @@ class Payslip::ReportService < ApplicationService
           type: :string,
           client_width: 180,
           excel_width: 35
-        }
+        }, PayslipReport
       )
     ]
     result
