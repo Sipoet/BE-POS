@@ -30,7 +30,8 @@ columns:
   sale_type:
     type: string
     client_width: 120
-    can_filter: false
+    can_filter: true
+    filter_key: 'tbl_ikhd.tipe'
     can_sort: false
   jumlah:
     client_width: 180
