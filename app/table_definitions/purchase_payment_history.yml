@@ -11,7 +11,7 @@ columns:
       attribute_key: name
     filter_key: 'supplier_code'
     sort_key: 'supplier_code'
-  purchase_code:
+  purchase:
     type: model
     class_name: 'Ipos::Purchase'
     excel_width: 22
@@ -69,7 +69,7 @@ columns:
     excel_width: 22
     client_width: 200
     type: string
-  purchase_order_code:
+  purchase_order:
     type: model
     class_name: 'Ipos::PurchaseOrder'
     excel_width: 22

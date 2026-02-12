@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'cash_transaction_reports/index'
-  get 'purchase_payment_histories/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

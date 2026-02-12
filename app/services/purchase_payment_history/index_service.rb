@@ -46,8 +46,9 @@ class PurchasePaymentHistory::IndexService < ApplicationService
                           'purchase_order_code ilike ?',
                           'description ilike ?',
                           'supplier_code ilike ?', 'tbl_supel.nama ilike ?']
-      purchase_payment_histories = purchase_payment_histories.left_outer_joins(:supplier).where([query_search_arr.join(' OR ')] + Array.new(6,
-                                                                                                                                            "%#{@search_text}%"))
+      purchase_payment_histories = purchase_payment_histories.left_outer_joins(:supplier, :purchase, :purchase_order)
+                                                             .where([query_search_arr.join(' OR ')] + Array.new(6,
+                                                                                                                "%#{@search_text}%"))
     end
     @filters.each do |filter|
       purchase_payment_histories = filter.add_filter_to_query(purchase_payment_histories)
