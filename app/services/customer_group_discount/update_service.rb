@@ -32,9 +32,10 @@ class CustomerGroupDiscount::UpdateService < ApplicationService
     table_definition = Datatable::DefinitionExtractor.new(CustomerGroupDiscount)
     allowed_columns = table_definition.column_names
     @fields = { customer_group_discount: allowed_columns }
+    permitted_columns = permitted_edit_columns(CustomerGroupDiscount, table_definition.allowed_edit_columns)
     permitted_params = params.required(:data)
                              .required(:attributes)
-                             .permit(allowed_columns)
+                             .permit(permitted_columns)
     customer_group_discount.attributes = permitted_params
   end
 end

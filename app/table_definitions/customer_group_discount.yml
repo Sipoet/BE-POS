@@ -2,7 +2,7 @@
 table_name: customer_group_discounts
 columns:
   customer_group:
-    name: customer_group_code
+    alias: customer_group_code
     type: model
     excel_width: 25
     client_width: 200
