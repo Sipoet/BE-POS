@@ -41,7 +41,10 @@ class CustomerGroupDiscount::IndexService < ApplicationService
                                                     .page(@page)
                                                     .per(@limit)
     if @search_text.present?
-      customer_group_discounts = customer_group_discounts.where(['name ilike ? '] + Array.new(1, "%#{@search_text}%"))
+      customer_group_discounts = customer_group_discounts.where(['tbl_supelgrup.kgrup ilike ? OR tbl_supelgrup.grup ilike ?'] + Array.new(
+        2, "%#{@search_text}%"
+      ))
+                                                         .left_outer_joins(:customer_group)
     end
     @filters.each do |filter|
       customer_group_discounts = customer_group_discounts.where(filter.to_query)
