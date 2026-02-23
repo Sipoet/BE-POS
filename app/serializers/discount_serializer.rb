@@ -11,66 +11,39 @@ class DiscountSerializer
   end
 
   attribute :item_code do |object|
-    filter_text(object.discount_items.included_items.limit(10).map(&:item_code))
+    filter_text(object.discount_items.included.limit(10).map(&:value))
   end
   attribute :supplier_code do |object|
-    filter_text(object.discount_suppliers.included_suppliers.limit(10).map(&:supplier_code))
+    filter_text(object.discount_suppliers.included.limit(10).map(&:value))
   end
   attribute :brand_name do |object|
-    filter_text(object.discount_brands.included_brands.limit(10).map(&:brand_name))
+    filter_text(object.discount_brands.included.limit(10).map(&:value))
   end
   attribute :item_type_name do |object|
-    filter_text(object.discount_item_types.included_item_types.limit(10).map(&:item_type_name))
+    filter_text(object.discount_item_types.included.limit(10).map(&:value))
   end
 
   attribute :blacklist_item_code do |object|
-    filter_text(object.discount_items.excluded_items.limit(10).map(&:item_code))
+    filter_text(object.discount_items.excluded.limit(10).map(&:value))
   end
   attribute :blacklist_supplier_code do |object|
-    filter_text(object.discount_suppliers.excluded_suppliers.limit(10).map(&:supplier_code))
+    filter_text(object.discount_suppliers.excluded.limit(10).map(&:value))
   end
   attribute :blacklist_brand_name do |object|
-    filter_text(object.discount_brands.excluded_brands.limit(10).map(&:brand_name))
+    filter_text(object.discount_brands.excluded.limit(10).map(&:value))
   end
   attribute :blacklist_item_type_name do |object|
-    filter_text(object.discount_item_types.excluded_item_types.limit(10).map(&:item_type_name))
+    filter_text(object.discount_item_types.excluded.limit(10).map(&:value))
   end
 
-  has_many :discount_items, if: proc { |_record, params|
+  has_many :discount_filters, if: proc { |_record, params|
     begin
-      params[:include].include?('discount_items')
+      params[:include].include?('discount_filters')
     rescue StandardError
       false
     end
   } do |discount|
-    discount.discount_items.order(item_code: :asc).includes(:item)
-  end
-  has_many :discount_item_types, if: proc { |_record, params|
-    begin
-      params[:include].include?('discount_item_types')
-    rescue StandardError
-      false
-    end
-  } do |discount|
-    discount.discount_item_types.order(item_type_name: :asc).includes(:item_type)
-  end
-  has_many :discount_brands, if: proc { |_record, params|
-    begin
-      params[:include].include?('discount_brands')
-    rescue StandardError
-      false
-    end
-  } do |discount|
-    discount.discount_brands.order(brand_name: :asc).includes(:brand)
-  end
-  has_many :discount_suppliers, if: proc { |_record, params|
-    begin
-      params[:include].include?('discount_suppliers')
-    rescue StandardError
-      false
-    end
-  } do |discount|
-    discount.discount_suppliers.order(supplier_code: :asc).includes(:supplier)
+    discount.discount_filters.order(filter_key: :asc, value: :asc)
   end
 
   belongs_to :customer_group, set_id: :customer_group_code, id_method_name: :customer_group_code

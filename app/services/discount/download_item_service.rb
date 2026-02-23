@@ -1,6 +1,6 @@
 class Discount::DownloadItemService < ApplicationService
   include ActionView::Helpers::NumberHelper
-
+  include DiscountAffectedItem
   def execute_service
     discount = Discount.find_by(id: @params[:id])
     raise ApplicationService::RecordNotFound.new(@params[:id], Discount.name) if discount.nil?
@@ -11,22 +11,21 @@ class Discount::DownloadItemService < ApplicationService
   end
 
   def find_reports(discount)
-    query = Ipos::ItemPromotion
-            .joins(:promotion, :discount)
-            .where(promotion: { stsact: true }, discount: { id: discount.id })
-            .includes(:item, :discount, promotion: [:discount])
-            .order(kodeitem: :asc)
-    query.to_a.map do |item_promotion|
-      item = item_promotion.item
+    item_reports = items_based_discount(discount)
+                   .includes(:brand, :supplier, :item_type)
+                   .order(item_code: :asc)
+    item_reports.map do |item|
       discount_amount = calculate_discount(discount, item.sell_price)
       {
-        item_code: item_promotion.kodeitem,
-        brand_name: item.brand_name,
-        item_type_name: item.item_type_name,
+        item_code: item.item_code,
+        item_name: item.item_name,
+        brand: item.brand,
+        item_type: item.item_type,
+        supplier: item.supplier,
         sell_price: item.sell_price,
         discount: discount_format(discount, discount_amount),
         sell_price_after_discount: item.sell_price - discount_amount,
-        discount_code: discount.try(:code)
+        discount_code: discount&.code
       }
     end
   end
@@ -64,20 +63,27 @@ class Discount::DownloadItemService < ApplicationService
     number_to_currency(value, unit: 'Rp ', separator: ',', delimiter: '.')
   end
 
-  WHITELIST_COLUMN = %i[item_code brand_name item_type_name sell_price]
-
+  @@column_definitions = [
+    Datatable::TableColumn.new(:item_code, { humanize_name: ItemReport.human_attribute_name(:item_code) },
+                               ItemReport),
+    Datatable::TableColumn.new(:item_name, { humanize_name: ItemReport.human_attribute_name(:item_name), excel_width: 35 },
+                               ItemReport),
+    Datatable::TableColumn.new(:brand, { humanize_name: ItemReport.human_attribute_name(:brand), class_name: 'Ipos::Brand', type: 'model' },
+                               ItemReport),
+    Datatable::TableColumn.new(:item_type, { humanize_name: ItemReport.human_attribute_name(:item_type), class_name: 'Ipos::ItemType', type: 'model' },
+                               ItemReport),
+    Datatable::TableColumn.new(:supplier, { humanize_name: ItemReport.human_attribute_name(:supplier), class_name: 'Ipos::Supplier', type: 'model' },
+                               ItemReport),
+    Datatable::TableColumn.new(:sell_price, { humanize_name: 'Harga Jual', type: 'money' },
+                               Discount),
+    Datatable::TableColumn.new(:discount, { humanize_name: 'Diskon', type: 'string' },
+                               Discount),
+    Datatable::TableColumn.new(:sell_price_after_discount, { humanize_name: 'Harga Setelah Diskon', type: 'money' },
+                               Discount)
+  ]
   def generate_file(reports, discount)
-    column_definitions = Datatable::DefinitionExtractor.new(ItemReport)
-                                                       .column_definitions
-                                                       .select { |column| WHITELIST_COLUMN.include?(column.name) }
-
-    column_definitions += [
-      Datatable::TableColumn.new(:discount, { humanize_name: 'Diskon' }, Discount),
-      Datatable::TableColumn.new(:sell_price_after_discount, { humanize_name: 'Harga Setelah Diskon', type: 'money' },
-                                 Discount)
-    ]
     generator = ExcelGenerator.new
-    generator.add_column_definitions(column_definitions)
+    generator.add_column_definitions(@@column_definitions)
     generator.set_row_data_type_hash!
     generator.add_data(reports)
     filter = {

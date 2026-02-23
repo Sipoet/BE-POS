@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     delete :delete_inactive_past_discount, on: :collection
     get :template_mass_upload_excel, on: :collection
     get :download_items, on: :member
+    post :affected_items, on: :collection
     get :download_active_items, on: :collection
   end
 

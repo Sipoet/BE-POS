@@ -1,4 +1,7 @@
-class Discount::CreateService < ApplicationService
+# frozen_string_literal: true
+
+class Discount::AffectedItemService < ApplicationService
+  include DiscountAffectedItem
   def execute_service
     permitted_params = @params.required(:data)
                               .required(:attributes)
@@ -10,13 +13,27 @@ class Discount::CreateService < ApplicationService
                                       :discount4, :start_time, :end_time)
     discount = Discount.new(permitted_params)
     build_discount_filters(discount)
-    discount.generate_code if discount.code.blank?
-    if discount.save
-      RefreshPromotionJob.perform_async(discount.id)
-      render_json(DiscountSerializer.new(discount), { status: :created })
-    else
-      render_error_record(discount)
+    limit = nil
+
+    item_reports = items_based_discount(discount)
+    if discount.discount_filters.blank?
+      limit = 500
+      item_reports = item_reports.page(1).per(limit)
     end
+    options = {
+      meta: {
+        filter: @filter,
+        page: 1,
+        limit: limit,
+        total_pages: 1,
+        total_rows: item_reports.count
+      },
+      fields: { item_report: %i[item_code item_name stock_left warehouse_stock store_stock cogs
+                                sell_price margin limit_profit_discount] },
+      params: { include: nil },
+      include: nil
+    }
+    render_json(ItemReportSerializer.new(item_reports, options))
   end
 
   private

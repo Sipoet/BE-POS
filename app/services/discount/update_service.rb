@@ -15,10 +15,7 @@ class Discount::UpdateService < ApplicationService
     begin
       ApplicationRecord.transaction do
         try_stop_background_job(discount)
-        build_discount_items(discount)
-        build_discount_item_types(discount)
-        build_discount_suppliers(discount)
-        build_discount_brands(discount)
+        build_discount_filters(discount)
         discount.update!(permitted_params)
         RefreshPromotionJob.perform_async(discount.id)
         render_json(DiscountSerializer.new(discount.reload))
@@ -51,43 +48,13 @@ class Discount::UpdateService < ApplicationService
     end
   end
 
-  def build_discount_items(discount)
+  def build_discount_filters(discount)
     permitted_params = params.required(:data)
                              .required(:relationships)
-                             .required(:discount_items)
-                             .permit(data: [:type, :id, { attributes: %i[item_code is_exclude] }])
+                             .required(:discount_filters)
+                             .permit(data: [:type, :id, { attributes: %i[value filter_key is_exclude] }])
     return if permitted_params.blank? || permitted_params[:data].blank?
 
-    edit_attributes(permitted_params[:data], discount.discount_items)
-  end
-
-  def build_discount_item_types(discount)
-    permitted_params = params.required(:data)
-                             .required(:relationships)
-                             .required(:discount_item_types)
-                             .permit(data: [:type, :id, { attributes: %i[item_type_name is_exclude] }])
-    return if permitted_params.blank? || permitted_params[:data].blank?
-
-    edit_attributes(permitted_params[:data], discount.discount_item_types)
-  end
-
-  def build_discount_brands(discount)
-    permitted_params = params.required(:data)
-                             .required(:relationships)
-                             .required(:discount_brands)
-                             .permit(data: [:type, :id, { attributes: %i[brand_name is_exclude] }])
-    return if permitted_params.blank? || permitted_params[:data].blank?
-
-    edit_attributes(permitted_params[:data], discount.discount_brands)
-  end
-
-  def build_discount_suppliers(discount)
-    permitted_params = params.required(:data)
-                             .required(:relationships)
-                             .required(:discount_suppliers)
-                             .permit(data: [:type, :id, { attributes: %i[supplier_code is_exclude] }])
-    return if permitted_params.blank? || permitted_params[:data].blank?
-
-    edit_attributes(permitted_params[:data], discount.discount_suppliers)
+    edit_attributes(permitted_params[:data], discount.discount_filters)
   end
 end

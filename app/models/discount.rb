@@ -25,12 +25,9 @@ class Discount < ApplicationRecord
   validates :end_time, presence: true
   validates :calculation_type, presence: true
 
-  has_many :discount_items, dependent: :destroy
-  has_many :discount_suppliers, dependent: :destroy
-  has_many :discount_brands, dependent: :destroy
-  has_many :discount_item_types, dependent: :destroy
+  has_many :discount_filters, dependent: :destroy
   has_many :promotions, class_name: 'Ipos::Promotion', dependent: :destroy
-  accepts_nested_attributes_for :discount_items, :discount_suppliers, :discount_brands, :discount_item_types,
+  accepts_nested_attributes_for :discount_filters,
                                 allow_destroy: true
 
   belongs_to :item, optional: true, foreign_key: :item_code, primary_key: :kodeitem, class_name: 'Ipos::Item'
@@ -49,10 +46,10 @@ class Discount < ApplicationRecord
 
   def generate_code
     self.code = [
-      discount_items.first.try(:item_code),
-      discount_suppliers.first.try(:supplier_code),
-      discount_item_types.first.try(:item_type_name),
-      discount_brands.first.try(:brand_name),
+      discount_items.first.try(:value),
+      discount_suppliers.first.try(:value),
+      discount_item_types.first.try(:value),
+      discount_brands.first.try(:value),
       start_time.try(:strftime, '%d%b%y'),
       end_time.try(:strftime, '%d%b%y')
     ].compact.join('-')
@@ -63,6 +60,22 @@ class Discount < ApplicationRecord
 
   def delete_promotion
     promotions.destroy_all
+  end
+
+  def discount_items
+    discount_filters.items
+  end
+
+  def discount_brands
+    discount_filters.brands
+  end
+
+  def discount_suppliers
+    discount_filters.suppliers
+  end
+
+  def discount_item_types
+    discount_filters.item_types
   end
 
   private

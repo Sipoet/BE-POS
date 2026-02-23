@@ -1,4 +1,5 @@
 class Discount::RefreshPromotion
+  include DiscountAffectedItem
   IPOS_MAX_ITEM_PER_PROMOTION = 200
 
   attr_reader :discount
@@ -15,7 +16,8 @@ class Discount::RefreshPromotion
       delete_old_promotion
       return if DateTime.now < discount.start_time
 
-      items = items_based_discount
+      item_reports = items_based_discount(discount)
+      items = Ipos::Item.where(code: item_reports.pluck(:item_code))
       check_conflict_promotion(items)
       items = items.where.not(kodeitem: @blacklist_item_codes)
       generate_ipos_promotion(items)
@@ -26,27 +28,6 @@ class Discount::RefreshPromotion
 
   def delete_old_promotion
     discount.delete_promotion
-  end
-
-  def items_based_discount
-    items = Ipos::Item.order(kodeitem: :asc)
-    {
-      kodeitem: discount.discount_items.included_items.pluck(:item_code),
-      supplier1: discount.discount_suppliers.included_suppliers.pluck(:supplier_code),
-      jenis: discount.discount_item_types.included_item_types.pluck(:item_type_name),
-      merek: discount.discount_brands.included_brands.pluck(:brand_name)
-    }.each do |key, value|
-      items = items.where(key => value) if value.present?
-    end
-    {
-      kodeitem: discount.discount_items.excluded_items.pluck(:item_code),
-      supplier1: discount.discount_suppliers.excluded_suppliers.pluck(:supplier_code),
-      jenis: discount.discount_item_types.excluded_item_types.pluck(:item_type_name),
-      merek: discount.discount_brands.excluded_brands.pluck(:brand_name)
-    }.each do |key, value|
-      items = items.where.not(key => value) if value.present?
-    end
-    items
   end
 
   def check_conflict_promotion(items)
