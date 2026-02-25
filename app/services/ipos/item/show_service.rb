@@ -19,7 +19,7 @@ class Ipos::Item::ShowService < ApplicationService
 
   def extract_params
     @table_definition = Datatable::DefinitionExtractor.new(Ipos::Item)
-    allowed_includes = [:item]
+    allowed_includes = %i[item_report supplier brand item_type]
     result = deserialize_table_params(params,
                                       allowed_includes: allowed_includes,
                                       table_definition: @table_definition)
