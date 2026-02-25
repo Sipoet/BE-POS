@@ -63,22 +63,31 @@ class Discount < ApplicationRecord
   end
 
   def discount_items
-    discount_filters.items
+    group_filter['item'] || []
   end
 
   def discount_brands
-    discount_filters.brands
+    group_filter['brand'] || []
   end
 
   def discount_suppliers
-    discount_filters.suppliers
+    group_filter['supplier'] || []
   end
 
   def discount_item_types
-    discount_filters.item_types
+    group_filter['item_type'] || []
+  end
+
+  def reload
+    @group_filter = nil
+    super
   end
 
   private
+
+  def group_filter
+    @group_filter ||= discount_filters.group_by(&:filter_key)
+  end
 
   # filter should be filled at least one
   def filter_should_be_filled

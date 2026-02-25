@@ -11,29 +11,29 @@ class DiscountSerializer
   end
 
   attribute :item_code do |object|
-    filter_text(object.discount_items.included.limit(10).map(&:value))
+    filter_text(object.discount_items.select { |x| !x.is_exclude }.take(10).pluck(:value))
   end
   attribute :supplier_code do |object|
-    filter_text(object.discount_suppliers.included.limit(10).map(&:value))
+    filter_text(object.discount_suppliers.select { |x| !x.is_exclude }.take(10).pluck(:value))
   end
   attribute :brand_name do |object|
-    filter_text(object.discount_brands.included.limit(10).map(&:value))
+    filter_text(object.discount_brands.select { |x| !x.is_exclude }.take(10).pluck(:value))
   end
   attribute :item_type_name do |object|
-    filter_text(object.discount_item_types.included.limit(10).map(&:value))
+    filter_text(object.discount_item_types.select { |x| !x.is_exclude }.take(10).pluck(:value))
   end
 
   attribute :blacklist_item_code do |object|
-    filter_text(object.discount_items.excluded.limit(10).map(&:value))
+    filter_text(object.discount_items.select(&:is_exclude).take(10).pluck(:value))
   end
   attribute :blacklist_supplier_code do |object|
-    filter_text(object.discount_suppliers.excluded.limit(10).map(&:value))
+    filter_text(object.discount_suppliers.select(&:is_exclude).take(10).pluck(:value))
   end
   attribute :blacklist_brand_name do |object|
-    filter_text(object.discount_brands.excluded.limit(10).map(&:value))
+    filter_text(object.discount_brands.select(&:is_exclude).take(10).pluck(:value))
   end
   attribute :blacklist_item_type_name do |object|
-    filter_text(object.discount_item_types.excluded.limit(10).map(&:value))
+    filter_text(object.discount_item_types.select(&:is_exclude).take(10).pluck(:value))
   end
 
   has_many :discount_filters, if: proc { |_record, params|
