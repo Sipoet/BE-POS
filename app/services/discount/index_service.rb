@@ -47,16 +47,16 @@ class Discount::IndexService < ApplicationService
     @filters.each do |filter|
       if filter.key.to_sym == :item_code
         filter_discount_ids << DiscountFilter.where(filter_key: 'item',
-                                                    filter_value: filter.value).distinct(:discount_id).pluck(:discount_id)
+                                                    value: filter.value).distinct(:discount_id).pluck(:discount_id)
       elsif filter.key.to_sym == :item_type_name
         filter_discount_ids << DiscountFilter.where(filter_key: 'item_type',
-                                                    filter_value: filter.value).distinct(:discount_id).pluck(:discount_id)
+                                                    value: filter.value).distinct(:discount_id).pluck(:discount_id)
       elsif filter.key.to_sym == :supplier_code
         filter_discount_ids << DiscountFilter.where(filter_key: 'supplier',
-                                                    filter_value: filter.value).distinct(:discount_id).pluck(:discount_id)
+                                                    value: filter.value).distinct(:discount_id).pluck(:discount_id)
       elsif filter.key.to_sym == :brand_name
         filter_discount_ids << DiscountFilter.where(filter_key: 'brand',
-                                                    filter_value: filter.value).distinct(:discount_id).pluck(:discount_id)
+                                                    value: filter.value).distinct(:discount_id).pluck(:discount_id)
       else
         discounts = discounts.where(filter.to_query)
       end
