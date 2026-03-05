@@ -46,7 +46,13 @@ class DiscountSerializer
     discount.discount_filters.order(filter_key: :asc, value: :asc)
   end
 
-  belongs_to :customer_group, set_id: :customer_group_code, id_method_name: :customer_group_code
+  belongs_to :customer_group, set_id: :customer_group_code, id_method_name: :customer_group_code, if: proc { |_record, params|
+    begin
+      params[:include].include?('customer_group')
+    rescue StandardError
+      false
+    end
+  }
 
   def self.filter_text(text_arr)
     text = text_arr.join(', ')
