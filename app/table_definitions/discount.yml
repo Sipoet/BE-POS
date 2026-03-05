@@ -71,6 +71,7 @@ columns:
     can_sort: false
   customer_group:
     type: model
+    alias: customer_group_code
     client_width: 180
     input_options:
       model_name: customer_group
