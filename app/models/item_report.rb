@@ -8,5 +8,7 @@ class ItemReport < ApplicationRecord
   belongs_to :brand, optional: true, foreign_key: :brand_name, primary_key: :merek, class_name: 'Ipos::Brand'
   belongs_to :supplier, foreign_key: :supplier_code, primary_key: :kode, class_name: 'Ipos::Supplier'
 
+  has_many :beginning_balances, class_name: 'Ipos::BeginningBalance', foreign_key: :kodeitem, primary_key: :item_code
+  has_many :purchase_items, class_name: 'Ipos::PurchaseItem', foreign_key: :kodeitem, primary_key: :item_code
   alias_attribute :id, :item_code
 end

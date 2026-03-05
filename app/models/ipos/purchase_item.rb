@@ -9,7 +9,7 @@ class Ipos::PurchaseItem < ApplicationRecord
                         foreign_key: 'notransaksi'
   belongs_to :item, class_name: 'Ipos::Item', primary_key: 'kodeitem', foreign_key: 'kodeitem'
 
-  has_one :item_report, through: :item
+  belongs_to :item_report, class_name: 'ItemReport', primary_key: 'item_code', foreign_key: 'kodeitem'
 
   def sell_price
     item.try(:hargajual1)
