@@ -8,4 +8,12 @@ class Ipos::ItemStocksController < ApplicationController
   def update
     run_service_default
   end
+
+  def download_racksheets
+    run_service_default
+  end
+
+  def upload_racksheets
+    run_service_default
+  end
 end

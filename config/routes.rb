@@ -115,7 +115,10 @@ Rails.application.routes.draw do
   resources :cash_transaction_reports, only: [:index]
 
   namespace :ipos do
-    resources :item_stocks, only: %i[index update]
+    resources :item_stocks, only: %i[index update] do
+      get :download_racksheets, on: :collection
+      post :upload_racksheets, on: :collection
+    end
     resources :users, only: [:index]
     resources :items, param: :code, only: %i[index show update] do
       get :with_discount, on: :collection

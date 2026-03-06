@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-class Ipos::ItemStock::IndexService < ApplicationService
 
+class Ipos::ItemStock::IndexService < ApplicationService
   include JsonApiDeserializer
   def execute_service
     extract_params
@@ -8,10 +8,10 @@ class Ipos::ItemStock::IndexService < ApplicationService
     options = {
       meta: meta,
       fields: @fields,
-      params:{include: @included},
+      params: { include: @included },
       include: @included
     }
-    render_json(Ipos::ItemStockSerializer.new(@item_stocks,options))
+    render_json(Ipos::ItemStockSerializer.new(@item_stocks, options))
   end
 
   def meta
@@ -19,16 +19,16 @@ class Ipos::ItemStock::IndexService < ApplicationService
       page: @page,
       limit: @limit,
       total_rows: @item_stocks.total_count,
-       total_pages: @item_stocks.total_pages,
+      total_pages: @item_stocks.total_pages
     }
   end
 
   def extract_params
     @table_definition = Datatable::DefinitionExtractor.new(Ipos::ItemStock)
-    allowed_includes = [:item_stock]
+    allowed_includes = %i[item_stock item location]
     result = deserialize_table_params(params,
-      allowed_includes: allowed_includes,
-      table_definition: @table_definition)
+                                      allowed_includes: allowed_includes,
+                                      table_definition: @table_definition)
     @page = result.page || 1
     @limit = result.limit || 20
     @search_text = result.search_text
@@ -41,20 +41,16 @@ class Ipos::ItemStock::IndexService < ApplicationService
 
   def find_item_stocks
     item_stocks = Ipos::ItemStock.all.includes(@query_included)
-      .page(@page)
-      .per(@limit)
-    if @search_text.present?
-      item_stocks = item_stocks.where(['name ilike ? ']+ Array.new(1,"%#{@search_text}%"))
-    end
+                                 .page(@page)
+                                 .per(@limit)
+    item_stocks = item_stocks.where(['kodeitem ilike ? '] + Array.new(1, "%#{@search_text}%")) if @search_text.present?
     @filters.each do |filter|
       item_stocks = filter.add_filter_to_query(item_stocks)
     end
     if @sort.present?
-      item_stocks = item_stocks.order(@sort)
+      item_stocks.order(@sort)
     else
-      item_stocks = item_stocks.order(id: :asc)
+      item_stocks.order(item_code: :asc)
     end
-    item_stocks
   end
-
 end

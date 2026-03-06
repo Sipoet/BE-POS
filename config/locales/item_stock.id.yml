@@ -1,0 +1,15 @@
+id:
+  activerecord:
+    models:
+      ipos/item_stock: "Stok Item"
+    attributes:
+      ipos/item_stock:
+        item_code: 'Kode Item'
+        item: 'Item'
+        location: 'Lokasi'
+        location_code: 'Kode Lokasi'
+        quantity: 'Jumlah'
+        kantor: 'Lokasi'
+        kodeitem: 'Kode Item'
+        rack: 'Rak'
+        uom: 'Satuan'
