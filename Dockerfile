@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM ruby:3.4.7-slim
+FROM ruby:3.4.8-slim
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client build-essential apt-utils libpq-dev libyaml-dev
 WORKDIR /myapp
 COPY . /myapp
