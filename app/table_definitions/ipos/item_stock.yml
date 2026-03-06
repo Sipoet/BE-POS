@@ -1,0 +1,40 @@
+---
+table_name: tbl_itemstok
+columns:
+  item:
+    type: Model
+    alias: item_code
+    class_name: 'Ipos::Item'
+    excel_width: 25
+    client_width: 200
+    sort_key: kodeitem
+    can_filter: true
+    filter_key: kodeitem
+    can_sort: true
+  location:
+    type: Model
+    alias: location_code
+    class_name: 'Ipos::Location'
+    excel_width: 25
+    client_width: 200
+    sort_key: kantor
+    can_filter: true
+    filter_key: kantor
+    can_sort: true
+  quantity:
+    type: decimal
+    excel_width: 25
+    client_width: 200
+    sort_key: stok
+    can_filter: true
+    filter_key: stok
+    can_sort: true
+  rack:
+    type: string
+    excel_width: 25
+    client_width: 200
+    sort_key: rack
+    can_filter: true
+    filter_key: rack
+    can_sort: true
+

@@ -1,7 +1,7 @@
 class ItemWithDiscountSerializer
   include TextFormatter
   include JSONAPI::Serializer
-  %i[item_code item_name sell_price uom warehouse_stock store_stock].each do |key|
+  %i[item_code item_name sell_price uom stock_left].each do |key|
     attribute key do |obj|
       obj.send(key)
     end
@@ -18,6 +18,14 @@ class ItemWithDiscountSerializer
       obj.sell_price
     end
   end
+
+  has_many :stocks, set_id: :kodeitem, serializer: Ipos::ItemStockSerializer, if: proc { |record, params|
+    begin
+      params[:include].include?('stocks')
+    rescue StandardError
+      false
+    end
+  }
 
   def self.sell_price_after_discount(sell_price, discount)
     if discount.percentage?

@@ -115,6 +115,7 @@ Rails.application.routes.draw do
   resources :cash_transaction_reports, only: [:index]
 
   namespace :ipos do
+    resources :item_stocks, only: %i[index update]
     resources :users, only: [:index]
     resources :items, param: :code, only: %i[index show update] do
       get :with_discount, on: :collection

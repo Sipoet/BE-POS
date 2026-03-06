@@ -7,6 +7,7 @@ class Ipos::Item < ApplicationRecord
   belongs_to :supplier, optional: true, foreign_key: :supplier1, primary_key: :kode
   has_one :item_report, foreign_key: :item_code
   has_many :item_sell_uoms, class_name: 'Ipos::ItemSellUom', foreign_key: :kodeitem
+  has_many :stocks, class_name: 'Ipos::ItemStock', foreign_key: :kodeitem, primary_key: :kodeitem
 
   paginates_per 20
 

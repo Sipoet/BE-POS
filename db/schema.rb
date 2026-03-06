@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_05_063049) do
+ActiveRecord::Schema[7.1].define(version: 2026_03_05_124634) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -386,16 +386,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_05_063049) do
     t.datetime "updated_at", null: false
     t.index ["key_name"], name: "index_settings_on_key_name"
     t.index ["user_id"], name: "index_settings_on_user_id"
-  end
-
-  create_table "stock_locations", force: :cascade do |t|
-    t.string "sku_id"
-    t.string "rack", null: false
-    t.string "location", null: false
-    t.decimal "quantity", null: false
-    t.string "uom", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "tbl_acc_sa", id: false, force: :cascade do |t|
@@ -1563,6 +1553,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_05_063049) do
     t.string "kantor", limit: 50
     t.decimal "stok", precision: 20, scale: 3
     t.decimal "hppdasar", precision: 35, scale: 20, default: "0.0"
+    t.string "rack"
   end
 
   create_table "tbl_itktdt", primary_key: "iddetail", id: { type: :string, limit: 150 }, force: :cascade do |t|
