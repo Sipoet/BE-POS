@@ -45,15 +45,35 @@ class Discount::IndexService < ApplicationService
     @filters.each do |filter|
       if filter.key.to_sym == :item_code
         filter_discount_ids << DiscountFilter.where(filter_key: 'item',
+                                                    is_exclude: false,
                                                     value: filter.value).distinct(:discount_id).pluck(:discount_id)
       elsif filter.key.to_sym == :item_type_name
         filter_discount_ids << DiscountFilter.where(filter_key: 'item_type',
+                                                    is_exclude: false,
                                                     value: filter.value).distinct(:discount_id).pluck(:discount_id)
       elsif filter.key.to_sym == :supplier_code
         filter_discount_ids << DiscountFilter.where(filter_key: 'supplier',
+                                                    is_exclude: false,
                                                     value: filter.value).distinct(:discount_id).pluck(:discount_id)
       elsif filter.key.to_sym == :brand_name
         filter_discount_ids << DiscountFilter.where(filter_key: 'brand',
+                                                    is_exclude: false,
+                                                    value: filter.value).distinct(:discount_id).pluck(:discount_id)
+      elsif filter.key.to_sym == :blacklist_item_code
+        filter_discount_ids << DiscountFilter.where(filter_key: 'item',
+                                                    is_exclude: true,
+                                                    value: filter.value).distinct(:discount_id).pluck(:discount_id)
+      elsif filter.key.to_sym == :blacklist_item_type_name
+        filter_discount_ids << DiscountFilter.where(filter_key: 'item_type',
+                                                    is_exclude: true,
+                                                    value: filter.value).distinct(:discount_id).pluck(:discount_id)
+      elsif filter.key.to_sym == :blacklist_supplier_code
+        filter_discount_ids << DiscountFilter.where(filter_key: 'supplier',
+                                                    is_exclude: true,
+                                                    value: filter.value).distinct(:discount_id).pluck(:discount_id)
+      elsif filter.key.to_sym == :blacklist_brand_name
+        filter_discount_ids << DiscountFilter.where(filter_key: 'brand',
+                                                    is_exclude: true,
                                                     value: filter.value).distinct(:discount_id).pluck(:discount_id)
       else
         discounts = discounts.where(filter.to_query)
