@@ -8,6 +8,7 @@ id:
         end_time: 'Tanggal Selesai'
         sales_total: "Total Penjualan"
         num_of_transaction: 'Jumlah Transaksi'
+        num_of_item: 'Jumlah Item'
         discount_total: 'Total Diskon'
         cash_total: 'Total Tunai'
         debit_total: 'Total Kartu Debit'

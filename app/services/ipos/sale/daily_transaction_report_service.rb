@@ -30,8 +30,9 @@ class Ipos::Sale::DailyTransactionReportService < ApplicationService
       SELECT DATE_TRUNC('day',#{sale_table}.tanggal) AS date,
       ROUND(COALESCE(SUM(totalakhir),0),0) AS sales_total,
       ROUND(COALESCE(SUM(group_sale.discount_total), 0) + COALESCE(sum(potnomfaktur), 0),0) AS discount_total,
-      ROUND(COALESCE(SUM(totalakhir) - SUM(hpp_total),0),0) AS gross_profit,
+      ROUND(COALESCE(SUM(totalakhir) - SUM(group_sale.cogs_total),0),0) AS gross_profit,
       ROUND(COALESCE(count(*),0),0) AS num_of_transaction,
+      ROUND(COALESCE(SUM(totalitem),0),0) AS num_of_item,
       ROUND(COALESCE(SUM(jmldebit),0),0) AS debit_total,
       ROUND(COALESCE(SUM(jmlkk),0),0) AS credit_total,
       ROUND(COALESCE(SUM(case when jmltunai > 0 then totalakhir else 0 end),0),0) AS cash_total,
@@ -41,9 +42,18 @@ class Ipos::Sale::DailyTransactionReportService < ApplicationService
       INNER JOIN (
         SELECT notransaksi,
         SUM(jumlah * harga) - sum(total) AS discount_total,
-        SUM(jumlah * tbl_item.hargapokok) AS hpp_total
+        SUM(cogs_detail.cogs_total) AS cogs_total
         FROM #{Ipos::SaleItem.table_name}
-        INNER JOIN tbl_item on tbl_item.kodeitem = tbl_ikdt.kodeitem
+        LEFT OUTER JOIN (
+          SELECT
+            tbl_item_ik.iddetailtrs,
+            ROUND(SUM(tbl_item_ik.jumlahdasar * tbl_item_im.hargadasar),0) AS cogs_total
+          FROM tbl_item_ik
+          INNER JOIN tbl_item_im ON tbl_item_ik.iddetailim = tbl_item_im.iddetail
+          GROUP BY
+            tbl_item_ik.iddetailtrs
+        ) cogs_detail
+        ON tbl_ikdt.iddetail = cogs_detail.iddetailtrs
         GROUP BY notransaksi
       )group_sale ON group_sale.notransaksi = #{sale_table}.notransaksi
       WHERE tanggal BETWEEN '#{start_time}' AND '#{end_time}' AND #{sale_table}.tipe in('KSR','JL')

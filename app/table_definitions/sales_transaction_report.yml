@@ -46,6 +46,15 @@ columns:
     attribute_key: num_of_transaction
     can_filter: false
     can_sort: true
+  num_of_item:
+    name: num_of_item
+    type: decimal
+    excel_width: 25
+    client_width: 140
+    sort_key: num_of_item
+    attribute_key: num_of_item
+    can_filter: false
+    can_sort: true
   discount_total:
     name: discount_total
     type: money
