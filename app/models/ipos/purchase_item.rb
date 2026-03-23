@@ -11,6 +11,8 @@ class Ipos::PurchaseItem < ApplicationRecord
 
   belongs_to :item_report, class_name: 'ItemReport', primary_key: 'item_code', foreign_key: 'kodeitem'
 
+  alias_attribute :price, :harga
+
   def sell_price
     item.try(:hargajual1)
   end

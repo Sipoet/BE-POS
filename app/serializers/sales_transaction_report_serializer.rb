@@ -5,6 +5,7 @@ class SalesTransactionReportSerializer
 
   attributes :sales_total,
              :num_of_transaction,
+             :num_of_item,
              :discount_total,
              :cash_total,
              :debit_total,

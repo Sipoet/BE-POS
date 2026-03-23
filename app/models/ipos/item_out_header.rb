@@ -12,7 +12,8 @@ class Ipos::ItemOutHeader < ApplicationRecord
     'KSRP' => 'Ipos::Sale',
     'JL' => 'Ipos::Sale',
     'IK' => 'Ipos::ItemOut',
-    'RJ' => 'Ipos::SaleReturn'
+    'RJ' => 'Ipos::SaleReturn',
+    'PR' => 'Ipos::Assembly'
   }
   def self.find_sti_class(obj_type)
     @@list[obj_type].constantize

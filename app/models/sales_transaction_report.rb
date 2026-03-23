@@ -3,6 +3,7 @@ class SalesTransactionReport < ApplicationModel
                 :end_time,
                 :sales_total,
                 :num_of_transaction,
+                :num_of_item,
                 :discount_total,
                 :cash_total,
                 :debit_total,
@@ -16,6 +17,7 @@ class SalesTransactionReport < ApplicationModel
     @end_time = row['end_time']
     @sales_total = row['sales_total']
     @num_of_transaction = row['num_of_transaction'].to_i
+    @num_of_item = row['num_of_item'].to_i
     @discount_total = row['discount_total']
     @cash_total = row['cash_total']
     @debit_total = row['debit_total']
