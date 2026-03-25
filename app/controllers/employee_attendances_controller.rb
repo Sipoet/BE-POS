@@ -20,4 +20,8 @@ class EmployeeAttendancesController < ApplicationController
   def mass_update_allow_overtime
     run_service_default
   end
+
+  def report
+    run_service_default
+  end
 end

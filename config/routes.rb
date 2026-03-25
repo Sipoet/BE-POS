@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   resources :employee_attendances, only: %i[index create destroy update] do
     post :mass_upload, on: :collection
     post :mass_update_allow_overtime, on: :collection
+    get :report, on: :collection
   end
 
   resources :payslips, only: %i[index show update destroy] do

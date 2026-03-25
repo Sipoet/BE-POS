@@ -1,7 +1,6 @@
 class AttendanceAnalyzer
-  def initialize(payroll:, employee:, start_date:, end_date:)
+  def initialize(employee:, start_date:, end_date:)
     @employee = employee
-    @payroll = payroll
     @start_date = start_date
     @end_date = end_date
   end
@@ -20,8 +19,7 @@ class AttendanceAnalyzer
                        .index_by(&:date)
     @employee_attendances = find_attendances
     @finder = WorkScheduleFinder.new(@employee.role_id)
-    result = Result.new
-    result.paid_time_off = BigDecimal(@payroll.paid_time_off)
+    result = Result.new(@employee)
     result.is_first_work = @employee.start_working_date.between?(@start_date, @end_date)
     result.is_last_work = @employee.end_working_date.present? && @employee.end_working_date.between?(@start_date,
                                                                                                      @end_date)
@@ -192,17 +190,18 @@ class AttendanceAnalyzer
 
   class Result
     attr_accessor :total_day,
-                  :paid_time_off,
                   :is_first_work,
                   :is_last_work,
                   :overtime_hours,
+                  :employee_id,
                   :total_full_work_days
 
     attr_reader :details
 
-    def initialize
+    def initialize(employee)
+      @employee_id = employee.id
+      @employee_name = employee.name
       @total_day = 0
-      @paid_time_off = 0
       @overtime_hours = 0
       @total_full_work_days = 0
       @details = []

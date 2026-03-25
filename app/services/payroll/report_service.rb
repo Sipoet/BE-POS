@@ -86,6 +86,8 @@ class Payroll::ReportService < ApplicationService
                 .or(Employee.where(start_working_date: ..@date,
                                    end_working_date: @date..))
                 .order(name: :asc)
+    employees = employees.where(status: @employee_status) unless @employee_status.nil?
+    employees = employees.where(payroll_id: @payroll_ids) if @payroll_ids.present?
     group_salary_details = find_salary_details(employees, payroll_types)
     employees.map do |employee|
       salary_details = group_salary_details[employee.payroll_id]
@@ -145,10 +147,12 @@ class Payroll::ReportService < ApplicationService
   end
 
   def extract_params
-    permitted_params = params.permit(:report_type, :date, payroll_type_ids: [])
+    permitted_params = params.permit(:report_type, :date, :employee_status, payroll_ids: [], payroll_type_ids: [])
     @date = Date.try(:parse, permitted_params[:date])
     @payroll_type_ids = *permitted_params[:payroll_type_ids]
+    @payroll_ids = permitted_params[:payroll_ids]
     @report_type = permitted_params[:report_type].to_s
+    @employee_status = permitted_params[:employee_status]
   end
 
   def generate_excel(table_columns, rows)
