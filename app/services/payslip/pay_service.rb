@@ -28,17 +28,19 @@ class Payslip::PayService < ApplicationService
   end
 
   def find_payslips
-    query = Payslip.where(start_date: @start_date, end_date: @end_date)
+    query = Payslip.where(start_date: ..@end_date, end_date: @start_date..)
                    .where.not(status: :paid)
+    query = query.where(payroll_id: @payroll_ids) if @payroll_ids.present?
     query = query.where(employee_id: @employee_ids) if @employee_ids.present?
     query
   end
 
   def extract_params
     permitted_params = params.permit(:paid_at, :description, :location, :cash_account, :start_date, :is_notify, :end_date,
-                                     employee_ids: [])
+                                     employee_ids: [], payroll_ids: [])
     @is_notify = permitted_params[:is_notify].to_s == '1'
     @employee_ids = permitted_params[:employee_ids] || []
+    @payroll_ids = permitted_params[:payroll_ids]
     @start_date = begin
       Date.parse(permitted_params[:start_date])
     rescue StandardError
