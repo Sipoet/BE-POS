@@ -18,8 +18,14 @@ class EmployeeAttendance::ReportService < ApplicationService
   end
 
   def find_employees
-    employees = Employee.all
-    employees = employees.where(id: @employee_ids) if @employee_ids.present?
+    employees = if @employee_ids.present?
+                  Employee.where(id: @employee_ids)
+                else
+                  attendance_employee_ids = EmployeeAttendance.where(date: @start_date..@end_date)
+                                                              .distinct(:employee_id)
+                                                              .pluck(:employee_id)
+                  Employee.where(id: attendance_employee_ids)
+                end
     employees = employees.where(status: @employee_status) if @employee_status.present?
     employees = employees.where(payroll_id: @payroll_ids) if @payroll_ids.present?
     employees
