@@ -59,7 +59,6 @@ class PayslipPdfGenerator
         text 'Nama Karyawan'
         text 'Hari Kerja'
         text 'Total Kerja'
-        text 'Lembur'
         text 'Telat'
         text 'Sakit'
         text 'Izin'
@@ -79,8 +78,6 @@ class PayslipPdfGenerator
       text ": #{@payslip.work_days} Hari"
       move_down 0.5
       text ": #{@payslip.total_day} Hari"
-      move_down 0.5
-      text ": #{@payslip.overtime_hour} Jam"
       move_down 0.5
       text ": #{@payslip.late} kali"
       move_down 0.5
